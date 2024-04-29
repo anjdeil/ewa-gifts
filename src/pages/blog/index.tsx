@@ -1,7 +1,7 @@
 import Head from "next/head";
 
-const Home = () => {
-  const pageTitle = "Home Page";
+const Blog = () => {
+  const pageTitle = "Blog";
 
   return (
     <>
@@ -17,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Blog;
