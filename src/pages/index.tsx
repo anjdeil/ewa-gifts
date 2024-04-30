@@ -1,14 +1,7 @@
-// import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-// import TestSlice from "@/store/reducers/TestSlice";
 import Head from "next/head";
 
 const Home = () => {
-  const pageTitle = "Home Page";
-
-  // const dispatch = useAppDispatch();
-  // const {} = useAppSelector(state => state.)
-  // const {users, isLoading, error} = useSelector(state => state.TestSlice);
-
+  const pageTitle = "Home Page"
 
   return (
     <>
@@ -18,10 +11,9 @@ const Home = () => {
       </Head>
       <main>
         <h1>{pageTitle}</h1>
-        <p>Welcome to the Home Page</p>
       </main>
     </>
-  );
+  )
 };
 
 export default Home;
