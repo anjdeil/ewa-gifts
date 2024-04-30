@@ -1,51 +1,49 @@
 import { IUser } from "@/modules/IUser";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { fetchUsers } from "./ActionCreators";
 
-interface TestState {
-    user: IUser[];
+interface UserState
+{
+    users: IUser[];
     isLoading: boolean;
     error: string;
 }
 
-export const initialState: TestState = {
-    user: [],
+export const initialState: UserState = {
+    users: [],
     isLoading: false,
     error: '',
 }
 
 export const TestSlice = createSlice({
     name: 'test',
-    initialState, 
+    initialState,
     reducers: {
-        fetchUSer(state) {
-            state.isLoading = true;
-        },
-        editName(state, action: PayloadAction<IUser[]>) {
-            state.isLoading = false;
-            state.user = action.payload;
-        }
-    }
-})
+        // usersFetchingSuccess(state, action: PayloadAction<IUser[]>) {
+        //     state.isLoading = false;
+        //     state.error = '';
+        //     state.users = action.payload;
+        // },
+    },
+    extraReducers: (builder) =>
+    {
+        builder
+            .addCase(fetchUsers.fulfilled.type, (state, action: PayloadAction<IUser[]>) =>
+            {
+                state.isLoading = false;
+                state.error = '';
+                state.users = action.payload;
+            })
+            .addCase(fetchUsers.pending.type, (state) =>
+            {
+                state.isLoading = true;
+            })
+            .addCase(fetchUsers.rejected.type, (state, action: PayloadAction<string>) =>
+            {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
+    },
+});
 
-export default TestSlice;
-
-// export const UserSlice = createSlice ({
-//     name: 'user',
-//     initialState,
-//     reducers: {
-//         usersFetching(state) {
-//             state.isLoading = true;
-//         },
-
-//         usersFetchingSuccess(state, action: PayloadAction<IUser>) {
-//             state.isLoading = false;
-//             state.error = '';
-//             state.users = action.payload;
-//         },
-
-//         usersFetchingError(state, action: PayloadAction<string>) {
-//             state.isLoading = false;
-//             state.error = action.payload;
-//         }
-//     }
-// })
+export default TestSlice.reducer;
