@@ -1,14 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-    products: [],
-    isLoading: false,
-    error: ''
-}
-
-const ProductListSlice = createSlice({
-    name: 'productListSlice',
-    initialState,
+const productListSlice = createSlice({
+    name: 'productList',
+    initialState: {
+        products: [],
+        isLoading: false,
+        error: ''
+    },
     reducers: {
         productsFetching(state) {
             state.isLoading = true;
@@ -25,4 +23,10 @@ const ProductListSlice = createSlice({
     },
 })
 
-export default ProductListSlice;
+export const {
+    productsFetching,
+    productsFetchingSuccess,
+    productsFetchingError
+} = productListSlice.actions;
+
+export default productListSlice.reducer;
