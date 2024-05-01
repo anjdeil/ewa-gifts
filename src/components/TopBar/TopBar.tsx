@@ -3,15 +3,23 @@ import Link from "next/link";
 import Image from "next/image";
 import Nav from "@/components/Navigation/Nav";
 import React, { ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { MenuSlice, menuFetchingSuccess } from '@/store/reducers/MenuReducer';
+import { useSelector } from 'react-redux';
 
 interface TopBarProps
 {
   children?: ReactNode;
 }
-const TopBar: React.FC<TopBarProps> = ({ children }) =>
+const TopBar: React.FC<TopBarProps> = ({ res }) =>
 {
-  return (
+  const dispatch = useAppDispatch();
+  dispatch(menuFetchingSuccess(res));
 
+  const { links } = useSelector(state => state.MenuSlice);
+  console.log(links);
+
+  return (
     <Stack
       direction="row"
       alignItems="center"

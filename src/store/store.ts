@@ -1,20 +1,19 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import { menuAPI } from "@/services/NavServices";
 import { MenuSlice } from "./reducers/MenuReducer";
+import { createWrapper } from "next-redux-wrapper";
 
 export const rootReducer = combineReducers({
-    // [menuAPI.reducerPath]: menuAPI.reducer,
-    MenuSlice
+    MenuSlice: MenuSlice.reducer,
 });
 
 export const setupStore = () =>
 {
     return configureStore({
         reducer: rootReducer,
-        // middleware: (getDefaultMiddleware) =>
-        //     getDefaultMiddleware().concat(menuAPI.middleware)
     })
 }
+
+export const wrapper = createWrapper(setupStore);
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

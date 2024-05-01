@@ -4,9 +4,11 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { setupStore } from "@/store/store";
 
+import { wrapper } from "@/store/store";
+
 const store = setupStore();
 
-export default function App({ Component, pageProps }: AppProps)
+export function App({ Component, pageProps }: AppProps)
 {
   return (
     <Provider store={store}>
@@ -14,3 +16,6 @@ export default function App({ Component, pageProps }: AppProps)
     </Provider>
   )
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export default wrapper.withRedux(App);
