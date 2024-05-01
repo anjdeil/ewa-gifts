@@ -23,10 +23,11 @@ const Home = ({ res }) =>
 
 export default Home;
 
-export async function getServerSideProps()
-{
-  const items = await fetchMenuItems('358');
-  return {
-    props: { res: items }
-  };
-}
+// export async function getServerSideProps()
+// {
+//   const items = await fetchMenuItems('358');
+
+//   return {
+//     props: { res: items }
+//   };
+// }
