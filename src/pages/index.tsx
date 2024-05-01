@@ -3,8 +3,9 @@ import Head from "next/head";
 import { fetchMenuItems } from "@/services/NavServices";
 import { useAppDispatch } from "@/hooks/redux";
 
-const Home = ({ res }) =>
-{
+import TestToolkit from "@/components/TestToolkit";
+
+const Home = ({ res }) => {
   const pageTitle = "Home Page"
   return (
     <>
@@ -16,6 +17,7 @@ const Home = ({ res }) =>
       </TopBar>
       <main>
         <h1>{pageTitle}</h1>
+        <TestToolkit />
       </main>
     </>
   )

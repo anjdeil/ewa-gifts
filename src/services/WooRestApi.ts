@@ -1,9 +1,9 @@
 export default class WooRestApi {
-    _apiBase = "https://ewagifts.pl/wp-json/wc/v3/";
+    _apiBase = "https://new.ewagifts.pl/wp-json/wc/v3/";
 
     _authParams = {
-        consumer_key: "ck_04bc58455e69c86a01c0f0a779fa86799616d470",
-        consumer_secret: "cs_0e77756335aa54e8781080573179ec4045da7582"
+        consumer_key: "ck_be590e9d606acd4b4be6a9f2a3fb82b1b9f56b21",
+        consumer_secret: "cs_82dc58103b4c9b477b34d2aba374d1a45cea6a4c"
     };
 
     async getResource(url, params) {
@@ -16,6 +16,11 @@ export default class WooRestApi {
         const body = await response.json();
         return body;
     };
+
+    async getProducts(params) {
+        const result = await this.getResource('products', params);
+        return result;
+    }
 
     _paramsToString = (params) => {
         return Object.entries(params).reduce(
