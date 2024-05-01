@@ -1,8 +1,9 @@
 import TopBar from "@/components/TopBar/TopBar";
 import Head from "next/head";
 import { fetchMenuItems } from "@/services/NavServices";
+import { useAppDispatch } from "@/hooks/redux";
 
-const Home = () =>
+const Home = ({ res }) =>
 {
   const pageTitle = "Home Page"
   return (
@@ -11,7 +12,7 @@ const Home = () =>
         <title>{pageTitle}</title>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
-      <TopBar>
+      <TopBar res={res}>
       </TopBar>
       <main>
         <h1>{pageTitle}</h1>
@@ -25,7 +26,6 @@ export default Home;
 export async function getServerSideProps()
 {
   const items = await fetchMenuItems('358');
-  console.log(items);
   return {
     props: { res: items }
   };

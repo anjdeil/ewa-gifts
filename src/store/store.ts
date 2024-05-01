@@ -1,18 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import { menuAPI } from "@/services/NavServices";
 import { MenuSlice } from "./reducers/MenuReducer";
 
 export const rootReducer = combineReducers({
-    // [menuAPI.reducerPath]: menuAPI.reducer,
-    MenuSlice
+    MenuSlice: MenuSlice.reducer,
 });
 
 export const setupStore = () =>
 {
     return configureStore({
         reducer: rootReducer,
-        // middleware: (getDefaultMiddleware) =>
-        //     getDefaultMiddleware().concat(menuAPI.middleware)
     })
 }
 

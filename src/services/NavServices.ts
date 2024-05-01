@@ -33,7 +33,7 @@ import axios from 'axios';
 
 const baseUrl = 'https://new.ewagifts.pl/wp-json/wp/v2/';
 const username = 'admin';
-const password = '';
+const password = 'd36a QZT9 p6o8 1u6n 5fon J2Uu';
 const basicAuth = Buffer.from(`${username}:${password}`).toString('base64');
 
 export const fetchMenuItems = async (id) =>

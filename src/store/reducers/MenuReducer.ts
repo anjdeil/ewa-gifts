@@ -7,7 +7,7 @@ const initialState = {
 }
 
 export const MenuSlice = createSlice({
-    name: 'menuSlise',
+    name: 'menuSlice',
     initialState,
     reducers: {
         menuFetching(state)
@@ -27,4 +27,6 @@ export const MenuSlice = createSlice({
         },
     }
 })
+
+export const { menuFetching, menuFetchingSuccess, menuFetchingError } = MenuSlice.actions;
 export default MenuSlice.reducer;
