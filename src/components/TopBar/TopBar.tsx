@@ -1,12 +1,14 @@
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import Link from "next/link";
+import Image from "next/image";
+import Nav from "@/components/Navigation/Nav";
 import React, { ReactNode } from 'react';
 
 interface TopBarProps
 {
   children?: ReactNode;
 }
-
-export const TopBar: React.FC<TopBarProps> = ({ children }) =>
+const TopBar: React.FC<TopBarProps> = ({ children }) =>
 {
   return (
 
@@ -16,8 +18,13 @@ export const TopBar: React.FC<TopBarProps> = ({ children }) =>
       spacing={0}
       style={{ padding: '20px 0' }}
     >
-      {children}
+      <Link href={'/'} passHref>
+        <Image src="/logo.svg" alt="Logo" width={100} height={100} />
+      </Link>
+      <Nav></Nav>
 
     </Stack>
   )
-}   
+}
+
+export default TopBar;

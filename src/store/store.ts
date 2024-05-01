@@ -1,20 +1,21 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import TestSlice from "./reducers/TestSlice";
-import { postAPI } from "@/services/PostServices";
+// import { menuAPI } from "@/services/NavServices";
+import { MenuSlice } from "./reducers/MenuReducer";
 
 export const rootReducer = combineReducers({
-    TestSlice,
-    [postAPI.reducerPath]: postAPI.reducer,
+    // [menuAPI.reducerPath]: menuAPI.reducer,
+    MenuSlice
 });
 
-export const setupStore = () => {
+export const setupStore = () =>
+{
     return configureStore({
         reducer: rootReducer,
-        middleware: (getDefaultMiddleware) => 
-            getDefaultMiddleware().concat(postAPI.middleware)
+        // middleware: (getDefaultMiddleware) =>
+        //     getDefaultMiddleware().concat(menuAPI.middleware)
     })
 }
 
-export type  RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];

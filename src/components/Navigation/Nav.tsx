@@ -1,22 +1,33 @@
-import { NavPropsType } from "@/types/header";
-import './style.scss';
-import { Box, List, ListItem, Link } from '@mui/material';
+import Box from '@mui/material/Box';
+import { fetchMenuItems } from '@/services/NavServices';
 
+const getFunc = async () =>
+{
+    const id = '358';
+    const menuItems = await fetchMenuItems(id);
+    console.log(menuItems);
+}
 
-
-const Nav = ({ links }: NavPropsType) =>
+const Nav = () =>
 {
     return (
-        <nav className="nav">
-            <List className="nav__list">
-                {links.map((link, index) => (
-                    <ListItem key={index}>
-                        <Link href={link.url}>{link.title}</Link>
-                    </ListItem>
-                ))}
-            </List>
-        </nav>
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+            <nav className="nav">
+                <button onClick={getFunc}>
+                    get
+                </button>
+                {/* <ul>
+                    {links.map((link, index) => (
+                        <li key={index}>
+                            <a href={link.url}>{link.title}</a>
+                        </li>
+                    ))}
+                </ul> */}
+            </nav>
+        </Box>
+
     );
+
 };
 
 export default Nav;
