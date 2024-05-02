@@ -1,4 +1,5 @@
-export default class WooRestApi {
+export default class WooRestApi
+{
     _apiBase = "https://new.ewagifts.pl/wp-json/wc/v3/";
 
     _authParams = {
@@ -6,25 +7,30 @@ export default class WooRestApi {
         consumer_secret: "cs_82dc58103b4c9b477b34d2aba374d1a45cea6a4c"
     };
 
-    async getResource(url, params) {
+    async getResource(url, params)
+    {
         params = { ...params, ...this._authParams };
 
         const response = await fetch(`${this._apiBase}${url}${this._paramsToString(params)}`);
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error(`Could not fetch ${url}, recieved ${response.status}`);
         }
         const body = await response.json();
         return body;
     };
 
-    async getProducts(params) {
+    async getProducts(params)
+    {
         const result = await this.getResource('products', params);
         return result;
     }
 
-    _paramsToString = (params) => {
+    _paramsToString = (params) =>
+    {
         return Object.entries(params).reduce(
-            (accumulator, [key, value], i, params) => {
+            (accumulator, [key, value], i, params) =>
+            {
                 accumulator += `${key}=${value}`;
                 if (i < params.length - 1) accumulator += '&';
                 return accumulator;

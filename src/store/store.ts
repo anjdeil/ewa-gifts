@@ -12,21 +12,6 @@ const combinedReducer = (state, action) =>
 {
     if (action.type === HYDRATE)
     {
-        console.log("WORKS!")
-        return {
-            ...state,
-            ...action.payload,
-        };
-    }
-    return rootReducer(state, action);
-};
-
-
-const combinedReducer = (state, action) =>
-{
-    if (action.type === HYDRATE)
-    {
-        console.log("WORKS!")
         return {
             ...state,
             ...action.payload,
@@ -42,7 +27,8 @@ export const setupStore = () =>
     })
 }
 
-export const wrapper = createWrapper(setupStore, { debug: true });
+// export const wrapper = createWrapper(setupStore, { debug: true });
+export const wrapper = createWrapper(setupStore);
 
 
 export type RootState = ReturnType<typeof rootReducer>;

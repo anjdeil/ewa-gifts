@@ -1,19 +1,10 @@
 import TopBar from "@/components/TopBar/TopBar";
 import Head from "next/head";
-import { fetchMenuItems } from "@/services/NavServices";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { wrapper } from "@/store/store";
-import { MenuSlice, menuFetching, menuFetchingSuccess } from '@/store/reducers/MenuReducer';
-
-
 import TestToolkit from "@/components/TestToolkit";
 
 const Home = () =>
 {
   const pageTitle = "Home Page";
-
-  const links = useAppSelector(state => state.MenuSlice.links);
-  console.log(links);
 
   return (
     <>
@@ -33,11 +24,6 @@ const Home = () =>
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
-  (store) => async () =>
-  {
-    store.dispatch(menuFetching());
-    const links = await fetchMenuItems('358');
-    store.dispatch(menuFetchingSuccess(links));
-  }
-);
+
+
+
