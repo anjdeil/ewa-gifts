@@ -8,7 +8,6 @@ const rootReducer = combineReducers({
     productList: productListSlice
 });
 
-
 const combinedReducer = (state, action) =>
 {
     if (action.type === HYDRATE)
