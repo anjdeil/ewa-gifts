@@ -36,8 +36,7 @@ const username = 'admin';
 const password = 'd36a QZT9 p6o8 1u6n 5fon J2Uu';
 const basicAuth = Buffer.from(`${username}:${password}`).toString('base64');
 
-export const fetchMenuItems = async (id) =>
-{
+export const fetchMenuItems = async (id) => {
     const response = await axios.get(`${baseUrl}menu-items?menus=${id}`, {
         headers: {
             Authorization: `Basic ${basicAuth}`,
@@ -46,8 +45,7 @@ export const fetchMenuItems = async (id) =>
     return response.data;
 };
 
-const useMenuItems = (id) =>
-{
+const useMenuItems = (id) => {
     return useQuery({
         queryKey: ['menuItems', id],
         queryFn: () => fetchMenuItems(id),

@@ -6,6 +6,8 @@ import { wrapper } from "@/store/store";
 import { MenuSlice, menuFetching, menuFetchingSuccess } from '@/store/reducers/MenuReducer';
 
 
+import TestToolkit from "@/components/TestToolkit";
+
 const Home = () =>
 {
   const pageTitle = "Home Page";
@@ -23,6 +25,7 @@ const Home = () =>
       </TopBar>
       <main>
         <h1>{pageTitle}</h1>
+        <TestToolkit />
       </main>
     </>
   )

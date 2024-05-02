@@ -1,10 +1,26 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { MenuSlice } from "./reducers/MenuReducer";
 import { HYDRATE, createWrapper } from "next-redux-wrapper";
+import productListSlice from "./reducers/productListSlice";
 
 const rootReducer = combineReducers({
     [MenuSlice.name]: MenuSlice.reducer,
+    productList: productListSlice
 });
+
+
+const combinedReducer = (state, action) =>
+{
+    if (action.type === HYDRATE)
+    {
+        console.log("WORKS!")
+        return {
+            ...state,
+            ...action.payload,
+        };
+    }
+    return rootReducer(state, action);
+};
 
 
 const combinedReducer = (state, action) =>
