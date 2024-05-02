@@ -17,5 +17,4 @@ export function App({ Component, pageProps }: AppProps)
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export default wrapper.withRedux(App);

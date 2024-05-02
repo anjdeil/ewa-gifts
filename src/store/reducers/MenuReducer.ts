@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
+import build from "next/dist/build";
 
 const initialState = {
     links: [],
@@ -7,7 +9,7 @@ const initialState = {
 }
 
 export const MenuSlice = createSlice({
-    name: 'menuSlice',
+    name: 'MenuSlice',
     initialState,
     reducers: {
         menuFetching(state)
