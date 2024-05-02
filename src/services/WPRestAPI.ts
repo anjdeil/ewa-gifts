@@ -48,11 +48,9 @@ export class WPRestAPI
         return response;
     }
 
-    async getMenuItems(params: any)
+    async get(url: string, params: any)
     {
-        // const data = await this.getResource(`menu-items`, params);
-        const result = await this.getResource(`menu-items`, params);
-        // const result = this._transformMenuItems(data);
+        const result = await this.getResource(url, params);
         return result;
     }
 
