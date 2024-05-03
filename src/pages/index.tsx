@@ -1,7 +1,7 @@
 import TopBar from "@/components/TopBar/TopBar";
 import Head from "next/head";
 import TestToolkit from "@/components/TestToolkit";
-import Search from "@/components/Search";
+import SearchBar from "@/components/SearchBar";
 import { useFetchMenuItemsQuery } from "@/services/ActionCreators";
 
 const Home = () => {
@@ -21,7 +21,7 @@ const Home = () => {
       <TopBar />
       <main>
         <h1>{pageTitle}</h1>
-        <Search />
+        <SearchBar />
         <TestToolkit />
       </main>
     </>
