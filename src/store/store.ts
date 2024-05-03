@@ -1,32 +1,20 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { MenuSlice } from "./reducers/MenuReducer";
-import { HYDRATE, createWrapper } from "next-redux-wrapper";
 import productListSlice from "./reducers/productListSlice";
+import { wpAPI } from "@/services/ActionCreators";
 
 const rootReducer = combineReducers({
-    [MenuSlice.name]: MenuSlice.reducer,
-    productList: productListSlice
+    productList: productListSlice,
+    [wpAPI.reducerPath]: wpAPI.reducer,
 });
-
-
-const combinedReducer = (state, action) => {
-    if (action.type === HYDRATE) {
-        console.log("WORKS!")
-        return {
-            ...state,
-            ...action.payload,
-        };
-    }
-    return rootReducer(state, action);
-};
 
 export const setupStore = () => {
     return configureStore({
-        reducer: combinedReducer,
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware()
+                .concat(wpAPI.middleware)
     })
 }
-
-export const wrapper = createWrapper(setupStore, { debug: true });
 
 
 export type RootState = ReturnType<typeof rootReducer>;
