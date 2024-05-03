@@ -1,9 +1,7 @@
 import TopBar from "@/components/TopBar/TopBar";
 import Head from "next/head";
 import TestToolkit from "@/components/TestToolkit";
-import { useEffect, useState } from "react";
 import { useFetchMenuItemsQuery } from "@/services/ActionCreators";
-import axios from "axios";
 
 const Home = () =>
 {
