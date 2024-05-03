@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import WooRestApi from "@/services/WooRestApi";
 import { fetchProducts } from "@/store/reducers/ActionCreators";
 
 const TestToolkit = () => {
-    const wooRestApi = new WooRestApi();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchProducts(wooRestApi));
+        dispatch(fetchProducts());
     }, [])
 
     const { products, isLoading, error } = useSelector(state => state.productList);

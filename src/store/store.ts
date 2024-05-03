@@ -8,10 +8,9 @@ const rootReducer = combineReducers({
     productList: productListSlice
 });
 
-const combinedReducer = (state, action) =>
-{
-    if (action.type === HYDRATE)
-    {
+
+const combinedReducer = (state, action) => {
+    if (action.type === HYDRATE) {
         console.log("WORKS!")
         return {
             ...state,
@@ -21,22 +20,7 @@ const combinedReducer = (state, action) =>
     return rootReducer(state, action);
 };
 
-
-const combinedReducer = (state, action) =>
-{
-    if (action.type === HYDRATE)
-    {
-        console.log("WORKS!")
-        return {
-            ...state,
-            ...action.payload,
-        };
-    }
-    return rootReducer(state, action);
-};
-
-export const setupStore = () =>
-{
+export const setupStore = () => {
     return configureStore({
         reducer: combinedReducer,
     })

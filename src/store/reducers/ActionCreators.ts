@@ -1,7 +1,8 @@
 import axios from "axios";
 import { IUser } from "@/modules/IUser";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import productListSlice, {
+import wooCommerceRestApi from "@/services/WooRestApi";
+import {
     productsFetching,
     productsFetchingSuccess,
     productsFetchingError
@@ -20,11 +21,15 @@ export const fetchUsers = createAsyncThunk(
     }
 );
 
-export const fetchProducts = (wooRestApi) => (dispatch) => {
+export const fetchProducts = () => (dispatch) => {
     dispatch(productsFetching());
-    wooRestApi.getProducts({ per_page: 24 })
-        .then((data) => {
-            dispatch(productsFetchingSuccess(data))
+    wooCommerceRestApi.get('products',
+        {
+            per_page: 24
+        }
+    )
+        .then((response) => {
+            dispatch(productsFetchingSuccess(response.data))
         })
         .catch((err) => {
             dispatch(productsFetchingError(err.message))
