@@ -24,7 +24,7 @@ export class WPRestAPI {
     private getBasicAuth(): string {
         const { username, password } = this._authConfig;
         const encodedAuth = Buffer.from(`${username}:${password}`).toString('base64');
-
+        console.log(encodedAuth);
         return `Basic ${encodedAuth}`;
     }
 
