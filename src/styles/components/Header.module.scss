@@ -1,0 +1,15 @@
+@import '../variable';
+
+.header {
+
+    &__catalogTitle {
+        color: $black-color;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+}
+
+.header__catalog-title {
+    color: purple;
+}
