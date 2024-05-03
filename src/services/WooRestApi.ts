@@ -9,7 +9,7 @@ const wooCommerceRestApi = new WooCommerceRestApi({
         headers: {
             "Content-Type": "application/json;charset=UTF-8"
         }
+
     }
 });
-
 export default wooCommerceRestApi;

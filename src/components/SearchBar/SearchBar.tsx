@@ -1,17 +1,27 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import styles from './search-bar.module.scss';
+import styles from '@/styles/components/SearchBar.module.scss'
+// import makeStyles from '@mui/styles/makeStyles';
+
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         "& .MuiInputBase-root": {
+//             background: "rgb(232, 241, 250)"
+//         }
+//     }
+// }));
 
 const SearchBar = () => {
+    // const classes = useStyles();
+
     return (
         <Autocomplete
-            className="search-bar"
             freeSolo
             options={top100Films.map((option) => option.title)}
             renderInput={(params) => (
                 <TextField
-                    className="search-bar__text-field"
+                    className={styles['search-bar__text-field']}
                     {...params}
                     InputProps={{
                         ...params.InputProps,

@@ -25,7 +25,8 @@ export const fetchProducts = () => (dispatch) => {
     dispatch(productsFetching());
     wooCommerceRestApi.get('products',
         {
-            per_page: 24
+            per_page: 24,
+            category: 400
         }
     )
         .then((response) => {
