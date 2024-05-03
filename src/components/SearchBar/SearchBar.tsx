@@ -5,25 +5,22 @@ import styles from './search-bar.module.scss';
 
 const SearchBar = () => {
     return (
-        <>
-            <div className={styles['some-div']}>Lorem ipsum, dolor sit <div className={styles.someDiv__child}>Lorem, ipsum.</div> amet consectetur adipisicing elit. Quae possimus corporis dolorem dignissimos fugit magnam cum, eveniet sapiente. Sequi quos harum ratione possimus beatae aspernatur iste perferendis quo impedit numquam.</div>
-            <Autocomplete
-                className="search-bar"
-                freeSolo
-                options={top100Films.map((option) => option.title)}
-                renderInput={(params) => (
-                    <TextField
-                        className="search-bar__text-field"
-                        {...params}
-                        InputProps={{
-                            ...params.InputProps,
-                            placeholder: "Search",
-                            type: 'search'
-                        }}
-                    />
-                )}
-            />
-        </>
+        <Autocomplete
+            className="search-bar"
+            freeSolo
+            options={top100Films.map((option) => option.title)}
+            renderInput={(params) => (
+                <TextField
+                    className="search-bar__text-field"
+                    {...params}
+                    InputProps={{
+                        ...params.InputProps,
+                        placeholder: "Search",
+                        type: 'search'
+                    }}
+                />
+            )}
+        />
     );
 }
 
