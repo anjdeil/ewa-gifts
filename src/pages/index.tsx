@@ -19,11 +19,12 @@ const Home = () => {
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
       <TopBar />
-      <main>
+      <main
+        style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
         <SearchBar />
         <TestToolkit />
-      </main>
+      </main >
     </>
   );
 };
