@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import styles from '@/styles/components/SearchBar.module.scss'
+import styles from './SearchBar.module.scss'
 // import makeStyles from '@mui/styles/makeStyles';
 
 // const useStyles = makeStyles((theme) => ({
@@ -12,7 +12,8 @@ import styles from '@/styles/components/SearchBar.module.scss'
 //     }
 // }));
 
-const SearchBar = () => {
+const SearchBar = () =>
+{
     // const classes = useStyles();
 
     return (

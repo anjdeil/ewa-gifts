@@ -1,10 +1,10 @@
-import TopBar from "@/components/TopBar/TopBar";
 import Head from "next/head";
 import TestToolkit from "@/components/TestToolkit";
 import SearchBar from "@/components/SearchBar";
 import { useFetchMenuItemsQuery } from "@/services/ActionCreators";
 
-const Home = () => {
+const Home = () =>
+{
   const pageTitle = "Home Page";
   const { data, isLoading, isError, error } = useFetchMenuItemsQuery({ menus: "358" });
 
@@ -18,7 +18,6 @@ const Home = () => {
         <title>{pageTitle}</title>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
-      <TopBar />
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>

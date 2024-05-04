@@ -1,4 +1,3 @@
-import Header from '@/components/Header/Header';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 export default class MyDocument extends Document
 {
@@ -9,7 +8,6 @@ export default class MyDocument extends Document
         <Head>
         </Head>
         <body>
-          <Header></Header>
           <Main />
           <NextScript />
         </body>

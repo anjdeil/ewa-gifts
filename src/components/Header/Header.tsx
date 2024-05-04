@@ -12,8 +12,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import SearchBar from '../SearchBar';
 import Image from 'next/image';
-import styles from '@/styles/components/Header.module.scss';
-function Header()
+import styles from './Header.module.scss';
+const Header = () => 
 {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -118,36 +118,27 @@ function Header()
     );
 
     return (
-        <Box sx={{ flexGrow: 1, }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 1 }}
-                    >
-                        <Image src={'/images/hamburger.svg'} width={30} height={30} alt={'Menu hamburger for categories'} />
-                    </IconButton>
-                    <h3 className={styles['header__catalog-title']}>Katalog</h3>
-                    <SearchBar></SearchBar>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static" className={styles.header}>
+                <Toolbar sx={{ gap: '30px' }}>
+                    <Box display={'flex'}>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"
+                            edge="start"
                             color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 1 }}
                         >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
+                            <Image src={'/images/hamburger.svg'} width={50} height={25} alt={'Menu hamburger for categories'} />
                         </IconButton>
+                        <h3 className={styles['header__category-title']}>
+                            Katalog
+                        </h3>
+                    </Box>
+                    <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
+                        <SearchBar />
+                    </Box>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
                             edge="end"
@@ -157,7 +148,36 @@ function Header()
                             onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            <AccountCircle />
+                            <Image
+                                src={'/images/account.svg'}
+                                alt={'My favorite items'}
+                                width={30}
+                                height={30}
+                            />
+                        </IconButton>
+                        <IconButton
+                            size="large"
+                            aria-label="show 17 new notifications"
+                            color="inherit"
+                        >
+                            <Badge badgeContent={17} color="error">
+                                <Image
+                                    src={'/images/like.svg'}
+                                    alt={'My favorite items'}
+                                    width={30}
+                                    height={30}
+                                />
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                            <Badge badgeContent={4} color="error">
+                                <Image
+                                    src={'/images/shop.svg'}
+                                    alt={'My account button-icon'}
+                                    width={30}
+                                    height={30}
+                                />
+                            </Badge>
                         </IconButton>
                     </Box>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
