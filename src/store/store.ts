@@ -1,20 +1,22 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import TestSlice from "./reducers/TestSlice";
-import { postAPI } from "@/services/PostServices";
+import productListSlice from "./reducers/productListSlice";
+import { wpAPI } from "@/services/ActionCreators";
 
-export const rootReducer = combineReducers({
-    TestSlice,
-    [postAPI.reducerPath]: postAPI.reducer,
+const rootReducer = combineReducers({
+    productList: productListSlice,
+    [wpAPI.reducerPath]: wpAPI.reducer,
 });
 
 export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
-        middleware: (getDefaultMiddleware) => 
-            getDefaultMiddleware().concat(postAPI.middleware)
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware()
+                .concat(wpAPI.middleware)
     })
 }
 
-export type  RootState = ReturnType<typeof rootReducer>;
+
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];

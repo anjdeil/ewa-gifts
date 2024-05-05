@@ -5,7 +5,12 @@ const __dirname = new URL('.', import.meta.url).pathname;
 const nextConfig = {
   reactStrictMode: true,
     sassOptions: {
-        includePaths: [path.join(__dirname, 'styles')],
+      includePaths: [
+        path.join(__dirname, 'styles'),
+        path.join(__dirname, 'components'),
+        path.join(__dirname, 'utils'),
+        path.join(__dirname, 'global'),
+     ],
       },
 };
 

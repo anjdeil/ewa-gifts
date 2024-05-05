@@ -1,0 +1,17 @@
+@import '../../styles/variable';
+
+.header {
+    padding: 15px 0;
+    background-color: $white-lilac;
+    
+    &__category-title {
+        font-size: 26px;
+        font-weight: 400;
+        color: $black-color;
+    }
+
+    &__search-wrapper {
+        max-width: 870px;
+    }
+}
+
