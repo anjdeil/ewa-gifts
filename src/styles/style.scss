@@ -1,6 +1,11 @@
 @import 'reset';
 @import 'fonts';
 
+html,
+body {
+    font-size: 18px;
+}
+
 .test {
     font-family: Urbanist;
     font-weight: 600;

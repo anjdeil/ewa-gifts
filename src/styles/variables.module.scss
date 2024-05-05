@@ -2,12 +2,16 @@ $black-color: #000;
 $white-lilac: #f6f8fc;
 $input-light: #EBF0F3;
 $input-darker: #E4E9ED;
-$white: #FEFEFE;
+$background-white: #FEFEFE;
+$accent: #FECB00;
+$darker: rgba(0, 0, 0, .15);
 
 :export {
     blackColor: $black-color;
     whiteLilac: $white-lilac;
     inputLight: $input-light;
     inputDarker: $input-darker;
-    white: $white;
+    backgroundWhite: $background-white;
+    accent: $accent;
+    darker: $darker;
 }
