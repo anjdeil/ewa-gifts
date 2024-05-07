@@ -1,17 +1,10 @@
 import Head from "next/head";
 import TestToolkit from "@/components/TestToolkit";
 import SearchBar from "@/components/SearchBar";
-import { useFetchMenuItemsQuery } from "@/services/ActionCreators";
 
 const Home = () =>
 {
   const pageTitle = "Home Page";
-  const { data, isLoading, isError, error } = useFetchMenuItemsQuery({ menus: "358" });
-
-  isLoading && console.log('Loading...');
-  isError && console.log(error);
-  data && console.log(data);
-
   return (
     <>
       <Head>

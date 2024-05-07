@@ -1,0 +1,9 @@
+@import '../../styles/variable';
+
+.nav__list {
+    display: flex;
+
+    a {
+        text-decoration: none;
+    }
+}

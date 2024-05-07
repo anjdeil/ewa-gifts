@@ -1,4 +1,9 @@
+import { wpMenuType } from "@/modules";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { z } from "zod";
+
+const menuResponseSchema = z.record(z.any());
+type menuResponseType = z.infer<typeof menuResponseSchema>;
 
 
 export const wpAPI = createApi({
@@ -10,17 +15,16 @@ export const wpAPI = createApi({
                 url: '/menu-items',
                 params,
             }),
-
+            transformResponse: (response: menuResponseType): wpMenuType[] =>
+            {
+                const links = Object.values(response).map(obj => ({
+                    title: obj.title.rendered,
+                    url: obj.url
+                }));
+                return links;
+            },
         })
     })
 })
 
 export const { useFetchMenuItemsQuery } = wpAPI;
-
-// transformResponse: (response) =>
-// {
-//     return response.map(post => ({
-//         ...post,
-//         title: post.title.toUpperCase()
-//     }));
-// },

@@ -36,7 +36,7 @@ const Header: React.FC = () =>
     const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
         <>
             {iconLoading ? (
-                <IconButton {...other}>
+                <IconButton {...other} >
                     <Image
                         src={src}
                         alt={alt}
@@ -58,18 +58,18 @@ const Header: React.FC = () =>
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" className={styles.header}>
                 <Toolbar sx={{ gap: '30px', justifyContent: 'space-between' }}>
-                    <Box display={'flex'}>
-                        {/* {renderIconButton({
+                    <Box display={'flex'} alignItems={'center'}>
+                        {renderIconButton({
                             src: '/images/hamburger.svg',
                             alt: 'Menu hamburger for categories',
-                            width: 50,
-                            height: 25,
+                            width: 30,
+                            height: 30,
                             size: "large",
                             edge: "start",
                             color: "inherit",
-                            'aria-label': "open drawer"
-                        })} */}
-                        <h3 className={styles['header__category-title']}>
+                            'aria-label': "open drawer",
+                        })}
+                        <h3 className={styles['header__category-title']} style={{ margin: '0' }}>
                             Katalog
                         </h3>
                     </Box>

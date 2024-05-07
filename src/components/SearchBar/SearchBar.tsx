@@ -2,15 +2,17 @@ import React from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import styles from './SearchBar.module.scss'
-// import makeStyles from '@mui/styles/makeStyles';
+import { styled } from "@mui/material";
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         "& .MuiInputBase-root": {
-//             background: "rgb(232, 241, 250)"
-//         }
-//     }
-// }));
+const CustomTextField = styled(TextField)`
+& .MuiOutlinedInput-root {
+    border: 1px solid red;
+  }
+
+  .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: blue; /* Change this to your desired hover border color */
+  }
+`;
 
 const SearchBar = () =>
 {
@@ -21,7 +23,7 @@ const SearchBar = () =>
             freeSolo
             options={top100Films.map((option) => option.title)}
             renderInput={(params) => (
-                <TextField
+                <CustomTextField
                     className={styles['search-bar__text-field']}
                     {...params}
                     InputProps={{

@@ -1,27 +1,26 @@
 import Box from '@mui/material/Box';
 import { wpNavLinksProps } from "@/modules";
 import { FC } from 'react';
-import styles from './Navigation.module.scss';
 
-const Nav: FC<wpNavLinksProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
+const Socials: FC<wpNavLinksProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
 {
     return (
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
-            <nav>
-                <ul className={styles['nav__list']}>
+            <nav className="nav">
+                <ul className='social__list'>
                     {isLoading && <p>Loading...</p>}
                     {isError && <p>{error}</p>}
                     {data && data.map((link, index) => (
-                        <li key={index} className='desc'>
+                        <li key={index}>
                             <a href={link.url}>{link.title}</a>
                         </li>
                     ))}
                 </ul>
             </nav>
-        </Box >
+        </Box>
 
     );
 
 };
 
-export default Nav;
+export default Socials;
