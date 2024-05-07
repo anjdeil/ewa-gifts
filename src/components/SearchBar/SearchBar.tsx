@@ -29,24 +29,24 @@ const focusStyles = {
 const SearchBar = () => {
 
     const [options, updateOptions] = useState([
-        { name: "Gadżety biurowe", type: 'Category' },
-        { name: "Akcesoria biurkowe", type: 'Category' },
-        { name: "Wizytowniki reklamowe", type: 'Category' },
-        { name: "Notesy i notatniki reklamowe", type: 'Category' },
-        { name: "Lampki", type: 'Category' },
-        { name: "Soft cover notebooks", type: 'Category' },
-        { name: "Zegary reklamowe", type: 'Category' },
-        { name: "Teczki na dokumenty", type: 'Category' },
-        { name: "Artykuły piśmiennicze", type: 'Category' },
-        { name: "Długopisy", type: 'Category' },
-        { name: "Inne", type: 'Category' },
-        { name: "Markery", type: 'Category' },
-        { name: "Długopis metalowy 2w1 GETAFE", type: 'Product' },
-        { name: "Czapka z daszkiem 6-panelowa SAN FRANCISCO", type: 'Product' },
-        { name: "Teczka A4 PANAMA", type: 'Product' },
-        { name: "Jednorazowa zapalniczka KARLSRUHE", type: 'Product' },
-        { name: "Zapalniczka plastikowa LICHTENSTEIN", type: 'Product' },
-        { name: "Piłka plażowa ORLANDO", type: 'Product' }
+        // { name: "Gadżety biurowe", type: 'Category' },
+        // { name: "Akcesoria biurkowe", type: 'Category' },
+        // { name: "Wizytowniki reklamowe", type: 'Category' },
+        // { name: "Notesy i notatniki reklamowe", type: 'Category' },
+        // { name: "Lampki", type: 'Category' },
+        // { name: "Soft cover notebooks", type: 'Category' },
+        // { name: "Zegary reklamowe", type: 'Category' },
+        // { name: "Teczki na dokumenty", type: 'Category' },
+        // { name: "Artykuły piśmiennicze", type: 'Category' },
+        // { name: "Długopisy", type: 'Category' },
+        // { name: "Inne", type: 'Category' },
+        // { name: "Markery", type: 'Category' },
+        // { name: "Długopis metalowy 2w1 GETAFE", type: 'Product' },
+        // { name: "Czapka z daszkiem 6-panelowa SAN FRANCISCO", type: 'Product' },
+        // { name: "Teczka A4 PANAMA", type: 'Product' },
+        // { name: "Jednorazowa zapalniczka KARLSRUHE", type: 'Product' },
+        // { name: "Zapalniczka plastikowa LICHTENSTEIN", type: 'Product' },
+        // { name: "Piłka plażowa ORLANDO", type: 'Product' }
     ]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);

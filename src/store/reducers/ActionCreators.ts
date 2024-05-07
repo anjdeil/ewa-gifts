@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IUser } from "@/modules/IUser";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import wooCommerceRestApi from "@/services/WooRestApi";
+import wooCommerceRestApi from "@/services/wooCommerceRestApi";
 import {
     productsFetching,
     productsFetchingSuccess,

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+// import dotenv from 'dotenv';
+// dotenv.config({ path: '.env.local' });
 
 const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',

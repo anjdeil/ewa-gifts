@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import productListSlice from "./reducers/productListSlice";
 import { wpAPI } from "@/services/ActionCreators";
+import { wooCommerceApi } from "@/services/wooCommerceApi";
 
 const rootReducer = combineReducers({
     productList: productListSlice,
     [wpAPI.reducerPath]: wpAPI.reducer,
+    [wooCommerceApi.reducerPath]: wooCommerceApi.reducer
 });
 
 export const setupStore = () => {
@@ -13,6 +15,7 @@ export const setupStore = () => {
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware()
                 .concat(wpAPI.middleware)
+                .concat(wooCommerceApi.middleware)
     })
 }
 
