@@ -1,7 +1,8 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import wooCommerceRestApi from "@/services/wooCommerceRestApi";
-import {
+import
+{
     productsFetching,
     productsFetchingSuccess,
     productsFetchingError

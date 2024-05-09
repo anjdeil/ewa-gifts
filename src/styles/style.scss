@@ -1,12 +1,9 @@
 @import 'reset';
 @import 'fonts';
+@import 'globals';
+// @import '../components/Slider/Sider.module.scss';
 
 html,
 body {
     font-size: 18px;
-}
-
-.test {
-    font-family: Urbanist;
-    font-weight: 600;
 }
