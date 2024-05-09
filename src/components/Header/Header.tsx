@@ -2,14 +2,16 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-// import Badge from '@mui/material/Badge';
 import SearchBar from '../SearchBar';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import Skeleton from '@mui/material/Skeleton';
 import { IconButton } from '@mui/material';
+import { CategoriesMenu } from '../CategoriesMenu';
+import { categoriesItems } from './cat';
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 
-// type RenderIconButtonProps = IconButtonProps & ImageProps;
 
 interface IconButtonProps
 {
@@ -20,9 +22,7 @@ interface IconButtonProps
     [key: string]: string | number;
 }
 
-
 type RenderIconButtonProps = IconButtonProps;
-
 
 const Header: React.FC = () => 
 {
@@ -33,10 +33,27 @@ const Header: React.FC = () =>
         setLoaded(true);
     }
 
+    const dispatch = useAppDispatch();
+    const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
+    const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
+
+    const onBurgerClick = () =>
+    {
+        console.log('works');
+        if (!isOpen)
+        {
+            dispatch(setMenuOpen(true));
+        } else
+        {
+            dispatch(setMenuOpen(false))
+            dispatch(setCategory(null));
+        }
+    }
+
     const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
         <>
             {iconLoading ? (
-                <IconButton {...other} >
+                <IconButton {...other}>
                     <Image
                         src={src}
                         alt={alt}
@@ -56,19 +73,24 @@ const Header: React.FC = () =>
 
     return (
         <Box sx={{ flexGrow: 1 }}>
+            <CategoriesMenu categoriesItems={categoriesItems} />
             <AppBar position="static" className={styles.header}>
                 <Toolbar sx={{ gap: '30px', justifyContent: 'space-between' }}>
                     <Box display={'flex'} alignItems={'center'}>
-                        {renderIconButton({
-                            src: '/images/hamburger.svg',
-                            alt: 'Menu hamburger for categories',
-                            width: 30,
-                            height: 30,
-                            size: "large",
-                            edge: "start",
-                            color: "inherit",
-                            'aria-label': "open drawer",
-                        })}
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label='open drawer'
+                            onClick={onBurgerClick}
+                        >
+                            <Image
+                                src={'/images/hamburger.svg'}
+                                alt={'Menu hamburger for categories'}
+                                width={30}
+                                height={30}
+                            />
+                        </IconButton>
                         <h3 className={styles['header__category-title']} style={{ margin: '0' }}>
                             Katalog
                         </h3>

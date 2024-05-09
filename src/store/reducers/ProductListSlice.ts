@@ -8,15 +8,18 @@ const productListSlice = createSlice({
         error: ''
     },
     reducers: {
-        productsFetching(state) {
+        productsFetching(state)
+        {
             state.isLoading = true;
         },
-        productsFetchingSuccess(state, action) {
+        productsFetchingSuccess(state, action)
+        {
             state.isLoading = false;
             state.products = action.payload;
             state.error = '';
         },
-        productsFetchingError(state, action) {
+        productsFetchingError(state, action)
+        {
             state.isLoading = false;
             state.error = action.payload;
         },

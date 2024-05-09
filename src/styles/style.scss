@@ -1,16 +1,9 @@
 @import 'reset';
 @import 'fonts';
-<<<<<<< HEAD
 @import 'globals';
-=======
+// @import '../components/Slider/Sider.module.scss';
 
 html,
 body {
     font-size: 18px;
-}
-
->>>>>>> 99479462cbb9d2094b6c8f10f6a4dddf0d9a9a3b
-.test {
-    font-family: Urbanist;
-    font-weight: 600;
 }

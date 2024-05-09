@@ -1,0 +1,75 @@
+@import '../../styles/variables.module.scss';
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.categories {
+    position: absolute;
+    top: 176px;
+    z-index: 11;
+    display: flex;
+    max-height: 500px;
+    border-radius: 0 0px 10px 0;
+
+    transition: .3s transform ease-in-out;
+    transform: translateX(-105%);
+    background-color: $bg-accent;
+
+    &__list-wrapper {
+        padding: 20px 40px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #D9D9D9;
+    }
+
+    &__list-wrapper_sub {
+        display: none;
+        opacity: 0;
+        transition: opacity 2s ease-in-out;
+    }
+
+    &__list-wrapper_sub-active {
+        opacity: 1;
+        display: block;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+    }
+
+       li {
+            display: flex;
+            width: fit-content;
+            a {
+                padding: 10px;
+                border-radius: 10px;
+                transition: .2s background-color ease-in-out;
+            }
+
+            a:hover {
+                background-color: $hover-cat-menu;
+            }
+        }
+}
+
+.active {
+    transform: translateX(0%);
+}
+
+.activeCategoryList {
+    background-color: red;
+}
+
+.activeCategory {
+    a {
+        background-color: $hover-cat-menu;
+    }
+}
+
+.overlayVisible {
+    background-color: rgba(0, 0, 0, 0.5);
+}

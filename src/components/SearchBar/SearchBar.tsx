@@ -2,20 +2,6 @@ import React, { useState } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-<<<<<<< HEAD
-import styles from './SearchBar.module.scss'
-import { styled } from "@mui/material";
-
-const CustomTextField = styled(TextField)`
-& .MuiOutlinedInput-root {
-    border: 1px solid red;
-  }
-
-  .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: blue; /* Change this to your desired hover border color */
-  }
-`;
-=======
 import variables from '@/styles/variables.module.scss';
 
 const defaultStyles = {
@@ -25,7 +11,6 @@ const defaultStyles = {
         borderColor: variables.inputLight
     }
 };
->>>>>>> 99479462cbb9d2094b6c8f10f6a4dddf0d9a9a3b
 
 const hoverStyles = {
     backgroundColor: variables.inputDarker,
@@ -41,7 +26,8 @@ const focusStyles = {
     }
 };
 
-const SearchBar = () => {
+const SearchBar = () =>
+{
 
     const [options, updateOptions] = useState([
         // { name: "Gadżety biurowe", type: 'Category' },
@@ -87,12 +73,7 @@ const SearchBar = () => {
             getOptionLabel={(option) => option.name}
             renderOption={renderOption}
             renderInput={(params) => (
-<<<<<<< HEAD
-                <CustomTextField
-                    className={styles['search-bar__text-field']}
-=======
                 <TextField
->>>>>>> 99479462cbb9d2094b6c8f10f6a4dddf0d9a9a3b
                     {...params}
                     sx={{
                         '& .MuiOutlinedInput-root': defaultStyles,

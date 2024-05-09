@@ -1,8 +1,8 @@
 import Head from "next/head";
-import TestToolkit from "@/components/TestToolkit";
-import SearchBar from "@/components/SearchBar";
+import { Slider } from "@/components/Slider";
 
-const Home = () => {
+const Home = () =>
+{
   const pageTitle = "Home Page";
   return (
     <>
@@ -11,10 +11,10 @@ const Home = () => {
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
       <main
-        style={{ padding: 30, background: "#F6F8FC" }}>
+        style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
-        <SearchBar />
-        <TestToolkit />
+        {/* <TestToolkit /> */}
+        <Slider />
       </main >
     </>
   );

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useFetchProductListQuery } from "@/services/wooCommerceApi";
+import { useFetchProductListQuery } from "@/store/actionCreators/wooCommerceApi";
 
-const TestToolkit = () => {
-
+const TestToolkit = () =>
+{
     const [categoryId, setCategoryId] = useState(209);
 
     const { data: products, isLoading, isFetching, isError, error } = useFetchProductListQuery({
@@ -10,18 +10,21 @@ const TestToolkit = () => {
         category: categoryId
     });
 
-    useEffect(() => {
-        setTimeout(() => {
+    useEffect(() =>
+    {
+        setTimeout(() =>
+        {
             setCategoryId(400)
         }, 9000)
     }, []);
 
-    if (isLoading || isFetching) {
+    if (isLoading || isFetching)
+    {
         return <p>Loading...</p>
     }
 
-
-    if (isError) {
+    if (isError)
+    {
         return <p>{error}</p>
     }
 
@@ -30,7 +33,8 @@ const TestToolkit = () => {
             <h2>Products</h2>
             <ul>
                 {
-                    products?.map(({ id, name, price }) => {
+                    products?.map(({ id, name, price }) =>
+                    {
                         return (
                             <li key={id}>{name}, <b>${price}</b></li>
                         )
