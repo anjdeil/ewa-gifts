@@ -13,7 +13,6 @@ const Home = () => {
       <main
         style={{ padding: 30, background: "#F6F8FC" }}>
         <h1>{pageTitle}</h1>
-        <SearchBar />
         <TestToolkit />
       </main >
     </>

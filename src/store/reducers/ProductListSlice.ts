@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchProductList } from "./ActionCreators";
 
 const productListSlice = createSlice({
     name: 'productList',
@@ -7,26 +8,24 @@ const productListSlice = createSlice({
         isLoading: false,
         error: ''
     },
-    reducers: {
-        productsFetching(state) {
-            state.isLoading = true;
-        },
-        productsFetchingSuccess(state, action) {
-            state.isLoading = false;
-            state.products = action.payload;
-            state.error = '';
-        },
-        productsFetchingError(state, action) {
-            state.isLoading = false;
-            state.error = action.payload;
-        },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchProductList.pending, (state) => {
+                state.isLoading = true;
+                state.error = '';
+            })
+            .addCase(fetchProductList.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.productList = action.payload;
+                state.error = '';
+            })
+            .addCase(fetchProductList.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
     },
 })
 
-export const {
-    productsFetching,
-    productsFetchingSuccess,
-    productsFetchingError
-} = productListSlice.actions;
 
 export default productListSlice.reducer;

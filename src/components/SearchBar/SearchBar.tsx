@@ -1,31 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-<<<<<<< HEAD
-import styles from './SearchBar.module.scss'
-import { styled } from "@mui/material";
-
-const CustomTextField = styled(TextField)`
-& .MuiOutlinedInput-root {
-    border: 1px solid red;
-  }
-
-  .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: blue; /* Change this to your desired hover border color */
-  }
-`;
-=======
+import { useFetchProductListQuery } from "@/services/wooCommerceApi";
 import variables from '@/styles/variables.module.scss';
 
 const defaultStyles = {
     borderRadius: '10px',
+    paddingTop: "2px",
+    paddingBottom: "2px",
     backgroundColor: variables.inputLight,
     '& .MuiOutlinedInput-notchedOutline': {
         borderColor: variables.inputLight
     }
 };
->>>>>>> 99479462cbb9d2094b6c8f10f6a4dddf0d9a9a3b
 
 const hoverStyles = {
     backgroundColor: variables.inputDarker,
@@ -43,31 +31,27 @@ const focusStyles = {
 
 const SearchBar = () => {
 
-    const [options, updateOptions] = useState([
-        // { name: "Gadżety biurowe", type: 'Category' },
-        // { name: "Akcesoria biurkowe", type: 'Category' },
-        // { name: "Wizytowniki reklamowe", type: 'Category' },
-        // { name: "Notesy i notatniki reklamowe", type: 'Category' },
-        // { name: "Lampki", type: 'Category' },
-        // { name: "Soft cover notebooks", type: 'Category' },
-        // { name: "Zegary reklamowe", type: 'Category' },
-        // { name: "Teczki na dokumenty", type: 'Category' },
-        // { name: "Artykuły piśmiennicze", type: 'Category' },
-        // { name: "Długopisy", type: 'Category' },
-        // { name: "Inne", type: 'Category' },
-        // { name: "Markery", type: 'Category' },
-        // { name: "Długopis metalowy 2w1 GETAFE", type: 'Product' },
-        // { name: "Czapka z daszkiem 6-panelowa SAN FRANCISCO", type: 'Product' },
-        // { name: "Teczka A4 PANAMA", type: 'Product' },
-        // { name: "Jednorazowa zapalniczka KARLSRUHE", type: 'Product' },
-        // { name: "Zapalniczka plastikowa LICHTENSTEIN", type: 'Product' },
-        // { name: "Piłka plażowa ORLANDO", type: 'Product' }
-    ]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [hasSearched, setHasSearched] = useState(false);
+
+    let { data: searchResults = [], isLoading, isFetching, isError, error, refetch } = useFetchProductListQuery({
+        per_page: 12,
+        search: searchTerm
+    }, {
+        skip: searchTerm?.length < 3
+    });
+
+    useEffect(() => {
+        if (searchTerm.length >= 3) {
+            setHasSearched(true);
+            refetch();
+        } else {
+            setHasSearched(false);
+        }
+    }, [searchTerm, refetch]);
 
     const renderOption = (props, option) => (
-        <li {...props}>
+        <li key={option.id} {...props}>
             {option.name}
             <Chip
                 label={option.type}
@@ -80,43 +64,55 @@ const SearchBar = () => {
     );
 
     return (
-        <Autocomplete
-            freeSolo
-            loading={loading}
-            options={options}
-            getOptionLabel={(option) => option.name}
-            renderOption={renderOption}
-            renderInput={(params) => (
-<<<<<<< HEAD
-                <CustomTextField
-                    className={styles['search-bar__text-field']}
-=======
-                <TextField
->>>>>>> 99479462cbb9d2094b6c8f10f6a4dddf0d9a9a3b
-                    {...params}
-                    sx={{
-                        '& .MuiOutlinedInput-root': defaultStyles,
-                        '& .MuiOutlinedInput-root:hover': hoverStyles,
-                        '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
-                    }}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <>
-                                {loading ?
-                                    <CircularProgress
-                                        sx={{ color: variables.darker }}
-                                        size={20} />
-                                    : null}
-                                {params.InputProps.endAdornment}
-                            </>
-                        ),
-                        placeholder: "Search",
-                        type: 'search'
-                    }}
-                />
-            )}
-        />
+        <>
+            <Autocomplete
+                freeSolo
+                loading={isLoading || isFetching}
+                options={searchResults}
+                getOptionLabel={(option) => option.name}
+                filterOptions={(options) => options}
+                renderOption={renderOption}
+                onInputChange={(evt, value) => setSearchTerm(value)}
+                inputValue={searchTerm}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        sx={{
+                            '& .MuiOutlinedInput-root': defaultStyles,
+                            '& .MuiOutlinedInput-root:hover': hoverStyles,
+                            '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
+                        }}
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <>
+                                    {isLoading ?
+                                        <CircularProgress
+                                            sx={{ color: variables.darker }}
+                                            size={20} />
+                                        : null}
+                                    {params.InputProps.endAdornment}
+                                </>
+                            ),
+                            placeholder: "Search",
+                            type: 'search'
+                        }}
+                    />
+                )}
+            />
+            {/* <p style={{ marginTop: 400, color: 'black' }}>{searchTerm} {(isLoading || isFetching) ? "(Loading)" : ""}</p>
+            <div>
+                {isLoading ? (
+                    'Loading...'
+                ) : hasSearched ? (
+                    <ul>
+                        {searchResults?.map((result) => (
+                            <li key={result.id}>{result.name}</li>
+                        ))}
+                    </ul>
+                ) : null}
+            </div> */}
+        </>
     );
 }
 
