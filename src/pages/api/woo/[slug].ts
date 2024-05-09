@@ -25,6 +25,19 @@ export default async function handler(req, res) {
                 res.status(200).json(response.data);
                 break;
             }
+            case "search": {
+                const responses = await Promise.all([
+                    wooCommerceRestApi.get('products/categories', { ...params, per_page: 100 }),
+                    wooCommerceRestApi.get('products', params)
+                ]);
+
+                const response = responses.reduce((acc, curr) => {
+                    return [...acc, ...curr.data];
+                }, []);
+
+                res.status(200).json(response);
+                break;
+            }
             case "categories": {
                 const categories = await fetchAllCategories();
                 res.status(200).json(categories);
