@@ -1,7 +1,7 @@
 import wpRestApi from "@/services/WPRestAPI";
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const { slug, ...params } = req.query;
     if (!slug) {
         return res.status(400).json({ error: 'Slug parameter is missing' });

@@ -1,46 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useFetchProductListQuery } from "@/store/actionCreators/wooCommerceApi";
+import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
 
-const TestToolkit = () =>
-{
-    const [categoryId, setCategoryId] = useState(209);
+const TestToolkit = () => {
 
-    const { data: products, isLoading, isFetching, isError, error } = useFetchProductListQuery({
-        per_page: 24,
-        category: categoryId
-    });
 
-    useEffect(() =>
-    {
-        setTimeout(() =>
-        {
-            setCategoryId(400)
-        }, 9000)
-    }, []);
+    const { data: categories, isLoading, isFetching, isError, error } = useFetchCategoriesListQuery();
 
-    if (isLoading || isFetching)
-    {
+    if (isLoading || isFetching) {
         return <p>Loading...</p>
     }
 
-    if (isError)
-    {
+    if (isError) {
         return <p>{error}</p>
     }
 
     return (
         <>
-            <h2>Products</h2>
+            <h2>Categories</h2>
             <ul>
                 {
-                    products?.map(({ id, name, price }) =>
-                    {
+                    categories?.map(({ id, categoryName, slug, subcategories }) => {
                         return (
-                            <li key={id}>{name}, <b>${price}</b></li>
+                            <>
+                                <li key={id}>{categoryName}, <b>{slug}</b></li>
+                                <ul>
+                                    {
+                                        subcategories?.map(({ id, categoryName, slug }) => (
+                                            <li key={id}>{categoryName}, <b>{slug}</b></li>
+                                        ))
+                                    }
+                                </ul>
+                            </>
                         )
                     })
                 }
             </ul>
+            <button >Open category with id 400</button>
         </>
     )
 }

@@ -30,8 +30,7 @@ const data: HeroPropsType = {
   }
 };
 
-const Home = () =>
-{
+const Home = () => {
   const pageTitle = "Home Page";
   return (
     <>

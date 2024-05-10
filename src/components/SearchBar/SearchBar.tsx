@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceApi";
 import variables from '@/styles/variables.module.scss';
 
 const defaultStyles = {
     borderRadius: '10px',
+    paddingTop: "2px",
+    paddingBottom: "2px",
     backgroundColor: variables.inputLight,
     '& .MuiOutlinedInput-notchedOutline': {
         borderColor: variables.inputLight
@@ -26,37 +29,19 @@ const focusStyles = {
     }
 };
 
-const SearchBar = () =>
-{
+const SearchBar = () => {
 
-    const [options, updateOptions] = useState([
-        // { name: "Gadżety biurowe", type: 'Category' },
-        // { name: "Akcesoria biurkowe", type: 'Category' },
-        // { name: "Wizytowniki reklamowe", type: 'Category' },
-        // { name: "Notesy i notatniki reklamowe", type: 'Category' },
-        // { name: "Lampki", type: 'Category' },
-        // { name: "Soft cover notebooks", type: 'Category' },
-        // { name: "Zegary reklamowe", type: 'Category' },
-        // { name: "Teczki na dokumenty", type: 'Category' },
-        // { name: "Artykuły piśmiennicze", type: 'Category' },
-        // { name: "Długopisy", type: 'Category' },
-        // { name: "Inne", type: 'Category' },
-        // { name: "Markery", type: 'Category' },
-        // { name: "Długopis metalowy 2w1 GETAFE", type: 'Product' },
-        // { name: "Czapka z daszkiem 6-panelowa SAN FRANCISCO", type: 'Product' },
-        // { name: "Teczka A4 PANAMA", type: 'Product' },
-        // { name: "Jednorazowa zapalniczka KARLSRUHE", type: 'Product' },
-        // { name: "Zapalniczka plastikowa LICHTENSTEIN", type: 'Product' },
-        // { name: "Piłka plażowa ORLANDO", type: 'Product' }
-    ]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    let { data: searchResults = [], isLoading, isFetching, isError, error } = useFetchGlobalSearchResultsQuery(searchTerm, {
+        skip: searchTerm?.length < 3
+    });
 
     const renderOption = (props, option) => (
-        <li {...props}>
+        <li key={option.id} {...props}>
             {option.name}
             <Chip
-                label={option.type}
+                label={option.postType}
                 size="small"
                 sx={{
                     marginLeft: 1,
@@ -68,10 +53,14 @@ const SearchBar = () =>
     return (
         <Autocomplete
             freeSolo
-            loading={loading}
-            options={options}
+            loading={isLoading || isFetching}
+            options={searchTerm?.length >= 3 ? searchResults : []}
             getOptionLabel={(option) => option.name}
+            // filterOptions={(options) => options}
             renderOption={renderOption}
+            onInputChange={(evt, value) => setSearchTerm(value)}
+            blurOnSelect
+            inputValue={searchTerm}
             renderInput={(params) => (
                 <TextField
                     {...params}
@@ -84,7 +73,7 @@ const SearchBar = () =>
                         ...params.InputProps,
                         endAdornment: (
                             <>
-                                {loading ?
+                                {isLoading || isFetching ?
                                     <CircularProgress
                                         sx={{ color: variables.darker }}
                                         size={20} />
