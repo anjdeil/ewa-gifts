@@ -12,7 +12,6 @@ interface HeroProps
 
 export const Hero: FC<HeroProps> = ({ data }) =>
 {
-    console.log(data.images.large.src);
     const isMobile = useMediaQuery('(max-width: 1024px)');
 
     return (
@@ -31,12 +30,15 @@ export const Hero: FC<HeroProps> = ({ data }) =>
                         overflow: 'hidden',
                         paddingTop: isMobile ? "60%" : undefined
                     }}>
-                    <Image
-                        src={data.images.large.src}
-                        alt="Test"
-                        layout="fill"
-                        objectFit="cover"
-                    />
+                    <div>
+                        <Image
+                            src={data.images.large.src}
+                            alt="Test"
+                            layout="fill"
+                            objectFit="cover"
+                            sizes="100%"
+                        />
+                    </div>
                 </Box>
             </Box >
         </>

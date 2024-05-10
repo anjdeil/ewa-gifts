@@ -1,10 +1,9 @@
 @import 'reset';
 @import 'fonts';
 @import 'globals';
-@import './variables.module.scss';
+@import './variables.module';
 @import './swiperLib';
-// @import '../components/Slider/Sider.module.scss';
-
+@import './TopProductSlider';
 html,
 body {
     font-size: 18px;
@@ -14,4 +13,3 @@ body {
     scrollbar-width: thin;
     scrollbar-color: $tech-bg $background-white;
 }
-

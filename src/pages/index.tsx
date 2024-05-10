@@ -1,7 +1,9 @@
 import Head from "next/head";
 import { Slider } from "@/components/Slider";
 import { Hero } from "@/components/Hero";
-import { HeroPropsType } from "@/types";
+import { HeroPropsType, TopProductSliderType } from "@/types";
+import { TopProductSlider } from "@/components/TopProductSlider";
+import { Split } from "@/components/Split";
 
 const data: HeroPropsType = {
   title: "Misja perfekcja",
@@ -30,7 +32,68 @@ const data: HeroPropsType = {
   }
 };
 
-const Home = () => {
+const TopSlider: TopProductSliderType[] = [
+  {
+    images: {
+      large: {
+        alt: "Large Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      },
+      small: {
+        alt: "Small Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      }
+    },
+    title: 'Czapka z daszkiem 6-panelowa SAN FRANCISCO',
+    desc: 'Od zł 7.19 bez VAT',
+  },
+
+  {
+    images: {
+      large: {
+        alt: "Large Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      },
+      small: {
+        alt: "Small Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      }
+    },
+    title: 'Czapka z daszkiem 6-panelowa SAN FRANCISCO',
+    desc: 'Od zł 7.19 bez VAT',
+  },
+  {
+    images: {
+      large: {
+        alt: "Large Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      },
+      small: {
+        alt: "Small Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      }
+    },
+    title: 'Czapka z daszkiem 6-panelowa SAN FRANCISCO',
+    desc: 'Od zł 7.19 bez VAT',
+  },
+  {
+    images: {
+      large: {
+        alt: "Large Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      },
+      small: {
+        alt: "Small Image Alt Text",
+        src: "/images/testSlideProd.jpg"
+      }
+    },
+    title: 'Czapka z daszkiem 6-panelowa SAN FRANCISCO',
+    desc: 'Od zł 7.19 bez VAT',
+  },
+]
+
+const Home = () =>
+{
   const pageTitle = "Home Page";
   return (
     <>
@@ -44,6 +107,11 @@ const Home = () => {
         {/* <TestToolkit /> */}
         <Hero data={data} />
         <Slider />
+        <Split
+          leftContent={<TopProductSlider data={TopSlider} />}
+          rightContent={<TopProductSlider data={TopSlider} />}
+          isReversed={true}
+        />
       </main >
     </>
   );

@@ -7,3 +7,16 @@
 .link {
     text-decoration: none;
 }
+
+.sub-title {
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--black);
+}
+
+@media(max-width: 768px) {
+    .desc,
+    .sub-title {
+        font-size: 14px;
+    }
+}
