@@ -6,46 +6,42 @@
     background-color: rgba(0, 0, 0, 0);
 }
 
+.overlayVisible {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .categories {
     position: absolute;
     top: 176px;
     z-index: 11;
     display: flex;
-    max-height: 500px;
+    height: 80vh;
     border-radius: 0 0px 10px 0;
 
-    transition: .3s transform ease-in-out;
+    transition: .4s transform ease-in-out;
     transform: translateX(-105%);
     background-color: $bg-accent;
 
     &__list-wrapper {
         padding: 20px 40px;
         overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #D9D9D9;
-    }
-
-    &__list-wrapper_sub {
-        display: none;
-        opacity: 0;
-        transition: opacity 2s ease-in-out;
-    }
-
-    &__list-wrapper_sub-active {
-        opacity: 1;
-        display: block;
+        transition: opacity 10s ease-in-out;
     }
 
     &__list {
+        margin: 0;
+        padding-inline-start: 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
+        transition: opacity 10s ease-in-out;
     }
 
        li {
             display: flex;
             width: fit-content;
             a {
-                padding: 10px;
+                padding: 13px 10px;
                 border-radius: 10px;
                 transition: .2s background-color ease-in-out;
             }
@@ -56,20 +52,22 @@
         }
 }
 
-.active {
-    transform: translateX(0%);
+.hidden {
+    opacity: 0;
+    display: none
 }
 
-.activeCategoryList {
-    background-color: red;
+.visible {
+    opacity: 1;
+    display: block;
+}
+
+.active {
+    transform: translateX(0%);
 }
 
 .activeCategory {
     a {
         background-color: $hover-cat-menu;
     }
-}
-
-.overlayVisible {
-    background-color: rgba(0, 0, 0, 0.5);
 }

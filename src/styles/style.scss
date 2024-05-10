@@ -1,9 +1,17 @@
 @import 'reset';
 @import 'fonts';
 @import 'globals';
+@import './variables.module.scss';
+@import './swiperLib';
 // @import '../components/Slider/Sider.module.scss';
 
 html,
 body {
     font-size: 18px;
 }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $tech-bg $background-white;
+}
+

@@ -7,22 +7,11 @@ import Image from 'next/image';
 import styles from './Header.module.scss';
 import Skeleton from '@mui/material/Skeleton';
 import { IconButton } from '@mui/material';
-import { CategoriesMenu } from '../CategoriesMenu';
 import { categoriesItems } from './cat';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
-
-
-interface IconButtonProps
-{
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    [key: string]: string | number;
-}
-
-type RenderIconButtonProps = IconButtonProps;
+import { CategoriesMenu } from '../CategoriesMenu';
+import { RenderIconButtonProps } from '@/types';
 
 const Header: React.FC = () => 
 {
@@ -49,7 +38,6 @@ const Header: React.FC = () =>
             dispatch(setCategory(null));
         }
     }
-
     const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
         <>
             {iconLoading ? (

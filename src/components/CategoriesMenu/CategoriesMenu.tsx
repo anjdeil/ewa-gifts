@@ -1,89 +1,66 @@
-import Link from "next/link"
+import Link from "next/link";
 import styles from "./Categories.module.scss";
-import { z } from "zod";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
-
-const subcategories = z.object({
-    id: z.number(),
-    categoryName: z.string(),
-    slug: z.string(),
-});
-
-const categoriesMenuSchema = subcategories.extend({
-    subcategories: z.array(subcategories)
-});
-
-type categoriesMenu = z.infer<typeof categoriesMenuSchema>;
+import { Category } from "@/types";
 
 interface CategoriesMenuProps
 {
-    categoriesItems: categoriesMenu;
-    isMenuOpen: boolean;
+    categoriesItems: Category[];
 }
 
 export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
 {
     const dispatch = useAppDispatch();
-    const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen, isCategoryActive } = useAppSelector(state => state.MenuCategoriesSlice);
+    const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
 
-    const onLinkClick = () =>
+    const onLinkClick = useCallback(() =>
     {
         if (isOpen)
         {
             dispatch(setMenuOpen(false));
             dispatch(setCategory(null));
         }
-    }
+    }, [isOpen, dispatch, setMenuOpen, setCategory]);
 
     return (
         <div className={`${styles.categories} ${isOpen && styles.active}`}>
             <div className={styles['categories__list-wrapper']}>
                 <ul className={styles['categories__list']}>
-                    {
-                        Object.values(categoriesItems).map((item) => (
-                            <li key={item.id}
-                                className={(isCategoryActive === item.id) ? styles.activeCategory : ''}
+                    {categoriesItems.map((category) => (
+                        <li key={category.id} className={isCategoryActive === category.id ? styles.activeCategory : ''}>
+                            <Link href={category.slug} passHref
+                                className="link desc"
+                                onMouseEnter={() => dispatch(setCategory(category.id))}
+                                onClick={onLinkClick}
                             >
-                                <Link href={item.slug}
-                                    className="link desc"
-                                    onMouseEnter={() => dispatch(setCategory(item.id))}
-                                    onClick={onLinkClick}
-                                >
-                                    {item.categoryName}
+                                {category.categoryName}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            {/* {isCategoryActive && ( */}
+            <div className={`${styles['categories__list-wrapper']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
+                <ul className={`${styles['categories__list']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
+                    {
+                        categoriesItems.find((category) => category.id === isCategoryActive)?.subcategories.map((subItem) => (
+                            <li key={subItem.id}>
+                                <Link href={subItem.slug} passHref className="link desc" onClick={onLinkClick}>
+                                    {subItem.categoryName}
                                 </Link>
                             </li>
                         ))
                     }
                 </ul>
             </div>
-            <div className={[
-                styles['categories__list-wrapper'],
-                isCategoryActive ? styles['categories__list-wrapper_sub-active'] : styles['categories__list-wrapper_sub']
-            ].join(' ')}>
-                {
-                    <ul className={[
-                        styles[`categories__list`],
-                        isCategoryActive ? styles['categories__list-wrapper_sub-active'] : styles['categories__list-wrapper_sub']
-                    ].join(' ')}>
-                        {isCategoryActive && Object.values(categoriesItems).map((item) => (
-                            item.id === isCategoryActive && item.subcategories.map((subItem) => (
-                                <li key={subItem.id}>
-                                    <Link href={subItem.slug}
-                                        className="link desc"
-                                        onClick={onLinkClick}
-                                    >
-                                        {subItem.categoryName}
-                                    </Link>
-                                </li>
-                            ))
-                        ))}
-                    </ul>
-                }
-            </div>
-
+            {/* )} */}
         </div >
-    )
-}
+
+
+    );
+};
+
+// export default CategoriesMenu;

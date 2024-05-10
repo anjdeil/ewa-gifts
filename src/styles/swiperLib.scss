@@ -1,11 +1,4 @@
-@import '../../styles/variables.module.scss';
-
-    // border-radius: 10px;
-
-    .swiper-wrapper {
-        opacity: 0;
-    }
-
+.custom-swiper {
     .swiper-button-next::after {
         content: url('/images/swiper-arrow.svg') !important;
     }
@@ -36,3 +29,4 @@
         transition: .1s opacity ease-in-out;
        opacity: 0.5;
     }
+}
