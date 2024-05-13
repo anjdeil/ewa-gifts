@@ -1,0 +1,18 @@
+@import '../../styles/variables.module.scss';
+
+.header {
+    padding: 10px 15px;
+    background-color: $white-lilac;
+    box-shadow: none;
+    
+    &__category-title {
+        font-size: 26px;
+        font-weight: 400;
+        color: $black-color;
+    }
+
+    &__search-wrapper {
+        max-width: 60%;
+    }
+}
+

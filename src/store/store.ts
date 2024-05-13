@@ -1,20 +1,28 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import TestSlice from "./reducers/TestSlice";
-import { postAPI } from "@/services/PostServices";
+import productListSlice from "./reducers/productListSlice";
+import { wpAPI } from "@/store/actionCreators/wpAPI";
+import { wooCommerceApi } from "@/store/actionCreators/wooCommerceApi";
+import MenuCategoriesSlice from "./reducers/MenuCategoriesSlice";
 
-export const rootReducer = combineReducers({
-    TestSlice,
-    [postAPI.reducerPath]: postAPI.reducer,
+const rootReducer = combineReducers({
+    productList: productListSlice,
+    [wpAPI.reducerPath]: wpAPI.reducer,
+    [wooCommerceApi.reducerPath]: wooCommerceApi.reducer,
+    MenuCategoriesSlice: MenuCategoriesSlice.reducer,
 });
 
-export const setupStore = () => {
+export const setupStore = () =>
+{
     return configureStore({
         reducer: rootReducer,
-        middleware: (getDefaultMiddleware) => 
-            getDefaultMiddleware().concat(postAPI.middleware)
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware()
+                .concat(wpAPI.middleware)
+                .concat(wooCommerceApi.middleware)
     })
 }
 
-export type  RootState = ReturnType<typeof rootReducer>;
+
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];

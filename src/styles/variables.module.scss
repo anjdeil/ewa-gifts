@@ -1,5 +1,21 @@
-$primary-color: #64ff00;
- 
+$black-color: #000;
+$white-lilac: #f6f8fc;
+$input-light: #EBF0F3;
+$input-darker: #E4E9ED;
+$background-white: #FEFEFE;
+$accent: #FECB00;
+$darker: rgba(0, 0, 0, .15);
+$bg-accent: #f6f8fc; 
+$hover-cat-menu: rgba(254, 203, 0, 0.28);
+$tech-bg: #d9d9d9;
+
 :export {
-  primaryColor: $primary-color;
+    blackColor: $black-color;
+    whiteLilac: $white-lilac;
+    inputLight: $input-light;
+    inputDarker: $input-darker;
+    backgroundWhite: $background-white;
+    accent: $accent;
+    darker: $darker;
+    $bgAccent: $bg-accent; 
 }

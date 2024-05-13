@@ -1,0 +1,10 @@
+@import './variables.module';
+
+.top-product-slider {
+    .swiper-pagination-bullet {
+        border-radius: 10px;
+        width: 34px;
+        height: 5px;
+        background-color: $tech-bg;
+    }
+}

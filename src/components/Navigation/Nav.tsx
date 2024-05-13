@@ -1,22 +1,33 @@
-import { NavPropsType } from "@/types/header";
-import './style.scss';
-import { Box, List, ListItem, Link } from '@mui/material';
+import Box from '@mui/material/Box';
+import { wpNavLinks } from "@/modules";
+import { FC } from 'react';
+import styles from './Navigation.module.scss';
+import Link from 'next/link';
 
+interface NavProps
+{
+    navLinks: wpNavLinks;
+}
 
-
-const Nav = ({ links }: NavPropsType) =>
+const Nav: FC<NavProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
 {
     return (
-        <nav className="nav">
-            <List className="nav__list">
-                {links.map((link, index) => (
-                    <ListItem key={index}>
-                        <Link href={link.url}>{link.title}</Link>
-                    </ListItem>
-                ))}
-            </List>
-        </nav>
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+            <nav>
+                <ul className={`list-reset ${styles.nav__list}`}>
+                    {isLoading && <p>Loading...</p>}
+                    {isError && <p>{error}</p>}
+                    {data && data.map((link, index) => (
+                        <Link key={index} className='desc link' href={link.url}>
+                            {link.title}
+                        </Link>
+                    ))}
+                </ul>
+            </nav>
+        </Box >
+
     );
+
 };
 
 export default Nav;

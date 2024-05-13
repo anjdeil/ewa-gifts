@@ -1,4 +1,29 @@
-:root {
-  --max-width: 1100px;
+.desc {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--black);
+}
 
+.link {
+    text-decoration: none;
+}
+
+.sub-title {
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--black);
+}
+
+.list-reset {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+@media(max-width: 768px) {
+
+    .desc,
+    .sub-title {
+        font-size: 14px;
+    }
 }
