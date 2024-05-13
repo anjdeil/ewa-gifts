@@ -17,7 +17,7 @@ const Layout: FC = ({ children }) =>
 
     return (
         <>
-            <TopBar navLinks={navLinks} />
+            <TopBar navLinks={navLinks} socials={navLinks} />
             <Header />
             {children}
         </>

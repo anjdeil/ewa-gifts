@@ -5,22 +5,24 @@ import Toolbar from '@mui/material/Toolbar';
 import SearchBar from '../SearchBar';
 import Image from 'next/image';
 import styles from './Header.module.scss';
-import Skeleton from '@mui/material/Skeleton';
+// import Skeleton from '@mui/material/Skeleton';
+// import { RenderIconButtonProps } from '@/types';
 import { IconButton } from '@mui/material';
 import { categoriesItems } from './cat';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
-import { RenderIconButtonProps } from '@/types';
+import Badge from '@mui/material/Badge';
+
 
 const Header: React.FC = () => 
 {
-    const [iconLoading, setLoaded] = React.useState(false);
+    // const [iconLoading, setLoaded] = React.useState(false);
 
-    const handleIconLoad = () =>
-    {
-        setLoaded(true);
-    }
+    // const handleIconLoad = () =>
+    // {
+    //     setLoaded(true);
+    // }
 
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
@@ -38,39 +40,39 @@ const Header: React.FC = () =>
             dispatch(setCategory(null));
         }
     }
-    const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
-        <>
-            {iconLoading ? (
-                <IconButton {...other}>
-                    <Image
-                        src={src}
-                        alt={alt}
-                        width={width}
-                        height={height}
-                        onLoad={handleIconLoad}
-                    />
-                </IconButton>
-            ) : (
-                <Skeleton variant="circular" sx={{ marginRight: '20px' }} >
-                    <Image src={src} alt={''} width={width} height={height} onLoad={handleIconLoad} />
-                </Skeleton>
+    // const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
+    //     <>
+    //         {iconLoading ? (
+    //             <IconButton {...other}>
+    //                 <Image
+    //                     src={src}
+    //                     alt={alt}
+    //                     width={width}
+    //                     height={height}
+    //                     onLoad={handleIconLoad}
+    //                 />
+    //             </IconButton>
+    //         ) : (
+    //             <Skeleton variant="circular" sx={{ marginRight: '20px' }} >
+    //                 <Image src={src} alt={''} width={width} height={height} onLoad={handleIconLoad} />
+    //             </Skeleton>
 
-            )}
-        </>
-    );
-
+    //         )}
+    //     </>
+    // );
     return (
         <Box sx={{ flexGrow: 1 }}>
             <CategoriesMenu categoriesItems={categoriesItems} />
             <AppBar position="static" className={styles.header}>
-                <Toolbar sx={{ gap: '30px', justifyContent: 'space-between' }}>
-                    <Box display={'flex'} alignItems={'center'}>
+                <Toolbar sx={{ gap: '30px', justifyContent: 'space-between', minHeight: '100%!important' }}>
+                    <Box display={'flex'} alignItems={'center'} gap={"15px"} sx={{ minHeight: 'auto' }}>
                         <IconButton
                             size="large"
                             edge="start"
                             color="inherit"
                             aria-label='open drawer'
                             onClick={onBurgerClick}
+                            sx={{ padding: '0' }}
                         >
                             <Image
                                 src={'/images/hamburger.svg'}
@@ -87,24 +89,32 @@ const Header: React.FC = () =>
                         <SearchBar />
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center" } }}>
-                        {renderIconButton({
-                            src: '/images/account.svg',
-                            alt: 'Account of current user',
-                            width: 40,
-                            height: 40,
-                        })}
-                        {renderIconButton({
-                            src: '/images/like.svg',
-                            alt: 'My Favorites products button-icon',
-                            width: 40,
-                            height: 40,
-                        })}
-                        {renderIconButton({
-                            src: '/images/shop.svg',
-                            alt: 'Shop button-icon',
-                            width: 40,
-                            height: 40,
-                        })}
+                        <IconButton>
+                            <Image
+                                src={'/images/account.svg'}
+                                alt={'Account of current user'}
+                                width={24}
+                                height={24}
+                            />
+                        </IconButton>
+                        <IconButton>
+                            <Image
+                                src={'/images/like.svg'}
+                                alt={'My Favorites products button-icon'}
+                                width={24}
+                                height={24}
+                            />
+                        </IconButton>
+                        <IconButton>
+                            <Badge badgeContent={4} color="secondary">
+                                <Image
+                                    src={'/images/shop.svg'}
+                                    alt={'Shop button-icon'}
+                                    width={24}
+                                    height={24}
+                                />
+                            </Badge>
+                        </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>

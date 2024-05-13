@@ -42,21 +42,20 @@ export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
                     ))}
                 </ul>
             </div>
-            {/* {isCategoryActive && ( */}
             <div className={`${styles['categories__list-wrapper']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
                 <ul className={`${styles['categories__list']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
-                    {
+                    {isCategoryActive && (
                         categoriesItems.find((category) => category.id === isCategoryActive)?.subcategories.map((subItem) => (
-                            <li key={subItem.id}>
+                            <li key={subItem.id} className={`${isCategoryActive ? styles.visible : styles.hidden}`}>
                                 <Link href={subItem.slug} passHref className="link desc" onClick={onLinkClick}>
                                     {subItem.categoryName}
                                 </Link>
                             </li>
                         ))
+                    )
                     }
                 </ul>
             </div>
-            {/* )} */}
         </div >
 
 

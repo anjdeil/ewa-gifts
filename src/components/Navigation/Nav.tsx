@@ -1,20 +1,26 @@
 import Box from '@mui/material/Box';
-import { wpNavLinksProps } from "@/modules";
+import { wpNavLinks } from "@/modules";
 import { FC } from 'react';
 import styles from './Navigation.module.scss';
+import Link from 'next/link';
 
-const Nav: FC<wpNavLinksProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
+interface NavProps
+{
+    navLinks: wpNavLinks;
+}
+
+const Nav: FC<NavProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
 {
     return (
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
             <nav>
-                <ul className={styles['nav__list']}>
+                <ul className={`list-reset ${styles.nav__list}`}>
                     {isLoading && <p>Loading...</p>}
                     {isError && <p>{error}</p>}
                     {data && data.map((link, index) => (
-                        <li key={index} className='desc'>
-                            <a href={link.url}>{link.title}</a>
-                        </li>
+                        <Link key={index} className='desc link' href={link.url}>
+                            {link.title}
+                        </Link>
                     ))}
                 </ul>
             </nav>

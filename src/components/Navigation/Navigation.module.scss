@@ -2,8 +2,6 @@
 
 .nav__list {
     display: flex;
-
-    a {
-        text-decoration: none;
-    }
+    padding: 0;
+    gap: 70px;
 }
