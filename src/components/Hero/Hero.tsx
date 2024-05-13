@@ -33,9 +33,11 @@ export const Hero: FC<HeroProps> = ({ data }) =>
                     <div>
                         <Image
                             src={data.images.large.src}
+                            style={{
+                                objectFit: "cover"
+                            }}
                             alt="Test"
-                            layout="fill"
-                            objectFit="cover"
+                            fill
                             sizes="100%"
                         />
                     </div>
