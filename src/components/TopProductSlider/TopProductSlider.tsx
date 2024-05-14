@@ -28,7 +28,6 @@ const imageBoxStyle = {
     height: '100%'
 };
 
-
 export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
 {
     return (

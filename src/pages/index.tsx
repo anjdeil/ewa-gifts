@@ -1,11 +1,11 @@
 import Head from "next/head";
 import CategoryBars from "@/components/CategoryBars/CategoryBars";
-import { Slider } from "@/components/Slider";
+// import { Slider } from "@/components/Slider";
 import { Hero } from "@/components/Hero";
 import { HeroPropsType, TopProductSliderType } from "@/types";
 import { TopProductSlider } from "@/components/TopProductSlider";
 import { Split } from "@/components/Split";
-import TestToolkit from "@/components/TestToolkit";
+import { Features } from "@/components/Features";
 
 const data: HeroPropsType = {
   title: "Misja perfekcja",
@@ -94,6 +94,24 @@ const TopSlider: TopProductSliderType[] = [
   },
 ]
 
+const featuresdata = [
+  {
+    _type: "_",
+    image: "https://new.ewagifts.pl/wp-content/uploads/2024/05/12-years-1.svg",
+    text: "12 lat doświadczenia"
+  },
+  {
+    _type: "_",
+    image: "https://new.ewagifts.pl/wp-content/uploads/2024/05/virsualization.svg",
+    text: "Darmowa wizualizacja"
+  },
+  {
+    _type: "_",
+    image: "https://new.ewagifts.pl/wp-content/uploads/2024/05/support.svg",
+    text: "Profesjonalne doradztwo"
+  }
+]
+
 const Home = () => {
   const pageTitle = "Home Page";
   return (
@@ -108,12 +126,13 @@ const Home = () => {
         <CategoryBars />
         {/* <TestToolkit /> */}
         <Hero data={data} />
-        <Slider />
+        {/* <Slider /> */}
         <Split
           leftContent={<TopProductSlider data={TopSlider} />}
           rightContent={<TopProductSlider data={TopSlider} />}
           isReversed={true}
         />
+        <Features data={featuresdata} />
       </main >
     </>
   );

@@ -4,3 +4,4 @@ export * from './Hero';
 export * from './Global';
 export * from './SliderSwiper';
 export * from './TopProductSlider';
+export * from './Features';
