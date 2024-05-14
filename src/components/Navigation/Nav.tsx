@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { wpNavLinks } from "@/modules";
 import { FC } from 'react';
-import styles from './Navigation.module.scss';
+import styles from './styles.module.scss';
 import Link from 'next/link';
 
 interface NavProps

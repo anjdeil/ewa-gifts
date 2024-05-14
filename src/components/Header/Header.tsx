@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import SearchBar from '../SearchBar';
 import Image from 'next/image';
-import styles from './Header.module.scss';
+import styles from './styles.module.scss';
 // import Skeleton from '@mui/material/Skeleton';
 // import { RenderIconButtonProps } from '@/types';
 import { IconButton } from '@mui/material';

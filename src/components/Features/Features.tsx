@@ -1,6 +1,6 @@
 import { FeaturesType } from "@/types";
 import * as React from 'react';
-import styles from './Features.module.scss';
+import styles from './styles.module.scss';
 import Image from "next/image";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';

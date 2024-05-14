@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { wpNavLinks } from "@/modules";
 import { FC } from 'react';
 import Link from 'next/link';
-import styles from './Socials.module.scss';
+import styles from './styles.module.scss';
 
 interface SocialsProps
 {

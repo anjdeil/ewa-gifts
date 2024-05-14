@@ -5,9 +5,13 @@ $input-darker: #E4E9ED;
 $background-white: #FEFEFE;
 $accent: #FECB00;
 $darker: rgba(0, 0, 0, .15);
-$bg-accent: #f6f8fc; 
+$bg-accent: #f6f8fc;
 $hover-cat-menu: rgba(254, 203, 0, 0.28);
 $tech-bg: #d9d9d9;
+$text-grey: #696969;
+$dusty-gray: #9b9b9b;
+$second-bg: #f7f7f7;
+
 
 :export {
     blackColor: $black-color;
@@ -17,5 +21,5 @@ $tech-bg: #d9d9d9;
     backgroundWhite: $background-white;
     accent: $accent;
     darker: $darker;
-    $bgAccent: $bg-accent; 
+    $bgAccent: $bg-accent;
 }

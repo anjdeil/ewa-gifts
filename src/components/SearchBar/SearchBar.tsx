@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceApi";
+import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceAPI";
 import variables from '@/styles/variables.module.scss';
 
 const defaultStyles = {
@@ -29,7 +29,8 @@ const focusStyles = {
     }
 };
 
-const SearchBar = () => {
+const SearchBar = () =>
+{
 
     const [searchTerm, setSearchTerm] = useState('');
 
