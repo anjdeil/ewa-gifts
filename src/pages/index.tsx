@@ -1,9 +1,11 @@
 import Head from "next/head";
+import CategoryBars from "@/components/CategoryBars/CategoryBars";
 import { Slider } from "@/components/Slider";
 import { Hero } from "@/components/Hero";
 import { HeroPropsType, TopProductSliderType } from "@/types";
 import { TopProductSlider } from "@/components/TopProductSlider";
 import { Split } from "@/components/Split";
+import TestToolkit from "@/components/TestToolkit";
 
 const data: HeroPropsType = {
   title: "Misja perfekcja",
@@ -92,8 +94,7 @@ const TopSlider: TopProductSliderType[] = [
   },
 ]
 
-const Home = () =>
-{
+const Home = () => {
   const pageTitle = "Home Page";
   return (
     <>
@@ -104,6 +105,7 @@ const Home = () =>
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
+        <CategoryBars />
         {/* <TestToolkit /> */}
         <Hero data={data} />
         <Slider />

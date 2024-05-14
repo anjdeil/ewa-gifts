@@ -4,9 +4,11 @@
 @import './variables.module';
 @import './swiperLib';
 @import './TopProductSlider';
+
 html,
 body {
     font-size: 18px;
+    font-family: sans-serif;
 }
 
 * {
