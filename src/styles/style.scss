@@ -4,9 +4,12 @@
 @import './variables.module';
 @import './swiperLib';
 @import './TopProductSlider';
+
 html,
 body {
     font-size: 18px;
+    color: $black-color;
+    background-color: $second-bg;
 }
 
 * {

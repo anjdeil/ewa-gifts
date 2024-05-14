@@ -1,23 +1,35 @@
+@import './variables.module';
+
 .desc {
     font-weight: 400;
     font-size: 18px;
-    color: var(--black);
+    color: $black-color;
 }
 
 .link {
     text-decoration: none;
+    color: inherit;
+}
+
+.more-link {
+    color: $text-grey;
 }
 
 .sub-title {
+    margin: 0;
     font-weight: 600;
     font-size: 20px;
-    color: var(--black);
+    color: $black-color;
 }
 
 .list-reset {
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+.date {
+    color: $dusty-gray;
 }
 
 @media(max-width: 768px) {

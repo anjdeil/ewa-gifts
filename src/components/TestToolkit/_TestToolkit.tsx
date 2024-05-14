@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useFetchProductListQuery } from "@/services/wooCommerceApi";
+import { useFetchProductListQuery } from "@/services/wooCommerceAPI";
 import { useSelector, useDispatch } from 'react-redux';
 import { error } from "console";
 import { fetchProductList } from "@/store/reducers/ActionCreators";
 
-const TestToolkit = () => {
+const TestToolkit = () =>
+{
 
     const dispatch = useDispatch();
     const { productList, isLoading, error } = useSelector((state) => state.productList);
@@ -15,24 +16,28 @@ const TestToolkit = () => {
     //     category: categoryId
     // });
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         dispatch(fetchProductList({
             per_page: 24,
             category: categoryId
         }));
         console.log(isLoading);
 
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             setCategoryId(400)
         }, 9000)
     }, [categoryId]);
 
-    if (isLoading) {
+    if (isLoading)
+    {
         return <p>Loading...</p>
     }
 
 
-    if (error) {
+    if (error)
+    {
         return <p>{error}</p>
     }
 
@@ -41,7 +46,8 @@ const TestToolkit = () => {
             <h2>Products</h2>
             <ul>
                 {
-                    productList?.map(({ id, name, price }) => {
+                    productList?.map(({ id, name, price }) =>
+                    {
                         return (
                             <li key={id}>{name}, <b>${price}</b></li>
                         )

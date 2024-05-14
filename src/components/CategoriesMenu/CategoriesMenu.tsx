@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./Categories.module.scss";
+import styles from "./styles.module.scss";
 import { FC, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
+import { useFetchCategoriesListQuery } from "@/services/wooCommerceAPI";
 
-const TestToolkit = () => {
+const TestToolkit = () =>
+{
 
 
     const { data: categories, isLoading, isFetching, isError, error } = useFetchCategoriesListQuery();
 
-    if (isLoading || isFetching) {
+    if (isLoading || isFetching)
+    {
         return <p>Loading...</p>
     }
 
-    if (isError) {
+    if (isError)
+    {
         return <p>{error}</p>
     }
 
@@ -19,7 +22,8 @@ const TestToolkit = () => {
             <h2>Categories</h2>
             <ul>
                 {
-                    categories?.map(({ id, categoryName, slug, subcategories }) => {
+                    categories?.map(({ id, categoryName, slug, subcategories }) =>
+                    {
                         return (
                             <>
                                 <li key={id}>{categoryName}, <b>{slug}</b></li>
