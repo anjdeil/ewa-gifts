@@ -7,11 +7,13 @@ import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import transformCategoryBars from "@/services/transformers/transformCategoryBars";
 import styles from "./CategoryBars.module.scss";
 
-const CategoryBars = () => {
+const CategoryBars = () =>
+{
 
     const { data = [], isLoading, isError, error } = useFetchCategoriesListQuery();
 
-    if (isLoading) {
+    if (isLoading)
+    {
         return (<CategoryBarsSkeleton />)
     }
 

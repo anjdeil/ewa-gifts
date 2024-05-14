@@ -158,15 +158,18 @@ const blogTest = [
   }
 ]
 
-const Home = () => {
+const Home = () =>
+{
 
   const { data, isError, isLoading } = useFetchProductListQuery({});
 
   let products = [];
 
-  if (data) {
+  if (data)
+  {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    products = data.map((product: any): ProductType => {
+    products = data.map((product: any): ProductType =>
+    {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const colorAttribute = product.attributes.filter((attr: any) => attr.slug === 'pa_kolor' && attr.options.length > 0);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

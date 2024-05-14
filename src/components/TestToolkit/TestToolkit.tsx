@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useFetchCategoriesListQuery } from "@/services/wooCommerceAPI";
+import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
 
 const TestToolkit = () =>
 {
