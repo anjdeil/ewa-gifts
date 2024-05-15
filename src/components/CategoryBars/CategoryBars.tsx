@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
 import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
-import transformCategoryBars from "@/services/transformers/transformCategoryBars";
 import styles from "./CategoryBars.module.scss";
+import transformCategoryBars from "@/services/transformers/transformCategoryBars";
 
 const CategoryBars = () =>
 {

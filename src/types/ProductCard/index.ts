@@ -6,6 +6,7 @@ export const ProductColorSchema = z.object({
 })
 
 export const ProductCardSchema = z.object({
+    id: z.number(),
     name: z.string(),
     price: z.string(),
     slug: z.string(),
@@ -13,7 +14,8 @@ export const ProductCardSchema = z.object({
     image: z.string(),
     attributes: z.array(ProductColorSchema),
     default_attr: z.string(),
-    isSized: z.boolean()
+    isSized: z.boolean(),
+    stock: z.number().nullable()
 })
 
 export type ProductType = z.infer<typeof ProductCardSchema>;

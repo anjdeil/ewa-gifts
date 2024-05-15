@@ -32,6 +32,13 @@
     color: $dusty-gray;
 }
 
+.btn {
+    border-radius: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer
+}
+
 @media(max-width: 768px) {
 
     .desc,

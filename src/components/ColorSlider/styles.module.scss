@@ -1,4 +1,7 @@
 .colorSwiper {
+    padding: 0 25px;
+    position: relative;
+
     &__slide {
         width: 25px;
         height: 25px;
@@ -12,11 +15,11 @@
     }
 
     &__nextBtn {
-        right: 10px;
+        right: 0;
     }
 
     &__prevBtn {
-        left: 10px;
+        left: 0;
     }
 
     &__color {
@@ -51,20 +54,4 @@
             opacity: 0.7;
         }
     }
-
-    // &__color::before {
-    //     content: '';
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     right: 0;
-    //     bottom: 0;
-    //     background-color: rgba(0, 0, 0, 0.5);
-    //     opacity: 0;
-    //     transition: opacity 0.4s ease;
-    // }
-
-    // &__color:hover {
-    //     opacity: ;
-    // }
 }

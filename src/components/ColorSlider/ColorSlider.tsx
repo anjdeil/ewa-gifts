@@ -8,8 +8,9 @@ import styles from './styles.module.scss';
 interface ColorSliderProps
 {
     colors: string[] | null;
-    onColorClick: (color: string) => void;
+    onColorClick: (color: string, productId: number) => void;
     currentColor: string;
+    productId: number;
 }
 
 const colorsTemp = [
@@ -24,27 +25,35 @@ const colorsTemp = [
     '#c2ffd7',
 ]
 
-export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, currentColor }) =>
+
+export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, currentColor, productId }) =>
 {
+
+    const swiperId = `swiper-${productId}`;
+    const nextElId = `${swiperId}-next`;
+    const prevElId = `${swiperId}-prev`;
+
     return (
-        <div style={{ position: 'relative', padding: '0 30px' }}>
+        <div className={`${styles.colorSwiper}`}>
             <Swiper
+                id={swiperId}
                 navigation={{
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+                    nextEl: `#${nextElId}`,
+                    prevEl: `#${prevElId}`,
                 }}
+
                 modules={[Navigation]}
                 spaceBetween={10}
                 slidesPerView={'auto'}
             >
-                {colors && colors.map((color: string, index) =>
+                {colors && colorsTemp.map((color: string, index) =>
                     <SwiperSlide
                         className={`
                         ${styles.colorSwiper__slide}
                         ${(currentColor === color) && styles.colorSwiper__color_active}
                         `}
                         key={color}
-                        onClick={() => onColorClick(color)}
+                        onClick={() => onColorClick(color, productId)}
                     >
                         <div
                             className={`
@@ -58,10 +67,8 @@ export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, curren
                     </SwiperSlide>
                 )}
             </Swiper>
-            <div className={`swiper-button-next ${styles.colorSwiper__nextBtn}`}></div>
-            <div className={`swiper-button-prev ${styles.colorSwiper__prevBtn}`}></div>
-
-
-        </div>
+            <div id={nextElId} className={`swiper-button-next ${styles.colorSwiper__nextBtn}`} />
+            <div id={prevElId} className={`swiper-button-prev ${styles.colorSwiper__prevBtn}`} />
+        </div >
     )
 }

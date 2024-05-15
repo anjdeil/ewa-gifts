@@ -1,10 +1,107 @@
+@import '../../styles/variables.module.scss';
+
 .productCard {
-    background: #fff;
+    background: $white;
     display: flex;
     flex-direction: column;
-    max-width: 300px;
+    height: 100%;
+    // max-width: 300px;
     padding: 24px;
-    margin-bottom: 20px;
     border-radius: 10px;
     text-align: center;
+
+    &__image {
+        margin-bottom: 20px;
+    }
+
+    &__title {
+        margin: 0 auto;
+        margin-bottom: 15px;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        opacity: 0.5;
+    }
+
+    &__colorsWrap {
+        max-width: 80%;
+        margin: 0 auto 15px;
+    }
+
+    &__price {
+        margin-bottom: 10px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__price_vat {
+        opacity: 0.5;
+    }
+
+    &__addBtn {
+        margin-top: auto;
+        font-size: 16px;
+        padding: 12px;
+        background-color: rgba(254, 203, 0, 0.4);
+        transition: background-color .3s ease-in-out;
+
+        &:hover {
+            background-color: rgba(254, 203, 0, 0.7);
+        }
+
+        &:active {
+            background-color: rgba(254, 203, 0, 1);
+        }
+
+        &:disabled {
+            background-color: #f5f5f5;
+        }
+    }
+
+    &__productCount {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    &__stock {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 10px;
+        font-size: 16px;
+
+        span {
+            opacity: 0.5;
+        }
+    }
+
+    &__stockCircle {
+        width: 12px;
+        height: 12px;
+        border-radius: 100%;
+        background-color: #01A900;
+    }
+
+    &__window {
+        padding: 6px;
+        flex-grow: 2;
+        border-radius: 5px;
+        background-color: #F6F8FC;
+    }
+
+    &__countBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        flex-grow: 1;
+        cursor: pointer;
+    }
 }

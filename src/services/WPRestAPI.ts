@@ -1,6 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-// import dotenv from 'dotenv';
-// dotenv.config({ path: '.env.local' });
 
 const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
@@ -53,12 +51,6 @@ export class WPRestAPI
         const result = await this.getResource(url, params);
         return result;
     }
-
-    // _transformMenuItems = (data) => {
-    //     return (
-    //         map()
-    //     )
-    // }
 }
 
 const wpRestApi = new WPRestAPI(authConfig);
