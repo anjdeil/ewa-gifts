@@ -4,7 +4,7 @@ import Image from "next/image";
 import Nav from "@/components/Navigation/Nav";
 import React from 'react';
 import Socials from '../Socials/Socials';
-import { wpNavLinks } from '@/modules';
+import { wpNavLinks } from '@/types/Menus';
 
 
 interface topBarProps

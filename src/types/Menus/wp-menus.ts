@@ -12,6 +12,5 @@ export const wpNavLinksSchema = z.object({
     isLoading: z.boolean()
 });
 
-
 export type wpMenuType = z.infer<typeof wpMenuTypeSchema>;
 export type wpNavLinks = z.infer<typeof wpNavLinksSchema>;

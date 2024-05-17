@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { wpNavLinks } from "@/modules";
+import { wpNavLinks } from "@/types/Menus";
 import { FC } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';

@@ -8,3 +8,4 @@ export * from './Features';
 export * from './Blog';
 export * from './ProductCard';
 export * from './CustomTabs';
+export * from './Menus';

@@ -1,4 +1,4 @@
-import { wpMenuType } from "@/modules";
+import { wpMenuType } from "@/types/Menus";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { z } from "zod";
 

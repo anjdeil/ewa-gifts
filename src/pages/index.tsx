@@ -1,10 +1,11 @@
 import Head from "next/head";
 import CategoryBars from "@/components/CategoryBars/CategoryBars";
-import { useFetchProductListQuery } from "@/store/actionCreators";
 import { transformProductCard } from "@/services/transformers";
 import { ProductCardList } from "@/components/ProductCardsList";
 import { CustomTabs } from "@/components/Tabs";
 import TestToolkit from "@/components/TestToolkit";
+import { useFetchProductListQuery } from "@/services/wooCommerceApi";
+import { ProductSlider } from "@/components/ProductsSlider";
 const Home = () =>
 {
   const { data: initialProducts, isError, isLoading } = useFetchProductListQuery({});
