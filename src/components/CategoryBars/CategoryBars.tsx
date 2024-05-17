@@ -1,19 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
-import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceApi";
+import React from "react";
+import { useFetchAllCategoriesListQuery } from "@/services/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./CategoryBars.module.scss";
 import transformCategoryBars from "@/services/transformers/transformCategoryBars";
 
-const CategoryBars = () =>
-{
+const CategoryBars = () => {
 
-    const { data = [], isLoading, isError, error } = useFetchCategoriesListQuery();
+    const { data = [], isLoading, isError, error } = useFetchAllCategoriesListQuery();
 
-    if (isLoading)
-    {
+    if (isLoading) {
         return (<CategoryBarsSkeleton />)
     }
 

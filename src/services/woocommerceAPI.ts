@@ -1,21 +1,33 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import axios from "axios";
+
+const fetchAllCategories = async (page = 1, categories = []) =>
+{
+    try
+    {
+        const response = await axios.get("api/woo/products/categories", {
+            params: {
+                per_page: 100,
+                page
+            }
+        });
+        const allCategories = categories.concat(response.data);
+
+        if (response.data.length === 100)
+        {
+            return fetchAllCategories(page + 1, allCategories);
+        }
+        return allCategories;
+    } catch (error)
+    {
+        throw error;
+    }
+}
 
 export const wooCommerceApi = createApi({
     reducerPath: 'wooCommerceApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'api/woo' }),
     endpoints: (build) => ({
-        fetchGlobalSearchResults: build.query({
-            query: (search) => ({
-                url: `/search`,
-                params: { search }
-            }),
-            transformResponse: (response) => response.map(
-                (responseRow) => ({
-                    ...responseRow,
-                    postType: responseRow.type ? 'product' : 'category'
-                })
-            )
-        }),
         fetchProductList: build.query({
             query: (params) => ({
                 url: `/products`,
@@ -24,7 +36,7 @@ export const wooCommerceApi = createApi({
         }),
         fetchProductVariations: build.query({
             query: (id) => ({
-                url: `/products/${id}/variations`,
+                url: `/products/${id}/variations`
             })
         }),
         fetchCategoriesList: build.query({
@@ -32,15 +44,28 @@ export const wooCommerceApi = createApi({
                 url: `/categories`,
                 params
             })
+        }),
+        fetchAllCategoriesList: build.query({
+            queryFn: async () =>
+            {
+                try
+                {
+                    const data = await fetchAllCategories();
+                    return { data };
+                } catch (error)
+                {
+                    return { error: "Failed to fetch categories!" }
+                }
+            }
         })
     })
 })
 
 
 export const {
-    useFetchGlobalSearchResultsQuery,
     useFetchProductListQuery,
     useFetchCategoriesListQuery,
+    useFetchAllCategoriesListQuery,
     useLazyFetchProductVariationsQuery,
     useFetchProductVariationsQuery
 } = wooCommerceApi;

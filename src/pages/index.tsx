@@ -4,7 +4,7 @@ import { useFetchProductListQuery } from "@/store/actionCreators";
 import { transformProductCard } from "@/services/transformers";
 import { ProductCardList } from "@/components/ProductCardsList";
 import { CustomTabs } from "@/components/Tabs";
-import { ProductSlider } from "@/components/ProductsSlider";
+import TestToolkit from "@/components/TestToolkit";
 const Home = () =>
 {
   const { data: initialProducts, isError, isLoading } = useFetchProductListQuery({});
@@ -30,8 +30,9 @@ const Home = () =>
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
-        {/* <CategoryBars /> */}
+        <CategoryBars />
         {/* <ProductCardList isError={isError} isLoading={isLoading} products={products} /> */}
+        {/* <TestToolkit /> */}
         <CustomTabs titles={['Najnowsze', 'bestsellers']}>
           <ProductSlider isError={isError} isLoading={isLoading} products={firstPart} />
           <ProductSlider isError={isError} isLoading={isLoading} products={secondPart} />
