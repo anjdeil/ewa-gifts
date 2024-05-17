@@ -1,44 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useFetchCategoriesListQuery } from "@/services/wooCommerceApi";
+import { useFetchAllCategoriesListQuery } from "@/services/wooCommerceApi";
+import wooCommerceRestApi from "@/services/wooCommerceRestApi";
 
-const TestToolkit = () =>
-{
+const TestToolkit = () => {
 
 
-    const { data: categories, isLoading, isFetching, isError, error } = useFetchCategoriesListQuery();
+    const { data: categories, isLoading, isFetching, isError, error } = useFetchAllCategoriesListQuery();
 
-    if (isLoading || isFetching)
-    {
-        return <p>Loading...</p>
+    if (isLoading || isFetching) {
+        return <p>LOADING...</p>
     }
 
-    if (isError)
-    {
+    if (isError) {
         return <p>{error}</p>
     }
 
     return (
         <>
             <h2>Categories</h2>
-            <ul>
+            <ol>
                 {
-                    categories?.map(({ id, categoryName, slug, subcategories }) =>
-                    {
-                        return (
-                            <>
-                                <li key={id}>{categoryName}, <b>{slug}</b></li>
-                                <ul>
-                                    {
-                                        subcategories?.map(({ id, categoryName, slug }) => (
-                                            <li key={id}>{categoryName}, <b>{slug}</b></li>
-                                        ))
-                                    }
-                                </ul>
-                            </>
-                        )
-                    })
+                    categories.map(({ name }) => (
+                        <li>{name}</li>
+                    ))
                 }
-            </ul>
+            </ol>
             <button >Open category with id 400</button>
         </>
     )

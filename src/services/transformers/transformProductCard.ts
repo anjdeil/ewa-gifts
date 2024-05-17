@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductType } from "@/types";
-export const transformProductCard = (data: any[]): ProductType[] =>
-{
+export const transformProductCard = (data: any[]): ProductType[] => {
     console.log(data);
-    return data.map((product: any): ProductType =>
-    {
+    return data.map((product: any): ProductType => {
         const colorAttribute = product.attributes.find((attr: any) => attr.slug === 'pa_kolor' && attr.options.length > 0);
         const sizes = product.attributes.find((attr: any) => attr.slug === 'pa_rozmiar' && attr.options.length > 0);
 

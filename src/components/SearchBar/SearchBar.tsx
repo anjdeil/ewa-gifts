@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useFetchGlobalSearchResultsQuery } from "@/services/wooCommerceApi";
+import { useFetchProductListQuery } from "@/services/wooCommerceApi";
 import variables from '@/styles/variables.module.scss';
 
 const defaultStyles = {
@@ -29,12 +29,13 @@ const focusStyles = {
     }
 };
 
-const SearchBar = () =>
-{
+const SearchBar = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    let { data: searchResults = [], isLoading, isFetching, isError, error } = useFetchGlobalSearchResultsQuery(searchTerm, {
+    let { data: searchResults = [], isLoading, isFetching, isError, error } = useFetchProductListQuery({
+        search: searchTerm
+    }, {
         skip: searchTerm?.length < 3
     });
 
@@ -42,7 +43,7 @@ const SearchBar = () =>
         <li key={option.id} {...props}>
             {option.name}
             <Chip
-                label={option.postType}
+                label={option.type}
                 size="small"
                 sx={{
                     marginLeft: 1,
