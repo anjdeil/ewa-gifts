@@ -24,7 +24,7 @@ export const wooCommerceApi = createApi({
         }),
         fetchProductVariations: build.query({
             query: (id) => ({
-                url: `/products-${id}-variations`,
+                url: `/products/${id}/variations`,
             })
         }),
         fetchCategoriesList: build.query({

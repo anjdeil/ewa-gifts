@@ -46,7 +46,7 @@ export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, curren
                 spaceBetween={10}
                 slidesPerView={'auto'}
             >
-                {colors && colorsTemp.map((color: string, index) =>
+                {colors && colors.map((color: string, index) =>
                     <SwiperSlide
                         className={`
                         ${styles.colorSwiper__slide}

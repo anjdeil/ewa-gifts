@@ -4,16 +4,21 @@ import { useFetchProductListQuery } from "@/store/actionCreators";
 import { transformProductCard } from "@/services/transformers";
 import { ProductCardList } from "@/components/ProductCardsList";
 import { CustomTabs } from "@/components/Tabs";
+import { ProductSlider } from "@/components/ProductsSlider";
 const Home = () =>
 {
-  // const { data: initialProducts, isError, isLoading } = useFetchProductListQuery({});
+  const { data: initialProducts, isError, isLoading } = useFetchProductListQuery({});
 
-  // let products = null;
+  let products = null;
+  let firstPart = null;
+  let secondPart = null;
 
-  // if (initialProducts)
-  // {
-  //   products = transformProductCard(initialProducts);
-  // }
+  if (initialProducts)
+  {
+    products = transformProductCard(initialProducts);
+    firstPart = products.slice(0, 5);
+    secondPart = products.slice(5);
+  }
 
   const pageTitle = "Home Page";
   return (
@@ -28,8 +33,8 @@ const Home = () =>
         {/* <CategoryBars /> */}
         {/* <ProductCardList isError={isError} isLoading={isLoading} products={products} /> */}
         <CustomTabs titles={['Najnowsze', 'bestsellers']}>
-          <p>Najnowsze</p>
-          <p>bestsellers</p>
+          <ProductSlider isError={isError} isLoading={isLoading} products={firstPart} />
+          <ProductSlider isError={isError} isLoading={isLoading} products={secondPart} />
         </CustomTabs>
       </main >
     </>

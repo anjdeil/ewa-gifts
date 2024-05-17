@@ -22,18 +22,9 @@ async function fetchAllCategories(page = 1, categories = [])
 
 export default async function handler(req, res)
 {
-
     const { slug, ...params } = req.query;
     try
     {
-        if (slug.includes('-'))
-        {
-            const req = slug.replace(/-/g, '/');
-            console.log(req);
-            const response = await wooCommerceRestApi.get(req);
-            res.status(200).json(response.data);
-        }
-
         switch (slug)
         {
             case "products": {
