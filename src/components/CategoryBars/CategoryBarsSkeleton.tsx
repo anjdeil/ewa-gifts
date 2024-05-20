@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./CategoryBars.module.scss";
+import styles from "./styles.module.scss";
 import { Skeleton } from "@mui/material";
 import variables from '@/styles/variables.module.scss';
 

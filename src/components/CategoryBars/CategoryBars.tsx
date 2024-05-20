@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { useFetchAllCategoriesListQuery } from "@/services/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
-import styles from "./CategoryBars.module.scss";
+import styles from "./styles.module.scss";
 import transformCategoryBars from "@/services/transformers/transformCategoryBars";
 
 const CategoryBars = () => {

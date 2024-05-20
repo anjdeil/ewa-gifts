@@ -6,20 +6,12 @@ import { CustomTabs } from "@/components/Tabs";
 import TestToolkit from "@/components/TestToolkit";
 import { useFetchProductListQuery } from "@/services/wooCommerceApi";
 import { ProductSlider } from "@/components/ProductsSlider";
-const Home = () =>
-{
-  const { data: initialProducts, isError, isLoading } = useFetchProductListQuery({});
+const Home = () => {
+  const { data = [], isError, isLoading } = useFetchProductListQuery({
+    include: [11753, 1174, 1176, 11012, 2768]
+  });
 
-  let products = null;
-  let firstPart = null;
-  let secondPart = null;
-
-  if (initialProducts)
-  {
-    products = transformProductCard(initialProducts);
-    firstPart = products.slice(0, 5);
-    secondPart = products.slice(5);
-  }
+  const products = data.length ? transformProductCard(data) : [];
 
   const pageTitle = "Home Page";
   return (
@@ -35,8 +27,8 @@ const Home = () =>
         {/* <ProductCardList isError={isError} isLoading={isLoading} products={products} /> */}
         {/* <TestToolkit /> */}
         <CustomTabs titles={['Najnowsze', 'bestsellers']}>
-          <ProductSlider isError={isError} isLoading={isLoading} products={firstPart} />
-          <ProductSlider isError={isError} isLoading={isLoading} products={secondPart} />
+          <ProductSlider isError={isError} isLoading={isLoading} products={products} />
+          <ProductSlider isError={isError} isLoading={isLoading} products={products} />
         </CustomTabs>
       </main >
     </>
