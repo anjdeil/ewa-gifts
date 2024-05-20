@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import wooCommerceRestApi from "@/services/wooCommerceRestApi";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import
 {
     productsFetching,
@@ -11,11 +11,14 @@ import
 
 export const fetchUsers = createAsyncThunk(
     'user/fetchAll',
-    async (_, thunkAPI) => {
-        try {
+    async (_, thunkAPI) =>
+    {
+        try
+        {
             const response = await axios.get<IUser[]>('https://jsonplaceholder.typicode.com/users');
             return response.data;
-        } catch (error) {
+        } catch (error)
+        {
             return thunkAPI.rejectWithValue("Can't get the users :(")
         }
     }
@@ -38,7 +41,8 @@ export const fetchUsers = createAsyncThunk(
 // }
 export const fetchProductList = createAsyncThunk(
     'productList/fetchProductList',
-    async (params) => {
+    async (params) =>
+    {
         const response = await axios.get('/api/woo/products', { params });
         return response.data;
     }

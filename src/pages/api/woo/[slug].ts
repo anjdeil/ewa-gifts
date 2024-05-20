@@ -1,4 +1,4 @@
-import wooCommerceRestApi from "@/services/wooCommerceRestApi";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { log } from "console";
 
 async function fetchAllCategories(page = 1, categories = [])

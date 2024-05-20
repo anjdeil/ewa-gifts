@@ -1,3 +1,3 @@
-export * from './WordPress/WPRestAPI';
-export * from './wooCommerceRestApi';
-export * from './ContactForm7';
+export * from './wordpress/WPRestAPI';
+export * from './wooCommerce/wooCommerceRestApi';
+export * from './contactForm7/ContactForm7RestApi';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useFetchProductListQuery } from "@/services/wooCommerceApi";
+import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { useSelector, useDispatch } from 'react-redux';
 import { error } from "console";
 import { fetchProductList } from "@/store/reducers/ActionCreators";

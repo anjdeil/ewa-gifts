@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useFetchAllCategoriesListQuery } from "@/services/wooCommerceApi";
-import wooCommerceRestApi from "@/services/wooCommerceRestApi";
+import { useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 
-const TestToolkit = () => {
+const TestToolkit = () =>
+{
 
 
     const { data: categories, isLoading, isFetching, isError, error } = useFetchAllCategoriesListQuery();
 
-    if (isLoading || isFetching) {
+    if (isLoading || isFetching)
+    {
         return <p>LOADING...</p>
     }
 
-    if (isError) {
+    if (isError)
+    {
         return <p>{error}</p>
     }
 

@@ -1,7 +1,7 @@
 import { FC } from "react";
-import Header from "../Header/Header";
-import TopBar from "../TopBar/TopBar";
-import { useFetchMenuItemsQuery } from "@/store/actionCreators/wpAPI";
+import Header from "../Layouts/Header/Header";
+import TopBar from "../Layouts/TopBar/TopBar";
+import { useFetchMenuItemsQuery } from "@/store/wordpress/wpAPI";
 import { wpNavLinks } from "@/types/Menus";
 
 const Layout: FC = ({ children }) =>
