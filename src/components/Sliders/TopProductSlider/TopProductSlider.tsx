@@ -5,13 +5,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 import Image from "next/image";
-import { TopProductSliderType } from "@/types";
 import { Box, Typography } from "@mui/material";
-
-interface TopProductSliderProps
-{
-    data: TopProductSliderType[]
-}
+import { TopProductSliderProps } from "@/types";
 
 const swiperStyle = {
     borderRadius: '10px'

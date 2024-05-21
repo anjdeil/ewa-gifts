@@ -1,0 +1,25 @@
+@import '@/styles/variables.module.scss';
+
+
+.sliderMenu {
+
+    &__slide {}
+
+    &__navBtn {
+        margin: 10px 0;
+        width: 100%;
+        height: 25px;
+        border-radius: 10px;
+        position: static;
+        background-color: $tech-bg;
+
+        &::after {
+            display: none;
+        }
+
+        svg {
+            width: 15px;
+            height: 15px;
+        }
+    }
+}

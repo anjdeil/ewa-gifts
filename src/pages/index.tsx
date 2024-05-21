@@ -2,13 +2,13 @@ import Head from "next/head";
 import CategoryBars from "@/components/Common/CategoryBars/CategoryBars";
 import { transformProductCard } from "@/services/transformers";
 import { ProductCardList } from "@/components/Shop/ProductCardsList";
-import { CustomTabs } from "@/components/Tabs";
+import { CustomTabs } from "@/components/Common/Tabs";
 import TestToolkit from "@/components/TestToolkit";
 import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { ProductSlider } from "@/components/Shop/ProductsSlider";
 import { useSendAnEmailMutation } from "@/store/contactForm7/contactForm7Api";
 import axios from "axios";
-import { SubscriptionForm } from "@/components/SubscriptionForm";
+import { SubscriptionForm } from "@/components/Forms/SubscriptionForm";
 import { Box, Skeleton } from "@mui/material";
 const Home = () =>
 {
@@ -57,12 +57,6 @@ const Home = () =>
         {/* <CategoryBars /> */}
         {/* <button onClick={() => handleClick()}>Click</button> */}
         <ProductCardList isError={isError} isLoading={isLoading} products={products} />
-        {/* <TestToolkit /> */}
-        {/* <CustomTabs titles={['Najnowsze', 'bestsellers']}>
-          <ProductSlider isError={isError} isLoading={isLoading} products={firstPart} />
-          <ProductSlider isError={isError} isLoading={isLoading} products={secondPart} />
-        </CustomTabs> */}
-        {/* <SubscriptionForm /> */}
       </main >
     </>
   );

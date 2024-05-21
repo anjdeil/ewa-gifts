@@ -1,4 +1,4 @@
-import { wpMenuType } from "@/types/Menus";
+import { wpNavLink } from "@/types/layouts/Menus";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { z } from "zod";
 
@@ -15,11 +15,14 @@ export const wpAPI = createApi({
                 url: '/menu-items',
                 params,
             }),
-            transformResponse: (response: menuResponseType): wpMenuType[] =>
+            transformResponse: (response: menuResponseType): wpNavLink[] =>
             {
                 const links = Object.values(response).map(obj => ({
                     title: obj.title.rendered,
-                    url: obj.url
+                    url: obj.url,
+                    isButton: obj.is_button,
+                    isIcon: obj.fa_icon_code,
+                    id: obj.id,
                 }));
                 return links;
             },

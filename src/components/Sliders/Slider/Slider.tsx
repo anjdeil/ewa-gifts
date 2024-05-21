@@ -4,12 +4,7 @@ import 'swiper/css/navigation';
 import 'swiper/css';
 import { Navigation } from 'swiper/modules';
 import Image from "next/image";
-import { SlidersType } from "@/types";
-
-interface SliderProps
-{
-    data: SlidersType;
-}
+import { SliderProps } from "@/types";
 
 export const Slider: FC<SliderProps> = ({ data }) =>
 {
