@@ -59,7 +59,7 @@ const MobileSearchPopup = ({ onClose }) => {
     });
     products = transformSearchBarProducts(products);
 
-    const searchResults = [{ name: searchTerm, type: "Search" }, ...categories, ...products];
+    const searchResults = [{ key: 'seach', name: searchTerm, type: "Search" }, ...categories, ...products];
 
     const onSearch = (evt, value) => {
         setSearchTerm(value);

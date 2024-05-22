@@ -1,24 +1,22 @@
 import Box from '@mui/material/Box';
-import { wpNavLinks } from "@/types/Menus";
 import { FC } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
+import { useFetchMenuItemsQuery } from '@/store/wordpress';
+import { wpMenuProps } from '@/types';
 
-interface NavProps
+const Nav: FC<wpMenuProps> = ({ menuId, className }) =>
 {
-    navLinks: wpNavLinks;
-}
+    const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
 
-const Nav: FC<NavProps> = ({ navLinks: { isLoading, data, isError, error } }) =>
-{
     return (
-        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box className={`${className && className}`}>
             <nav>
                 <ul className={`list-reset ${styles.nav__list}`}>
                     {isLoading && <p>Loading...</p>}
                     {isError && <p>{error}</p>}
                     {data && data.map((link, index) => (
-                        <Link key={index} className='desc link' href={link.url}>
+                        <Link key={index} className='desc nav-link link' href={link.url}>
                             {link.title}
                         </Link>
                     ))}

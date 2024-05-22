@@ -1,0 +1,83 @@
+.form {
+
+    &__logo {
+        display: inline-block;
+        margin-bottom: 30px;
+    }
+
+    form {
+        margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__title {
+        margin-bottom: 20px;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+
+    &__input {
+        margin-bottom: 15px;
+        padding: 14px 22px;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+
+    &__checkbox {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+
+        input {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    &__btn {
+        width: fit-content;
+    }
+
+    &__rules {
+        font-size: 16px;
+    }
+
+    &__error {
+        margin: 5px;
+        color: red;
+    }
+}
+
+@media (max-width: 1024px) {
+    .form {
+        &__logo {
+            margin-bottom: 15px;
+        }
+
+        &__title {
+            font-size: 16px;
+        }
+
+        &__input {
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        &__checkbox {
+            font-size: 14px;
+        }
+
+        &__btn {
+            width: 100%;
+        }
+
+        &__rules {
+            text-align: center;
+            font-size: 14px;
+        }
+    }
+}

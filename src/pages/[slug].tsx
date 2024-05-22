@@ -3,7 +3,8 @@ import Head from "next/head";
 import variables from '../styles/variables.module.scss';
 
 
-const Page = () => {
+const Page = () =>
+{
   const router = useRouter();
   const { slug } = router.query;
 

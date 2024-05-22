@@ -1,13 +1,7 @@
-import { BlogListType } from "@/types";
 import { FC } from "react";
 import { Grid } from "@mui/material";
 import { BlogListItem } from "../BlogListItem";
-
-interface BlogListProps
-{
-    data: BlogListType;
-}
-
+import { BlogListProps } from "@/types";
 export const BlogList: FC<BlogListProps> = ({ data }) =>
 {
     return (

@@ -3,12 +3,7 @@ import styles from "./styles.module.scss";
 import { FC, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
-import { Category } from "@/types";
-
-interface CategoriesMenuProps
-{
-    categoriesItems: Category[];
-}
+import { CategoriesMenuProps } from "@/types";
 
 export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
 {

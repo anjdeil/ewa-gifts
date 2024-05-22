@@ -8,14 +8,14 @@ const Breadcrumbs = ({ links }) => {
     return (
         <MuiBreadcrumbs aria-label="Breadcrumbs">
             {
-                links?.map(({ name, url, isCurrent }) => {
+                links?.map(({ name, url, isCurrent }, i) => {
                     if (isCurrent) {
                         return (
-                            <Typography>{name}</Typography>
+                            <Typography key={i}>{name}</Typography>
                         )
                     } else {
                         return (
-                            <Link className={styles['breadcrumbs__link']} href={url}>{name}</Link>
+                            <Link key={i} className={styles['breadcrumbs__link']} href={url}>{name}</Link>
                         )
                     }
                 })

@@ -1,15 +1,8 @@
 import { FC } from "react"
-import { z } from "zod"
-import styles from './style.module.scss';
+import styles from './styles.module.scss';
+import { CounterProps } from "@/types";
 
-const CounterSchema = z.object({
-    onClickHandler: z.function().args(z.any()).returns(z.void()),
-    count: z.number()
-});
-
-type CounterType = z.infer<typeof CounterSchema>;
-
-export const Counter: FC<CounterType> = ({ onClickHandler, count }) =>
+export const Counter: FC<CounterProps> = ({ onClickHandler, count }) =>
 {
     return (
         <div className={styles.counter}>

@@ -3,16 +3,19 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
-    const { slug, body } = req.query;
+    let slug = req.query.path;
 
-    if (!slug)
+    if (!slug || slug.length === 0)
     {
         return res.status(400).json({ error: 'Slug parameter is missing' });
     }
 
-    const slugRes = slug.join('/');
+    if (Array.isArray(slug))
+    {
+        slug = slug.join('/');
+    }
 
-    CF7RestApi.send(slugRes, req.body)
+    CF7RestApi.send(slug, req.body)
         .then((response) => res.status(200).json(response.data))
         .catch((error) =>
         {

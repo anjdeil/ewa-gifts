@@ -1,6 +1,6 @@
 import { AddButtonProps } from "@/types";
 import { FC } from "react";
-import styles from './style.module.scss';
+import styles from './styles.module.scss';
 
 export const AddButton: FC<AddButtonProps> = ({ onClickHandler, className, disabled = false }) => (
     <button

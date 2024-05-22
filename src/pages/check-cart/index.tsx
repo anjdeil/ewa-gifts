@@ -84,15 +84,9 @@ const CheckPage = () => {
                         <select onChange={onChangeColor} value={choosenOptions.pa_kolor} name="pa_kolor">
                             {
                                 product.attributes.find(({ slug }) => slug === "pa_kolor")?.options.map(option => (
-                                    <option value={option}>{option}</option>
+                                    <option key={option} value={option}>{option}</option>
                                 ))
                             }
-                            <option value="biały">biały</option>
-                            <option value="czarny">czarny</option>
-                            <option value="czerwony">czerwony</option>
-                            <option value="fioletowy">fioletowy</option>
-                            <option value="niebieski">niebieski</option>
-                            <option value="zielony">zielony</option>
                         </select>
                     </label>
                     <br /><br />

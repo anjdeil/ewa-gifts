@@ -2,17 +2,8 @@ import { FC } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
-import { z } from "zod";
-import { ProductCardSchema } from "@/types";
 import { ProductCard } from "../ProductCard";
-
-const ProductSliderSchema = z.object({
-    isError: z.boolean(),
-    isLoading: z.boolean(),
-    products: z.array(ProductCardSchema).nullable(),
-});
-
-type ProductSliderType = z.infer<typeof ProductSliderSchema>;
+import { ProductSliderType } from "@/types";
 
 export const ProductSlider: FC<ProductSliderType> = ({ isError, isLoading, products }) =>
 {
