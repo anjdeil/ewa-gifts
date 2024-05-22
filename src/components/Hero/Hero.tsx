@@ -1,6 +1,6 @@
 import { HeroPropsType } from "@/types";
 import { FC } from "react";
-import { RichTextComponent } from "../RichTextComponent";
+import { RichTextComponent } from "../Common/RichTextComponent";
 import { Box, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 

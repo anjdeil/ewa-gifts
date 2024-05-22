@@ -1,0 +1,27 @@
+@import "@/styles/variables.module.scss";
+
+.search-popup {
+    position: fixed;
+    z-index: 1000;
+    background-color: $background-white;
+    inset: 0;
+
+    &__header {
+        padding: 0 20px;
+        height: 60px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        background-color: $white-lilac;
+    }
+
+    &__option {
+        text-decoration: none;
+        color: $black-color;
+    }
+
+    &__list-item {
+        padding: 5px 20px;
+    }
+}
