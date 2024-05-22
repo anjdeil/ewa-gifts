@@ -26,8 +26,8 @@ export const wpAPI = createApi({
                 }));
                 return links;
             },
-        })
-    })
+        }),
+    }),
 })
 
 export const { useFetchMenuItemsQuery } = wpAPI;

@@ -5,3 +5,5 @@ export * from './Shop';
 export * from './Buttons';
 export * from './Common';
 export * from './Sliders';
+export * from './wpRestApi';
+export * from './PageBuilder';

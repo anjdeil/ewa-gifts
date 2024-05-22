@@ -1,2 +1,2 @@
-export * from './transformCategoryBars';
-export * from './transformProductCard';
+export * from './woocommerce/transformCategoryBars';
+export * from './woocommerce/transformProductCard';

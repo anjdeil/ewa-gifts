@@ -3,11 +3,18 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
-    const { slug, ...params } = req.query;
+    const { ...params } = req.query;
 
-    if (!slug)
+    let slug = req.query.path;
+
+    if (!slug || slug.length === 0)
     {
         return res.status(400).json({ error: 'Slug parameter is missing' });
+    }
+
+    if (Array.isArray(slug))
+    {
+        slug = slug.join('/');
     }
 
     wpRestApi.get(slug, params)

@@ -1,3 +1,4 @@
+import { wpRestApiProps } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 const authConfig: AuthConfig = {
@@ -46,7 +47,7 @@ export class WPRestAPI
         return response;
     }
 
-    async get(url: string, params: any)
+    async get(url: string, params?: any)
     {
         const result = await this.getResource(url, params);
         return result;

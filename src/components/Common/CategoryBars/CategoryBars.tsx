@@ -4,7 +4,7 @@ import React from "react";
 import { useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./CategoryBars.module.scss";
-import transformCategoryBars from "@/services/transformers/transformCategoryBars";
+import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
 
 const CategoryBars = () =>
 {
