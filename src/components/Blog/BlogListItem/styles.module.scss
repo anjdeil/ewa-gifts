@@ -1,0 +1,47 @@
+.blogItem {
+
+    &__image {
+        display: block;
+        margin-bottom: 20px;
+        position: relative;
+        padding-top: 40%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    &__title {
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
+    &__date {
+        margin-bottom: 16px;
+    }
+
+    &__text p {
+        margin: 0;
+        margin-bottom: 20px;
+    }
+}
+
+@media(max-width: 768px) {
+    .blogItem {
+        &__image {
+            padding-top: 50%;
+            margin-bottom: 5px;
+        }
+
+        &__title {
+            margin-bottom: 5px;
+        }
+
+        &__date {
+            font-size: 10px;
+            margin-bottom: 16px;
+        }
+
+        &__text p {
+            margin-bottom: 10px;
+        }
+    }
+}

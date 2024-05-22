@@ -1,25 +1,18 @@
-import { FC } from "react";
-import Header from "../Header/Header";
-import TopBar from "../TopBar/TopBar";
-import { useFetchMenuItemsQuery } from "@/store/actionCreators/wpAPI";
-import { wpNavLinks } from "@/modules";
+import React, { FC, useEffect } from "react";
+import Header from "../Layouts/Header/Header";
+import TopBar from "../Layouts/TopBar/TopBar";
+import PopupContainer from "@/components/Popups/PopupContainer";
+import { Footer } from "../Layouts";
 
-const Layout: FC = ({ children }) =>
-{
-    const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: "358" });
 
-    const navLinks: wpNavLinks = {
-        data,
-        error,
-        isError,
-        isLoading,
-    }
-
+const Layout: FC = ({ children }) => {
     return (
         <>
-            <TopBar navLinks={navLinks} socials={navLinks} />
+            <TopBar />
             <Header />
+            <PopupContainer />
             {children}
+            <Footer />
         </>
     );
 };

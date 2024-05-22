@@ -1,25 +1,32 @@
-import wooCommerceRestApi from "@/services/wooCommerceRestApi";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
+import { log } from "console";
 
-async function fetchAllCategories(page = 1, categories = []) {
-    try {
+async function fetchAllCategories(page = 1, categories = [])
+{
+    try
+    {
         const response = await wooCommerceRestApi.get("products/categories", { per_page: 100, page });
         const allCategories = categories.concat(response.data);
 
-        if (response.data.length === 100) {
+        if (response.data.length === 100)
+        {
             return fetchAllCategories(page + 1, allCategories);
         }
 
         return allCategories;
-    } catch (error) {
+    } catch (error)
+    {
         throw error;
     }
 }
 
-export default async function handler(req, res) {
+export default async function handler(req, res)
+{
     const { slug, ...params } = req.query;
-
-    try {
-        switch (slug) {
+    try
+    {
+        switch (slug)
+        {
             case "products": {
                 const response = await wooCommerceRestApi.get('products', params);
                 res.status(200).json(response.data);
@@ -31,7 +38,8 @@ export default async function handler(req, res) {
                     wooCommerceRestApi.get('products', params)
                 ]);
 
-                const response = responses.reduce((acc, curr) => {
+                const response = responses.reduce((acc, curr) =>
+                {
                     return [...acc, ...curr.data];
                 }, []);
 
@@ -48,7 +56,8 @@ export default async function handler(req, res) {
                 break;
             }
         }
-    } catch (error) {
+    } catch (error)
+    {
         res.status(500).json(error.message);
     }
 }

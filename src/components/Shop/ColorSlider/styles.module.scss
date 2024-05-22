@@ -1,0 +1,56 @@
+.colorSwiper {
+    padding: 0 25px;
+    position: relative;
+
+    &__slide {
+        width: 25px;
+        height: 25px;
+    }
+
+    &__nextBtn::after,
+    &__prevBtn::after {
+        color: black;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    &__nextBtn {
+        right: 0;
+    }
+
+    &__prevBtn {
+        left: 0;
+    }
+
+    &__color {
+        position: relative;
+        height: 100%;
+        border-radius: 100%;
+        cursor: pointer;
+        overflow: hidden;
+        transition: opacity .2s ease-in-out;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top: 50%;
+            transform: translate(50%, -50%);
+            right: 50%;
+            background-color: white;
+            border-radius: 100%;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        &_active::after {
+            opacity: 1;
+        }
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.features {
+    &__text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-transform: uppercase;
+    }
+}
+
+@media(max-width: 768px) {
+
+    .features {
+        &__text {
+            font-size: 12px;
+        }
+    }
+}
