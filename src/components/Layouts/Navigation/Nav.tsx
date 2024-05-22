@@ -16,7 +16,7 @@ const Nav: FC<wpMenuProps> = ({ menuId, className }) =>
                     {isLoading && <p>Loading...</p>}
                     {isError && <p>{error}</p>}
                     {data && data.map((link, index) => (
-                        <Link key={index} className='desc link' href={link.url}>
+                        <Link key={index} className='desc nav-link link' href={link.url}>
                             {link.title}
                         </Link>
                     ))}

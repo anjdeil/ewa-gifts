@@ -11,6 +11,23 @@
     color: inherit;
 }
 
+.nav-link {
+    transition: .2s color ease-in-out;
+}
+
+.nav-link:hover {
+    color: $accent;
+}
+
+.nav-link:active {
+    color: $black-color;
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 10px;
+}
+
 .more-link {
     color: $text-grey;
 }
@@ -39,7 +56,22 @@
     cursor: pointer
 }
 
-@media(max-width: 768px) {
+.btn-primary {
+    background: $accent;
+    padding: 12px 18px;
+    border-radius: 10px;
+    transition: background .2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background: $accent-hover;
+}
+
+.btn-primary:active {
+    background: $accent;
+}
+
+@media(max-width: 1024px) {
 
     .desc,
     .sub-title {

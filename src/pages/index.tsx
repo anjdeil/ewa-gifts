@@ -36,7 +36,7 @@ const Home = () =>
 
   // const id = 22199;
 
-  // const [sendAnEmail, { data }] = useSendAnEmailMutation();
+  // 
 
   // const handleClick = async () =>
   // {
@@ -56,7 +56,7 @@ const Home = () =>
         <h1>{pageTitle}</h1>
         {/* <CategoryBars /> */}
         {/* <button onClick={() => handleClick()}>Click</button> */}
-        <ProductCardList isError={isError} isLoading={isLoading} products={products} />
+        {/* <ProductCardList isError={isError} isLoading={isLoading} products={products} /> */}
       </main >
     </>
   );

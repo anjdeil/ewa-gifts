@@ -3,6 +3,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import styles from './styles.module.scss';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
+import { SocialsSkeleton } from "./SocialsSkeleton";
 
 const Socials: FC<wpMenuProps> = ({ menuId, className }) =>
 {
@@ -15,7 +16,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className }) =>
         <div className={`${styles.socials} ${className && className}`}>
             <nav className="nav">
                 <ul className={`list-reset ${styles.socials__list}`}>
-                    {isLoading && <p>Loading...</p>}
+                    {isLoading && <SocialsSkeleton />}
                     {isError && <p>{error}</p>}
                     {data &&
                         <>
@@ -25,7 +26,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className }) =>
                                 {
                                     case link.isButton:
                                         return (
-                                            <Link key={index} className={`desc link ${styles.socials__btn}`} href={link.url}>
+                                            <Link key={index} className={`desc link btn-primary`} href={link.url}>
                                                 {link.title}
                                             </Link>
                                         )
@@ -39,7 +40,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className }) =>
 
                                     default:
                                         return (
-                                            <Link key={index} className={`desc link`} href={link.url}>
+                                            <Link key={index} className={`desc link nav-link `} href={link.url}>
                                                 {link.title}
                                             </Link>
                                         );

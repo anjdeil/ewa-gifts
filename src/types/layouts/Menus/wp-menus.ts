@@ -13,5 +13,11 @@ export const wpMenuPropsSchema = z.object({
     className: z.string().optional(),
 });
 
+export const VerticalWpMenuPropsSchema = z.object({
+    menuId: z.number(),
+    className: z.string().optional(),
+    height: z.number().optional()
+});
+
 export type wpNavLink = z.infer<typeof wpNavLinkSchema>;
 export type wpMenuProps = z.infer<typeof wpMenuPropsSchema>;
