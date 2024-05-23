@@ -3,16 +3,19 @@ import { wpAPI } from "@/store/wordpress/wpAPI";
 import { wooCommerceApi } from "@/store/wooCommerce/wooCommerceApi";
 import MenuCategoriesSlice from "./reducers/MenuCategoriesSlice";
 import { contactForm7Api } from "./contactForm7/contactForm7Api";
+import CartSlice from "./reducers/CartSlice";
+import PopupSlice from "./reducers/PopupSlice";
 
 const rootReducer = combineReducers({
     [wpAPI.reducerPath]: wpAPI.reducer,
     [contactForm7Api.reducerPath]: contactForm7Api.reducer,
     [wooCommerceApi.reducerPath]: wooCommerceApi.reducer,
     MenuCategoriesSlice: MenuCategoriesSlice.reducer,
+    Cart: CartSlice,
+    Popup: PopupSlice
 });
 
-export const setupStore = () =>
-{
+export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) =>

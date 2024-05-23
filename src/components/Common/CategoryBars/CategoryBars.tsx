@@ -6,13 +6,11 @@ import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./CategoryBars.module.scss";
 import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
 
-const CategoryBars = () =>
-{
+const CategoryBars = () => {
 
     const { data = [], isLoading, isError, error } = useFetchAllCategoriesListQuery();
 
-    if (isLoading)
-    {
+    if (isLoading) {
         return (<CategoryBarsSkeleton />)
     }
 

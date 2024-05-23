@@ -10,11 +10,18 @@ body {
     font-size: 18px;
     font-family: sans-serif;
     color: $black-color;
-    background-color: $second-bg;
 }
 
 * {
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: $tech-bg $background-white;
+}
+
+@media (max-width: 768px) {
+
+    html,
+    body {
+        font-size: 14px;
+    }
 }

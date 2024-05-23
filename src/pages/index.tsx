@@ -5,13 +5,6 @@ import Head from "next/head";
 
 const Home = ({ response }) =>
 {
-  let sections;
-  if (response.length > 0)
-  {
-    console.log(response);
-    sections = transformersPageBuilder(response);
-  }
-
   const pageTitle = "Home Page";
   return (
     <>
@@ -22,15 +15,13 @@ const Home = ({ response }) =>
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
-
-        <PageBuilder sections={sections} />
       </main >
     </>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps() 
+export async function getServerSideProps()
 {
   let response;
   try

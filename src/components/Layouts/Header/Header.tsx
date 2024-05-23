@@ -1,13 +1,12 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import SearchBar from '../SearchBar';
+import SearchBar, { MobileSearchButton } from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
 // import Skeleton from '@mui/material/Skeleton';
 // import { RenderIconButtonProps } from '@/types';
-import { IconButton } from '@mui/material';
+import { IconButton, useMediaQuery, Box } from '@mui/material';
 import { categoriesItems } from './cat';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
@@ -15,8 +14,8 @@ import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
 
 
-const Header: React.FC = () => 
-{
+const Header: React.FC = () => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
     // const [iconLoading, setLoaded] = React.useState(false);
 
     // const handleIconLoad = () =>
@@ -24,18 +23,16 @@ const Header: React.FC = () =>
     //     setLoaded(true);
     // }
 
+
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
 
-    const onBurgerClick = () =>
-    {
+    const onBurgerClick = () => {
         console.log('works');
-        if (!isOpen)
-        {
+        if (!isOpen) {
             dispatch(setMenuOpen(true));
-        } else
-        {
+        } else {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
         }
@@ -86,7 +83,13 @@ const Header: React.FC = () =>
                         </h3>
                     </Box>
                     <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
-                        <SearchBar />
+                        {
+                            !isMobile ? (
+                                <SearchBar />
+                            ) : (
+                                <MobileSearchButton />
+                            )
+                        }
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center" } }}>
                         <IconButton>
