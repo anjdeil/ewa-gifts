@@ -1,8 +1,17 @@
+import { PageBuilder } from "@/components/PageBuilder";
+import { transformersPageBuilder } from "@/services/transformers/pageBuilder";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
 const Home = ({ response }) =>
 {
+  let sections;
+  if (response.length > 0)
+  {
+    console.log(response);
+    sections = transformersPageBuilder(response);
+  }
+
   const pageTitle = "Home Page";
   return (
     <>
@@ -14,6 +23,7 @@ const Home = ({ response }) =>
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
 
+        <PageBuilder sections={sections} />
       </main >
     </>
   );

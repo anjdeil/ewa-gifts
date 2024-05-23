@@ -1,10 +1,8 @@
 // import { PageBuilderProps } from "@/types";
 import { FC } from "react";
 
-export const PageBuilder: FC = ({ data }) =>
+export const PageBuilder: FC = ({ sections }) =>
 {
 
-    return (
-        { data }
-    )
+    return <div></div>
 }

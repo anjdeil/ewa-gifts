@@ -1,5 +1,4 @@
 .form {
-
     &__logo {
         display: inline-block;
         margin-bottom: 30px;
@@ -41,12 +40,21 @@
         width: fit-content;
     }
 
+    &__success,
+    &__error {
+        margin: 10px 0;
+        font-size: 16px;
+    }
+
+    &__success {
+        color: green;
+    }
+
     &__rules {
         font-size: 16px;
     }
 
     &__error {
-        margin: 5px;
         color: red;
     }
 }
@@ -75,7 +83,9 @@
             width: 100%;
         }
 
-        &__rules {
+        &__success,
+        &__rules,
+        &__error {
             text-align: center;
             font-size: 14px;
         }

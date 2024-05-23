@@ -1,15 +1,6 @@
 import { z } from "zod";
 
-// const PageBuilderPropsSchema = z.object({
-//     slug: z.string()
-// });
+const HomePropsSchema = z.object({}).passthrough();
+// type
 
-// const PageBuilderSectionSchema = z.object({
-//     type: z.string()
-// })
-
-// const PageBuilderPropsSchema = z.object({
-//     sections: z.string()
-// })
-
-// export type PageBuilderProps = z.infer<typeof PageBuilderPropsSchema>;
+export type PageBuilderProps = z.infer<typeof PageBuilderPropsSchema>;

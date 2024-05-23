@@ -81,7 +81,7 @@ export const Footer: FC = () =>
     return (
         <div className={styles.footer}>
             <div className={styles.footer__form}>
-                <SubscriptionForm />
+                <SubscriptionForm formId={22199} />
             </div>
             <FooterAccordion expanded={!isMobile || expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummaryCustom
@@ -116,7 +116,16 @@ export const Footer: FC = () =>
                     <h3 className={`${styles.footer__title} sub-title`}>Kontakt</h3>
                 </AccordionSummaryCustom>
                 <AccordionDetails>
-                    <Socials menuId={818} className={`${styles.footer__socials}`} />
+                    <Socials
+                        menuId={818}
+                        skeleton={{
+                            elements: 2,
+                            width: 100,
+                            height: 60,
+                            gap: '30px'
+                        }}
+                        className={`${styles.footer__socials}`}
+                    />
                 </AccordionDetails>
             </FooterAccordion>
         </div>

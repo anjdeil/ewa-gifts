@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
-    let slug = req.query.path;
+    let slug = req.query.slug;
 
     if (!slug || slug.length === 0)
     {
