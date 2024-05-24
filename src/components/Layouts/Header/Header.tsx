@@ -1,16 +1,15 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import SearchBar, { MobileSearchButton } from '@/components/Layouts/SearchBar';
+import SearchBar from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
-import { IconButton, useMediaQuery, Box, styled } from '@mui/material';
+import { IconButton, Box, styled } from '@mui/material';
 import { categoriesItems } from './cat';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
-import { useFetchAllCategoriesListQuery } from '@/store/wooCommerce/wooCommerceApi';
 
 const CustomBadge = styled(Badge)`
 .css-1abqjyq-MuiBadge-badge {
@@ -22,10 +21,6 @@ const CustomBadge = styled(Badge)`
 
 const Header: React.FC = () =>
 {
-    // const { data, isLoading, isError, error } = useFetchAllCategoriesListQuery();
-    // console.log(data);
-
-    const isMobile = useMediaQuery('(max-width: 768px)');
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
@@ -68,13 +63,7 @@ const Header: React.FC = () =>
                         </h3>
                     </Box>
                     <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
-                        {
-                            !isMobile ? (
-                                <SearchBar />
-                            ) : (
-                                <MobileSearchButton />
-                            )
-                        }
+                        <SearchBar />
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' } }}>
                         <IconButton>

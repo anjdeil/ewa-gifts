@@ -1,7 +1,10 @@
+// import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
-const Blog = () => {
+const Blog = ({ response }) =>
+{
   const pageTitle = "Blog";
+  console.log(response);
 
   return (
     <>
@@ -11,10 +14,12 @@ const Blog = () => {
       </Head>
       <main>
         <h1>{pageTitle}</h1>
-        <p>Welcome to the Home Page</p>
+        <p>Welcome to the Blog Page</p>
       </main>
     </>
   );
 };
 
 export default Blog;
+
+// response = await wpRestApi.get('posts');
