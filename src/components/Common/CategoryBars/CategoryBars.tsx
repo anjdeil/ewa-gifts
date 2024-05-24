@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
-import styles from "./CategoryBars.module.scss";
+import styles from "./styles.module.scss";
 import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
 
 const CategoryBars = () => {
@@ -26,7 +26,7 @@ const CategoryBars = () => {
                     >
                         <Image
                             className={styles["categories-list__image"]}
-                            src={imageSrc}
+                            src={`/images/categories/${slug}.svg`}
                             width={60}
                             height={60}
                             alt={categoryName}

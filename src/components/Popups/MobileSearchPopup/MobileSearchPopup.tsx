@@ -40,7 +40,7 @@ const SearchPaper = (props) => {
             width: "100vw",
             marginLeft: "-20px",
             marginTop: "10px",
-            height: 'calc(100vh - 80px)'
+            height: 'calc(100vh - 120px)'
         }}
     />;
 };

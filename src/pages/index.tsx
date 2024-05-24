@@ -1,3 +1,4 @@
+import CategoryBars from "@/components/Common/CategoryBars/CategoryBars";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
@@ -12,6 +13,7 @@ const Home = ({ response }) => {
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
+        <CategoryBars />
       </main >
     </>
   );

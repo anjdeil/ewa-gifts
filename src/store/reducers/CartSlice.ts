@@ -1,11 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const saveCartToLocalStorage = (state) => {
+    try {
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem('cart', serializedState);
+    } catch (e) {
+        console.warn(e);
+    }
+}
+
+const loadCartFromLocalStorage = () => {
+    try {
+        const serializedState = localStorage.getItem('cart');
+        if (serializedState === null) return undefined;
+        return JSON.parse(serializedState);
+    } catch (e) {
+        console.warn(e);
+        return undefined;
+    }
+}
+
 export const CartSlice = createSlice({
     name: 'Cart',
-    initialState: [],
+    initialState: loadCartFromLocalStorage() || [],
     reducers: {
         addedToCart: (prevCart, action) => {
-            const { id: productId, type: productType, choosenOptions } = action.payload;
+            const { id: productId, type: productType, variationId, choosenOptions } = action.payload;
 
             const foundedItem = prevCart.find(({ id }) => id === productId);
 
@@ -34,7 +54,7 @@ export const CartSlice = createSlice({
                                 ...cartItem,
                                 options: [
                                     ...cartItem.options,
-                                    { attributes: { ...choosenOptions }, quantity: 1 }
+                                    { id: variationId, attributes: { ...choosenOptions }, quantity: 1 }
                                 ]
                             };
                         }
@@ -46,7 +66,7 @@ export const CartSlice = createSlice({
                 const newItem = {
                     id: productId,
                     type: productType,
-                    options: productType === 'variable' ? [{ attributes: { ...choosenOptions }, quantity: 1 }] : [],
+                    options: productType === 'variable' ? [{ id: variationId, attributes: { ...choosenOptions }, quantity: 1 }] : [],
                     quantity: productType === 'variable' ? 0 : 1
                 };
                 return [...prevCart, newItem];
@@ -55,6 +75,12 @@ export const CartSlice = createSlice({
         }
     }
 })
+
+export const cartLocalStorageMiddleware = store => next => action => {
+    const result = next(action);
+    saveCartToLocalStorage(store.getState().Cart);
+    return result;
+};
 
 export const { addedToCart } = CartSlice.actions;
 export default CartSlice.reducer;

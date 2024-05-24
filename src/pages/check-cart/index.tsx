@@ -4,9 +4,20 @@ import { addedToCart } from "@/store/reducers/CartSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import Link from "next/link";
+import { useLazyFetchProductVariationsQuery } from "@/store/wooCommerce/wooCommerceApi";
+
+const findVariationByOptions = (variations, options) => {
+    return variations.find(variation => {
+        let found = true;
+        variation.attributes.forEach(({ slug, option }) => {
+            if (options[slug] !== option) found = false;
+        });
+        return found;
+    })
+}
 
 const CheckPage = () => {
+    const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
 
     const product = {
         id: 22127,
@@ -47,16 +58,39 @@ const CheckPage = () => {
         }))
     }
 
-    const onAddedToCart = (evt) => {
+    const onAddedToCart = async (evt) => {
         evt.preventDefault();
 
-        dispatch(
-            addedToCart({
-                id: product.id,
-                type: product.type,
-                choosenOptions: { ...choosenOptions }
-            })
-        );
+        if (product.type === 'variable') {
+            let variationsData = variations;
+            if (variationsData === undefined) {
+                const { data } = await fetchProductVariations(product.id);
+                variationsData = data;
+            }
+
+            // const choosenVariation = findVariationByOptions(variationsData, choosenOptions);
+            const choosenVariation = { id: 229 };
+
+            dispatch(
+                addedToCart({
+                    id: product.id,
+                    type: product.type,
+                    variationId: choosenVariation.id,
+                    choosenOptions: { ...choosenOptions }
+                })
+            );
+
+        } else {
+            dispatch(
+                addedToCart({
+                    id: product.id,
+                    type: product.type,
+                    variationId: null,
+                    choosenOptions: null
+                })
+            );
+        }
+
 
     }
 

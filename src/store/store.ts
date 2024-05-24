@@ -5,6 +5,7 @@ import MenuCategoriesSlice from "./reducers/MenuCategoriesSlice";
 import { contactForm7Api } from "./contactForm7/contactForm7Api";
 import CartSlice from "./reducers/CartSlice";
 import PopupSlice from "./reducers/PopupSlice";
+import { cartLocalStorageMiddleware } from "./reducers/CartSlice";
 
 const rootReducer = combineReducers({
     [wpAPI.reducerPath]: wpAPI.reducer,
@@ -23,6 +24,7 @@ export const setupStore = () => {
                 .concat(wpAPI.middleware)
                 .concat(contactForm7Api.middleware)
                 .concat(wooCommerceApi.middleware)
+                .concat(cartLocalStorageMiddleware)
     })
 }
 

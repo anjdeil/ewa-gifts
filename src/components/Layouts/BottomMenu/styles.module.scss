@@ -1,0 +1,29 @@
+@import "@/styles/variables.module.scss";
+
+.bottom-menu {
+    z-index: 2000;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $bg-accent;
+
+    &__nav {
+        padding: 0 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__button {
+        padding: 13px;
+        background-color: transparent;
+        border: none;
+
+
+        &_active {
+            svg path {
+                fill: $accent;
+            }
+        }
+    }
+}
