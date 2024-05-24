@@ -10,7 +10,7 @@ import { Grid } from 'swiper/modules';
 
 const Item: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
 
-export const Features: React.FC<FeaturesProps> = ({ data }) =>
+export const Features: React.FC<FeaturesProps> = ({ features }) =>
 {
     return (
         <Swiper
@@ -30,16 +30,16 @@ export const Features: React.FC<FeaturesProps> = ({ data }) =>
             }}
             modules={[Grid]}
         >
-            {data.map((item, index) => (
+            {features.map((feature, index) => (
                 <SwiperSlide key={index}>
                     <Item className={`${styles.features__text} sub-title`} >
                         <Image
-                            src={item.image}
-                            alt={item.text}
+                            src={feature.image}
+                            alt={feature.text}
                             width={48}
                             height={48}
                         />
-                        {item.text}
+                        {feature.text}
                     </Item>
                 </SwiperSlide>
             ))}

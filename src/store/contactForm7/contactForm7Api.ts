@@ -1,20 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { z } from "zod";
-
-// const menuResponseSchema = z.record(z.any());
-// type menuResponseType = z.infer<typeof menuResponseSchema>;
-
 
 export const contactForm7Api = createApi({
     reducerPath: 'contactForm7Api',
     baseQuery: fetchBaseQuery({ baseUrl: 'api/contact-form' }),
     endpoints: (build) => ({
         sendAnEmail: build.mutation({
-            query: ({ id, formData }) => ({
+            query: ({ formId, formData }) => ({
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: `/${id}/feedback`,
+                url: `/${formId}/feedback`,
                 method: 'POST',
                 body: formData,
             }),

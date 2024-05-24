@@ -1,5 +1,5 @@
 .footer {
-    padding: 0 32px;
+    padding: 45px 40px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -49,11 +49,15 @@
 
 @media (max-width: 992px) {
     .footer {
+        padding: 30px 20px;
+
         &__form {
             flex: 100%;
 
             &>div {
-                max-width: 100%;
+                margin: 0 auto;
+                max-width: 400px;
+                text-align: center;
             }
         }
     }

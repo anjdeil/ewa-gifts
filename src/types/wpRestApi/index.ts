@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const wpRestApiPropsSchema = z.object({
-    path: z.string(),
+    url: z.string(),
     params: z.record(z.union([z.string(), z.number()])).optional()
 });
 

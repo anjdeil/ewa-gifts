@@ -1,15 +1,17 @@
 import { z } from "zod";
-import { Images } from "../..";
 
 export const HeroSchema = z.object({
+    image: z.string(),
+    is_reverse: z.boolean(),
+    link_text: z.string(),
+    link_url: z.string(),
+    text: z.string(),
     title: z.string(),
-    richText: z.string(),
-    isReversed: z.boolean(),
-    images: Images,
+    _type: z.string().optional()
 });
 
 const HeroPropsSchema = z.object({
-    data: HeroSchema,
+    section: HeroSchema,
 });
 
 export type HeroPropsType = z.infer<typeof HeroPropsSchema>;

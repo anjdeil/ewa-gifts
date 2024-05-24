@@ -1,7 +1,10 @@
+import { PageBuilder } from "@/components/PageBuilder";
+import { transformersPageBuilder } from "@/services/transformers/pageBuilder";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
-const Home = ({ response }) => {
+const Home = ({ response }) =>
+{
   const pageTitle = "Home Page";
   return (
     <>
@@ -12,18 +15,22 @@ const Home = ({ response }) => {
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
+        {/* <PageBuilder sections={response[0].sections} /> */}
       </main >
     </>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps() {
+export async function getServerSideProps()
+{
   let response;
-  try {
+  try
+  {
     response = await wpRestApi.get('pages', { slug: `homepage` });
     response = response.data;
-  } catch (error) {
+  } catch (error)
+  {
     response = (error as Error).message;
   }
 

@@ -7,14 +7,29 @@ import { Navigation } from 'swiper/modules';
 import { wpMenuProps, wpNavLink } from '@/types';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import styles from './styles.module.scss';
+import { MenuSkeleton } from "../MenuSkeleton";
 
-export const SliderMenu: FC<wpMenuProps> = ({ menuId, className }) =>
+export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
 {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
+    isError && console.error(error)
 
     const swiperId = `SliderMenu`;
     const nextElId = `btn-next`;
     const prevElId = `btn-prev`;
+
+    if (isLoading && skeleton)
+    {
+        return (
+            <MenuSkeleton
+                elements={skeleton.elements}
+                isColumn={skeleton.isColumn}
+                width={skeleton.width}
+                height={skeleton.height}
+                gap={skeleton.gap}
+            />
+        )
+    }
 
     return (
         <div>

@@ -1,15 +1,9 @@
 import { z } from "zod";
+import { SliderBuild } from "../Sliders";
+import { FeaturesBuild, HeroSchema, SplitBuild } from "../Common";
 
-// const PageBuilderPropsSchema = z.object({
-//     slug: z.string()
-// });
+export const PageBuilderPropsSchema = z.array(
+    z.union([SliderBuild, FeaturesBuild, HeroSchema, SplitBuild]).optional()
+);
 
-// const PageBuilderSectionSchema = z.object({
-//     type: z.string()
-// })
-
-// const PageBuilderPropsSchema = z.object({
-//     sections: z.string()
-// })
-
-// export type PageBuilderProps = z.infer<typeof PageBuilderPropsSchema>;
+export type PageBuilderProps = z.infer<typeof PageBuilderPropsSchema>;

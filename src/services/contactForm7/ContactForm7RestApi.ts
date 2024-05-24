@@ -9,9 +9,9 @@ export class ContactsForm7RestApi
         this._apiBase = 'https://new.ewagifts.pl/wp-json/contact-form-7/v1/contact-forms/';
     }
 
-    async sendAnEmail(url: string, body: any): Promise<AxiosResponse<any>>
+    async sendAnEmail(url: string, body: object): Promise<AxiosResponse<unknown>>
     {
-        const response: AxiosResponse<any> = await axios.post(this._apiBase + url, body, {
+        const response: AxiosResponse<unknown> = await axios.post(this._apiBase + url, body, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
@@ -24,7 +24,7 @@ export class ContactsForm7RestApi
         return response;
     }
 
-    async send(url: string, body)
+    async send(url: string, body: object)
     {
         const result = await this.sendAnEmail(url, body);
         return result;

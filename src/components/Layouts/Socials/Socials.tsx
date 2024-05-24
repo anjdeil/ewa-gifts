@@ -3,21 +3,32 @@ import { FC } from 'react';
 import Link from 'next/link';
 import styles from './styles.module.scss';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
-import { SocialsSkeleton } from "./SocialsSkeleton";
-
-const Socials: FC<wpMenuProps> = ({ menuId, className }) =>
+import { MenuSkeleton } from "../MenuSkeleton";
+const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
 {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
-
     const iconLinks = data?.filter(link => link.isIcon.length > 0) || [];
     const otherLinks = data?.filter(link => link.isIcon.length === 0) || [];
+
+    isError && console.error(error)
+
+    if (isLoading && skeleton)
+    {
+        return (
+            <MenuSkeleton
+                elements={skeleton.elements}
+                isColumn={skeleton.isColumn}
+                width={skeleton.width}
+                height={skeleton.height}
+                gap={skeleton.gap}
+            />
+        )
+    }
 
     return (
         <div className={`${styles.socials} ${className && className}`}>
             <nav className="nav">
                 <ul className={`list-reset ${styles.socials__list}`}>
-                    {isLoading && <SocialsSkeleton />}
-                    {isError && <p>{error}</p>}
                     {data &&
                         <>
                             {otherLinks.map((link, index) =>
