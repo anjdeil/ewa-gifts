@@ -1,16 +1,18 @@
 import { z } from "zod";
+import { MenuSkeletonPropsSchema } from "./Skeletons";
 
 const wpNavLinkSchema = z.object({
     title: z.string(),
     url: z.string(),
     isButton: z.boolean(),
     isIcon: z.string(),
-    id: z.number()
+    id: z.number(),
 });
 
 export const wpMenuPropsSchema = z.object({
     menuId: z.number(),
     className: z.string().optional(),
+    skeleton: MenuSkeletonPropsSchema.optional()
 });
 
 export const VerticalWpMenuPropsSchema = z.object({

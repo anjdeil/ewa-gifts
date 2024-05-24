@@ -7,3 +7,4 @@ export * from './Common';
 export * from './Sliders';
 export * from './wpRestApi';
 export * from './PageBuilder';
+export * from './Forms';

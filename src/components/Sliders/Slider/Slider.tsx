@@ -3,11 +3,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
 import { Navigation } from 'swiper/modules';
-import Image from "next/image";
 import { SliderProps } from "@/types";
+import { useMediaQuery } from "@mui/material";
+import { AdaptiveImage } from "@/components/Common/AdaptiveImage";
+import Link from "next/link";
 
-export const Slider: FC<SliderProps> = ({ data }) =>
+
+export const Slider: FC<SliderProps> = ({ slides, height }) =>
 {
+    const isMobile = useMediaQuery('(max-width: 768px)');
     return (
         <div className="custom-swiper">
             <Swiper
@@ -16,22 +20,25 @@ export const Slider: FC<SliderProps> = ({ data }) =>
                 spaceBetween={50}
                 slidesPerView={1}
                 style={{
-                    height: '500px',
-                    borderRadius: '10px'
+                    height: height,
+                    borderRadius: '10px',
+                    overflow: 'hidden'
                 }}
             >
-                <SwiperSlide key={1}>
-                    <Image src={"/images/slide.jpg"} alt="Test" layout="fill" objectFit="cover" />
-                </SwiperSlide>
-                <SwiperSlide key={2}>
-                    <Image src={"/images/slide.jpg"} alt="Test" layout="fill" objectFit="cover" />
-                </SwiperSlide>
-                <SwiperSlide key={3}>
-                    <Image src={"/images/slide.jpg"} alt="Test" layout="fill" objectFit="cover" />
-                </SwiperSlide>
-                <SwiperSlide key={4}>
-                    <Image src={"/images/slide.jpg"} alt="Test" layout="fill" objectFit="cover" />
-                </SwiperSlide>
+                {slides.map((slide, index) => (
+                    <SwiperSlide key={index}>
+                        <Link href={slide.url}>
+                            <AdaptiveImage
+                                isMobile={isMobile}
+                                imageUrl={slide.image_desc}
+                                mobileImageUrl={slide.image_mob}
+                                alt={slide.text}
+                                descOffset={'30%'}
+                                mobOffset={'100%'}
+                            />
+                        </Link>
+                    </SwiperSlide>
+                ))}
             </Swiper>
         </div>
     );

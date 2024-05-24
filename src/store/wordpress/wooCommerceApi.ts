@@ -1,4 +1,3 @@
-import { fetchProducts } from "@/store/reducers/ActionCreators";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const wooCommerceApi = createApi({
@@ -16,11 +15,18 @@ export const wooCommerceApi = createApi({
                 url: `/products`,
                 params
             })
+        }),
+        fetchBlogArticles: build.query({
+            query: (params) => ({
+                url: `/posts`,
+                params
+            })
         })
     })
 })
 
 export const {
     useFetchGlobalSearchResultsQuery,
-    useFetchProductListQuery
+    useFetchProductListQuery,
+    useFetchBlogArticlesQuery
 } = wooCommerceApi;

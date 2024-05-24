@@ -2,7 +2,7 @@ import { SplitProps } from "@/types";
 import { Box, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 
-export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed }) =>
+export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed = false }) =>
 {
     const isMobile = useMediaQuery('(max-width: 1024px)');
     const mobileColumn = isReversed ? "column-reverse" : "column";

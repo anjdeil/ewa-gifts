@@ -30,9 +30,9 @@ export class WPRestAPI
         return `Basic ${encodedAuth}`;
     }
 
-    async getResource(url: string, params?: any): Promise<AxiosResponse<any>>
+    async getResource(url: string, params?: Record<string, string | number>): Promise<AxiosResponse<unknown>>
     {
-        const response: AxiosResponse<any> = await axios.get(this._apiBase + url, {
+        const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
             params: params,
             headers: {
                 Authorization: this.getBasicAuth()
@@ -47,7 +47,7 @@ export class WPRestAPI
         return response;
     }
 
-    async get(url: string, params?: any)
+    async get(url: string, params?: Record<string, string | number>)
     {
         const result = await this.getResource(url, params);
         return result;

@@ -1,4 +1,5 @@
-import CategoryBars from "@/components/Common/CategoryBars/CategoryBars";
+import { PageBuilder } from "@/components/PageBuilder";
+import { transformersPageBuilder } from "@/services/transformers/pageBuilder";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
@@ -13,7 +14,7 @@ const Home = ({ response }) => {
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
-        <CategoryBars />
+        {/* <PageBuilder sections={response[0].sections} /> */}
       </main >
     </>
   );

@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
     const { ...params } = req.query;
-
     let slug = req.query.path;
 
     if (!slug || slug.length === 0)
