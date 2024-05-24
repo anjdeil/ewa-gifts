@@ -1,2 +1,2 @@
-export * from './Socials';
+export * from './Skeletons';
 export * from './wp-menus';

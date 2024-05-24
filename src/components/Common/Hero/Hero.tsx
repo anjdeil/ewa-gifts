@@ -1,21 +1,21 @@
 import { HeroProps } from "@/types";
 import { FC } from "react";
-import { RichTextComponent } from "../RichTextComponent";
 import { Box, useMediaQuery } from "@mui/material";
 import Image from "next/image";
+import { Text } from '@/components/Common/Text';
 
-export const Hero: FC<HeroProps> = ({ data }) =>
+export const Hero: FC<HeroProps> = ({ section }) =>
 {
     const isMobile = useMediaQuery('(max-width: 1024px)');
-
     return (
         <>
             <Box display="flex"
-                flexDirection={isMobile ? "column" : (data.isReversed ? "row-reverse" : "row")}
+                flexDirection={isMobile ? "column" : (section.is_reverse ? "row-reverse" : "row")}
                 gap={isMobile ? 0 : '5%'}
             >
                 <Box width={isMobile ? "100%" : "60%"} p={2}>
-                    <RichTextComponent richText={data.richText} />
+                    <h3 className="sub-title">{section.title}</h3>
+                    <Text text={section.text} />
                 </Box>
                 <Box width={isMobile ? "100%" : "40%"}
                     position={'relative'}
@@ -26,11 +26,11 @@ export const Hero: FC<HeroProps> = ({ data }) =>
                     }}>
                     <div>
                         <Image
-                            src={data.images.large.src}
+                            src={section.image}
                             style={{
                                 objectFit: "cover"
                             }}
-                            alt="Test"
+                            alt={section.title}
                             fill
                             sizes="100%"
                         />

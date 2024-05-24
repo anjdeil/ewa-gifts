@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SocialsSkeletonPropsSchema } from "./Socials";
+import { MenuSkeletonPropsSchema } from "./Skeletons";
 
 const wpNavLinkSchema = z.object({
     title: z.string(),
@@ -12,7 +12,7 @@ const wpNavLinkSchema = z.object({
 export const wpMenuPropsSchema = z.object({
     menuId: z.number(),
     className: z.string().optional(),
-    skeleton: SocialsSkeletonPropsSchema.optional()
+    skeleton: MenuSkeletonPropsSchema.optional()
 });
 
 export const VerticalWpMenuPropsSchema = z.object({

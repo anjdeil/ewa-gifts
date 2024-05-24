@@ -4,59 +4,44 @@ import Toolbar from '@mui/material/Toolbar';
 import SearchBar, { MobileSearchButton } from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
-// import Skeleton from '@mui/material/Skeleton';
-// import { RenderIconButtonProps } from '@/types';
-import { IconButton, useMediaQuery, Box } from '@mui/material';
+import { IconButton, useMediaQuery, Box, styled } from '@mui/material';
 import { categoriesItems } from './cat';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
+import { useFetchAllCategoriesListQuery } from '@/store/wooCommerce/wooCommerceApi';
 
+const CustomBadge = styled(Badge)`
+.css-1abqjyq-MuiBadge-badge {
+    background-color: #FECB00;
+    color: black;
+}
+},
+`;
 
-const Header: React.FC = () => {
+const Header: React.FC = () =>
+{
+    // const { data, isLoading, isError, error } = useFetchAllCategoriesListQuery();
+    // console.log(data);
+
     const isMobile = useMediaQuery('(max-width: 768px)');
-    // const [iconLoading, setLoaded] = React.useState(false);
-
-    // const handleIconLoad = () =>
-    // {
-    //     setLoaded(true);
-    // }
-
-
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
 
-    const onBurgerClick = () => {
-        console.log('works');
-        if (!isOpen) {
+    const onBurgerClick = () =>
+    {
+        if (!isOpen)
+        {
             dispatch(setMenuOpen(true));
-        } else {
+        } else
+        {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
         }
     }
-    // const renderIconButton = ({ src, alt, width, height, ...other }: RenderIconButtonProps): JSX.Element => (
-    //     <>
-    //         {iconLoading ? (
-    //             <IconButton {...other}>
-    //                 <Image
-    //                     src={src}
-    //                     alt={alt}
-    //                     width={width}
-    //                     height={height}
-    //                     onLoad={handleIconLoad}
-    //                 />
-    //             </IconButton>
-    //         ) : (
-    //             <Skeleton variant="circular" sx={{ marginRight: '20px' }} >
-    //                 <Image src={src} alt={''} width={width} height={height} onLoad={handleIconLoad} />
-    //             </Skeleton>
 
-    //         )}
-    //     </>
-    // );
     return (
         <Box sx={{ flexGrow: 1 }}>
             <CategoriesMenu categoriesItems={categoriesItems} />
@@ -78,7 +63,7 @@ const Header: React.FC = () => {
                                 height={30}
                             />
                         </IconButton>
-                        <h3 className={styles['header__category-title']} style={{ margin: '0' }}>
+                        <h3 className={'desc'} style={{ margin: '0' }}>
                             Katalog
                         </h3>
                     </Box>
@@ -91,7 +76,7 @@ const Header: React.FC = () => {
                             )
                         }
                     </Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center" } }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' } }}>
                         <IconButton>
                             <Image
                                 src={'/images/account.svg'}
@@ -109,14 +94,14 @@ const Header: React.FC = () => {
                             />
                         </IconButton>
                         <IconButton>
-                            <Badge badgeContent={4} color="secondary">
+                            <CustomBadge badgeContent={4} color="secondary">
                                 <Image
                                     src={'/images/shop.svg'}
                                     alt={'Shop button-icon'}
                                     width={24}
                                     height={24}
                                 />
-                            </Badge>
+                            </CustomBadge>
                         </IconButton>
                     </Box>
                 </Toolbar>
@@ -126,3 +111,10 @@ const Header: React.FC = () => {
 }
 
 export default Header;
+
+// const [iconLoading, setLoaded] = React.useState(false);
+
+// const handleIconLoad = () =>
+// {
+//     setLoaded(true);
+// }

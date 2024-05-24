@@ -15,6 +15,7 @@ const Home = ({ response }) =>
       <main
         style={{ padding: 30 }}>
         <h1>{pageTitle}</h1>
+        {/* <PageBuilder sections={response[0].sections} /> */}
       </main >
     </>
   );

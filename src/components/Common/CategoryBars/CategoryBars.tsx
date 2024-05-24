@@ -3,14 +3,16 @@ import Link from "next/link";
 import React from "react";
 import { useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
-import styles from "./CategoryBars.module.scss";
+import styles from "./styles.module.scss";
 import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
 
-const CategoryBars = () => {
+export const CategoryBars = () =>
+{
 
     const { data = [], isLoading, isError, error } = useFetchAllCategoriesListQuery();
 
-    if (isLoading) {
+    if (isLoading)
+    {
         return (<CategoryBarsSkeleton />)
     }
 
@@ -38,5 +40,3 @@ const CategoryBars = () => {
         </ul>
     )
 }
-
-export default CategoryBars;

@@ -3,3 +3,4 @@ export * from './Features';
 export * from './Hero';
 export * from './Split';
 export * from './RichTextComponent';
+export * from './AdaptiveImage';

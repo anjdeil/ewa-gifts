@@ -92,7 +92,18 @@ export const Footer: FC = () =>
                     <h3 className={`${styles.footer__title} sub-title`}>Infomarmacja</h3>
                 </AccordionSummaryCustom>
                 <AccordionDetails>
-                    <Nav menuId={819} className={styles.footer__nav} />
+                    <Nav menuId={819}
+                        className={styles.footer__nav}
+                        skeleton={
+                            {
+                                elements: 7,
+                                isColumn: true,
+                                width: "100%",
+                                height: "30px",
+                                gap: '5px'
+                            }
+                        }
+                    />
                 </AccordionDetails>
             </FooterAccordion>
             <FooterAccordion expanded={!isMobile || expanded === 'panel2'} onChange={handleChange('panel2')}>
@@ -104,7 +115,18 @@ export const Footer: FC = () =>
                     <h3 className={`${styles.footer__title} sub-title`}>NASZE LOKALIZACE</h3>
                 </AccordionSummaryCustom>
                 <AccordionDetails>
-                    <SliderMenu menuId={820} className={styles.footer__menuSlider} />
+                    <SliderMenu menuId={820}
+                        className={styles.footer__menuSlider}
+                        skeleton={
+                            {
+                                elements: 6,
+                                isColumn: true,
+                                width: "100%",
+                                height: '30px',
+                                gap: '5px'
+                            }
+                        }
+                    />
                 </AccordionDetails>
             </FooterAccordion>
             <FooterAccordion expanded={!isMobile || expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -118,12 +140,15 @@ export const Footer: FC = () =>
                 <AccordionDetails>
                     <Socials
                         menuId={818}
-                        skeleton={{
-                            elements: 2,
-                            width: 100,
-                            height: 60,
-                            gap: '30px'
-                        }}
+                        skeleton={
+                            {
+                                elements: 7,
+                                isColumn: true,
+                                width: "100%",
+                                height: "30px",
+                                gap: '5px'
+                            }
+                        }
                         className={`${styles.footer__socials}`}
                     />
                 </AccordionDetails>
