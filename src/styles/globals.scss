@@ -29,7 +29,7 @@
 }
 
 .more-link {
-    color: $text-grey;
+    color: $text-gray;
 }
 
 .sub-title {
@@ -63,12 +63,36 @@
     transition: background .2s ease-in-out;
 }
 
+
 .btn-primary:hover {
     background: $accent-hover;
 }
 
 .btn-primary:active {
     background: $accent;
+}
+
+.btn-secondary {
+    background: transparent;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid $black-color;
+    box-sizing: border-box;
+    transition: .2s ease-in-out;
+}
+
+.btn-secondary:hover,
+.btn-secondary.active {
+    background: $accent-hover;
+    border-color: transparent;
+}
+
+.cart-item-quty {
+
+    &__x {
+        margin: 0 0.3em;
+    }
+
 }
 
 @media(max-width: 1024px) {

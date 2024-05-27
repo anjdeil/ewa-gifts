@@ -20,41 +20,39 @@ const CheckPage = () => {
     const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
 
     const product = {
-        id: 22127,
+        id: 32706,
         type: 'variable',
         attributes: [
             {
-                "id": 1,
+                "id": 8,
                 "name": "Kolor",
                 "slug": "pa_kolor",
                 "position": 0,
                 "visible": true,
                 "variation": true,
                 "options": [
-                    "biały",
-                    "czarny",
-                    "czerwony",
-                    "fioletowy",
-                    "niebieski",
-                    "zielony"
+                    "bordowy (#990505)",
+                    "biały (#ffffff)",
+                    "czarny (#000000)",
+                    "czerwony (#e61717)",
+                    "granatowy (#0c0878)",
+                    "niebieski (#298df2)"
                 ]
             }
         ]
     };
     const dispatch = useDispatch();
-    const cart = useSelector(state => state.Cart);
+    const cart = useSelector(state => state.Cart.items);
 
 
     const [choosenOptions, setChoosenOptions] = useState({
-        pa_kolor: 'biały'
+        pa_color: 'bordowy (#990505)'
     });
 
     const onChangeColor = (evt) => {
-
-
         setChoosenOptions((choosenOptions) => ({
             ...choosenOptions,
-            pa_kolor: evt.target.value
+            pa_color: evt.target.value
         }))
     }
 
@@ -68,8 +66,7 @@ const CheckPage = () => {
                 variationsData = data;
             }
 
-            // const choosenVariation = findVariationByOptions(variationsData, choosenOptions);
-            const choosenVariation = { id: 229 };
+            const choosenVariation = findVariationByOptions(variationsData, choosenOptions);
 
             dispatch(
                 addedToCart({

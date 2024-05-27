@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
+import MiniCart from '@/components/Cart/MiniCart';
+import { toggleMiniCart } from '@/store/reducers/CartSlice';
 
 const CustomBadge = styled(Badge)`
 .css-1abqjyq-MuiBadge-badge {
@@ -19,19 +21,16 @@ const CustomBadge = styled(Badge)`
 },
 `;
 
-const Header: React.FC = () =>
-{
+const Header: React.FC = () => {
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
+    const { miniCartOpen } = useAppSelector(state => state.Cart);
 
-    const onBurgerClick = () =>
-    {
-        if (!isOpen)
-        {
+    const onBurgerClick = () => {
+        if (!isOpen) {
             dispatch(setMenuOpen(true));
-        } else
-        {
+        } else {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
         }
@@ -65,7 +64,7 @@ const Header: React.FC = () =>
                     <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
                         <SearchBar />
                     </Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' } }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' }, position: 'relative' }}>
                         <IconButton>
                             <Image
                                 src={'/images/account.svg'}
@@ -82,7 +81,8 @@ const Header: React.FC = () =>
                                 height={24}
                             />
                         </IconButton>
-                        <IconButton>
+
+                        <IconButton onClick={() => dispatch(toggleMiniCart())}>
                             <CustomBadge badgeContent={4} color="secondary">
                                 <Image
                                     src={'/images/shop.svg'}
@@ -92,6 +92,7 @@ const Header: React.FC = () =>
                                 />
                             </CustomBadge>
                         </IconButton>
+                        {miniCartOpen && (<MiniCart />)}
                     </Box>
                 </Toolbar>
             </AppBar>

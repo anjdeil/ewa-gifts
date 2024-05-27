@@ -37,3 +37,32 @@
         text-align: center;
     }
 }
+
+.mobile-category-bars {
+    user-select: none;
+
+    &__slide {
+        width: auto;
+    }
+
+    &__link {
+        width: 85px;
+        display: block;
+        text-decoration: none;
+    }
+
+    &__image-wrap {
+        height: 85px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $white-lilac;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    &__name {
+        text-align: center;
+        color: $black-color;
+    }
+}

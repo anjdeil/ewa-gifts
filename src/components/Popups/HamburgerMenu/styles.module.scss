@@ -1,0 +1,68 @@
+@import "@/styles/variables.module.scss";
+
+.hamburger-menu {
+    position: fixed;
+    z-index: 1000;
+    background-color: $background-white;
+    inset: 0;
+    padding: 20px;
+
+    &__header {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__close {
+        display: block;
+        padding: 10px;
+        background-color: transparent;
+        border: none;
+    }
+
+    &__nav-wrap {
+        padding: 50px 0;
+    }
+
+    &__nav {
+
+
+        ul {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        a {
+            padding: 0.8em 0.6em;
+            display: block;
+            border-radius: 10px;
+            transition: .2s ease;
+
+            &:hover,
+            &_active {
+                background-color: $accent-hover;
+                color: $black-color;
+            }
+        }
+    }
+
+    &__list {}
+
+    &__list-item {
+        list-style: none;
+        margin-bottom: 10px;
+    }
+
+    &__link {
+        text-decoration: none;
+        color: $black-color;
+        padding: 0.8em 0.6em;
+        display: block;
+        border-radius: 10px;
+        transition: .2s ease;
+
+        &:hover,
+        &_active {
+            background-color: $accent-hover;
+        }
+    }
+}

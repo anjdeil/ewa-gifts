@@ -6,14 +6,12 @@ import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import { wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
 
-const Nav: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
-{
+const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
 
     isError && console.error(error)
 
-    if (isLoading && skeleton)
-    {
+    if (isLoading && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -30,9 +28,11 @@ const Nav: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
             <nav>
                 <ul className={`list-reset ${styles.nav__list}`}>
                     {data && data.map((link, index) => (
-                        <Link key={index} className='desc nav-link link' href={link.url}>
-                            {link.title}
-                        </Link>
+                        <li key={index}>
+                            <Link className='desc nav-link link' href={link.url}>
+                                {link.title}
+                            </Link>
+                        </li>
                     ))}
                 </ul>
             </nav>
