@@ -3,7 +3,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { CustomTab } from './CustomTab';
 import { FC, useState, SyntheticEvent } from 'react';
-import { CustomTabsType } from '@/types';
+import { CustomTabsProps } from '@/types';
 import { styled } from '@mui/material';
 
 function tabsNavigationAttr(index: number)
@@ -30,16 +30,9 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)`
   }
 `;
 
-export const CustomTabs: FC<CustomTabsType> = ({ children, titles }) =>
+export const CustomTabs: FC<CustomTabsProps> = ({ tabs }) =>
 {
     const [value, setValue] = useState<number>(0);
-
-    if (children.length !== titles.length)
-    {
-        console.error('The length of children and titles arrays must be equal.');
-        return null;
-    }
-
     const handleChange = (_: SyntheticEvent, newValue: number) =>
     {
         setValue(newValue);
@@ -49,13 +42,17 @@ export const CustomTabs: FC<CustomTabsType> = ({ children, titles }) =>
         <Box sx={{ width: '100%' }}>
             <Box>
                 <Tabs TabIndicatorProps={{ style: { display: 'none' } }} value={value} onChange={handleChange} aria-label="custom tabs">
-                    {children.map((_, index) => (
-                        <StyledTab key={index} label={titles[index]} {...tabsNavigationAttr(index)} />
+                    {tabs.map((tab, index) => (
+                        <StyledTab key={index} label={tab.title} {...tabsNavigationAttr(index)} />
                     ))}
                 </Tabs>
             </Box>
-            {children.map((children, index) => (
-                <CustomTab value={value} key={index} index={index}>{children}</CustomTab>
+            {tabs.map((tab, index) => (
+                <CustomTab
+                    sections={tab.sections}
+                    value={value}
+                    key={index}
+                    index={index} />
             ))}
         </Box>
     );

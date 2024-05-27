@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const ColorSliderPropsSchema = z.object({
-    colors: z.array(z.string()).nullable(),
+    colors: z.array(z.string()),
     onColorClick: z.function()
         .args(z.string(), z.number())
         .returns(z.promise(z.void())),

@@ -30,6 +30,20 @@
 
 .more-link {
     color: $text-gray;
+    transition: color .3s ease-in-out;
+}
+
+.more-link:focus-visible {
+    outline-color: $accent;
+    outline-offset: 10px;
+}
+
+.more-link:hover {
+    color: $black-color;
+}
+
+.more-link:active {
+    color: $text-gray;
 }
 
 .sub-title {

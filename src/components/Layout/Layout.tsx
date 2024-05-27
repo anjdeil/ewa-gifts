@@ -17,10 +17,6 @@ const Layout: FC = ({ children }: { children?: ReactNode }) => {
             {!isMobile ? <Header /> : <MobileHeader />}
             <PopupContainer />
             {isMobile && (<BottomMenu />)}
-            <div style={{ padding: '20px 0' }}>
-
-                <CategoryBars />
-            </div>
             {children}
             <Footer />
         </>

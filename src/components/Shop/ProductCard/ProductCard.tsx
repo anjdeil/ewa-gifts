@@ -5,13 +5,12 @@ import { RichTextComponent } from "../../Common/RichTextComponent";
 import styles from './styles.module.scss';
 import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
+import { isArray } from "util";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 {
     const [color, setColor] = useState('');
-
-    const colorAttributes = product.attributes[0].options ? product.attributes[0] : null;
 
     const [count, setCount] = useState(1);
 
@@ -53,19 +52,21 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 <h3 className={`desc ${styles.productCard__title}`}>
                     {product.name}
                 </h3>
-                {colorAttributes && (
+                {isArray(product.attributes) &&
                     <ColorSlider
-                        colors={colorAttributes.options}
+                        colors={product.attributes}
                         currentColor={color}
                         productId={product.id}
                         onColorClick={onHandleColorClick}
                         className={styles.productCard__colorsSlider}
                     />
-                )}
-                <div className={`desc ${styles.productCard__price}`}>
-                    From <RichTextComponent richText={product.price_html} />
-                    <span className={styles.productCard__price_vat}>without VAT</span>
-                </div>
+                }
+                {product.price_html &&
+                    <div className={`desc ${styles.productCard__price}`}>
+                        From <RichTextComponent text={product.price_html} />
+                        <span className={styles.productCard__price_vat}>without VAT</span>
+                    </div>
+                }
                 {product.stock && (
                     <div className={`${styles.productCard__stock} desc`}>
                         <div className={styles.productCard__stockCircle}></div>
@@ -86,25 +87,3 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
         </div>
     );
 }
-
-// const [fetchProductVariations, { isLoading, data, error }] = useLazyFetchProductVariationsQuery();
-// const result = await fetchProductVariations(productId);
-
-// if (result.data)
-// {
-//     console.log(result.data);
-// } else
-// {
-//     console.log('No data received');
-// }
-
-// products/22127/variations
-
-// const { isLoading, data, error } = useFetchProductVariationsQuery(22127);
-
-// if (data)
-// {
-//     console.log(data);
-// }
-
-// alert(productId);

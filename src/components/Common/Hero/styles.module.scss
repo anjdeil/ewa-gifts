@@ -1,0 +1,19 @@
+.hero {
+    &__text {
+        margin-bottom: 20px;
+    }
+
+    &__title {
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+}
+
+@media(max-width: 1024px) {
+    .hero {
+
+        &__title {
+            margin-bottom: 15px;
+        }
+    }
+}

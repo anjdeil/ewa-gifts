@@ -1,32 +1,41 @@
 import { PageBuilder } from "@/components/PageBuilder";
-import { transformersPageBuilder } from "@/services/transformers/pageBuilder";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import Head from "next/head";
 
-const Home = ({ response }) => {
-  const pageTitle = "Home Page";
+const Home = ({ response }) =>
+{
+  let sections;
+  const pageTitle = response[0].title.rendered;
+
+  if (response)
+  {
+    sections = response[0].sections;
+  }
+
   return (
     <>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
-      <main
-        style={{ padding: 30 }}>
-        <h1>{pageTitle}</h1>
-        {/* <PageBuilder sections={response[0].sections} /> */}
+      <main style={{ maxWidth: '1440px', margin: '0 auto' }}>
+        {/* <h1>{pageTitle}</h1> */}
+        <PageBuilder sections={sections} />
       </main >
     </>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps() {
+export async function getServerSideProps()
+{
   let response;
-  try {
+  try
+  {
     response = await wpRestApi.get('pages', { slug: `homepage` });
     response = response.data;
-  } catch (error) {
+  } catch (error)
+  {
     response = (error as Error).message;
   }
 
