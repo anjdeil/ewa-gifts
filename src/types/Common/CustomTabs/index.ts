@@ -1,15 +1,26 @@
+import { PageBuilderInnerSchema, PageBuilderPropsSchema } from '@/types';
 import { z } from 'zod';
 
 export const CustomTabsSchema = z.object({
-    children: z.array(z.any()),
-    titles: z.array(z.string()),
+    sections: PageBuilderPropsSchema,
+    title: z.string(),
+    _type: z.string().optional()
+});
+
+export const CustomTabsPropsSchema = z.object({
+    tabs: z.array(CustomTabsSchema)
 });
 
 export const CustomTabSchema = z.object({
-    children: z.array(z.any()),
+    sections: z.any(),
     index: z.number(),
     value: z.number()
 });
 
-export type CustomTabsType = z.infer<typeof CustomTabsSchema>;
+export const CustomTabBuilderSchema = z.object({
+    tabs: PageBuilderInnerSchema,
+    _type: z.string()
+})
+
+export type CustomTabsProps = z.infer<typeof CustomTabsPropsSchema>;
 export type CustomTabType = z.infer<typeof CustomTabSchema>;

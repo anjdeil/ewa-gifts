@@ -1,8 +1,9 @@
-export const transformersPageBuilder = (response) =>
+import { PageBuilderInner } from "@/types";
+
+export const transformBuilderSplitSection = (sections: PageBuilderInner[]) =>
 {
-    console.log(response);
-    // return response.map(page =>
-    // {
-    //     console.log(page);
-    // });
-}
+    return {
+        leftSections: [...sections[0].sections],
+        rightSections: [...sections[1].sections]
+    }
+};

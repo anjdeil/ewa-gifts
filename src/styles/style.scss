@@ -25,3 +25,42 @@ body {
         font-size: 14px;
     }
 }
+
+.features {
+    padding-top: 50px;
+}
+
+// .section.categories {
+//     padding-bottom: 100px;
+// }
+
+.section {
+    padding: 50px 30px;
+}
+
+.slider.section {
+    padding-bottom: 0;
+}
+
+.topseller {
+    background-color: #f6f8fc;
+}
+
+.topseller.section {
+    padding-top: 35px;
+}
+
+@media(max-width: 1024px) {
+    .section {
+        padding: 20px 15px;
+    }
+
+    .topseller.section {
+        padding-top: 20px;
+    }
+
+    .topseller-wrapper {
+        flex-direction: column;
+    }
+
+}
