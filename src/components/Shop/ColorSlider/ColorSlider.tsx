@@ -6,23 +6,18 @@ import { Navigation } from 'swiper/modules';
 import styles from './styles.module.scss';
 import { ColorSliderProps } from "@/types";
 
-const colorsTemp = [
-    '#aa1f00',
-    '#ffefc2',
-    '#2b2a29',
-    '#80a7f7',
-    '#426b1f',
-    '#c2ffd7',
-    '#c2ffd7',
-    '#c2ffd7',
-    '#c2ffd7',
-]
-
 export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, currentColor, productId, className }) =>
 {
     const swiperId = `swiper-${productId}`;
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
+    const filteredColors = colors.map(color =>
+    {
+        if (color.includes('#'))
+        {
+            return '#' + color.split('#')[1].split(')')[0];
+        }
+    });
 
     return (
         <div className={`${styles.colorSwiper} ${className}`}>
@@ -37,7 +32,7 @@ export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, curren
                 spaceBetween={10}
                 slidesPerView={'auto'}
             >
-                {colors && colors.map((color, index) =>
+                {colors[0] && colors.map((color, index) =>
                     <SwiperSlide
                         className={`
                         ${styles.colorSwiper__slide}
@@ -52,7 +47,7 @@ export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, curren
                             ${(currentColor === color) && styles.colorSwiper__color_active}
                             `}
                             style={{
-                                backgroundColor: `${colorsTemp[index]}`
+                                backgroundColor: `${filteredColors[index]}`
                             }}>
                         </div>
                     </SwiperSlide>

@@ -1,42 +1,37 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import SearchBar, { MobileSearchButton } from '@/components/Layouts/SearchBar';
+import SearchBar from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
-import { IconButton, useMediaQuery, Box, styled } from '@mui/material';
-import { categoriesItems } from './cat';
+import { IconButton, Box, styled } from '@mui/material';
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
-import { useFetchAllCategoriesListQuery } from '@/store/wooCommerce/wooCommerceApi';
+import MiniCart from '@/components/Cart/MiniCart';
+import { toggleMiniCart } from '@/store/reducers/CartSlice';
+import { categoriesItems } from './cat';
 
 const CustomBadge = styled(Badge)`
-.css-1abqjyq-MuiBadge-badge {
-    background-color: #FECB00;
-    color: black;
-}
-},
-`;
+    .css-1abqjyq-MuiBadge-badge {
+        background-color: #FECB00;
+        color: black;
+    }
+    },
+    `;
 
-const Header: React.FC = () =>
-{
-    // const { data, isLoading, isError, error } = useFetchAllCategoriesListQuery();
-    // console.log(data);
-
-    const isMobile = useMediaQuery('(max-width: 768px)');
+const Header: React.FC = () => {
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
+    const { miniCartOpen } = useAppSelector(state => state.Cart);
 
-    const onBurgerClick = () =>
-    {
-        if (!isOpen)
-        {
+    const onBurgerClick = () => {
+        if (!isOpen) {
+            alert('open');
             dispatch(setMenuOpen(true));
-        } else
-        {
+        } else {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
         }
@@ -68,15 +63,9 @@ const Header: React.FC = () =>
                         </h3>
                     </Box>
                     <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
-                        {
-                            !isMobile ? (
-                                <SearchBar />
-                            ) : (
-                                <MobileSearchButton />
-                            )
-                        }
+                        <SearchBar />
                     </Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' } }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' }, position: 'relative' }}>
                         <IconButton>
                             <Image
                                 src={'/images/account.svg'}
@@ -93,7 +82,8 @@ const Header: React.FC = () =>
                                 height={24}
                             />
                         </IconButton>
-                        <IconButton>
+
+                        <IconButton onClick={() => dispatch(toggleMiniCart())}>
                             <CustomBadge badgeContent={4} color="secondary">
                                 <Image
                                     src={'/images/shop.svg'}
@@ -103,6 +93,7 @@ const Header: React.FC = () =>
                                 />
                             </CustomBadge>
                         </IconButton>
+                        {miniCartOpen && (<MiniCart />)}
                     </Box>
                 </Toolbar>
             </AppBar>

@@ -1,8 +1,9 @@
+import { PageBuilder } from "@/components/PageBuilder";
 import { CustomTabType } from "@/types";
 import { Box } from "@mui/material";
 import { FC } from 'react';
 
-export const CustomTab: FC<CustomTabType> = ({ children, index, value }) => 
+export const CustomTab: FC<CustomTabType> = ({ sections, index, value }) => 
 {
     return (
         <div
@@ -13,7 +14,7 @@ export const CustomTab: FC<CustomTabType> = ({ children, index, value }) =>
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    {children}
+                    <PageBuilder sections={sections} />
                 </Box>
             )}
         </div>

@@ -5,6 +5,8 @@ import { z } from "zod";
 const menuResponseSchema = z.record(z.any());
 type menuResponseType = z.infer<typeof menuResponseSchema>;
 
+console.log('Я был запущен')
+
 
 export const wpAPI = createApi({
     reducerPath: 'wpAPI',
@@ -27,7 +29,19 @@ export const wpAPI = createApi({
                 return links;
             },
         }),
+        fetchSomeMenuItems: build.query({
+            query: (params) => ({
+                url: '/menus',
+                params,
+            }),
+        }),
+        fetchAllBlogPosts: build.query({
+            query: (params) => ({
+                url: '/posts',
+                params,
+            }),
+        }),
     }),
 })
 
-export const { useFetchMenuItemsQuery } = wpAPI;
+export const { useFetchMenuItemsQuery, useFetchSomeMenuItemsQuery, useFetchAllBlogPostsQuery } = wpAPI;

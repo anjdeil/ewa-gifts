@@ -52,8 +52,6 @@ export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
                 </ul>
             </div>
         </div >
-
-
     );
 };
 

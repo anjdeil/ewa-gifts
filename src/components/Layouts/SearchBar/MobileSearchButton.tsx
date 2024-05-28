@@ -11,7 +11,7 @@ const MobileSearchButton = () => {
     return (
         <Button
             sx={{
-                backgroundColor: variables.backgroundWhite,
+                backgroundColor: variables.inputLight,
                 width: "100%",
                 textTransform: "none",
                 fontSize: "1rem",
@@ -20,7 +20,7 @@ const MobileSearchButton = () => {
                 borderRadius: "10px",
                 padding: "8px",
                 '&:hover': {
-                    backgroundColor: variables.inputLight,
+                    backgroundColor: variables.inputDarker,
 
                 }
             }}

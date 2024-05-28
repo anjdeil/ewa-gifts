@@ -3,38 +3,50 @@ import { FC } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { Text } from '@/components/Common/Text';
+import Link from "next/link";
+import styles from './styles.module.scss';
+
+
 
 export const Hero: FC<HeroProps> = ({ section }) =>
 {
     const isMobile = useMediaQuery('(max-width: 1024px)');
+    const isReverse = section.is_reverse;
     return (
         <>
             <Box display="flex"
-                flexDirection={isMobile ? "column" : (section.is_reverse ? "row-reverse" : "row")}
+                flexDirection={isMobile ? "column-reverse" : (isReverse ? "row-reverse" : "row")}
                 gap={isMobile ? 0 : '5%'}
             >
-                <Box width={isMobile ? "100%" : "60%"} p={2}>
-                    <h3 className="sub-title">{section.title}</h3>
-                    <Text text={section.text} />
+                <Box width={isMobile ? "100%" : "60%"} sx={{
+                    paddingTop: isMobile ? '20px' : 'initial',
+                }}>
+                    <h3 className={`sub-title ${styles.hero__title}`}>{section.title}</h3>
+                    <Text className={styles.hero__text} text={section.text} />
+                    {section.link_url && <Link className="more-link" href={section.link_url}>{section.link_text}</Link>}
                 </Box>
                 <Box width={isMobile ? "100%" : "40%"}
                     position={'relative'}
                     sx={{
                         borderRadius: '10px',
                         overflow: 'hidden',
-                        paddingTop: isMobile ? "60%" : undefined
                     }}>
-                    <div>
+                    <Box position={'relative'}
+                        paddingTop={'51%'}
+                        overflow={"hidden"}
+                        borderRadius={"15px"}
+                    >
                         <Image
                             src={section.image}
                             style={{
                                 objectFit: "cover"
                             }}
                             alt={section.title}
-                            fill
+                            layout="fill"
+                            objectFit="cover"
                             sizes="100%"
                         />
-                    </div>
+                    </Box>
                 </Box>
             </Box >
         </>

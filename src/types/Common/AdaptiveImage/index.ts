@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-const AdaptiveImagePropsSchema = z.object({
-    isMobile: z.boolean(),
+export const AdaptiveImagePropsSchema = z.object({
+    isMobile: z.boolean().optional(),
     imageUrl: z.string(),
-    mobileImageUrl: z.string(),
+    mobileImageUrl: z.string().optional(),
     alt: z.string(),
     descOffset: z.string(),
     mobOffset: z.string().optional()

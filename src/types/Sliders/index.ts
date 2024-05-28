@@ -1,3 +1,3 @@
 export * from './SliderSwiper';
-export * from './TopProductSlider';
-export * from './ProductsSlider';
+export * from './TopSeller';
+export * from './ProductCarousel';

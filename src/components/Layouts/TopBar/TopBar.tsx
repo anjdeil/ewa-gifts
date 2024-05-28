@@ -7,6 +7,7 @@ import Socials from '../Socials/Socials';
 import styles from './styles.module.scss';
 const TopBar: React.FC = () =>
 {
+
   return (
     <Stack
       direction="row"
