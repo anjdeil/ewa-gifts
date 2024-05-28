@@ -6,15 +6,12 @@ import { Navigation } from 'swiper/modules';
 import styles from './styles.module.scss';
 import { ColorSliderProps } from "@/types";
 
-export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, currentColor, productId, className }) =>
-{
+export const ColorSlider: FC<ColorSliderProps> = ({ colors, onColorClick, currentColor, productId, className }) => {
     const swiperId = `swiper-${productId}`;
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
-    const filteredColors = colors.map(color =>
-    {
-        if (color.includes('#'))
-        {
+    const filteredColors = colors.map(color => {
+        if (color.includes('#')) {
             return '#' + color.split('#')[1].split(')')[0];
         }
     });

@@ -70,43 +70,61 @@ const updateCartItems = (prevCart, updatedItem) => {
     }
 }
 
-export const calculateCartTotal = createAsyncThunk(
-    'Cart/calculateCartTotal',
+export const fetchCartRows = createAsyncThunk(
+    'Cart/fetchCartRows',
     async (cartItems, thunkAPI) => {
-
         const productPromises = [];
 
+        const productIds = [];
+
         cartItems.forEach(({ id, type, options }) => {
+            productIds.push(id);
+
             if (type === 'variable') {
+                const variationIds = [];
                 options.forEach(({ id: variationId }) => {
-                    productPromises.push(axios.get(`api/woo/products/${id}/variations/${variationId}`));
+                    variationIds.push(variationId);
                 });
-            } else {
-                productPromises.push(axios.get(`api/woo/products/${id}`));
+                productPromises.push(axios.get(`/api/woo/products/${id}/variations`, {
+                    params: {
+                        include: variationIds.join(',')
+                    }
+                }));
             }
-        })
+        });
 
-        const productResponses = await Promise.all(productPromises);
+        productPromises.push(axios.get(`/api/woo/products`, {
+            params: {
+                include: productIds.join(',')
+            }
+        }));
 
-        // // Вычисление общей стоимости корзины
-        // const total = productResponses.reduce(
-        //     (sum, response) => sum + response.data.price,
-        //     0
-        // )
-        console.log(productResponses);
+        const response = await Promise.all(productPromises);
 
+        const cartRows = response.reduce((prevData, currData) => {
+            return [...prevData, currData.data];
+        }, []);
 
-        return productResponses;
+        return cartRows;
     }
 )
+
+const getItemsCount = (items) => {
+    return items.reduce((accumulator, item) => {
+        if (item.type === 'variable') return accumulator + item.options.length;
+        return accumulator + 1;
+    }, 0);
+}
 
 export const CartSlice = createSlice({
     name: 'Cart',
     initialState: {
         items: loadCartFromLocalStorage() || [],
+        cartRows: [],
         totals: {
             total: 0
         },
+        itemsCount: 0,
         isLoading: false,
         isError: false,
         error: "",
@@ -115,11 +133,27 @@ export const CartSlice = createSlice({
     reducers: {
         addedToCart: (state, action) => {
             state.items = updateCartItems(state.items, action.payload);
+            state.itemsCount = getItemsCount(state.items);
         },
         toggleMiniCart: (state) => {
             state.miniCartOpen = !state.miniCartOpen
         }
-    }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchCartRows.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchCartRows.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.cartRows = action.payload;
+            })
+            .addCase(fetchCartRows.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+                state.isError = true;
+            })
+    },
 })
 
 export const cartLocalStorageMiddleware = store => next => action => {

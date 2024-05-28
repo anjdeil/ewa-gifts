@@ -122,6 +122,14 @@ const CheckPage = () => {
                     </label>
                     <br /><br />
                     <button onClick={onAddedToCart}>Add to cart</button>
+                    <button onClick={() => {
+                        dispatch(addedToCart({
+                            id: 32937,
+                            type: 'simple',
+                            variationId: null,
+                            choosenOptions: null
+                        }))
+                    }}>Add simple product</button>
                 </form>
             </main >
         </>

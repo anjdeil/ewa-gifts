@@ -25,7 +25,7 @@ const Header: React.FC = () => {
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
-    const { miniCartOpen } = useAppSelector(state => state.Cart);
+    const { miniCartOpen, itemsCount } = useAppSelector(state => state.Cart);
 
     const onBurgerClick = () => {
         if (!isOpen) {
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
                         </IconButton>
 
                         <IconButton onClick={() => dispatch(toggleMiniCart())}>
-                            <CustomBadge badgeContent={4} color="secondary">
+                            <CustomBadge badgeContent={itemsCount} color="secondary">
                                 <Image
                                     src={'/images/shop.svg'}
                                     alt={'Shop button-icon'}

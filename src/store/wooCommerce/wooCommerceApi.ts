@@ -1,11 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import axios from "axios";
 
-const fetchAllCategories = async (page = 1, categories = []) =>
-{
-    try
-    {
-        const response = await axios.get("api/woo/products/categories", {
+const fetchAllCategories = async (page = 1, categories = []) => {
+    try {
+        const response = await axios.get("/api/woo/products/categories", {
             params: {
                 per_page: 100,
                 page
@@ -13,20 +11,18 @@ const fetchAllCategories = async (page = 1, categories = []) =>
         });
         const allCategories = categories.concat(response.data);
 
-        if (response.data.length === 100)
-        {
+        if (response.data.length === 100) {
             return fetchAllCategories(page + 1, allCategories);
         }
         return allCategories;
-    } catch (error)
-    {
+    } catch (error) {
         throw error;
     }
 }
 
 export const wooCommerceApi = createApi({
     reducerPath: 'wooCommerceApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'api/woo' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/woo' }),
     endpoints: (build) => ({
         fetchProductList: build.query({
             query: (params) => ({
@@ -46,14 +42,11 @@ export const wooCommerceApi = createApi({
             })
         }),
         fetchAllCategoriesList: build.query({
-            queryFn: async () =>
-            {
-                try
-                {
+            queryFn: async () => {
+                try {
                     const data = await fetchAllCategories();
                     return { data };
-                } catch (error)
-                {
+                } catch (error) {
                     return { error: "Failed to fetch categories!" }
                 }
             }

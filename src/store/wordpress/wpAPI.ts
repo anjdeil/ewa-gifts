@@ -10,15 +10,14 @@ console.log('Я был запущен')
 
 export const wpAPI = createApi({
     reducerPath: 'wpAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'api/wp' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/wp' }),
     endpoints: (build) => ({
         fetchMenuItems: build.query({
             query: (params) => ({
                 url: '/menu-items',
                 params,
             }),
-            transformResponse: (response: menuResponseType): wpNavLink[] =>
-            {
+            transformResponse: (response: menuResponseType): wpNavLink[] => {
                 const links = Object.values(response).map(obj => ({
                     title: obj.title.rendered,
                     url: obj.url,

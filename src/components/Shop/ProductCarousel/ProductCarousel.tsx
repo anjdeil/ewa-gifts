@@ -4,22 +4,19 @@ import 'swiper/css/navigation';
 import 'swiper/css';
 import { ProductCard } from "../ProductCard";
 import { productCarouselProps } from "@/types";
-import { useFetchProductListQuery } from "@/store/wordpress";
+import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { transformProductCard } from "@/services/transformers";
 
-export const ProductCarousel: FC<productCarouselProps> = ({ ids }) =>
-{
+export const ProductCarousel: FC<productCarouselProps> = ({ ids }) => {
     const { data } = useFetchProductListQuery({ include: ids });
 
-    if (!data)
-    {
+    if (!data) {
         return <div>Products not found.</div>
     }
 
     let products;
 
-    if (data)
-    {
+    if (data) {
         products = transformProductCard(data);
     }
 
