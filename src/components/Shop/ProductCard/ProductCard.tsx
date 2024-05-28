@@ -35,7 +35,6 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
     const onHandleColorClick = async (newColor: string, productId: ProductType['id']) =>
     {
         setColor(newColor);
-        console.log(productId);
     }
 
     return (

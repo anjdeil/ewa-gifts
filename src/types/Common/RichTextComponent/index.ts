@@ -6,7 +6,7 @@ export const RichTextPropsSchema = z.object({
     text: z.string(),
     title: z.string().optional(),
     _type: z.string().optional(),
-    className: z.string().optional()
+    className: z.string()
 });
 
 export type RichTextProps = z.infer<typeof RichTextPropsSchema>;

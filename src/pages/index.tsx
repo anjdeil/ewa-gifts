@@ -18,7 +18,7 @@ const Home = ({ response }) =>
         <title>{pageTitle}</title>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
-      <main style={{ maxWidth: '1440px', margin: '0 auto' }}>
+      <main>
         {/* <h1>{pageTitle}</h1> */}
         <PageBuilder sections={sections} />
       </main >

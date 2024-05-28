@@ -1,10 +1,11 @@
+import { SectionProps } from "@/types"
 import { FC } from "react"
 
-export const Section: FC = ({ children, className }) =>
+export const Section: FC<SectionProps> = ({ children, className, isContainer }) =>
 {
     return (
         <section className={`${className}`}>
-            {children}
+            {isContainer ? <div className="container">{children}</div> : children}
         </section>
     )
 }

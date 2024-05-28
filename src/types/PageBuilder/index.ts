@@ -1,31 +1,27 @@
 import { z } from "zod";
 import { SliderBuild, TopSellerBuildSchema, productCarouselBuilderSchema } from "../Sliders";
-import { AdaptiveImagePropsSchema, CustomTabBuilderSchema, FeaturesBuild, HeroSchema, RichTextPropsSchema, SplitBuild } from "../Common";
+import { AdaptiveImagePropsSchema, CustomTabBuilderSchema, FeaturesBuild, HeroSchema, RichTextPropsSchema, SplitBuild, SplitImage } from "../Common";
 import { BlogBuildSchema } from "../Blog";
 import { GoogleReviewsBuildSchema } from "../GoogleReviews";
+import { CategoryBarsBuildSchema } from "../Common/CategoryBars";
 
-export const PageBuilderPropsSchema = z.array(
-    z.union([SliderBuild,
-        FeaturesBuild,
-        HeroSchema,
-        SplitBuild,
-        AdaptiveImagePropsSchema,
-        RichTextPropsSchema,
-        CustomTabBuilderSchema,
-        BlogBuildSchema,
-        TopSellerBuildSchema,
-        GoogleReviewsBuildSchema,
-        productCarouselBuilderSchema])
-);
+export const PageBuilderSectionSchema = z.union([SliderBuild,
+    FeaturesBuild,
+    CategoryBarsBuildSchema,
+    HeroSchema,
+    TopSellerBuildSchema,
+    CustomTabBuilderSchema,
+    SplitBuild,
+    SplitImage,
+    BlogBuildSchema,
+    AdaptiveImagePropsSchema,
+    RichTextPropsSchema,
+    GoogleReviewsBuildSchema,
+    productCarouselBuilderSchema]);
 
-export const PageBuilderInnerSchema = z.object({
-    sections: z.array(z.union([SliderBuild,
-        FeaturesBuild,
-        HeroSchema,
-        AdaptiveImagePropsSchema,
-        RichTextPropsSchema])),
-    _type: z.string()
+export const PageBuilderPropsSchema = z.object({
+    sections: z.array(PageBuilderSectionSchema)
 });
 
-export type PageBuilderProps = z.infer<typeof PageBuilderPropsSchema>;
-export type PageBuilderInner = z.infer<typeof PageBuilderInnerSchema>;
+export type PageBuilderSection = z.infer<typeof PageBuilderSectionSchema>;
+export type PageBuilderProp = z.infer<typeof PageBuilderPropsSchema>;
