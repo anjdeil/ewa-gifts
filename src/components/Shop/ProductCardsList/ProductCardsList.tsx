@@ -14,7 +14,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading, isError, 
     if (isError) return <p>We cannot get the products</p>;
 
     const column = (isMobile && (columns?.mobile !== undefined ? columns.mobile : 2)) ||
-        (isTablet && (columns?.tablet !== undefined ? columns.tablet : 3)) ||
+        (isTablet && (columns?.tablet !== undefined ? columns.tablet : 4)) ||
         (columns?.desktop !== undefined ? columns.desktop : 4);
 
     return (

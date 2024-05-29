@@ -74,7 +74,7 @@ const Category = ({ categories }) => {
 
                         </aside>
                         <div className={styles['product-category__archive']}>
-                            <ProductCardList isLoading={isProductsLoading} isError={isProductsError} products={products} columns={{ desktop: 3, tablet: 4, mobile: 2 }} />
+                            <ProductCardList isLoading={isProductsLoading} isError={isProductsError} products={products} columns={{ desktop: 3 }} />
                         </div>
                     </div>
                 </div>
