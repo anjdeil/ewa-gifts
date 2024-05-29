@@ -13,21 +13,21 @@ import { ProductCarousel } from "../Shop/ProductCarousel";
 import { TopSeller } from "../Shop/TopSeller";
 import { Box, useMediaQuery } from "@mui/material";
 import { Section } from "../Layouts/Section";
-import { PageBuilderProp, PageBuilderSection } from "@/types";
+import { HeroSchema, PageBuilderProp, SliderType } from "@/types";
 
 export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
 {
-    console.log(sections);
+    // console.log(sections);
     const isMobile = useMediaQuery('(max-width: 1024px)');
     return (
         <div>
-            {sections.map((section: PageBuilderSection) =>
+            {sections.map((section) =>
             {
                 if ('_type' in section)
                 {
                     switch (section._type)
                     {
-                        case "slider":
+                        case "slider": {
                             if ('slider' in section)
                             {
                                 return (
@@ -37,8 +37,9 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                                 );
                             }
                             break;
+                        }
 
-                        case "features":
+                        case "features": {
                             if ('features' in section)
                             {
                                 return (
@@ -48,21 +49,29 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                                 )
                             }
                             break;
+                        }
 
                         case "categories": {
+
+                            if ('categories' in section)
+                            {
+                                return (
+                                    <Section isContainer={true} className={'section'}>
+                                        <CategoryBars />
+                                    </Section>
+                                )
+                            }
+                            break;
+                        }
+
+                        case "hero": {
+                            const heroSection = section as HeroSchema;
                             return (
-                                <Section isContainer={true} className={'categories section'}>
-                                    <CategoryBars />
+                                <Section isContainer={true} className={'hero section'}>
+                                    <Hero section={heroSection} />
                                 </Section>
                             )
                         }
-
-                        case "hero":
-                            return (
-                                <Section isContainer={true} className={'hero section'}>
-                                    <Hero section={section} />
-                                </Section>
-                            )
 
                         case "split":
                         case "split_reversible": {
@@ -99,38 +108,53 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                         }
 
                         case "blog": {
-                            return (
-                                <Section className={'section'}>
-                                    <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
-                                    <BlogList />
-                                </Section>
-                            )
+                            if ('blog' in section)
+                            {
+                                return (
+                                    <Section className={'section'}>
+                                        <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
+                                        <BlogList />
+                                    </Section>
+                                )
+                            }
+                            break;
                         }
 
                         case "topseller": {
-                            return (
-                                <Section className={'topseller section'}>
-                                    <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
-                                    <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
-                                        flexDirection: 'row'
-                                    }}>
-                                        <TopSeller />
-                                        <TopSeller />
-                                    </Box>
-                                    <ProductCarousel ids={['32746', '32686', '32681', '32653']} />
-                                </Section>
-                            );
+                            if ('topseller' in section)
+                            {
+                                return (
+                                    <Section className={'topseller section'}>
+                                        <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
+                                        <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
+                                            flexDirection: 'row'
+                                        }}>
+                                            <TopSeller />
+                                            <TopSeller />
+                                        </Box>
+                                        <ProductCarousel ids={['32746', '32686', '32681', '32653']} />
+                                    </Section>
+                                );
+                            }
+                            break;
                         }
 
                         case "google_reviews": {
-                            // console.log(section);
+                            if ('google_reviews' in section)
+                            {
+                                break;
+                            }
                             break;
                         }
 
                         case "product_carousel": {
-                            return (
-                                <ProductCarousel ids={section.products} />
-                            )
+                            if ('product_carousel' in section)
+                            {
+                                return (
+                                    <ProductCarousel ids={section.products} />
+                                )
+                            }
+                            break;
                         }
 
                         case "split_image":

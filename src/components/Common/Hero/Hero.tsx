@@ -6,17 +6,17 @@ import { Text } from '@/components/Common/Text';
 import Link from "next/link";
 import styles from './styles.module.scss';
 
-
-
 export const Hero: FC<HeroProps> = ({ section }) =>
 {
-    const isMobile = useMediaQuery('(max-width: 1024px)');
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isTablet = useMediaQuery('(max-width: 1024px)');
+    const imagePaddingTop = isMobile && '40%' || isTablet && '80%' || '50%';
     const isReverse = section.is_reverse;
     return (
         <>
             <Box display="flex"
                 flexDirection={isMobile ? "column-reverse" : (isReverse ? "row-reverse" : "row")}
-                gap={isMobile ? 0 : '5%'}
+                gap={isMobile ? 0 : '20px'}
             >
                 <Box width={isMobile ? "100%" : "60%"} sx={{
                     paddingTop: isMobile ? '20px' : 'initial',
@@ -32,7 +32,7 @@ export const Hero: FC<HeroProps> = ({ section }) =>
                         overflow: 'hidden',
                     }}>
                     <Box position={'relative'}
-                        paddingTop={'51%'}
+                        paddingTop={imagePaddingTop}
                         overflow={"hidden"}
                         borderRadius={"15px"}
                     >
