@@ -17,3 +17,4 @@ export const FeaturesBuild = z.object({
 
 export type FeaturesType = z.infer<typeof FeaturesSchema>;
 export type FeaturesProps = z.infer<typeof FeaturesPropsSchema>;
+export type FeaturesBuild = z.infer<typeof FeaturesBuild>;

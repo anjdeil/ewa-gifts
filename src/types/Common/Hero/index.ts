@@ -7,7 +7,7 @@ export const HeroSchema = z.object({
     link_url: z.string(),
     text: z.string(),
     title: z.string(),
-    _type: z.string().optional()
+    _type: z.string()
 });
 
 const HeroPropsSchema = z.object({
@@ -16,3 +16,4 @@ const HeroPropsSchema = z.object({
 
 export type HeroPropsType = z.infer<typeof HeroPropsSchema>;
 export type HeroProps = z.infer<typeof HeroPropsSchema>
+export type HeroSchema = z.infer<typeof HeroSchema>;
