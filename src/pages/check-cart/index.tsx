@@ -122,7 +122,8 @@ const CheckPage = () => {
                     </label>
                     <br /><br />
                     <button onClick={onAddedToCart}>Add to cart</button>
-                    <button onClick={() => {
+                    <button onClick={(evt) => {
+                        evt.preventDefault();
                         dispatch(addedToCart({
                             id: 32937,
                             type: 'simple',
@@ -130,6 +131,17 @@ const CheckPage = () => {
                             choosenOptions: null
                         }))
                     }}>Add simple product</button>
+                    <button onClick={(evt) => {
+                        evt.preventDefault();
+                        dispatch(addedToCart({
+                            id: 35198,
+                            type: 'variable',
+                            variationId: 35286,
+                            choosenOptions: {
+                                pa_color: 'granatowy (#204060)'
+                            }
+                        }))
+                    }}>Add some variation</button>
                 </form>
             </main >
         </>

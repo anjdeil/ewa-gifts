@@ -8,7 +8,11 @@ import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { transformProductCard } from "@/services/transformers";
 
 export const ProductCarousel: FC<productCarouselProps> = ({ ids }) => {
-    const { data } = useFetchProductListQuery({ include: ids });
+    const { data, isLoading } = useFetchProductListQuery({ include: ids });
+
+    if (isLoading) {
+        return <h3>Loading...</h3>
+    }
 
     if (!data) {
         return <div>Products not found.</div>

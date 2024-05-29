@@ -37,7 +37,6 @@ export const TopSeller: FC = () => {
 
     if (data) {
         products = transformProductCard(data);
-        console.log(products);
 
     }
 

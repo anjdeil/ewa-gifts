@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import SearchBar from '@/components/Layouts/SearchBar';
@@ -10,7 +10,7 @@ import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
 import MiniCart from '@/components/Cart/MiniCart';
-import { toggleMiniCart } from '@/store/reducers/CartSlice';
+import { getItemsCount, refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
 import { categoriesItems } from './cat';
 
 const CustomBadge = styled(Badge)`
@@ -26,6 +26,10 @@ const Header: React.FC = () => {
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
     const { miniCartOpen, itemsCount } = useAppSelector(state => state.Cart);
+
+    useEffect(() => {
+        dispatch(refreshItemsCount());
+    }, []);
 
     const onBurgerClick = () => {
         if (!isOpen) {

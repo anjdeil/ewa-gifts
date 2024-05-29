@@ -4,36 +4,37 @@ import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { useFetchProductListQuery, wooCommerceApi } from "@/store/wooCommerce/wooCommerceApi";
 import { ProductCardList } from "@/components/Shop";
 import { transformProductCard } from "@/services/transformers";
+import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
+import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
+import styles from "./styles.module.scss";
+import { Chip } from "@mui/material";
 
 export const getServerSideProps = async ({ query }) => {
 
     const { slugs, ...params } = query;
 
-    const slug = slugs[slugs.length - 1];
+    const categoryPromises = slugs.map((slug) => wooCommerceRestApi.get(`products/categories`, { slug }));
+    const categoryResponses = await Promise.all(categoryPromises);
 
-    const response = await wooCommerceRestApi.get(`products/categories`, {
-        ...params,
-        slug
-    });
+    const categories = categoryResponses.reduce((prev, curr) => [...prev, curr.data[0]], []);
 
-    const categoryData = response.data[0];
-
-    console.log(categoryData);
-
+    const notFoundIndex = categories.findIndex(category => category === undefined);
+    if (notFoundIndex >= 0) {
+        return {
+            notFound: true
+        }
+    }
 
     return {
         props: {
-            id: categoryData.id,
-            name: categoryData.name,
-            slug: categoryData.slug,
-            parent: categoryData.parent,
-            description: categoryData.description,
-            count: categoryData.count
+            categories
         }
     };
+
 }
 
-const Category = ({ id, name, slug, parent, description, count }) => {
+const Category = ({ categories }) => {
+
 
     const [supplierFilter, setSupplierFilter] = useState([]);
     const [colorFilter, setColorFilter] = useState('');
@@ -41,10 +42,15 @@ const Category = ({ id, name, slug, parent, description, count }) => {
     const [sortBy, setSortBy] = useState(null);
     const [orderBy, setOrderBy] = useState(null);
 
-    let { data: products, isLoading, isError, error } = useFetchProductListQuery({ per_page: 21, category: id })
+    const { id, name, slug, parent, description, count } = categories[categories.length - 1];
+
+    let { data: products, isProductsLoading, isProductsError, productsError } = useFetchProductListQuery({ per_page: 21, category: id })
     if (products) {
         products = transformProductCard(products);
     }
+
+    const links = transformBreadcrumbsCategories(categories);
+
 
     return (
         <>
@@ -52,12 +58,25 @@ const Category = ({ id, name, slug, parent, description, count }) => {
                 <title>{name}</title>
                 <meta name="description" content={description} />
             </Head>
-            <main>
+            <main className={styles['product-category']}>
                 <div className="container">
+                    <Breadcrumbs links={links} />
+                    <div className={styles['product-category__titling']}>
+                        <h1 className={styles['product-category__title']}>{name}</h1>
+                        <Chip
+                            className={styles['product-category__count']}
+                            label={count}
+                            size="small"
+                        />
+                    </div>
+                    <div className={styles['product-category__container']}>
+                        <aside className={styles['product-category__sidebar']}>
 
-                    <h1>{name}</h1>
-                    <span>{count}</span>
-                    <ProductCardList isLoading={isLoading} isError={isError} products={products} />
+                        </aside>
+                        <div className={styles['product-category__archive']}>
+                            <ProductCardList isLoading={isProductsLoading} isError={isProductsError} products={products} columns={{ desktop: 3, tablet: 4, mobile: 2 }} />
+                        </div>
+                    </div>
                 </div>
             </main>
         </>

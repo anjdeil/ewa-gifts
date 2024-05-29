@@ -1,26 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const getItemsCount = (items) => {
+    return items.reduce((accumulator, item) => {
+        if (item.type === 'variable') return accumulator + item.options.length;
+        return accumulator + 1;
+    }, 0);
+}
+
 const saveCartToLocalStorage = (state) => {
     try {
-        const serializedState = JSON.stringify(state);
-        localStorage.setItem('cart', serializedState);
+        const cartJSON = JSON.stringify(state);
+        localStorage.setItem('cart', cartJSON);
     } catch (e) {
         console.warn(e);
     }
 }
-
 const loadCartFromLocalStorage = () => {
     try {
-        const serializedState = localStorage.getItem('cart');
-        if (serializedState === null) return undefined;
-        return JSON.parse(serializedState);
+        const cartJSON = localStorage.getItem('cart') || undefined;
+        const cart = JSON.parse(cartJSON);
+        return cart;
     } catch (e) {
         console.warn(e);
         return undefined;
     }
 }
-
 const updateCartItems = (prevCart, updatedItem) => {
     const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
 
@@ -107,14 +112,7 @@ export const fetchCartRows = createAsyncThunk(
 
         return cartRows;
     }
-)
-
-const getItemsCount = (items) => {
-    return items.reduce((accumulator, item) => {
-        if (item.type === 'variable') return accumulator + item.options.length;
-        return accumulator + 1;
-    }, 0);
-}
+);
 
 export const CartSlice = createSlice({
     name: 'Cart',
@@ -128,7 +126,7 @@ export const CartSlice = createSlice({
         isLoading: false,
         isError: false,
         error: "",
-        miniCartOpen: false
+        miniCartOpen: false,
     },
     reducers: {
         addedToCart: (state, action) => {
@@ -137,6 +135,9 @@ export const CartSlice = createSlice({
         },
         toggleMiniCart: (state) => {
             state.miniCartOpen = !state.miniCartOpen
+        },
+        refreshItemsCount: (state) => {
+            state.itemsCount = getItemsCount(state.items);
         }
     },
     extraReducers: (builder) => {
@@ -158,9 +159,10 @@ export const CartSlice = createSlice({
 
 export const cartLocalStorageMiddleware = store => next => action => {
     const result = next(action);
-    saveCartToLocalStorage(store.getState().Cart.items);
+    const { items } = store.getState().Cart;
+    saveCartToLocalStorage(items);
     return result;
 };
 
-export const { addedToCart, toggleMiniCart } = CartSlice.actions;
+export const { addedToCart, toggleMiniCart, refreshItemsCount } = CartSlice.actions;
 export default CartSlice.reducer;

@@ -7,9 +7,10 @@ const Breadcrumbs = ({ links }) => {
 
     return (
         <MuiBreadcrumbs aria-label="Breadcrumbs">
+            <Link className={styles['breadcrumbs__link']} href={'/'}>Home</Link>
             {
-                links?.map(({ name, url, isCurrent }, i) => {
-                    if (isCurrent) {
+                links?.map(({ name, url }, i, links) => {
+                    if (i === links.length - 1) {
                         return (
                             <Typography key={i}>{name}</Typography>
                         )

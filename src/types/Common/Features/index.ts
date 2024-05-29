@@ -11,7 +11,7 @@ const FeaturesPropsSchema = z.object({
 });
 
 export const FeaturesBuild = z.object({
-    features: z.string(),
+    features: z.array(FeaturesSchema),
     _type: z.string(),
 })
 

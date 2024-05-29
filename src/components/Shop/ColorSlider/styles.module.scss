@@ -2,7 +2,9 @@
     padding: 0 25px;
     position: relative;
 
-    &__slide {
+    &__slide div {
+        margin: 0 auto;
+        padding: 1px 0;
         width: 25px;
         height: 25px;
     }
