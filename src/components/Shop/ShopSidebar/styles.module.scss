@@ -1,0 +1,50 @@
+@import "@/styles/variables.module.scss";
+
+.filter-collapsed {
+    margin-bottom: 20px;
+
+    &__header {
+        &_expanded {
+            .filter-collapsed__header-angle {
+                transform: scaleY(-1);
+            }
+        }
+    }
+
+    &__content {
+        padding: 20px 0;
+    }
+}
+
+.categories-list {
+    &__list {
+        &-item {
+            list-style: none;
+        }
+    }
+
+    &__button {
+        color: $black-color;
+        text-decoration: none;
+        font-size: 0.9em;
+        padding: 0.7em 0.6em;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        transition: .2s ease;
+
+        &:hover {
+            background-color: $white-lilac;
+        }
+
+        &_active,
+        &_active:hover {
+            background-color: $accent-hover;
+
+        }
+
+        &-icon {
+            margin-right: 0.4em;
+        }
+    }
+}
