@@ -6,7 +6,8 @@ import { ProductCard } from "../ProductCard";
 import { useMediaQuery } from "@mui/material";
 
 
-export const ProductCardList: FC<ProductCardListProps> = ({ isLoading, isError, products, columns }) => {
+export const ProductCardList: FC<ProductCardListProps> = ({ isLoading, isError, products, columns }) =>
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
 

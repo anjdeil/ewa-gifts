@@ -5,8 +5,24 @@ import { FC } from "react";
 import { SplitContainer } from '@/types/Common/Split';
 
 const StyledBox = styled(Box)`
-  &>div{
+  & > div {
     width: 100%;
+  }
+
+  & .sub-title {
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1024px) {
+    & .sub-title {
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+
+    & .desc {
+        margin-bottom: 10px;
+    }
   }
 `;
 
@@ -17,7 +33,6 @@ export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed = 
 
     const SplitSection: FC<SplitContainer> = ({ isMobile, content }) =>
     {
-        // console.log(content);
         return (
             <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}
             >

@@ -1,8 +1,12 @@
+import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
 import { PageBuilder } from "@/components/PageBuilder";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
+import { useFetchUserRegistrationMutation } from "@/store/wooCommerce/wooCommerceApi";
+import { HomeProps } from "@/types";
 import Head from "next/head";
+import { FC } from "react";
 
-const Home = ({ response }) =>
+const Home: FC<HomeProps> = ({ response }) =>
 {
   let sections;
   const pageTitle = response[0].title.rendered;
@@ -12,6 +16,20 @@ const Home = ({ response }) =>
     sections = response[0].sections;
   }
 
+  const [fetchUserToken] = useFetchUserRegistrationMutation();
+
+  const OnClick = async () =>
+  {
+    try
+    {
+      const response = await fetchUserToken({ email: 'test@gmai.com' });
+      console.log('User', response);
+    } catch (err)
+    {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       <Head>
@@ -19,8 +37,10 @@ const Home = ({ response }) =>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
       <main>
-        {/* <h1>{pageTitle}</h1> */}
-        <PageBuilder sections={sections} />
+        <h1>{pageTitle}</h1>
+        {/* <button onClick={() => OnClick()}>Register User</button> */}
+        <RegistrationForm />
+        {/* <PageBuilder sections={sections} /> */}
       </main >
     </>
   );

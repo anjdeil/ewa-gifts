@@ -1,6 +1,6 @@
-import { PageBuilderInner } from "@/types";
+import { transformBuilderSplitProps } from "@/types";
 
-export const transformBuilderSplitSection = (sections: PageBuilderInner[]) =>
+export const transformBuilderSplitSection = (sections: transformBuilderSplitProps[]) =>
 {
     return {
         leftSections: [...sections[0].sections],

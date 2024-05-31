@@ -1,2 +1,2 @@
 export * from './SubscriptionForm';
-export * from './CF7';
+export * from './CustomInput';

@@ -13,7 +13,7 @@ import { ProductCarousel } from "../Shop/ProductCarousel";
 import { TopSeller } from "../Shop/TopSeller";
 import { Box, useMediaQuery } from "@mui/material";
 import { Section } from "../Layouts/Section";
-import { HeroSchema, PageBuilderProp, SliderType } from "@/types";
+import { HeroSchema, PageBuilderProp, SliderType, SplitBuild } from "@/types";
 
 export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
 {
@@ -77,11 +77,11 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                         case "split_reversible": {
                             if ('split' in section || 'split_reversible' in section)
                             {
-                                const leftSections = transformBuilderSplitSection((section.split)).leftSections;
-                                const rightSections = transformBuilderSplitSection((section.split)).rightSections;
+                                const splitSection = section as SplitBuild;
+                                const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
                                 const isReversed = section._type === "split_reversible";
                                 return (
-                                    <Section className={'split section'}>
+                                    <Section className={'split section'} isContainer={true}>
                                         <Split
                                             leftContent={leftSections}
                                             rightContent={rightSections}
