@@ -23,10 +23,12 @@ export const getServerSideProps = async ({ query }) => {
 
     const pageSlugIndex = slugs.findIndex(slug => slug === 'page');
     const lastCategorySlugIndex = pageSlugIndex >= 0 ? pageSlugIndex : slugs.length;
-    const page = pageSlugIndex >= 0 ? slugs[pageSlugIndex + 1] || '1' : '1';
+    const page = pageSlugIndex >= 0 ? slugs[pageSlugIndex + 1] : '1';
     const categorySlugs = slugs.slice(0, lastCategorySlugIndex);
 
-    console.log(page);
+    if (page === undefined || page === '0') return {
+        notFound: true
+    }
 
     const categoryPromises = categorySlugs.map((slug) => wooCommerceRestApi.get(`products/categories`, { slug }));
     const categoryResponses = await Promise.all(categoryPromises);
@@ -38,6 +40,15 @@ export const getServerSideProps = async ({ query }) => {
         return {
             notFound: true
         }
+    }
+
+    const productsPerPage = 21;
+    let { count: categoryProductsCount } = categories[categories.length - 1];
+    categoryProductsCount = categoryProductsCount || 1;
+    const pagesCount = Math.ceil(categoryProductsCount / productsPerPage);
+
+    if (+page > +pagesCount) return {
+        notFound: true
     }
 
     return {

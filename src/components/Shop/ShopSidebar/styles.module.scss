@@ -33,12 +33,14 @@
         border-radius: 10px;
         transition: .2s ease;
 
-        &:hover {
+        &:hover,
+        &:focus {
             background-color: $white-lilac;
         }
 
         &_active,
-        &_active:hover {
+        &_active:hover,
+        &_active:focus {
             background-color: $accent-hover;
 
         }

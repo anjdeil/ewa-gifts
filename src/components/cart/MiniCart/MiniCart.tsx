@@ -22,7 +22,7 @@ const MiniCart = () => {
                     <li className={styles["mini-cart__item"]}>
                         <div className={styles["mini-cart__item-image-wrap"]}>
                             <Image
-                                alt="Pod"
+                                alt={row.name}
                                 className={styles["mini-cart__item-image"]}
                                 width={55}
                                 height={55}
@@ -36,11 +36,11 @@ const MiniCart = () => {
                                 {row.name}
                             </p>
                             <div className="cart-item-quty">
-                                <span className="cart-item-quty__quty">1</span>
+                                <span className="cart-item-quty__quty">{row.quantity}</span>
                                 <svg className="cart-item-quty__x" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9 0.5L1 8.5M1 0.5L9 8.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <span className="cart-item-quty__price">4.34 zł.</span>
+                                <span className="cart-item-quty__price">{row.price}</span>
                             </div>
                         </div>
                         <div className={styles["mini-cart__item-delete-wrap"]}>
