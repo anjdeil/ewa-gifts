@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from './styles.module.scss';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import { MenuSkeleton } from "../MenuSkeleton";
+import { WpWooError } from "@/types";
 const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
 {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
@@ -12,7 +13,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
 
     if (isError)
     {
-        return <p>{error.data.message}</p>
+        return <p>{(error as WpWooError).data.message}</p>;
     }
 
     if (isLoading && skeleton)

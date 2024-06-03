@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
     const { slug } = req.query;
-    console.log(slug)
 
     if (!slug || slug.length === 0)
     {
