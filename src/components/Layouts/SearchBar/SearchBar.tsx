@@ -7,7 +7,6 @@ import { useFetchProductListQuery, useFetchAllCategoriesListQuery } from "@/stor
 import { transformSearchBarCategories, transformSearchBarProducts } from "@/services/transformers"
 import variables from '@/styles/variables.module.scss';
 import styles from './styles.module.scss';
-import { Paper } from "@mui/material";
 
 const defaultStyles = {
     borderRadius: '10px',

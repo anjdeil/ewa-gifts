@@ -26,7 +26,7 @@ const loadCartFromLocalStorage = () => {
         return undefined;
     }
 }
-const updateCartItems = (prevCart, updatedItem) => {
+const addCartItem = (prevCart, updatedItem) => {
     const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
 
     const foundedItem = prevCart.find(({ id }) => id === productId);
@@ -177,8 +177,17 @@ export const CartSlice = createSlice({
     },
     reducers: {
         addedToCart: (state, action) => {
-            state.items = updateCartItems(state.items, action.payload);
+            state.items = addCartItem(state.items, action.payload);
             state.itemsCount = getItemsCount(state.items);
+        },
+        decreasedCartQuantity: (state) => {
+
+        },
+        updatedCartQuantity: (state, action) => {
+
+        },
+        deletedFromCart: (state, action) => {
+
         },
         toggleMiniCart: (state) => {
             state.miniCartOpen = !state.miniCartOpen
