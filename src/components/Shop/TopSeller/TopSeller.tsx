@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css';
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
-import { useFetchProductListQuery } from "@/store/wordpress";
+import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { transformProductCard } from "@/services/transformers";
 import { RichTextComponent } from "@/components/Common/RichTextComponent";
 
@@ -26,26 +26,21 @@ const imageBoxStyle = {
     height: '100%'
 };
 
-export const TopSeller: FC = () =>
-{
+export const TopSeller: FC = () => {
     const { data, isError } = useFetchProductListQuery({ per_page: 10 });
 
-    if (!data)
-    {
+    if (!data) {
         return <div>Products not found.</div>
     }
 
     let products;
 
-    if (data)
-    {
+    if (data) {
         products = transformProductCard(data);
-        console.log(products);
 
     }
 
-    if (isError)
-    {
+    if (isError) {
         return <h3>Products not found.</h3>
     }
 

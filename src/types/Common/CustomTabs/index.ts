@@ -1,4 +1,4 @@
-import { PageBuilderInnerSchema, PageBuilderPropsSchema } from '@/types';
+import { PageBuilderPropsSchema } from '@/types';
 import { z } from 'zod';
 
 export const CustomTabsSchema = z.object({
@@ -18,7 +18,7 @@ export const CustomTabSchema = z.object({
 });
 
 export const CustomTabBuilderSchema = z.object({
-    tabs: PageBuilderInnerSchema,
+    tabs: z.any(),
     _type: z.string()
 })
 

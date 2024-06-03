@@ -8,7 +8,7 @@ export const productBuilderSchema = z.object({
 });
 
 export const productCarouselBuilderSchema = z.object({
-    products: z.array(productBuilderSchema),
+    products: z.string(),
     title: z.string(),
     _type: z.string()
 });

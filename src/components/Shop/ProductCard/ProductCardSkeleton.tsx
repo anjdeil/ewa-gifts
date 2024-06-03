@@ -10,7 +10,8 @@ export const ProductCardSkeleton: FC = () =>
                 variant="rectangular"
                 sx={{
                     borderRadius: '10px',
-                    width: '100%',
+                    width: '300px',
+                    height: '300px'
                 }}
                 height={400}
             >

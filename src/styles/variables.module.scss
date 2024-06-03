@@ -14,9 +14,14 @@ $dusty-gray: #9b9b9b;
 $second-bg: #f7f7f7;
 $gray: #f5f5f5;
 $text-gray: #7D7D7D;
+$cornflower-blue: #7e7e7e;
+$error: #f00;
+$successfully: #45a882;
 
 
 :export {
+    error: $error;
+    successfully: $successfully;
     blackColor: $black-color;
     whiteLilac: $white-lilac;
     inputLight: $input-light;
@@ -24,6 +29,6 @@ $text-gray: #7D7D7D;
     backgroundWhite: $background-white;
     accent: $accent;
     darker: $darker;
-    $bgAccent: $bg-accent;
+    bgAccent: $bg-accent;
     textGrey: $text-gray;
 }

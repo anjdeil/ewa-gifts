@@ -1,8 +1,11 @@
 .colorSwiper {
     padding: 0 25px;
     position: relative;
+    max-width: 300px;
 
-    &__slide {
+    &__slide div {
+        margin: 0 auto;
+        padding: 1px 0;
         width: 25px;
         height: 25px;
     }

@@ -10,7 +10,10 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
     const iconLinks = data?.filter(link => link.isIcon.length > 0) || [];
     const otherLinks = data?.filter(link => link.isIcon.length === 0) || [];
 
-    isError && console.error(error)
+    if (isError)
+    {
+        return <p>{error.data.message}</p>
+    }
 
     if (isLoading && skeleton)
     {

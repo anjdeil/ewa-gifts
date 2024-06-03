@@ -10,7 +10,7 @@ console.log('Я был запущен')
 
 export const wpAPI = createApi({
     reducerPath: 'wpAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'api/wp' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/wp' }),
     endpoints: (build) => ({
         fetchMenuItems: build.query({
             query: (params) => ({
@@ -41,7 +41,21 @@ export const wpAPI = createApi({
                 params,
             }),
         }),
+        fetchUserData: build.query({
+            query: (accessToken) => ({
+                url: '/users/me',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            }),
+        }),
     }),
 })
 
-export const { useFetchMenuItemsQuery, useFetchSomeMenuItemsQuery, useFetchAllBlogPostsQuery } = wpAPI;
+export const {
+    useFetchMenuItemsQuery,
+    useFetchSomeMenuItemsQuery,
+    useFetchAllBlogPostsQuery,
+    useLazyFetchUserDataQuery,
+    useFetchUserDataQuery
+} = wpAPI;

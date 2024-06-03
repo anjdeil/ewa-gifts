@@ -7,11 +7,13 @@ import 'swiper/css/navigation';
 import 'swiper/css';
 import 'swiper/css/grid';
 import { Grid } from 'swiper/modules';
+import { useMediaQuery } from "@mui/material";
 
 const Item: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
 
 export const Features: React.FC<FeaturesProps> = ({ features }) =>
 {
+    const isMobile = useMediaQuery('(max-width: 1024px)');
     return (
         <Swiper
             loop={true}
@@ -36,8 +38,8 @@ export const Features: React.FC<FeaturesProps> = ({ features }) =>
                         <Image
                             src={feature.image}
                             alt={feature.text}
-                            width={48}
-                            height={48}
+                            width={isMobile ? 24 : 48}
+                            height={isMobile ? 24 : 48}
                         />
                         {feature.text}
                     </Item>

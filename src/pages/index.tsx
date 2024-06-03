@@ -1,11 +1,24 @@
+import { LoginForm } from "@/components/Forms/LoginForm";
+import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
+import { ResetPassword } from "@/components/Forms/ResetPassword";
 import { PageBuilder } from "@/components/PageBuilder";
-import wpRestApi from "@/services/wordpress/WPRestAPI";
+import wpRestApi from "@/services/wordpress/wpRestAPI";
+import { HomeProps } from "@/types";
 import Head from "next/head";
+import { FC } from "react";
+import { GetServerSidePropsContext } from 'next';
+import { NewPassword } from "@/components/Forms/NewPassword";
 
-const Home = ({ response }) =>
+
+const Home: FC<HomeProps> = ({ response, cookies }) =>
 {
   let sections;
   const pageTitle = response[0].title.rendered;
+
+  if ('userToken' in cookies)
+  {
+    // Change interface by adding rules 
+  }
 
   if (response)
   {
@@ -18,17 +31,24 @@ const Home = ({ response }) =>
         <title>{pageTitle}</title>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
-      <main style={{ maxWidth: '1440px', margin: '0 auto' }}>
-        {/* <h1>{pageTitle}</h1> */}
-        <PageBuilder sections={sections} />
+      <main>
+        <h1>{pageTitle}</h1>
+        {/* <button onClick={() => OnClick()}>Register User</button> */}
+        {/* <RegistrationForm /> */}
+        {/* <LoginForm /> */}
+        {/* <ResetPassword /> */}
+        {/* <NewPassword /> */}
+        {/* <PageBuilder sections={sections} /> */}
       </main >
     </>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps()
+export async function getServerSideProps(context: GetServerSidePropsContext)
 {
+  const { req } = context;
+  const cookies = req.cookies || {};
   let response;
   try
   {
@@ -42,6 +62,7 @@ export async function getServerSideProps()
   return {
     props: {
       response,
+      cookies
     },
   };
 }

@@ -5,7 +5,7 @@ const fetchAllCategories = async (page = 1, categories = []) =>
 {
     try
     {
-        const response = await axios.get("api/woo/products/categories", {
+        const response = await axios.get("/api/woo/products/categories", {
             params: {
                 per_page: 100,
                 page
@@ -26,7 +26,7 @@ const fetchAllCategories = async (page = 1, categories = []) =>
 
 export const wooCommerceApi = createApi({
     reducerPath: 'wooCommerceApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'api/woo' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/woo' }),
     endpoints: (build) => ({
         fetchProductList: build.query({
             query: (params) => ({
@@ -39,10 +39,14 @@ export const wooCommerceApi = createApi({
                 url: `/products/${id}/variations`
             })
         }),
-        fetchCategoriesList: build.query({
-            query: (params) => ({
-                url: `/categories`,
-                params
+        fetchUserRegistration: build.mutation({
+            query: (credentials) => ({
+                url: `/customers`,
+                method: 'POST',
+                body: credentials,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             })
         }),
         fetchAllCategoriesList: build.query({
@@ -67,5 +71,6 @@ export const {
     useFetchCategoriesListQuery,
     useFetchAllCategoriesListQuery,
     useLazyFetchProductVariationsQuery,
-    useFetchProductVariationsQuery
+    useFetchProductVariationsQuery,
+    useFetchUserRegistrationMutation,
 } = wooCommerceApi;

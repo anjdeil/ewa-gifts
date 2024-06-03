@@ -1,0 +1,45 @@
+@import "@/styles/variables.module.scss";
+
+.product-category {
+    padding: 40px 0;
+
+    &__titling {
+        margin-top: 40px;
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+
+    &__title {
+        font-size: 1.15em;
+        text-transform: uppercase;
+        margin: 0 0.6em 0 0;
+    }
+
+    &__count {
+        margin-top: -1px;
+        background-color: $input-light;
+    }
+
+    &__container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    &__archive {
+        grid-column: 2/5;
+    }
+
+    &__toolbar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1em;
+    }
+
+    &__nav-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+}

@@ -1,4 +1,5 @@
-import wpRestApi from "@/services/wordpress/WPRestAPI";
+import { validateApiError } from "@/Utils/validateApiError";
+import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)
@@ -20,6 +21,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse)
         .then((response) => res.status(200).json(response.data))
         .catch((error) =>
         {
-            return res.status(500).json(error.message);
+            validateApiError(error, res);
         })
 }
