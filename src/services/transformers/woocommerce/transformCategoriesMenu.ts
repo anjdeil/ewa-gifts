@@ -3,6 +3,7 @@ const transformResponse = (response) => {
 
     response.forEach(parentRow => {
         if (parentRow.parent) return;
+        if (parentRow.slug === 'uncategorized') return;
 
         const subcategories = [];
         response.forEach(childRow => {

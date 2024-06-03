@@ -75,6 +75,53 @@ const updateCartItems = (prevCart, updatedItem) => {
     }
 }
 
+const transformCartRows = (cartItems, response) => {
+
+    const parentsResponse = response[response.length - 1];
+    const variationsResponse = response.slice(0, response.length - 1);
+
+    const parentsData = parentsResponse.data;
+    const variationsData = variationsResponse.reduce((prevData, currData) => {
+        return [...prevData, ...currData.data];
+    }, []);
+
+
+    const cartRows = [];
+    parentsData.forEach(parentData => {
+        const relevantCartItem = cartItems.find(({ id }) => id === parentData.id);
+
+        if (parentData.type === 'variable') {
+
+            variationsData.forEach(variationData => {
+                if (variationData.parent_id === parentData.id) {
+                    const name = `${parentData.name} — ${variationData.name.split(' (#')[0]}`;
+                    const relevantCartItemVariation = relevantCartItem.options.find(({ id }) => id === variationData.id);
+                    const quantity = relevantCartItemVariation.quantity;
+
+                    cartRows.push({
+                        name,
+                        image: variationData.image,
+                        price: variationData.price,
+                        quantity
+                    });
+                }
+            });
+        } else {
+            const image = parentData.images.length ? parentData.images[0] : null;
+
+            cartRows.push({
+                name: parentData.name,
+                image,
+                price: parentData.price,
+                quantity: relevantCartItem.quantity
+            });
+        }
+    });
+
+    return cartRows;
+
+}
+
 export const fetchCartRows = createAsyncThunk(
     'Cart/fetchCartRows',
     async (cartItems, thunkAPI) => {
@@ -106,13 +153,13 @@ export const fetchCartRows = createAsyncThunk(
 
         const response = await Promise.all(productPromises);
 
-        const cartRows = response.reduce((prevData, currData) => {
-            return [...prevData, currData.data];
-        }, []);
+        const cartRows = transformCartRows(cartItems, response);
 
         return cartRows;
     }
 );
+
+const calculateTotal = (cartRows) => cartRows.reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
 
 export const CartSlice = createSlice({
     name: 'Cart',
@@ -148,6 +195,7 @@ export const CartSlice = createSlice({
             .addCase(fetchCartRows.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.cartRows = action.payload;
+                state.totals.total = calculateTotal(action.payload);
             })
             .addCase(fetchCartRows.rejected, (state, action) => {
                 state.isLoading = false;
