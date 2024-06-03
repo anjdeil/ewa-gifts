@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import axios from "axios";
 
-const fetchAllCategories = async (page = 1, categories = []) => {
-    try {
+const fetchAllCategories = async (page = 1, categories = []) =>
+{
+    try
+    {
         const response = await axios.get("/api/woo/products/categories", {
             params: {
                 per_page: 100,
@@ -11,11 +13,13 @@ const fetchAllCategories = async (page = 1, categories = []) => {
         });
         const allCategories = categories.concat(response.data);
 
-        if (response.data.length === 100) {
+        if (response.data.length === 100)
+        {
             return fetchAllCategories(page + 1, allCategories);
         }
         return allCategories;
-    } catch (error) {
+    } catch (error)
+    {
         throw error;
     }
 }
@@ -35,18 +39,25 @@ export const wooCommerceApi = createApi({
                 url: `/products/${id}/variations`
             })
         }),
-        fetchCategoriesList: build.query({
-            query: (params) => ({
-                url: `/categories`,
-                params
+        fetchUserRegistration: build.mutation({
+            query: (credentials) => ({
+                url: `/customers`,
+                method: 'POST',
+                body: credentials,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             })
         }),
         fetchAllCategoriesList: build.query({
-            queryFn: async () => {
-                try {
+            queryFn: async () =>
+            {
+                try
+                {
                     const data = await fetchAllCategories();
                     return { data };
-                } catch (error) {
+                } catch (error)
+                {
                     return { error: "Failed to fetch categories!" }
                 }
             }
@@ -60,5 +71,6 @@ export const {
     useFetchCategoriesListQuery,
     useFetchAllCategoriesListQuery,
     useLazyFetchProductVariationsQuery,
-    useFetchProductVariationsQuery
+    useFetchProductVariationsQuery,
+    useFetchUserRegistrationMutation,
 } = wooCommerceApi;

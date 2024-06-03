@@ -1,0 +1,39 @@
+@import '@/styles/variables.module.scss';
+
+.customInput {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+
+    &__require {
+        margin-left: 5px;
+        color: red;
+    }
+
+    span {
+        margin-bottom: 10px;
+    }
+
+    &__checkbox {
+        margin-right: 10px;
+        display: inline-block;
+        order: -1;
+        width: fit-content;
+    }
+
+    &_checkbox {
+        align-items: flex-start;
+        flex-direction: row;
+
+        span {
+            margin-bottom: 0;
+        }
+    }
+
+    &__input {
+        padding: 15px;
+        background-color: $white-lilac;
+        border: none;
+        border-radius: 10px;
+    }
+}
