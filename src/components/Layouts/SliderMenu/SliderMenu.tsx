@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation } from 'swiper/modules';
-import { wpMenuProps, wpNavLink } from '@/types';
+import { WpWooError, wpMenuProps, wpNavLink } from '@/types';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
@@ -12,7 +12,11 @@ import { MenuSkeleton } from "../MenuSkeleton";
 export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
 {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
-    isError && console.error(error)
+
+    if (isError)
+    {
+        return <p>{(error as WpWooError).data.message}</p>;
+    }
 
     const swiperId = `SliderMenu`;
     const nextElId = `btn-next`;

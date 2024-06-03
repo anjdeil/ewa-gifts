@@ -3,7 +3,7 @@ import { FC } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
 import { useFetchMenuItemsQuery } from '@/store/wordpress';
-import { wpMenuProps } from '@/types';
+import { WpWooError, wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
 
 const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) =>
@@ -12,7 +12,7 @@ const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) =>
 
     if (isError)
     {
-        return <p>{error.data.message}</p>
+        return <p>{(error as WpWooError).data.message}</p>;
     }
 
     if (isLoading && skeleton)
@@ -42,9 +42,7 @@ const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) =>
                 </ul>
             </nav>
         </Box >
-
     );
-
 };
 
 export default Nav;

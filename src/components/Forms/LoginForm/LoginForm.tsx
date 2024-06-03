@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import React from 'react';
 import Link from "next/link";
 import variables from '@/styles/variables.module.scss';
+import { WpWooError } from "@/types";
 
 
 const LoginFormSchema = z.object({
@@ -27,6 +28,7 @@ export const LoginForm: FC = () =>
     });
 
     const [fetchUserToken, { isError, error }] = useFetchUserTokenMutation();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setCookie] = useCookies(['userToken']);
 
     const onSubmit = async (data: LoginForm) =>
@@ -99,7 +101,7 @@ export const LoginForm: FC = () =>
                         The account was created successfully
                     </p>}
                     {isError && <p style={{ color: variables.error }}
-                        dangerouslySetInnerHTML={{ __html: error.data?.message }} />}
+                        dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
                 </Box>
             </form>
             <Box display={'flex'} flexDirection={'column'} gap={'8px'}>

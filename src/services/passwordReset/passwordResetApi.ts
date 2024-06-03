@@ -8,7 +8,7 @@ class passwordResetApi
         this._apiBase = `${process.env.SITE_URL}/wp-json/bdpwr/v1/`;
     }
 
-    async getResource(url: string, body?: any): Promise<AxiosResponse<unknown>>
+    async getResource(url: string | string[], body?: unknown): Promise<AxiosResponse<unknown>>
     {
         const response = await axios({
             url: `${this._apiBase}${url}`,
@@ -27,7 +27,7 @@ class passwordResetApi
         return response;
     }
 
-    async post(url: string, body?: any)
+    async post(url: string | string[], body?: unknown)
     {
         return this.getResource(url, body);
     }
