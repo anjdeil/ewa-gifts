@@ -1,7 +1,8 @@
 import { validateApiError } from "@/Utils/validateApiError";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res)
+export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
 
     const { slug: slugs, ...params } = req.query;

@@ -5,7 +5,6 @@ const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
     password: process.env.USER_PASSWORD || ''
 };
-
 export class WPRestAPI
 {
     private readonly _apiBase: string;
@@ -24,7 +23,7 @@ export class WPRestAPI
         return `Basic ${encodedAuth}`;
     }
 
-    async getResource(url: string, params?: Record<string, string | number>): Promise<AxiosResponse<unknown>>
+    async getResource(url: string, params?: Record<string, string[] | string | number | undefined>): Promise<AxiosResponse<unknown>>
     {
         const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
             params: params,
@@ -41,7 +40,7 @@ export class WPRestAPI
         return response;
     }
 
-    async get(url: string, params?: Record<string, string | number | undefined>)
+    async get(url: string, params?: Record<string, string[] | string | number | undefined>)
     {
         const result = await this.getResource(url, params);
         return result;
