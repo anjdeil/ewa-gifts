@@ -1,23 +1,18 @@
-import { validateApiError } from "@/Utils/validateApiError";
-import wpRestApi from "@/services/wordpress/wpRestAPI";
+import { validateApiError } from '@/Utils/validateApiError';
+import passwordReset from '@/services/passwordReset/passwordResetApi';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
-    const { ...params } = req.query;
-    let slug = req.query.path;
+    const { slug } = req.query;
+    console.log(slug)
 
     if (!slug || slug.length === 0)
     {
         return res.status(400).json({ error: 'Slug parameter is missing' });
     }
 
-    if (Array.isArray(slug))
-    {
-        slug = slug.join('/');
-    }
-
-    wpRestApi.get(slug, params)
+    passwordReset.post(slug, req.body)
         .then((response) => res.status(200).json(response.data))
         .catch((error) =>
         {

@@ -6,9 +6,9 @@ import { Footer } from "../Layouts";
 import { useMediaQuery } from "@mui/material";
 import MobileHeader from "../Layouts/MobileHeader/MobileHeader";
 import BottomMenu from "../Layouts/BottomMenu";
-import { CategoryBars } from "../Common/CategoryBars";
 
-const Layout: FC = ({ children }: { children?: ReactNode }) => {
+const Layout: FC = ({ children }: { children?: ReactNode }) =>
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (

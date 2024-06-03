@@ -1,16 +1,10 @@
-import { wpRestApiProps } from "@/types";
+import { AuthConfig } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
     password: process.env.USER_PASSWORD || ''
 };
-
-export interface AuthConfig
-{
-    username: string;
-    password: string;
-}
 
 export class WPRestAPI
 {
@@ -19,7 +13,7 @@ export class WPRestAPI
 
     constructor(authConfig: AuthConfig)
     {
-        this._apiBase = 'https://new.ewagifts.pl/wp-json/wp/v2/';
+        this._apiBase = `${process.env.SITE_URL}/wp-json/wp/v2/`;
         this._authConfig = authConfig;
     }
 
@@ -47,7 +41,7 @@ export class WPRestAPI
         return response;
     }
 
-    async get(url: string, params?: Record<string, string | number>)
+    async get(url: string, params?: Record<string, string | number | undefined>)
     {
         const result = await this.getResource(url, params);
         return result;

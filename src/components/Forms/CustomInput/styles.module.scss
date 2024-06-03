@@ -1,13 +1,17 @@
 @import '@/styles/variables.module.scss';
 
 .customInput {
+    padding: 5px;
     display: flex;
     flex-direction: column;
     font-size: 16px;
+    position: relative;
+    overflow: hidden;
 
     &__require {
         margin-left: 5px;
-        color: red;
+        font-size: 21px;
+        color: $error;
     }
 
     span {
@@ -15,25 +19,83 @@
     }
 
     &__checkbox {
+        width: fit-content;
         margin-right: 10px;
         display: inline-block;
-        order: -1;
-        width: fit-content;
+        width: 25px;
+        height: 25px;
     }
 
     &_checkbox {
-        align-items: flex-start;
+        display: flex;
+        width: fit-content;
+        align-items: center;
         flex-direction: row;
+        color: $cornflower-blue;
+
+        div {
+            order: -1;
+        }
 
         span {
             margin-bottom: 0;
         }
     }
 
+    &__inputWrapper {
+        position: relative;
+    }
+
     &__input {
         padding: 15px;
-        background-color: $white-lilac;
         border: none;
         border-radius: 10px;
+        width: 100%;
+        background-color: $white-lilac;
+        transition: outline-width .2s ease-in-out;
+
+        &:focus {
+            outline: 1px solid $accent;
+            box-shadow: 0 0 6px 0 rgba(43, 42, 41, 0.2);
+        }
+
+        &_error {
+            outline-color: $error !important;
+        }
+    }
+
+    &__error {
+        margin-top: 10px;
+        font-size: 14px;
+        color: $error;
+    }
+
+    &__showPassword {
+        position: absolute;
+        transform: translateY(-50%);
+        top: 50%;
+        right: 4%;
+        cursor: pointer;
+    }
+}
+
+
+@media(max-width: '768px') {
+    .customInput {
+        font-size: 14px;
+
+        &__require {
+            font-size: 16px;
+        }
+
+        &__checkbox {
+            width: 15px;
+            height: 15px;
+        }
+
+        &__error {
+            margin-top: 5px;
+            font-size: 12px;
+        }
     }
 }

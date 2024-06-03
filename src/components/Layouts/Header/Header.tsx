@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import SearchBar from '@/components/Layouts/SearchBar';
@@ -9,9 +9,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
-import MiniCart from '@/components/Cart/MiniCart';
-import { getItemsCount, refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
+import { refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
 import { categoriesItems } from './cat';
+import MiniCart from '@/components/cart/MiniCart';
 
 const CustomBadge = styled(Badge)`
     .css-1abqjyq-MuiBadge-badge {
@@ -21,21 +21,26 @@ const CustomBadge = styled(Badge)`
     },
     `;
 
-const Header: React.FC = () => {
+const Header: React.FC = () =>
+{
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
     const { miniCartOpen, itemsCount } = useAppSelector(state => state.Cart);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         dispatch(refreshItemsCount());
-    }, []);
+    }, [dispatch]);
 
-    const onBurgerClick = () => {
-        if (!isOpen) {
+    const onBurgerClick = () =>
+    {
+        if (!isOpen)
+        {
             alert('open');
             dispatch(setMenuOpen(true));
-        } else {
+        } else
+        {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
         }
@@ -106,10 +111,3 @@ const Header: React.FC = () => {
 }
 
 export default Header;
-
-// const [iconLoading, setLoaded] = React.useState(false);
-
-// const handleIconLoad = () =>
-// {
-//     setLoaded(true);
-// }

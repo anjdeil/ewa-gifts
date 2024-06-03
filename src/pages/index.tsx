@@ -1,33 +1,28 @@
+import { LoginForm } from "@/components/Forms/LoginForm";
 import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
+import { ResetPassword } from "@/components/Forms/ResetPassword";
 import { PageBuilder } from "@/components/PageBuilder";
-import wpRestApi from "@/services/wordpress/WPRestAPI";
-import { useFetchUserRegistrationMutation } from "@/store/wooCommerce/wooCommerceApi";
+import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
+import { GetServerSidePropsContext } from 'next';
+import { NewPassword } from "@/components/Forms/NewPassword";
 
-const Home: FC<HomeProps> = ({ response }) =>
+
+const Home: FC<HomeProps> = ({ response, cookies }) =>
 {
   let sections;
   const pageTitle = response[0].title.rendered;
 
+  if ('userToken' in cookies)
+  {
+    // Change interface by adding rules 
+  }
+
   if (response)
   {
     sections = response[0].sections;
-  }
-
-  const [fetchUserToken] = useFetchUserRegistrationMutation();
-
-  const OnClick = async () =>
-  {
-    try
-    {
-      const response = await fetchUserToken({ email: 'test@gmai.com' });
-      console.log('User', response);
-    } catch (err)
-    {
-      console.log(err);
-    }
   }
 
   return (
@@ -39,7 +34,10 @@ const Home: FC<HomeProps> = ({ response }) =>
       <main>
         <h1>{pageTitle}</h1>
         {/* <button onClick={() => OnClick()}>Register User</button> */}
-        <RegistrationForm />
+        {/* <RegistrationForm /> */}
+        {/* <LoginForm /> */}
+        {/* <ResetPassword /> */}
+        {/* <NewPassword /> */}
         {/* <PageBuilder sections={sections} /> */}
       </main >
     </>
@@ -47,8 +45,10 @@ const Home: FC<HomeProps> = ({ response }) =>
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps()
+export async function getServerSideProps(context: GetServerSidePropsContext)
 {
+  const { req } = context;
+  const cookies = req.cookies || {};
   let response;
   try
   {
@@ -62,6 +62,7 @@ export async function getServerSideProps()
   return {
     props: {
       response,
+      cookies
     },
   };
 }

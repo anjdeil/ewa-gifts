@@ -1,0 +1,115 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { CustomInput } from "../CustomInput";
+import { Box } from "@mui/material";
+import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
+import { useCookies } from 'react-cookie';
+import React from 'react';
+import Link from "next/link";
+import variables from '@/styles/variables.module.scss';
+
+
+const LoginFormSchema = z.object({
+    email: z.string().email('Please, type valid email'),
+    password: z.string()
+        .min(8, 'The password must contain at least 8 characters.'),
+    rememberMe: z.boolean().optional(),
+});
+
+type LoginForm = z.infer<typeof LoginFormSchema>;
+
+export const LoginForm: FC = () =>
+{
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, reset } = useForm<LoginForm>({
+        resolver: zodResolver(LoginFormSchema)
+    });
+
+    const [fetchUserToken, { isError, error }] = useFetchUserTokenMutation();
+    const [_, setCookie] = useCookies(['userToken']);
+
+    const onSubmit = async (data: LoginForm) =>
+    {
+        const body = {
+            username: data.email,
+            password: data.password,
+        }
+
+        try
+        {
+            const response = await fetchUserToken(body).unwrap();
+            if (response && response.token)
+            {
+                const userToken = response.token;
+                const options = data.rememberMe
+                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8) }
+                    : { path: '/' };
+                setCookie('userToken', userToken, options);
+            }
+        } catch (error)
+        {
+            console.error('Warning:', error);
+
+            if (error instanceof Error)
+            {
+                console.log(error);
+                return { error: error.message };
+            }
+
+        } finally
+        {
+            reset();
+        }
+    };
+
+    return (
+        <Box
+            maxWidth={'500px'}
+            margin={'0 auto'}
+        >
+            <form onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: '30px' }}>
+                <Box
+                    display={'flex'}
+                    flexDirection={'column'}
+                    gap={'30px'}
+                >
+                    <CustomInput
+                        fieldName="E-mail "
+                        name='email'
+                        register={register}
+                        errors={errors}
+                    />
+                    <CustomInput
+                        fieldName="Password"
+                        name='password'
+                        register={register}
+                        errors={errors}
+                        isPassword={true}
+                    />
+                    <CustomInput
+                        fieldName="Remember me"
+                        name='rememberMe'
+                        register={register}
+                        errors={errors}
+                        isCheckbox={true}
+                    />
+                    <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Sign in'}</button>
+                    {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
+                        The account was created successfully
+                    </p>}
+                    {isError && <p style={{ color: variables.error }}
+                        dangerouslySetInnerHTML={{ __html: error.data?.message }} />}
+                </Box>
+            </form>
+            <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
+                <Link href={"/"} className="desc link">
+                    Nie pamiętasz hasła?
+                </Link>
+                <Link href={"/"} className="desc link">
+                    Nie masz konta? Zarejestruj się!
+                </Link>
+            </Box>
+        </Box>
+    )
+}

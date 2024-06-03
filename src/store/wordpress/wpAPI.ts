@@ -17,7 +17,8 @@ export const wpAPI = createApi({
                 url: '/menu-items',
                 params,
             }),
-            transformResponse: (response: menuResponseType): wpNavLink[] => {
+            transformResponse: (response: menuResponseType): wpNavLink[] =>
+            {
                 const links = Object.values(response).map(obj => ({
                     title: obj.title.rendered,
                     url: obj.url,
@@ -40,7 +41,21 @@ export const wpAPI = createApi({
                 params,
             }),
         }),
+        fetchUserData: build.query({
+            query: (accessToken) => ({
+                url: '/users/me',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            }),
+        }),
     }),
 })
 
-export const { useFetchMenuItemsQuery, useFetchSomeMenuItemsQuery, useFetchAllBlogPostsQuery } = wpAPI;
+export const {
+    useFetchMenuItemsQuery,
+    useFetchSomeMenuItemsQuery,
+    useFetchAllBlogPostsQuery,
+    useLazyFetchUserDataQuery,
+    useFetchUserDataQuery
+} = wpAPI;
