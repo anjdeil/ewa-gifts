@@ -45,6 +45,12 @@ body {
     padding-bottom: 70px;
 }
 
+.tabs,
+.topseller {
+    padding: 50px;
+    background-color: $white-lilac;
+}
+
 @media(max-width: 1024px) {
     .container {
         padding: 0 20px;
@@ -73,31 +79,3 @@ body {
         padding-bottom: 20px;
     }
 }
-
-
-// .slider.section {
-//     padding-bottom: 0;
-// }
-
-// .topseller {
-//     background-color: #f6f8fc;
-// }
-
-// .topseller.section {
-//     padding-top: 35px;
-// }
-
-// @media(max-width: 1024px) {
-//     .section {
-//         padding: 20px 15px;
-//     }
-
-//     .topseller.section {
-//         padding-top: 20px;
-//     }
-
-//     .topseller-wrapper {
-//         flex-direction: column;
-//     }
-
-// }

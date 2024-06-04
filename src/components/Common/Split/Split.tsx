@@ -5,6 +5,9 @@ import { FC } from "react";
 import { SplitContainer } from '@/types/Common/Split';
 
 const StyledBox = styled(Box)`
+
+  padding: 0;
+
   & > div {
     width: 100%;
   }
@@ -28,25 +31,26 @@ const StyledBox = styled(Box)`
 
 export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed = false }) =>
 {
-    const isMobile = useMediaQuery('(max-width: 1024px)');
-    const mobileColumn = isReversed ? "column-reverse" : "column";
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const mobileColumn = isReversed ? "column-reverse" : "column";
 
-    const SplitSection: FC<SplitContainer> = ({ isMobile, content }) =>
-    {
-        return (
-            <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}
-            >
-                <PageBuilder sections={content} />
-            </StyledBox>
-        )
-    };
-
+  const SplitSection: FC<SplitContainer> = ({ isMobile, content }) =>
+  {
     return (
-        <Box display="flex"
-            flexDirection={isMobile ? mobileColumn : "row"}
-        >
-            {leftContent && <SplitSection isMobile={isMobile} content={leftContent} />}
-            {rightContent && <SplitSection isMobile={isMobile} content={rightContent} />}
-        </Box >
+      <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}
+      >
+        <PageBuilder sections={content} />
+      </StyledBox>
     )
+  };
+
+  return (
+    <Box display="flex"
+      flexDirection={isMobile ? mobileColumn : "row"}
+      gap={isMobile ? '15px' : '30px'}
+    >
+      {leftContent && <SplitSection isMobile={isMobile} content={leftContent} />}
+      {rightContent && <SplitSection isMobile={isMobile} content={rightContent} />}
+    </Box >
+  )
 }
