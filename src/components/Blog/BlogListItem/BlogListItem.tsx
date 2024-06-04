@@ -19,7 +19,7 @@ export const BlogListItem: FC<BlogItemProps> = ({ post }) =>
                 {post.date}
             </span>
             <RichTextComponent text={post.excerpt} className={styles.blogItem__text} />
-            <Link href={`/blog/${post.slug}`} className="desc more-link">
+            <Link href={`/blog/${post.slug}`} className="more-link">
                 More
             </Link>
         </div>

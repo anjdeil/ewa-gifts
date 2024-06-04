@@ -1,0 +1,30 @@
+@import "@/styles/variables.module.scss";
+
+.cartItem {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    &__title {
+        max-width: 50%;
+        max-width: 200px;
+
+        h3 {
+            opacity: 0.5;
+        }
+    }
+}
+
+.CartTable {
+    text-align: center;
+
+    &__cell {
+        padding: 13px;
+        text-align: center;
+
+        &_head {
+            padding: 26px;
+            background-color: $white-lilac;
+        }
+    }
+}

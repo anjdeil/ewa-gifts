@@ -6,12 +6,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchCartRows } from "@/store/reducers/CartSlice";
 
-const MiniCart = () => {
+const MiniCart = () =>
+{
     const { items, totals, cartRows } = useSelector(state => state.Cart);
     const dispatch = useDispatch();
 
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         dispatch(fetchCartRows(items));
     }, [items]);
 
@@ -19,7 +21,7 @@ const MiniCart = () => {
         <div className={styles["mini-cart"]}>
             <ul className={styles["mini-cart__items"]}>
                 {cartRows && cartRows.map((row) => (
-                    <li className={styles["mini-cart__item"]}>
+                    <li className={styles["mini-cart__item"]} key={row.id}>
                         <div className={styles["mini-cart__item-image-wrap"]}>
                             <Image
                                 alt={row.name}
