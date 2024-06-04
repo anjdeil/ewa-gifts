@@ -3,8 +3,8 @@ import { z } from "zod";
 export const CustomInputPropsSchema = z.object({
     fieldName: z.string(),
     name: z.string(),
-    register: z.any(),
-    errors: z.any(),
+    register: z.any().optional(),
+    errors: z.any().optional(),
     className: z.string().optional(),
     isRequire: z.boolean().optional(),
     isPassword: z.boolean().optional(),

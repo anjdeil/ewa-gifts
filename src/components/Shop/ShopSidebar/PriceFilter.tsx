@@ -1,6 +1,8 @@
 import { Box, Slider, TextField } from "@mui/material";
 import React from "react";
 import variables from "@/styles/variables.module.scss";
+import FormInput from "@/components/EwaComponents/EwaInput";
+import EwaInput from "@/components/EwaComponents/EwaInput";
 
 function valueText(value: number) {
     return `${value}°C`;
@@ -58,41 +60,7 @@ const PriceFilter = () => {
                 alignItems: 'center',
                 color: variables.textGray
             }}>
-                <TextField
-                    value={value[0]}
-                    sx={{
-                        ".MuiOutlinedInput-root": {
-                            ".MuiInputBase-input": {
-                                color: variables.blackColor,
-                                borderRadius: '10px',
-                                padding: "0.6em",
-                                fontSize: ".9em",
-                                textAlign: 'center',
-                                backgroundColor: variables.whiteLilac,
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                borderRadius: '10px',
-                                borderColor: variables.whiteLilac,
-                            },
-                            "&:hover": {
-                                ".MuiInputBase-input": {
-                                    backgroundColor: variables.inputLight,
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: variables.inputLight
-                                },
-                            },
-                            "&.Mui-focused": {
-                                ".MuiInputBase-input": {
-                                    backgroundColor: variables.backgroundWhite,
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: variables.accent,
-                                },
-                            }
-                        }
-                    }}
-                />
+                <EwaInput value={value[0]} />
                 <div
                     aria-hidden
                     style={{
@@ -100,41 +68,7 @@ const PriceFilter = () => {
                         backgroundColor: variables.inputDarker
                     }}
                 ></div>
-                <TextField
-                    value={value[1]}
-                    sx={{
-                        ".MuiOutlinedInput-root": {
-                            ".MuiInputBase-input": {
-                                color: variables.blackColor,
-                                borderRadius: '10px',
-                                padding: "0.6em",
-                                fontSize: ".9em",
-                                textAlign: 'center',
-                                backgroundColor: variables.whiteLilac,
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                borderRadius: '10px',
-                                borderColor: variables.whiteLilac,
-                            },
-                            "&:hover": {
-                                ".MuiInputBase-input": {
-                                    backgroundColor: variables.inputLight,
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: variables.inputLight
-                                },
-                            },
-                            "&.Mui-focused": {
-                                ".MuiInputBase-input": {
-                                    backgroundColor: variables.backgroundWhite,
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: variables.accent,
-                                },
-                            }
-                        }
-                    }}
-                />
+                <EwaInput value={value[1]} />
                 <p>zł</p>
             </Box>
         </>

@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import styles from './styles.module.scss';
 import { CustomInputProps } from '@/types/Forms';
 import Image from 'next/image';
+import { error } from "console";
 export const CustomInput: FC<CustomInputProps> = ({
     fieldName,
     name,
@@ -12,26 +13,25 @@ export const CustomInput: FC<CustomInputProps> = ({
     isPassword = false,
     isCheckbox = false,
     isNumeric = false,
-}) =>
-{
+}) => {
     let type;
     let inputClass = styles.customInput__input;
     const [showPassword, setShowPassword] = useState(false);
 
-    const toggleShowPassword = () =>
-    {
+    const toggleShowPassword = () => {
         setShowPassword(prevState => !prevState);
     };
 
 
-    if (isPassword)
-    {
+    if (isPassword) {
         type = showPassword ? 'text' : 'password';
-    } else if (isCheckbox)
-    {
+    } else if (isCheckbox) {
         type = 'checkbox';
         inputClass = styles.customInput__checkbox;
     }
+
+    const registerProps = register ? register(name) : {};
+    const isError = errors ? name in errors : false;
 
     return (
         <div>
@@ -42,14 +42,13 @@ export const CustomInput: FC<CustomInputProps> = ({
                 </span>
                 <div className={styles.customInput__inputWrapper}>
                     <input
-                        {...register(name)}
+                        {...registerProps}
                         style={{ color: 'black' }}
                         type={type && type}
-                        className={`${inputClass} ${errors[name] && styles.customInput__input_error}`}
+                        className={`${inputClass} ${isError && styles.customInput__input_error}`}
                         inputMode={isNumeric ? "numeric" : undefined}
                         pattern={isNumeric ? "[0-9]*" : undefined}
-                        onInput={isNumeric ? (e) =>
-                        {
+                        onInput={isNumeric ? (e) => {
                             e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
                         } : undefined}
                     />
@@ -66,7 +65,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                     }
                 </div>
             </label>
-            {errors[name] && <p className={styles.customInput__error}>{errors[name]?.message}</p>}
+            {isError && <p className={styles.customInput__error}>{errors[name]?.message}</p>}
         </div>
     )
 };
