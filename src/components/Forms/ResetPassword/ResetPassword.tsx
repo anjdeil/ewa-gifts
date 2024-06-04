@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { object, z } from "zod";
 import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
 import React from 'react';

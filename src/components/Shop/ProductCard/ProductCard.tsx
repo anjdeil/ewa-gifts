@@ -5,29 +5,34 @@ import { RichTextComponent } from "../../Common/RichTextComponent";
 import styles from './styles.module.scss';
 import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
-import { isArray } from "util";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
-export const ProductCard: FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: FC<ProductCardProps> = ({ product }) =>
+{
     const [color, setColor] = useState('');
 
     const [count, setCount] = useState(1);
 
-    const onCounterClick = (count: number) => {
-        if (count >= 1) {
+    const onCounterClick = (count: number) =>
+    {
+        if (count >= 1)
+        {
             setCount(count);
         }
     }
 
     const [isVariable, setVariable] = useState(false);
 
-    const changeQuantityState = () => {
-        if (!isVariable) {
+    const changeQuantityState = () =>
+    {
+        if (!isVariable)
+        {
             setVariable(true);
         }
     }
 
-    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) => {
+    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) =>
+    {
         setColor(newColor);
     }
 

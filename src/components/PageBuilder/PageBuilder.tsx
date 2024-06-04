@@ -10,10 +10,10 @@ import { RichTextComponent } from "../Common/RichTextComponent";
 import { CustomTabs } from "../Common/Tabs";
 import { BlogList } from "../Blog/BlogList";
 import { ProductCarousel } from "../Shop/ProductCarousel";
-import { TopSeller } from "../Shop/TopSeller";
-import { Box, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { Section } from "../Layouts/Section";
 import { HeroSchema, PageBuilderProp, SliderType, SplitBuild } from "@/types";
+import { TopSeller } from "../Shop/TopSeller";
 
 export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
 {
@@ -52,7 +52,6 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                         }
 
                         case "categories": {
-
                             if ('categories' in section)
                             {
                                 return (
@@ -99,8 +98,10 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                                 section.tabs[0].title = "Bestsellers";
                                 section.tabs[1].title = "New";
                                 return (
-                                    <Section className={'topseller section'}>
-                                        <CustomTabs tabs={section.tabs} ></CustomTabs>
+                                    <Section className={'tabs'}>
+                                        <div className="container">
+                                            <CustomTabs tabs={section.tabs} ></CustomTabs>
+                                        </div>
                                     </Section>
                                 )
                             }
@@ -111,7 +112,7 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                             if ('blog' in section)
                             {
                                 return (
-                                    <Section className={'section'}>
+                                    <Section className={'section'} isContainer={true}>
                                         <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
                                         <BlogList />
                                     </Section>
@@ -124,15 +125,11 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                             if ('topseller' in section)
                             {
                                 return (
-                                    <Section className={'topseller section'}>
-                                        <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
-                                        <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
-                                            flexDirection: 'row'
-                                        }}>
+                                    <Section className={'topseller'}>
+                                        <div className="container">
+                                            <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
                                             <TopSeller />
-                                            <TopSeller />
-                                        </Box>
-                                        <ProductCarousel ids={['32746', '32686', '32681', '32653']} />
+                                        </div>
                                     </Section>
                                 );
                             }

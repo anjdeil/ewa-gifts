@@ -1,13 +1,13 @@
-import { LoginForm } from "@/components/Forms/LoginForm";
-import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
-import { ResetPassword } from "@/components/Forms/ResetPassword";
+// import { LoginForm } from "@/components/Forms/LoginForm";
+// import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
+// import { ResetPassword } from "@/components/Forms/ResetPassword";
 import { PageBuilder } from "@/components/PageBuilder";
 import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
-import { NewPassword } from "@/components/Forms/NewPassword";
+// import { NewPassword } from "@/components/Forms/NewPassword";
 
 
 const Home: FC<HomeProps> = ({ response, cookies }) =>
@@ -20,7 +20,7 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
     // Change interface by adding rules 
   }
 
-  if (response)
+  if ('sections' in response[0])
   {
     sections = response[0].sections;
   }
@@ -38,7 +38,7 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
         {/* <LoginForm /> */}
         {/* <ResetPassword /> */}
         {/* <NewPassword /> */}
-        {/* <PageBuilder sections={sections} /> */}
+        <PageBuilder sections={sections} />
       </main >
     </>
   );
