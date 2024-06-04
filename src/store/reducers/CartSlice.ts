@@ -16,6 +16,7 @@ const saveCartToLocalStorage = (state) => {
         console.warn(e);
     }
 }
+
 const loadCartFromLocalStorage = () => {
     try {
         const cartJSON = localStorage.getItem('cart') || undefined;
@@ -26,7 +27,8 @@ const loadCartFromLocalStorage = () => {
         return undefined;
     }
 }
-const updateCartItems = (prevCart, updatedItem) => {
+
+const addCartItem = (prevCart, updatedItem) => {
     const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
 
     const foundedItem = prevCart.find(({ id }) => id === productId);
@@ -75,6 +77,51 @@ const updateCartItems = (prevCart, updatedItem) => {
     }
 }
 
+const updateCartItemQuantity = (prevCart, targetItemData, quantity = 1, type = "update") => {
+    const updateQuantity = (currentQuantity, type, quantity) => {
+        switch (type) {
+            case "update":
+                return quantity;
+            case "increase":
+                return currentQuantity + quantity;
+            case "decrease":
+                return currentQuantity - quantity;
+            default:
+                return currentQuantity;
+        }
+    };
+
+    for (let cartItemIndex = prevCart.length - 1; cartItemIndex >= 0; cartItemIndex--) {
+        const cartItem = prevCart[cartItemIndex];
+
+        if (targetItemData.type === 'variation') {
+            if (cartItem.type !== 'variable') continue;
+
+            const foundedOptionIndex = cartItem.options.findIndex(({ id }) => id === targetItemData.id);
+            if (foundedOptionIndex === -1) continue;
+
+            const targetQuantity = updateQuantity(cartItem.options[foundedOptionIndex].quantity, type, quantity);
+
+            if (targetQuantity > 0) {
+                cartItem.options[foundedOptionIndex].quantity = targetQuantity;
+            } else {
+                cartItem.options.splice(foundedOptionIndex, 1);
+            }
+
+        } else if (cartItem.id === targetItemData.id) {
+            const targetQuantity = updateQuantity(cartItem.quantity, type, quantity);
+
+            if (targetQuantity > 0) {
+                cartItem.quantity = targetQuantity;
+            } else {
+                prevCart.splice(cartItemIndex, 1);
+            }
+            break;
+        }
+    }
+}
+
+
 const transformCartRows = (cartItems, response) => {
 
     const parentsResponse = response[response.length - 1];
@@ -99,6 +146,8 @@ const transformCartRows = (cartItems, response) => {
                     const quantity = relevantCartItemVariation.quantity;
 
                     cartRows.push({
+                        id: variationData.id,
+                        type: 'variation',
                         name,
                         image: variationData.image,
                         price: variationData.price,
@@ -110,6 +159,8 @@ const transformCartRows = (cartItems, response) => {
             const image = parentData.images.length ? parentData.images[0] : null;
 
             cartRows.push({
+                id: parentData.id,
+                type: parentData.type,
                 name: parentData.name,
                 image,
                 price: parentData.price,
@@ -177,7 +228,24 @@ export const CartSlice = createSlice({
     },
     reducers: {
         addedToCart: (state, action) => {
-            state.items = updateCartItems(state.items, action.payload);
+            state.items = addCartItem(state.items, action.payload);
+            state.itemsCount = getItemsCount(state.items);
+        },
+        increasedCartQuantity: (state, action) => {
+            updateCartItemQuantity(state.items, action.payload, 1, 'increase');
+            state.itemsCount = getItemsCount(state.items);
+        },
+        decreasedCartQuantity: (state, action) => {
+            updateCartItemQuantity(state.items, action.payload, 1, 'decrease');
+            state.itemsCount = getItemsCount(state.items);
+        },
+        updatedCartQuantity: (state, action) => {
+            const { id, type, quantity } = action.payload;
+            updateCartItemQuantity(state.items, { id, type }, quantity, 'update');
+            state.itemsCount = getItemsCount(state.items);
+        },
+        deletedFromCart: (state, action) => {
+            updateCartItemQuantity(state.items, action.payload, 0, 'update');
             state.itemsCount = getItemsCount(state.items);
         },
         toggleMiniCart: (state) => {
@@ -212,5 +280,12 @@ export const cartLocalStorageMiddleware = store => next => action => {
     return result;
 };
 
-export const { addedToCart, toggleMiniCart, refreshItemsCount } = CartSlice.actions;
+export const {
+    addedToCart,
+    increasedCartQuantity,
+    decreasedCartQuantity,
+    updatedCartQuantity,
+    deletedFromCart,
+    toggleMiniCart,
+    refreshItemsCount } = CartSlice.actions;
 export default CartSlice.reducer;
