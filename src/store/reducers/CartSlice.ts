@@ -108,6 +108,9 @@ const updateCartItemQuantity = (prevCart, targetItemData, quantity = 1, type = "
                 cartItem.options.splice(foundedOptionIndex, 1);
             }
 
+            if (!cartItem.options.length) prevCart.splice(cartItemIndex, 1);
+
+
         } else if (cartItem.id === targetItemData.id) {
             const targetQuantity = updateQuantity(cartItem.quantity, type, quantity);
 
