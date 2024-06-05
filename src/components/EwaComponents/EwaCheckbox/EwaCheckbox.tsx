@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import * as React from 'react';
+import React from 'react';
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 import variables from "@/styles/variables.module.scss";
 
@@ -8,10 +8,7 @@ const CheckBoxIcon = styled('span')(() => ({
     width: 24,
     height: 24,
     border: `1px solid ${variables.textGray}`,
-    transition: '0.1s ease',
-    'input:hover ~ &': {
-        backgroundColor: variables.inputLight,
-    },
+    transition: '0.1s ease'
 }));
 
 const CheckBoxCheckedIcon = styled(CheckBoxIcon)({
@@ -26,22 +23,15 @@ const CheckBoxCheckedIcon = styled(CheckBoxIcon)({
     }
 });
 
-// Inspired by blueprintjs
-function BpCheckbox(props: CheckboxProps) {
+function EwaCheckbox(props: CheckboxProps) {
     return (
         <Checkbox
-            sx={{
-                '&:hover': { bgcolor: 'transparent' },
-            }
-            }
-            disableRipple
             color="default"
             checkedIcon={< CheckBoxCheckedIcon />}
             icon={< CheckBoxIcon />}
-            inputProps={{ 'aria-label': 'Checkbox demo' }}
             {...props}
         />
     );
 }
 
-export default BpCheckbox;
+export default EwaCheckbox;

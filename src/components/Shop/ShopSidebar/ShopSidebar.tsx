@@ -7,6 +7,7 @@ import PriceFilter from './PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
 import { Box, FormControlLabel } from '@mui/material';
 import BpCheckbox from '@/components/EwaComponents/EwaCheckbox';
+import EwaCheckbox from '@/components/EwaComponents/EwaCheckbox/EwaCheckbox';
 
 const ShopSidebar = () => {
     const { slugs } = useParams();
@@ -40,9 +41,9 @@ const ShopSidebar = () => {
                                 }
                             }}
                             label={supplier.name}
+                            value={supplier.id}
                             control={
-                                <BpCheckbox
-                                    value={supplier.id}
+                                <EwaCheckbox
                                     inputProps={{
                                         "aria-label": supplier.name,
                                     }}
@@ -51,6 +52,9 @@ const ShopSidebar = () => {
                         />
                     </Box>
                 ))}
+            </FilterCollapsed>
+            <FilterCollapsed title={"Colors"} collapsed={false}>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita, repellendus ut explicabo numquam incidunt atque necessitatibus perspiciatis, aperiam accusamus doloremque adipisci officiis nihil sapiente porro ea? Perferendis voluptates earum rerum.
             </FilterCollapsed>
         </>
     )
