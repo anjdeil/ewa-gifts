@@ -26,6 +26,7 @@ export const transformProductCard = (data: any[]): ProductType[] =>
             image: product.images[0].src,
             default_attr: '',
             isSized: sizes ? sizes : [],
+            type: product.type,
         };
     });
 };
