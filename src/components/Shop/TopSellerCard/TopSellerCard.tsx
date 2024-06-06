@@ -5,16 +5,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 import Image from "next/image";
-import { TopProductSliderType } from "@/types";
 import { Box, Typography } from "@mui/material";
-
-interface TopProductSliderProps
-{
-    data: TopProductSliderType[]
-}
+import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { transformProductCard } from "@/services/transformers";
 
 const swiperStyle = {
-    borderRadius: '10px'
+    borderRadius: '10px',
+    backgroundColor: '#fff'
 };
 
 const boxStyle = {
@@ -28,9 +25,28 @@ const imageBoxStyle = {
     height: '100%'
 };
 
-
-export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
+export const TopSellerCard: FC = () =>
 {
+    const { data, isError } = useFetchProductListQuery({ per_page: 10 });
+
+    if (!data)
+    {
+        return <div>Products not found.</div>
+    }
+
+    let products;
+
+    if (data)
+    {
+        products = transformProductCard(data);
+
+    }
+
+    if (isError)
+    {
+        return <h3>Products not found.</h3>
+    }
+
     return (
         <Swiper
             modules={[Pagination]}
@@ -41,7 +57,7 @@ export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
             className="top-product-slider"
         >
             {
-                data.map((item, index) => (
+                products && products.map((product, index) => (
                     <SwiperSlide key={index}>
                         <Box style={boxStyle}>
                             <Box width={"50%"}
@@ -56,14 +72,7 @@ export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
                                         marginBottom: '30px'
                                     }}
                                 >
-                                    {item.title}
-                                </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    component={"p"}
-                                    className="desc"
-                                >
-                                    {item.desc}
+                                    {product.name}
                                 </Typography>
                             </Box>
                             <Box width={"50%"}
@@ -76,8 +85,8 @@ export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
                                         position: 'relative',
                                     }}>
                                         <Image
-                                            src={item.images.large.src}
-                                            alt={item.images.large.alt}
+                                            src={product.image}
+                                            alt={product.name}
                                             fill
                                             style={{ objectFit: 'contain' }}
                                             sizes="min-height: 250px"

@@ -7,7 +7,7 @@ export const RichTextComponent: FC<RichTextProps> = ({ link_text, link_url, text
 {
     return (
         <div className={className}>
-            <h3 className={`sub-title ${styles.richText__title}`} >{title}</h3>
+            {title && <h3 className={`sub-title ${styles.richText__title}`} >{title}</h3>}
             <div
                 dangerouslySetInnerHTML={{ __html: text }}
                 className={`desc ${styles.richText__text}`}

@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import React from 'react';
 import { StyledBox } from "./StyleBox";
 import variables from '@/styles/variables.module.scss';
-import { RegistrationFormSchema, RegistrationFormType } from "@/types";
+import { RegistrationFormSchema, RegistrationFormType, WpWooError } from "@/types";
 
 export const RegistrationForm: FC = () =>
 {
@@ -19,6 +19,7 @@ export const RegistrationForm: FC = () =>
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
     const [fetchUserToken] = useFetchUserTokenMutation();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setCookie] = useCookies(['userToken']);
     const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -134,7 +135,7 @@ export const RegistrationForm: FC = () =>
                         The account was created successfully
                     </p>}
                     {isError && <p style={{ color: variables.error }}
-                        dangerouslySetInnerHTML={{ __html: error.data?.message }} />}
+                        dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
                 </StyledBox>
             </Box>
         </form>

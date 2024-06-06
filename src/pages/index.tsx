@@ -1,6 +1,6 @@
-import { LoginForm } from "@/components/Forms/LoginForm";
-import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
-import { ResetPassword } from "@/components/Forms/ResetPassword";
+// import { LoginForm } from "@/components/Forms/LoginForm";
+// import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
+// import { ResetPassword } from "@/components/Forms/ResetPassword";
 import { PageBuilder } from "@/components/PageBuilder";
 import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { HomeProps } from "@/types";
@@ -22,16 +22,16 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
     // Change interface by adding rules 
   }
 
+  if ('sections' in response[0])
+  {
+    sections = response[0].sections;
+  }
+
   const { data, isLoading } = useFetchProductListQuery({ slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
 
   if (data)
   {
     console.log(data);
-  }
-
-  if ('sections' in response[0])
-  {
-    sections = response[0].sections;
   }
 
   return (
@@ -47,7 +47,7 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
         {/* <LoginForm /> */}
         {/* <ResetPassword /> */}
         {/* <NewPassword /> */}
-        {/* <PageBuilder sections={sections} /> */}
+        <PageBuilder sections={sections} />
       </main >
     </>
   );

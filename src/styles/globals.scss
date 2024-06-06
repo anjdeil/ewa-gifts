@@ -29,6 +29,7 @@
 }
 
 .more-link {
+    font-size: 18px;
     color: $text-gray;
     transition: color .3s ease-in-out;
 }
@@ -70,13 +71,16 @@
     cursor: pointer
 }
 
-.btn-primary {
-    background: $accent;
+.btn-primary,
+.btn-transparent {
     padding: 12px 18px;
     border-radius: 10px;
     transition: background .2s ease-in-out;
 }
 
+.btn-primary {
+    background: $accent;
+}
 
 .btn-primary:hover {
     background: $accent-hover;
@@ -84,6 +88,19 @@
 
 .btn-primary:active {
     background: $accent;
+}
+
+.btn-transparent {
+    border: 1px solid $black-color;
+    background: transparent;
+}
+
+.btn-transparent:hover {
+    background: $input-darker;
+}
+
+.btn-transparent:active {
+    background: $gray;
 }
 
 .btn-secondary {
@@ -113,6 +130,23 @@
 
     .desc,
     .sub-title {
+        font-size: 16px;
+    }
+
+    .more-link {
+        font-size: 16px;
+    }
+}
+
+
+@media(max-width: 768) {
+
+    .desc,
+    .sub-title {
+        font-size: 14px;
+    }
+
+    .more-link {
         font-size: 14px;
     }
 }
