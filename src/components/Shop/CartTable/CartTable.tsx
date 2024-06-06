@@ -6,6 +6,7 @@ import { Counter } from '@/components/Buttons';
 import { useAppDispatch } from '@/hooks/redux';
 import { updatedCartQuantity } from '@/store/reducers/CartSlice';
 import { z } from 'zod';
+import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
 export const CartTablePropsSchema = z.object({
     products: z.any(),
@@ -27,7 +28,7 @@ export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
         }));
     }, [dispatch]);
 
-    console.log(products);
+    // console.log(products);
 
     // const deleteProduct = () => {
     //     dispatch(deletedFromCart({

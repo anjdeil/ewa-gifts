@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
 
-    const { slug: slugs, ...params } = req.query;
+    const { slugs, ...params } = req.query;
     const slug = slugs.join('/');
 
     if (!slug)
@@ -29,7 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try
     {
         const response = await wooCommerceRestApi.get(slug, params);
-        console.log(params);
+        console.log('Params', params);
+        console.log('Slug', slug);
 
         res.status(200).json(response.data);
     } catch (error)
