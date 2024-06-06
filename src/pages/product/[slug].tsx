@@ -1,11 +1,25 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
+import {GetServerSideProps} from "next";
+import React from "react";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
+import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 
 
-const Product = () => {
+const Product = ({response}) =>
+{
+    console.log(response,'response');
+
+
   const router = useRouter();
   const { slug } = router.query;
 
+    console.log(slug,'router.query')
+
+    const { data, isLoading } = useFetchProductListQuery({ slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
+
+
+    console.log(data,isLoading,'useFetchProductListQuery')
   return (
     <>
       <Head>
@@ -16,6 +30,7 @@ const Product = () => {
       </Head>
       <main>
         <div>
+
           <p>
             {slug}
           </p>
@@ -25,6 +40,34 @@ const Product = () => {
       </main>
     </>
   );
+}
+
+export const getServerSideProps:GetServerSideProps = async ({ query }) => {
+    let response;
+    const {slug} = query;
+
+    try {
+        const product = await wooCommerceRestApi.get(`product/${slug}`);
+        if (product.data.length === 0) {
+            return {notFound: true};
+        }
+        console.log(product.data,'getServerSideProps');
+        response = product.data;
+    } catch (error) {
+        console.log(error,'77777777777777');
+        return {
+            props: {
+                response: null,
+                error: (error as Error).message,
+            }
+        }
+    }
+
+    return {
+        props: {
+            response,
+        }
+    };
 }
 
 export default Product;
