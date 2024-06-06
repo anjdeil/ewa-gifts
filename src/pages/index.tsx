@@ -8,6 +8,8 @@ import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
 import { NewPassword } from "@/components/Forms/NewPassword";
+import { useFetchProductListQuery } from "@/services/wooCommerceApi";
+// import { NewPassword } from "@/components/Forms/NewPassword";
 
 
 const Home: FC<HomeProps> = ({ response, cookies }) =>
@@ -20,7 +22,14 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
     // Change interface by adding rules 
   }
 
-  if (response)
+  const { data, isLoading } = useFetchProductListQuery({ slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
+
+  if (data)
+  {
+    console.log(data);
+  }
+
+  if ('sections' in response[0])
   {
     sections = response[0].sections;
   }
