@@ -5,25 +5,21 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/hooks/redux";
 import { useEffect } from "react";
 import { fetchCartRows } from "@/store/reducers/CartSlice";
-
+import { CartSummary } from "@/components/Shop/CartSummary";
+import { Box } from "@mui/material";
 
 const Product = () =>
 {
     // const router = useRouter();
     // const { slug } = router.query;
 
-    const { items, totals, cartRows } = useSelector(state => state.Cart);
+    const { items, totals, cartRows, isLoading } = useSelector(state => state.Cart);
     const dispatch = useAppDispatch();
 
     useEffect(() =>
     {
         dispatch(fetchCartRows(items));
     }, [dispatch, items]);
-
-    if (cartRows)
-    {
-        console.log(cartRows);
-    }
 
     return (
         <>
@@ -36,7 +32,10 @@ const Product = () =>
             <main>
                 <section className="section">
                     <h1>Koszyk</h1>
-                    <CartTable products={cartRows} />
+                    <Box display={"flex"}>
+                        <CartTable products={cartRows} isLoading={isLoading} />
+                        <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
+                    </Box>
                 </section>
             </main>
         </>
