@@ -7,6 +7,7 @@ import CartSlice from "./reducers/CartSlice";
 import PopupSlice from "./reducers/PopupSlice";
 import { cartLocalStorageMiddleware } from "./reducers/CartSlice";
 import { jwtApi } from "./jwt/jwtApi";
+import CurrentOrder from "./reducers/CurrentOrder";
 
 const rootReducer = combineReducers({
     [wpAPI.reducerPath]: wpAPI.reducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     [jwtApi.reducerPath]: jwtApi.reducer,
     MenuCategoriesSlice: MenuCategoriesSlice.reducer,
     Cart: CartSlice,
-    Popup: PopupSlice
+    Popup: PopupSlice,
+    currentOrderSlice: CurrentOrder,
 });
 
 export const setupStore = () =>
