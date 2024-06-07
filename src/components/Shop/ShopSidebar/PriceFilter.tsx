@@ -32,7 +32,7 @@ const PriceFilter = () => {
                         color: variables.accent,
                         ".MuiSlider-rail": {
                             opacity: 1,
-                            backgroundColor: variables.whiteLilac,
+                            backgroundColor: variables.inputLight,
                         },
                         ".MuiSlider-track": {
                             backgroundColor: variables.accentLight,
@@ -60,7 +60,7 @@ const PriceFilter = () => {
                 alignItems: 'center',
                 color: variables.textGray
             }}>
-                <EwaInput value={value[0]} />
+                <EwaInput value={value[0]} sx={{ textAlign: 'right' }} />
                 <div
                     aria-hidden
                     style={{

@@ -6,8 +6,9 @@ import { useParams } from 'next/navigation';
 import PriceFilter from './PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
 import { Box, FormControlLabel } from '@mui/material';
-import BpCheckbox from '@/components/EwaComponents/EwaCheckbox';
 import EwaCheckbox from '@/components/EwaComponents/EwaCheckbox/EwaCheckbox';
+import { transformColors } from '@/services/transformers/woocommerce/transformColors';
+import ColorsFilter from './ColorsFilter';
 
 const ShopSidebar = () => {
     const { slugs } = useParams();
@@ -16,10 +17,11 @@ const ShopSidebar = () => {
     const { data: categoriesData = [], isLoading: isCategoriesLoading, isError: isCategoriesError, error: categoriesError } = useFetchAllCategoriesListQuery();
     const categories = categoriesData.length ? transformCategoriesMenu(categoriesData) : [];
 
-    const { data: termsData = [], isLoading: isTermsLoading, isError: isTermsError, error: termsError } = useFetchAttributeTermsQuery(11);
-    const suppliers = termsData.length ? termsData : [];
-    console.log(suppliers);
+    const { data: suppliersData = [], isLoading: isSuppliersLoading, isError: isSuppliersError, error: suppliersError } = useFetchAttributeTermsQuery(11);
+    const suppliers = suppliersData.length ? suppliersData : [];
 
+    const { data: colorsData = [], isLoading: isColorsLoading, isError: isColorsError, error: colorsError } = useFetchAttributeTermsQuery(9);
+    const colors = colorsData.length ? transformColors(colorsData) : [];
 
     const targetCategory = categories.find(({ slug }) => slug === categorySlug);
 
@@ -54,7 +56,7 @@ const ShopSidebar = () => {
                 ))}
             </FilterCollapsed>
             <FilterCollapsed title={"Colors"} collapsed={false}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita, repellendus ut explicabo numquam incidunt atque necessitatibus perspiciatis, aperiam accusamus doloremque adipisci officiis nihil sapiente porro ea? Perferendis voluptates earum rerum.
+                <ColorsFilter colors={colors} />
             </FilterCollapsed>
         </>
     )

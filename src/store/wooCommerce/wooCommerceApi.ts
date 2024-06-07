@@ -57,7 +57,10 @@ export const wooCommerceApi = createApi({
         }),
         fetchAttributeTerms: build.query({
             query: (id) => ({
-                url: `/products/attributes/${id}/terms`
+                url: `/products/attributes/${id}/terms`,
+                params: {
+                    per_page: 100
+                }
             })
         })
     })

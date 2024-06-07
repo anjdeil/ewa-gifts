@@ -9,18 +9,18 @@ const EwaInput = styled(TextField)(() => ({
             padding: "0.6em",
             fontSize: ".9em",
             textAlign: 'center',
-            backgroundColor: variables.whiteLilac,
+            backgroundColor: variables.inputLight,
         },
         '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '10px',
-            borderColor: variables.whiteLilac,
+            borderColor: variables.inputLight,
         },
         "&:hover": {
             ".MuiInputBase-input": {
-                backgroundColor: variables.inputLight,
+                backgroundColor: variables.inputDarker,
             },
             '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: variables.inputLight
+                borderColor: variables.inputDarker
             },
         },
         "&.Mui-focused": {
