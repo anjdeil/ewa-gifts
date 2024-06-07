@@ -27,13 +27,6 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
     sections = response[0].sections;
   }
 
-  const { data, isLoading } = useFetchProductListQuery({ slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
-
-  if (data)
-  {
-    console.log(data);
-  }
-
   return (
     <>
       <Head>

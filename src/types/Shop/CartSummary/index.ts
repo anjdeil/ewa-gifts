@@ -14,7 +14,7 @@ export const CartSummaryRowPropsSchema = z.object({
     skeleton: z.object({
         width: z.string(),
         height: z.string(),
-    })
+    }).optional()
 });
 
 export type CartSummaryProps = z.infer<typeof CartSummaryPropsSchema>;
