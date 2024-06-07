@@ -1,0 +1,44 @@
+@import '@/styles/variables.module.scss';
+
+.article {
+	max-width: 1304px;
+	width: 100%;
+	padding: 0 12px 93px;
+	margin: 0 auto;
+
+	&__header {
+		text-align: center;
+		margin-bottom: 57px;
+		& h1 {
+			text-transform: uppercase;
+			margin-top: 20px;
+		}
+	}
+	&__title {
+
+	}
+	&__img {
+		display: block;
+		width: 100%;
+		height: 640px;
+		margin-bottom: 20px;
+		position: relative;
+		border-radius: 10px;
+		& img {
+			object-fit: contain;
+			border-radius: 10px;
+		}
+	}
+
+	&__text {
+		&_wrapper {
+			max-width: 720px;
+			width: 100%;
+			margin: 0 auto;
+		}
+		p {
+			color: grey;
+			margin: 0 0 20px;
+		}
+	}
+}

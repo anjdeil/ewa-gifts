@@ -3,7 +3,6 @@ import Head from "next/head";
 import {FC} from "react";
 import wpRestApi from "@/services/wordpress/WPRestAPI";
 import {BlogPost} from "@/components/Blog/BlogPost";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import {BlogNavPosts} from "@/components/Blog/BlogNavPosts";
 
 interface ArticleProps {
@@ -13,7 +12,7 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
     if (!response) {
         return <p>Loading...</p>;
     }
-
+    console.log(response);
     return (
         <>
             <Head>
@@ -21,9 +20,11 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
                 <meta name="description" content={response.title.rendered}/>
             </Head>
             <main>
-                <Breadcrumbs/>
+
+
                 <BlogPost post={response}/>
                 <BlogNavPosts  prevPost={prevPost} nextPost={nextPost}/>
+
             </main>
         </>
     );
