@@ -3,13 +3,13 @@ import Head from "next/head";
 import React from "react";
 import styles from './styles.module.scss';
 import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
-import ProductInfo from '@/components/Shop/Product/ProductInfo';
+import ProductInfo from '@/components/Shop/ProductInfo/ProductInfo';
 
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import {transformProductCard} from "@/services/transformers";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 // import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
-
+// import {useLazyFetchProductVariationsQuery} from '@/store/wooCommerce/wooCommerceApi';
 
 const Product = () =>
 {
@@ -17,8 +17,8 @@ const Product = () =>
   // const router = useRouter();
   // const { slug } = router.query;
 
-  const { data } = useFetchProductListQuery({slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
-  console.log(data,'useFetchProductListQuery');
+  const { data } = useFetchProductListQuery({slug: '4-kolorowy-zakreslacz-kwadratowy-trafalgar' });
+  console.log(data);
   let info;
   if (data) {
     info = transformProductCard(data);
@@ -28,10 +28,17 @@ const Product = () =>
     return <p>No product found</p>;
   }
 
-
-  const [{ name, categories }] = info;
-
+  const [{ name, categories, type:typeVan }] = info;
   const links = transformBreadcrumbsCategories(categories);
+  console.log(
+      links, 'Breadcrumbs'
+  )
+  // const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
+  //
+  // const handlerClick = () => {
+    // fetchProductVariations(id);
+  // };
+  // console.log(variations,isVariationsLoading,isVariationsError);
 
   return (
     <>
@@ -44,8 +51,9 @@ const Product = () =>
       <main className={styles.product__info}>
         <div className="container">
           <Breadcrumbs links={links} />
+          {/*<button onClick={handlerClick}>eqweq</button>*/}
           <div>
-              <ProductInfo data={info}/>
+            {typeVan === 'simple' ? <ProductInfo data={info}/>:<p>No simple product found</p>}
           </div>
         </div>
       </main>

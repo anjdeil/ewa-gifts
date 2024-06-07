@@ -2,15 +2,18 @@ import React from "react";
 import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from './styles.module.scss';
+import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import {transformProductCard} from "@/services/transformers";
 
 
 const ProductInfo = ({data}) => {
-    const [{name, description, price, sku}] = data;
+    const [{name, description, price, sku, images }] = data;
     console.log(data);
     return (
         <Box className={styles.product}>
-            <Box className={styles.product__slider}></Box>
+            <Box className={styles.product__slider}>
+                <ProductSwiper data={images}/>
+            </Box>
             <Box className={styles.product__info}>
                 <Typography variant='h1' className={styles.product__info_title} title={name}>
                     {name}
