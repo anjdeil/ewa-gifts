@@ -7,6 +7,8 @@ import { useAppDispatch } from '@/hooks/redux';
 import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
 import { CartTableProps, cartProduct } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
+import { updatedCartQuantity } from '@/store/reducers/CartSlice';
+import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
 
 export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
@@ -29,6 +31,14 @@ export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
             type: product.type,
         }));
     }
+    // console.log(products);
+
+    // const deleteProduct = () => {
+    //     dispatch(deletedFromCart({
+    //         id: ,
+    //         type: ,
+    //     }));
+    // 
 
     return (
         <Box className={styles.CartTable}>

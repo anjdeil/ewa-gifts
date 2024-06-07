@@ -7,6 +7,8 @@ import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
+import { NewPassword } from "@/components/Forms/NewPassword";
+import { useFetchProductListQuery } from "@/services/wooCommerceApi";
 // import { NewPassword } from "@/components/Forms/NewPassword";
 
 
