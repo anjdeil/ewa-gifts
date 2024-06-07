@@ -18,7 +18,7 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         isLoading={isLoading}
                         skeleton={{
                             width: "100px",
-                            height: '30px'
+                            height: '100%'
                         }}
                     />
                 </li>
@@ -27,10 +27,7 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         value={'Płaska stawka Oblicz koszty wysyłki'}
                         className={styles.CartSummary__row}
                         isLoading={isLoading}
-                        skeleton={{
-                            width: "100px",
-                            height: '30px'
-                        }}
+
                     />
                 </li>
                 <li>
@@ -38,10 +35,6 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         value={'zł36.92'}
                         className={styles.CartSummary__row}
                         isLoading={isLoading}
-                        skeleton={{
-                            width: "100px",
-                            height: '30px'
-                        }}
                     />
                 </li>
                 <li>
@@ -49,10 +42,6 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         value={'36.92 zł'}
                         className={styles.CartSummary__row}
                         isLoading={isLoading}
-                        skeleton={{
-                            width: "100px",
-                            height: '30px'
-                        }}
                     />
                 </li>
                 <li>
@@ -62,7 +51,7 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         isLoading={isLoading}
                         skeleton={{
                             width: "100px",
-                            height: '30px'
+                            height: '100%'
                         }}
                     />
                 </li>
