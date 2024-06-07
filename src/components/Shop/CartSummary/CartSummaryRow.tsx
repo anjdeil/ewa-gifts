@@ -7,7 +7,7 @@ export const CartSummaryRow: FC<CartSummaryRowProps> = ({ title, value, classNam
         <h3>
             {title}
         </h3>
-        {isLoading ?
+        {isLoading && skeleton ?
             <Skeleton width={skeleton.width} height={skeleton.height} animation="wave" />
             :
             <span>

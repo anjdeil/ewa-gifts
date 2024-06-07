@@ -5,17 +5,6 @@
     justify-content: center;
     gap: 10px;
 
-    &__buttons {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: transparent;
-        border: none;
-        font-size: 20px;
-        flex-grow: 1;
-        cursor: pointer;
-    }
-
     &__window {
         padding: 10px 0;
         min-width: 70px;
