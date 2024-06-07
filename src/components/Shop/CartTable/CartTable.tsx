@@ -1,93 +1,108 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import Image from 'next/image';
-import { Box } from '@mui/material';
+import { Box, Skeleton, Typography } from '@mui/material';
 import styles from './styles.module.scss';
 import { Counter } from '@/components/Buttons';
+import { useAppDispatch } from '@/hooks/redux';
+import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
+import { CartTableProps, cartProduct } from '@/types/Cart';
+import IconButton from '@mui/material/IconButton';
+import { updatedCartQuantity } from '@/store/reducers/CartSlice';
+import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-)
+
+export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
 {
-    return { name, calories, fat, carbs };
-}
+    const dispatch = useAppDispatch();
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24),
-    createData('Ice cream sandwich', 237, 9.0, 37),
-    createData('Eclair', 262, 16.0, 24),
-    createData('Cupcake', 305, 3.7, 67),
-    createData('Gingerbread', 356, 16.0, 49),
-];
+    const changeProductsAmount = React.useCallback((product: cartProduct, count: string) =>
+    {
+        dispatch(updatedCartQuantity({
+            id: product.id,
+            type: product.type,
+            quantity: count,
+        }));
+    }, [dispatch]);
 
-export const CartTable = ({ products }) =>
-{
+    const deleteProduct = (product: cartProduct) =>
+    {
+        dispatch(deletedFromCart({
+            id: product.id,
+            type: product.type,
+        }));
+    }
+    // console.log(products);
+
+    // const deleteProduct = () => {
+    //     dispatch(deletedFromCart({
+    //         id: ,
+    //         type: ,
+    //     }));
+    // 
+
     return (
-        <TableContainer component={Paper} sx={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell className={`${styles.CartTable__cell} ${styles.CartTable__cell_head}`}>Product</TableCell>
-                        <TableCell className={`${styles.CartTable__cell} ${styles.CartTable__cell_head}`}> Price</TableCell>
-                        <TableCell className={`${styles.CartTable__cell} ${styles.CartTable__cell_head}`}>Amount</TableCell>
-                        <TableCell className={`${styles.CartTable__cell} ${styles.CartTable__cell_head}`}>Total</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {products.map((product, index) =>
-                    {
-                        return (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row" className={styles.CartTable__cell}>
-                                    <div className={styles.cartItem}>
-                                        <div>
-                                            <button className='btn'>
-                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M13 1L1 13M1 1L13 13" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <Image
-                                                src={product.image.src}
-                                                width={75}
-                                                height={75}
-                                                alt={product.name}
-                                            />
-                                        </div>
-                                        <div className={`${styles.cartItem__title}`}>
-                                            <h3 className='desc'>
-                                                {product.name}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell component="th" scope="row" className={styles.CartTable__cell}>
-                                    {product.price}
-                                </TableCell>
-                                <TableCell component="th" scope="row" className={styles.CartTable__cell}>
-                                    <Counter onClickHandler={() => 'yes'} count={product.quantity} />
-                                </TableCell>
-                                <TableCell component="th" scope="row" className={styles.CartTable__cell}>
-                                    {product.price * product.quantity}
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Box className={styles.CartTable}>
+            <Box className={`${styles.CartTable__row_head} ${styles.CartTable__row}`}>
+                <Box className={`${styles.CartTable__cell}`}>
+                    Product
+                </Box>
+                <Box className={`${styles.CartTable__cell}`}>
+                    Price
+                </Box>
+                <Box className={`${styles.CartTable__cell}`}>
+                    Amount
+                </Box>
+                <Box className={`${styles.CartTable__cell}`}>
+                    Total
+                </Box>
+            </Box >
+            <Box className={styles.CartTable__cell__row}>
+                {products.map((product, index) => (
+                    <Box key={index} className={`${styles.CartTable__row}`}>
+                        <Box className={`${styles.cartItem}`}>
+                            <Box>
+                                <IconButton aria-label="delete" onClick={() => deleteProduct(product)}>
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </IconButton>
+                            </Box>
+                            <Box>
+                                <Image
+                                    src={product.image.src}
+                                    width={75}
+                                    height={75}
+                                    alt={product.name}
+                                />
+                            </Box>
+                            <Box className={`${styles.cartItem__title}`}>
+                                <Typography variant='h6' className='desc'>
+                                    {product.name}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box className={styles.CartTable__cell}>
+                            <Typography variant='body1'>
+                                {product.price} zł
+                            </Typography>
+                        </Box>
+                        <Box className={styles.CartTable__cell}>
+                            <Counter
+                                count={product.quantity}
+                                changeQuantity={(count) => changeProductsAmount(product, count)}
+                                isLoading={isLoading}
+                            />
+                        </Box>
+                        <Box className={styles.CartTable__cell}>
+                            {isLoading ? (
+                                <Skeleton width={'100px'} height={'50px'} animation="wave" />
+                            ) : (
+                                product.price * product.quantity + ' zł'
+                            )}
+                        </Box>
+                    </Box>
+                ))}
+            </Box>
+        </Box >
     );
 }

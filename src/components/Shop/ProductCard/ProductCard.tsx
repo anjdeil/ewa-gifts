@@ -1,24 +1,27 @@
-import { ProductCardProps, ProductType } from "@/types";
+import { ProductCardProps, ProductType, ProductType } from "@/types";
 import { FC, useState } from "react";
 import Image from "next/image";
 import { RichTextComponent } from "../../Common/RichTextComponent";
 import styles from './styles.module.scss';
 import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
+import { useAppDispatch } from "@/hooks/redux";
+import { updatedCartQuantity } from "@/store/reducers/CartSlice";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 {
     const [color, setColor] = useState('');
 
-    const [count, setCount] = useState(1);
+    const dispatch = useAppDispatch();
 
-    const onCounterClick = (count: number) =>
+    function changeProductsAmount(product: ProductType, count: number)
     {
-        if (count >= 1)
-        {
-            setCount(count);
-        }
+        dispatch(updatedCartQuantity({
+            id: product.id,
+            type: product.type,
+            quantity: count,
+        }));
     }
 
     const [isVariable, setVariable] = useState(false);
@@ -80,7 +83,10 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                     disabled={false}
                 />
             ) : (
-                <Counter onClickHandler={onCounterClick} count={count} />
+                <Counter
+                    count={product.quantity ? product.quantity : 1}
+                    changeQuantity={(count) => changeProductsAmount(product, count)}
+                />
             )}
         </div>
     );

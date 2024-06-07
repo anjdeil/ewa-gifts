@@ -42,6 +42,13 @@ const MiniCart = () => {
                                 </svg>
                                 <span className="cart-item-quty__price">{row.price}</span>
                             </div>
+                            <input type="nuber" value={row.quantity} onChange={(evt) => {
+                                dispatch(updatedCartQuantity({
+                                    id: row.id,
+                                    type: row.type,
+                                    quantity: evt.target.value
+                                }))
+                            }} />
                         </div>
                         <div className={styles["mini-cart__item-delete-wrap"]}>
                             <button

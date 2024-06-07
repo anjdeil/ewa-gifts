@@ -17,6 +17,8 @@ export const ProductCardSchema = z.object({
     image: z.string(),
     default_attr: z.string(),
     isSized: z.boolean(),
+    type: z.string(),
+    quantity: z.number().optional()
 });
 
 const ProductCardPropsSchema = z.object({

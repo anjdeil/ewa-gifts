@@ -141,7 +141,6 @@ const transformCartRows = (cartItems, response) => {
         const relevantCartItem = cartItems.find(({ id }) => id === parentData.id);
 
         if (parentData.type === 'variable') {
-
             variationsData.forEach(variationData => {
                 if (variationData.parent_id === parentData.id) {
                     const name = `${parentData.name} — ${variationData.name.split(' (#')[0]}`;
@@ -151,6 +150,7 @@ const transformCartRows = (cartItems, response) => {
                     cartRows.push({
                         id: variationData.id,
                         type: 'variation',
+                        stockQuantity: variationData.stock_quantity,
                         name,
                         image: variationData.image,
                         price: variationData.price,
@@ -164,6 +164,7 @@ const transformCartRows = (cartItems, response) => {
             cartRows.push({
                 id: parentData.id,
                 type: parentData.type,
+                stockQuantity: parentData.stock_quantity,
                 name: parentData.name,
                 image,
                 price: parentData.price,

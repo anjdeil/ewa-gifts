@@ -1,29 +1,96 @@
 // import { useRouter } from "next/router";
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useEffect } from "react";
 import { fetchCartRows } from "@/store/reducers/CartSlice";
-
+import { CartSummary } from "@/components/Shop/CartSummary";
+import { Box } from "@mui/material";
+import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
+import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
 
 const Product = () =>
 {
     // const router = useRouter();
     // const { slug } = router.query;
 
-    const { items, totals, cartRows } = useSelector(state => state.Cart);
+    const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
+    const currentOrderSlice = useAppSelector(state => state.currentOrderSlice);
     const dispatch = useAppDispatch();
+
+    const [fetchCreateOrder, { data: newOrder }] = useFetchCreateOrderMutation();
 
     useEffect(() =>
     {
-        dispatch(fetchCartRows(items));
-    }, [dispatch, items]);
+        if (items.length > 0)
+        {
+            dispatch(fetchCartRows(items));
+            if (!currentOrderSlice.currentOrder)
+            {
+                fetchCreateOrder(transformCreateOrderProducts(items));
+                if (newOrder)
+                {
+                    dispatch(setCurrentOrder(newOrder.id));
+                }
+            }
+        }
+    }, [currentOrderSlice.currentOrder, dispatch, fetchCreateOrder, items, newOrder]);
 
-    if (cartRows)
+    if (newOrder)
     {
-        console.log(cartRows);
+        console.log(newOrder.id);
     }
+
+    // line_items: [
+    //     {
+    //       product_id: 93,
+    //       quantity: 2
+    //     },
+    //     {
+    //       product_id: 22,
+    //       variation_id: 23,
+    //       quantity: 1
+    //     }
+    //   ],
+
+    // if (items)
+    // {
+    //     console.log(transformCreateOrderProducts(items));
+    // }
+
+    function transformCreateOrderProducts(products)
+    {
+        return products.reduce((acc, product) =>
+        {
+            if (product.type === 'variable')
+            {
+                product.options.forEach(item =>
+                {
+                    acc.push({
+                        product_id: product.id,
+                        variation_id: item.id,
+                        quantity: item.quantity
+                    })
+                })
+            } else
+            {
+                acc.push({
+                    product_id: product.id,
+                    quantity: product.quantity
+                })
+            }
+            return acc;
+        }, [])
+    }
+
+    // useEffect(() =>
+    // {
+    //     if (data)
+    //     {
+    //         console.log(data.id);
+    //         dispatch(updateCurrentOrder(data.id));
+    //     }
+    // }, [data, dispatch]);
 
     return (
         <>
@@ -36,9 +103,13 @@ const Product = () =>
             <main>
                 <section className="section">
                     <h1>Koszyk</h1>
-                    <CartTable products={cartRows} />
+                    <Box display={"flex"}>
+                        <CartTable products={cartRows} isLoading={isLoading} />
+                        <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
+                        {/* <button onClick={() => fetchCreateOrder(object)}>Create</button> */}
+                    </Box>
                 </section>
-            </main>
+            </main >
         </>
     );
 }

@@ -1,0 +1,114 @@
+@import "@/styles/variables.module.scss";
+
+.CartSummary {
+    margin: 0 auto;
+    padding: 30px;
+    border: 2px solid $white-lilac;
+    border-radius: 10px;
+    height: fit-content;
+
+    &__title {
+        margin-bottom: 17px;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+
+    &__list {
+        margin-bottom: 100px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        li {
+            &:first-child {
+                padding-top: 20px;
+                border-top: 2px solid $white-lilac;
+            }
+
+            &:last-child {
+                padding-top: 20px;
+                border-top: 2px solid $white-lilac;
+
+                .CartSummary__row {
+
+                    h3,
+                    span {
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+
+        h3,
+        span {
+            max-width: 162px;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        h3 {
+            color: $gray-transparent;
+        }
+
+        span {
+            text-align: right;
+        }
+    }
+
+    &__btnWrapper {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    &__btn {
+        display: inline-block;
+        height: fit-content;
+        width: 100%;
+        max-width: 252px;
+        text-align: center;
+    }
+}
+
+@media(max-width: 768px) {
+    .CartSummary {
+        padding: 20px 15px;
+
+        &__title {
+            font-size: 16px;
+        }
+
+        &__list {
+            margin-bottom: 20px;
+
+            li {
+                &:last-child {
+                    .CartSummary__row {
+
+                        h3,
+                        span {
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &__row {
+            display: flex;
+            justify-content: space-between;
+
+            h3,
+            span {
+                font-size: 14px;
+            }
+        }
+    }
+}

@@ -5,21 +5,34 @@
     justify-content: center;
     gap: 10px;
 
-    &__buttons {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: transparent;
-        border: none;
-        font-size: 20px;
-        flex-grow: 1;
-        cursor: pointer;
-    }
-
     &__window {
-        padding: 6px;
-        flex-grow: 2;
+        padding: 10px 0;
+        min-width: 70px;
+        border: none;
         border-radius: 5px;
         background-color: $white-lilac;
+
+        input {
+            padding: 0;
+            text-align: center;
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    }
+
+    &__window::after {
+        display: none;
+    }
+
+    &__window::before {
+        display: none;
     }
 }
