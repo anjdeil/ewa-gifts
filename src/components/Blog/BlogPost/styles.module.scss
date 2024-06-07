@@ -1,30 +1,32 @@
 @import '@/styles/variables.module.scss';
 
 .article {
-	max-width: 1304px;
+	max-width: 1135px;
 	width: 100%;
-	padding: 0 12px 93px;
+	padding: 51px 0 0;
 	margin: 0 auto;
 
 	&__header {
 		text-align: center;
-		margin-bottom: 57px;
+		margin-bottom: 43px;
+
 		& h1 {
 			text-transform: uppercase;
-			margin-top: 20px;
+			margin-bottom: 20px;
 		}
 	}
-	&__title {
 
-	}
 	&__img {
 		display: block;
 		width: 100%;
-		height: 640px;
 		margin-bottom: 20px;
 		position: relative;
 		border-radius: 10px;
+
 		& img {
+			width: 100%;
+			height: auto;
+			display: block;
 			object-fit: contain;
 			border-radius: 10px;
 		}
@@ -36,9 +38,39 @@
 			width: 100%;
 			margin: 0 auto;
 		}
+
 		p {
-			color: grey;
-			margin: 0 0 20px;
+			font-weight: 400;
+			font-size: 18px;
+			line-height: 156%;
+			color: #000;
+			margin-bottom: 40px;
+		}
+		& h2,
+		& h3,
+		& h4 {
+			font-weight: 600;
+			font-size: 20px;
+			line-height: 120%;
+			text-transform: uppercase;
+			color: $black-color;
+			margin-bottom: 20px;
+		}
+		& blockquote {
+			padding: 8px 0 8px 20px;
+			border-left: 2px solid $accent;
+			margin-bottom: 20px;
+			& p {
+				margin-bottom: 8px;
+			}
+			cite {
+				font-style: italic;
+			}
+		}
+		& ol,
+		& ul {
+			padding-left: 30px;
+			margin-bottom: 20px;
 		}
 	}
 }

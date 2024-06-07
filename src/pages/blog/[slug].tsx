@@ -13,6 +13,11 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
         return <p>Loading...</p>;
     }
     console.log(response);
+    const breadCurrent = {
+        name: response.title.rendered,
+        url: response.link,
+    };
+    console.log(breadCurrent);
     return (
         <>
             <Head>
@@ -20,11 +25,10 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
                 <meta name="description" content={response.title.rendered}/>
             </Head>
             <main>
-
-
-                <BlogPost post={response}/>
-                <BlogNavPosts  prevPost={prevPost} nextPost={nextPost}/>
-
+                <div className="container">
+                    <BlogPost post={response}/>
+                    <BlogNavPosts  prevPost={prevPost} nextPost={nextPost}/>
+                </div>
             </main>
         </>
     );
