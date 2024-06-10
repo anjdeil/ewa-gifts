@@ -3,6 +3,7 @@ import { popupClosed } from "@/store/reducers/PopupSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MobileSearchPopup from "@/components/Popups/MobileSearchPopup";
 import HamburgerMenu from "@/components/Popups/HamburgerMenu";
+import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
 
 const PopupContainer = () => {
     const dispatch = useDispatch();
@@ -30,6 +31,11 @@ const PopupContainer = () => {
         case 'hamburger-menu': {
             return (
                 <HamburgerMenu onClose={closePopup} />
+            )
+        }
+        case 'mobile-filter': {
+            return (
+                <MobileSidebar />
             )
         }
     }

@@ -1,48 +1,62 @@
 import React from 'react';
 import FilterCollapsed from './FilterCollapsed';
-import { useFetchAllCategoriesListQuery } from '@/store/wooCommerce/wooCommerceApi';
+import { useFetchAllCategoriesListQuery, useFetchAttributeTermsQuery } from '@/store/wooCommerce/wooCommerceApi';
 import transformCategoriesMenu from '@/services/transformers/woocommerce/transformCategoriesMenu';
 import { useParams } from 'next/navigation';
-import styles from './styles.module.scss';
-import Link from 'next/link';
-import Image from 'next/image';
+import PriceFilter from './PriceFilter';
+import SubcategoriesList from './SubcategoriesList';
+import { Box, FormControlLabel } from '@mui/material';
+import EwaCheckbox from '@/components/EwaComponents/EwaCheckbox/EwaCheckbox';
+import { transformColors } from '@/services/transformers/woocommerce/transformColors';
+import ColorsFilter from './ColorsFilter';
 
 const ShopSidebar = () => {
-
     const { slugs } = useParams();
     const [categorySlug, subcategorySlug] = slugs;
 
-    const { data = [], isLoading, isError, error } = useFetchAllCategoriesListQuery();
-    const categories = data.length ? transformCategoriesMenu(data) : [];
+    const { data: categoriesData = [], isLoading: isCategoriesLoading, isError: isCategoriesError, error: categoriesError } = useFetchAllCategoriesListQuery();
+    const categories = categoriesData.length ? transformCategoriesMenu(categoriesData) : [];
+
+    const { data: suppliersData = [], isLoading: isSuppliersLoading, isError: isSuppliersError, error: suppliersError } = useFetchAttributeTermsQuery(11);
+    const suppliers = suppliersData.length ? suppliersData : [];
+
+    const { data: colorsData = [], isLoading: isColorsLoading, isError: isColorsError, error: colorsError } = useFetchAttributeTermsQuery(9);
+    const colors = colorsData.length ? transformColors(colorsData) : [];
 
     const targetCategory = categories.find(({ slug }) => slug === categorySlug);
 
     return (
         <>
             <FilterCollapsed title={targetCategory?.categoryName} collapsed={false}>
-                <nav className={styles['categories-list']}>
-                    <ul className={styles['categories-list__list']}>
-                        {targetCategory && targetCategory.subcategories.map(({ id, categoryName, slug }) => (
-                            <li key={id} className={styles['categories-list__list-item']}>
-                                <Link
-                                    href={`/product-category/${targetCategory.slug}/${slug}`}
-                                    className={`${styles['categories-list__button']} ${subcategorySlug === slug ? styles['categories-list__button_active'] : ''}`}
-                                >
-                                    <Image
-                                        alt={categoryName}
-                                        className={styles['categories-list__button-icon']}
-                                        src={`/images/categories/${slug}.svg`}
-                                        width={24}
-                                        height={24}
-                                    />
-                                    <span className={styles['categories-list__button-name']}>
-                                        {categoryName}
-                                    </span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <SubcategoriesList targetCategory={targetCategory} currentSubcategorySlug={subcategorySlug} />
+            </FilterCollapsed>
+            <FilterCollapsed title={"Price"} collapsed={false}>
+                <PriceFilter />
+            </FilterCollapsed>
+            <FilterCollapsed title={"Suppliers"} collapsed={false}>
+                {suppliers?.map(supplier => (
+                    <Box key={supplier.id}>
+                        <FormControlLabel
+                            sx={{
+                                '.MuiTypography-root': {
+                                    fontSize: '0.9em',
+                                }
+                            }}
+                            label={supplier.name}
+                            value={supplier.id}
+                            control={
+                                <EwaCheckbox
+                                    inputProps={{
+                                        "aria-label": supplier.name,
+                                    }}
+                                />
+                            }
+                        />
+                    </Box>
+                ))}
+            </FilterCollapsed>
+            <FilterCollapsed title={"Colors"} collapsed={false}>
+                <ColorsFilter colors={colors} />
             </FilterCollapsed>
         </>
     )

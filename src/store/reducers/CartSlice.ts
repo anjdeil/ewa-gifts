@@ -28,7 +28,6 @@ const loadCartFromLocalStorage = () => {
         return undefined;
     }
 }
-
 const addCartItem = (prevCart, updatedItem) => {
     const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
 
@@ -252,6 +251,15 @@ export const CartSlice = createSlice({
         deletedFromCart: (state, action) => {
             updateCartItemQuantity(state.items, action.payload, 0, 'update');
             state.itemsCount = getItemsCount(state.items);
+        },
+        decreasedCartQuantity: (state) => {
+
+        },
+        updatedCartQuantity: (state, action) => {
+
+        },
+        deletedFromCart: (state, action) => {
+
         },
         toggleMiniCart: (state) => {
             state.miniCartOpen = !state.miniCartOpen

@@ -11,7 +11,7 @@ const FilterCollapsed = ({ title, children, collapsed }) => {
             <Button
                 className={`${styles['filter-collapsed__header']} ${!isCollapsed && styles['filter-collapsed__header_expanded']}`}
                 sx={{
-                    backgroundColor: variables.whiteLilac,
+                    backgroundColor: variables.inputLight,
                     fontSize: '0.9rem',
                     fontWeight: 500,
                     textTransform: 'none',
@@ -22,7 +22,7 @@ const FilterCollapsed = ({ title, children, collapsed }) => {
                     textAlign: 'left',
                     justifyContent: 'space-between',
                     '&:hover': {
-                        backgroundColor: variables.inputLight,
+                        backgroundColor: variables.inputDarker,
                     }
                 }}
                 onClick={() => setCollapsed((isCollapsed) => !isCollapsed)}
