@@ -51,7 +51,6 @@ const Product = () =>
       <main className={styles.product__info}>
         <div className="container">
           <Breadcrumbs links={links} />
-          {/*<button onClick={handlerClick}>eqweq</button>*/}
           <div>
             {typeVan === 'simple' ? <ProductInfo data={info}/>:<p>No simple product found</p>}
           </div>
