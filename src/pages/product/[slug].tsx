@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 
 
-const Product = () => {
+const Product = () =>
+{
   const router = useRouter();
   const { slug } = router.query;
 
