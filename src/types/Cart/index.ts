@@ -25,8 +25,8 @@ export const CartTablePropsSchema = z.object({
 });
 
 export const createOrderProductsSchema = z.object({
-    product_id: z.string(),
-    variation_id: z.string().optional(),
+    product_id: z.number(),
+    variation_id: z.number().optional(),
     quantity: z.number()
 });
 

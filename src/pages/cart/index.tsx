@@ -3,13 +3,10 @@ import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useEffect } from "react";
-import { fetchCartRows } from "@/store/reducers/CartSlice";
 import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
-import { useFetchCreateOrderMutation, useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
-import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { error } from "console";
+import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 
 const Product = () =>
 {
@@ -17,90 +14,62 @@ const Product = () =>
     // const { slug } = router.query;
     const dispatch = useAppDispatch();
     const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
-    const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrderSlice);
-    const [fetchCreateOrder, { data: newOrder }] = useFetchCreateOrderMutation();
-    const [fetchUpdateOrder, { data: updatedOrder, isError, error }] = useFetchUpdateOrderMutation();
+    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
+    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError } = useCreateOrderWoo();
+    const { updateOrder } = useUpdateOrderWoo();
 
     useEffect(() =>
     {
         if (items.length > 0)
         {
-            if (orderId)
+            if (!orderId)
             {
-                dispatch(fetchCartRows(items));
-                console.log(items);
-                // console.log(orderId);
-                fetchUpdateOrder(
-                    {
-                        credentials: {
-                            line_items: [
-                                {
-                                    id: "713",
-                                    product_id: "32706",
-                                    quantity: "400",
-                                    variation_id: "32709",
-                                }
-                            ]
+                createOrder(
+                    [
+                        {
+                            id: 46817,
+                            quantity: 2,
+                            type: "simple"
                         },
-                        // credentials: { line_items: transformCreateOrderProducts(items) },
-                        id: orderId
-                    }
+                        {
+                            options: [
+                                {
+                                    id: 43111,
+                                    quantity: 10,
+                                },
+                                {
+                                    id: 43106,
+                                    quantity: 20,
+                                }
+                            ],
+                            id: 43081,
+                            quantity: 0,
+                            type: "variable"
+                        },
+                    ],
                 )
-                if (isError)
+                if (isCreatingOrder)
                 {
-                    console.log(error);
+                    console.log('Loading...');
                 }
-
-                if (updatedOrder)
+                if (isCreateOrderError)
                 {
-                    console.log(updatedOrder);
-                    transformCartItems(items, updatedOrder.line_items)
+                    console.log(isCreateOrderError);
                 }
             } else
             {
-                dispatch(setCurrentOrder(null));
-
-                try
-                {
-                    const createOrderData = fetchCreateOrder({ line_items: transformCreateOrderProducts(items) });
-                } catch (error)
-                {
-                    error => console.error(error, 'Failed create order')
-                }
-
-                if (newOrder)
-                {
-                    dispatch(setCurrentOrder(newOrder.id));
-                }
+                if (!productLineIds) return;
+                updateOrder(productLineIds, [
+                    {
+                        id: 46817,
+                        quantity: 20,
+                        type: "simple"
+                    },
+                ], orderId);
             }
         }
-    }, [dispatch, items, newOrder, orderId, updatedOrder]);
-
-    function transformCartItems(items, orderLines)
-    {
-        items.map(item =>
-        {
-
-            orderLines.forEach(line =>
-            {
-                // console.log(line)
-            })
-
-            // if (item.type === 'variable')
-            // {
-            //     item.options.map(option =>
-            //     {
-            //         console.log(option.id);
-            //     })
-            // }
-        })
-
-        // })
-        // orderLines.forEach(line =>
-        // {
-        //     console.log(line);
-        // })
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, items, orderId]);
 
     return (
         <>
