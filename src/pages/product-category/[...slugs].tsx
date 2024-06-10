@@ -11,11 +11,12 @@ import { transformProductCard } from "@/services/transformers";
 
 import { ProductCardList } from "@/components/Shop";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { Chip } from "@mui/material";
+import { Chip, useMediaQuery } from "@mui/material";
 import PagesNavigation from "@/components/Layouts/PagesNavigation";
+import ShopSidebar from "@/components/Shop/ShopSidebar";
+import ShopToolbar from "@/components/Shop/ShopToolbar";
 
 import styles from "./styles.module.scss";
-import ShopSidebar from "@/components/Shop/ShopSidebar";
 
 export const getServerSideProps = async ({ query }) => {
 
@@ -61,6 +62,8 @@ export const getServerSideProps = async ({ query }) => {
 }
 
 const Category = ({ categories, page }) => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
+
     const router = useRouter();
     const { slugs } = useParams();
     const pageSlugIndex = slugs.findIndex(slug => slug === 'page');
@@ -114,15 +117,10 @@ const Category = ({ categories, page }) => {
                     </div>
                     <div className={styles['product-category__container']}>
                         <aside className={styles['product-category__sidebar']}>
-                            <ShopSidebar />
+                            {!isMobile && <ShopSidebar />}
                         </aside>
                         <div className={styles['product-category__archive']}>
-                            <div className={styles['product-category__toolbar']}>
-                                <div className={styles['product-category__sort']}>
-
-                                </div>
-                                {renderPagination()}
-                            </div>
+                            <ShopToolbar renderPagination={renderPagination} />
                             <ProductCardList isLoading={isProductsLoading} isError={isProductsError} products={products} columns={{ desktop: 3 }} />
                             <div className={styles['product-category__nav-wrap']}>
                                 {renderPagination()}

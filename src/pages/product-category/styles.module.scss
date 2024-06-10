@@ -31,15 +31,32 @@
         grid-column: 2/5;
     }
 
-    &__toolbar {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1em;
-    }
-
     &__nav-wrap {
         display: flex;
         justify-content: center;
         margin-top: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-category {
+        padding: 15px 0;
+
+        &__titling {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        &__container {
+            display: block;
+        }
+
+        &__archive {
+            grid-column: auto;
+        }
+
+        &__sidebar {
+            display: none;
+        }
     }
 }

@@ -3,94 +3,73 @@ import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useEffect } from "react";
-import { fetchCartRows } from "@/store/reducers/CartSlice";
 import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
-import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
+import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 
 const Product = () =>
 {
     // const router = useRouter();
     // const { slug } = router.query;
-
-    const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
-    const currentOrderSlice = useAppSelector(state => state.currentOrderSlice);
     const dispatch = useAppDispatch();
-
-    const [fetchCreateOrder, { data: newOrder }] = useFetchCreateOrderMutation();
+    const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
+    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
+    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError } = useCreateOrderWoo();
+    const { updateOrder } = useUpdateOrderWoo();
 
     useEffect(() =>
     {
         if (items.length > 0)
         {
-            dispatch(fetchCartRows(items));
-            if (!currentOrderSlice.currentOrder)
+            if (!orderId)
             {
-                fetchCreateOrder(transformCreateOrderProducts(items));
-                if (newOrder)
+                createOrder(
+                    [
+                        {
+                            id: 46817,
+                            quantity: 2,
+                            type: "simple"
+                        },
+                        {
+                            options: [
+                                {
+                                    id: 43111,
+                                    quantity: 10,
+                                },
+                                {
+                                    id: 43106,
+                                    quantity: 20,
+                                }
+                            ],
+                            id: 43081,
+                            quantity: 0,
+                            type: "variable"
+                        },
+                    ],
+                )
+                if (isCreatingOrder)
                 {
-                    dispatch(setCurrentOrder(newOrder.id));
+                    console.log('Loading...');
                 }
-            }
-        }
-    }, [currentOrderSlice.currentOrder, dispatch, fetchCreateOrder, items, newOrder]);
-
-    if (newOrder)
-    {
-        console.log(newOrder.id);
-    }
-
-    // line_items: [
-    //     {
-    //       product_id: 93,
-    //       quantity: 2
-    //     },
-    //     {
-    //       product_id: 22,
-    //       variation_id: 23,
-    //       quantity: 1
-    //     }
-    //   ],
-
-    // if (items)
-    // {
-    //     console.log(transformCreateOrderProducts(items));
-    // }
-
-    function transformCreateOrderProducts(products)
-    {
-        return products.reduce((acc, product) =>
-        {
-            if (product.type === 'variable')
-            {
-                product.options.forEach(item =>
+                if (isCreateOrderError)
                 {
-                    acc.push({
-                        product_id: product.id,
-                        variation_id: item.id,
-                        quantity: item.quantity
-                    })
-                })
+                    console.log(isCreateOrderError);
+                }
             } else
             {
-                acc.push({
-                    product_id: product.id,
-                    quantity: product.quantity
-                })
+                if (!productLineIds) return;
+                updateOrder(productLineIds, [
+                    {
+                        id: 46817,
+                        quantity: 20,
+                        type: "simple"
+                    },
+                ], orderId);
             }
-            return acc;
-        }, [])
-    }
-
-    // useEffect(() =>
-    // {
-    //     if (data)
-    //     {
-    //         console.log(data.id);
-    //         dispatch(updateCurrentOrder(data.id));
-    //     }
-    // }, [data, dispatch]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, items, orderId]);
 
     return (
         <>
@@ -106,7 +85,6 @@ const Product = () =>
                     <Box display={"flex"}>
                         <CartTable products={cartRows} isLoading={isLoading} />
                         <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
-                        {/* <button onClick={() => fetchCreateOrder(object)}>Create</button> */}
                     </Box>
                 </section>
             </main >

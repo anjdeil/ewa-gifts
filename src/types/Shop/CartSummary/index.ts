@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const CartSummaryPropsSchema = z.object({
-    total: z.string(),
-    sum: z.string(),
+    total: z.number(),
+    sum: z.number(),
     isLoading: z.boolean().optional()
 });
 

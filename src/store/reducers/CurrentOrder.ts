@@ -1,15 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { z } from 'zod';
+import { loadLocalStorageState } from '@/Utils/loadLocalStorageState';
+import { currentOrderReducerType } from '@/types';
 
-export const currentOrderReducerSchema = z.object({
-    currentOrder: z.number().nullable()
-});
-
-export type currentOrderReducerType = z.infer<typeof currentOrderReducerSchema>;
+const storedItems = loadLocalStorageState('currentOrderItems');
+const storedOrderId = loadLocalStorageState('currentOrderId');
+const initialOrderItems = storedItems ? storedItems : null;
+const initialOrderId = storedOrderId ? storedOrderId : null;
 
 const initialState: currentOrderReducerType = {
-    currentOrder: null,
-}
+    currentOrder: {
+        orderId: initialOrderId,
+        productLineIds: initialOrderItems,
+    }
+};
 
 const currentOrderSlice = createSlice({
     name: 'currentOrder',
@@ -17,10 +20,14 @@ const currentOrderSlice = createSlice({
     reducers: {
         setCurrentOrder: (state, action) =>
         {
-            state.currentOrder = action.payload;
+            state.currentOrder.orderId = action.payload;
+        },
+        setLineItemsIds: (state, action) =>
+        {
+            state.currentOrder.productLineIds = action.payload;
         },
     },
 });
 
-export const { setCurrentOrder } = currentOrderSlice.actions;
+export const { setCurrentOrder, setLineItemsIds } = currentOrderSlice.actions;
 export default currentOrderSlice.reducer;

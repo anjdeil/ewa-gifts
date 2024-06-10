@@ -24,5 +24,12 @@ export const CartTablePropsSchema = z.object({
     isLoading: z.boolean()
 });
 
+export const createOrderProductsSchema = z.object({
+    product_id: z.number(),
+    variation_id: z.number().optional(),
+    quantity: z.number()
+});
+
 export type CartTableProps = z.infer<typeof CartTablePropsSchema>
 export type cartProduct = z.infer<typeof cartProductSchema>;
+export type createOrderProducts = z.infer<typeof createOrderProductsSchema>;

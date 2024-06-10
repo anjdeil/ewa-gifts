@@ -50,3 +50,13 @@
         }
     }
 }
+
+.mobile-sidebar {
+    padding: 20px;
+    position: fixed;
+    background-color: $white-lilac;
+    top: 120px;
+    bottom: 45px;
+    overflow: auto;
+    z-index: 900;
+}

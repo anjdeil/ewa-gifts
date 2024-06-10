@@ -1,3 +1,4 @@
+import { CartItem } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -27,7 +28,6 @@ const loadCartFromLocalStorage = () => {
         return undefined;
     }
 }
-
 const addCartItem = (prevCart, updatedItem) => {
     const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
 
@@ -177,7 +177,7 @@ const transformCartRows = (cartItems, response) => {
 
 }
 
-export const fetchCartRows = createAsyncThunk(
+export const fetchCartRows = createAsyncThunk<CartItem[]>(
     'Cart/fetchCartRows',
     async (cartItems, thunkAPI) => {
         const productPromises = [];
@@ -251,6 +251,15 @@ export const CartSlice = createSlice({
         deletedFromCart: (state, action) => {
             updateCartItemQuantity(state.items, action.payload, 0, 'update');
             state.itemsCount = getItemsCount(state.items);
+        },
+        decreasedCartQuantity: (state) => {
+
+        },
+        updatedCartQuantity: (state, action) => {
+
+        },
+        deletedFromCart: (state, action) => {
+
         },
         toggleMiniCart: (state) => {
             state.miniCartOpen = !state.miniCartOpen
