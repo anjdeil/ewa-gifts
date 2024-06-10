@@ -3,7 +3,7 @@ import styles from "./styles.module.scss"
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { decreasedCartQuantity, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
+import { decreasedCartQuantity, deletedFromCart, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { useAppDispatch } from "@/hooks/redux";
 
 const MiniCart = () =>
@@ -46,11 +46,21 @@ const MiniCart = () =>
                                 </svg>
                                 <span className="cart-item-quty__price">{row.price}</span>
                             </div>
+                            <input type="nuber" value={row.quantity} onChange={(evt) => {
+                                dispatch(updatedCartQuantity({
+                                    id: row.id,
+                                    type: row.type,
+                                    quantity: evt.target.value
+                                }))
+                            }} />
                         </div>
                         <div className={styles["mini-cart__item-delete-wrap"]}>
-                            <button className={styles["mini-cart__item-delete"]}>
+                            <button
+                                className={styles["mini-cart__item-delete"]}
+                                onClick={() => dispatch(deletedFromCart({ id: row.id, type: row.type }))}
+                            >
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 1L1 13M1 1L13 13" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </div>
