@@ -59,6 +59,16 @@ export const wooCommerceApi = createApi({
                 }
             })
         }),
+        fetchUpdateOrder: build.mutation({
+            query: ({ credentials, id }) => ({
+                url: `/orders/${id}`,
+                method: 'POST',
+                body: credentials,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+        }),
         fetchAllCategoriesList: build.query({
             queryFn: async () =>
             {
@@ -84,4 +94,5 @@ export const {
     useFetchProductVariationsQuery,
     useFetchUserRegistrationMutation,
     useFetchCreateOrderMutation,
+    useFetchUpdateOrderMutation,
 } = wooCommerceApi;

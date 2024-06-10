@@ -3,16 +3,20 @@ import styles from "./styles.module.scss"
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { decreasedCartQuantity, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
+import { useAppDispatch } from "@/hooks/redux";
 
-const MiniCart = () => {
+const MiniCart = () =>
+{
+    const dispatch = useAppDispatch();
     const { items, totals, cartRows, isLoading } = useSelector(state => state.Cart);
-    const dispatch = useDispatch();
 
-
-    useEffect(() => {
-        dispatch(fetchCartRows(items));
+    useEffect(() =>
+    {
+        if (items.length > 0)
+        {
+            dispatch(fetchCartRows(items));
+        }
     }, [items]);
 
     return (

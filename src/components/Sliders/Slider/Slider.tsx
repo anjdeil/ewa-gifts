@@ -7,14 +7,20 @@ import { SliderProps } from "@/types";
 import { useMediaQuery } from "@mui/material";
 import { AdaptiveImage } from "@/components/Common/AdaptiveImage";
 import Link from "next/link";
+import { styled } from '@mui/material/styles';
 
+const CustomSwiper = styled(Swiper)`
+    .swiper-slide-active {
+        opacity: 0.5;
+    }
+`;
 
 export const Slider: FC<SliderProps> = ({ slides, height }) =>
 {
     const isMobile = useMediaQuery('(max-width: 768px)');
     return (
         <div className="custom-swiper">
-            <Swiper
+            <CustomSwiper
                 navigation={true}
                 modules={[Navigation]}
                 spaceBetween={50}
@@ -39,7 +45,7 @@ export const Slider: FC<SliderProps> = ({ slides, height }) =>
                         </Link>
                     </SwiperSlide>
                 ))}
-            </Swiper>
+            </CustomSwiper>
         </div>
     );
 };
