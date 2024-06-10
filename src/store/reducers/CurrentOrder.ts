@@ -2,14 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import { z } from 'zod';
 
 export const currentOrderReducerSchema = z.object({
-    currentOrder: z.number().nullable()
+    currentOrder: z.object({
+        orderId: z.number().nullable()
+    })
 });
 
 export type currentOrderReducerType = z.infer<typeof currentOrderReducerSchema>;
 
 const initialState: currentOrderReducerType = {
-    currentOrder: null,
-}
+    currentOrder: {
+        orderId: null
+    }
+};
 
 const currentOrderSlice = createSlice({
     name: 'currentOrder',
@@ -17,7 +21,7 @@ const currentOrderSlice = createSlice({
     reducers: {
         setCurrentOrder: (state, action) =>
         {
-            state.currentOrder = action.payload;
+            state.currentOrder.orderId = action.payload;
         },
     },
 });

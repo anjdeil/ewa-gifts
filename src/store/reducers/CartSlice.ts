@@ -1,3 +1,4 @@
+import { CartItem } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -177,7 +178,7 @@ const transformCartRows = (cartItems, response) => {
 
 }
 
-export const fetchCartRows = createAsyncThunk(
+export const fetchCartRows = createAsyncThunk<CartItem[]>(
     'Cart/fetchCartRows',
     async (cartItems, thunkAPI) => {
         const productPromises = [];
