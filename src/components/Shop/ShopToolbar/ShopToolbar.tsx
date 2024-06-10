@@ -1,10 +1,51 @@
 import React from "react";
-import { Button, useScrollTrigger, useMediaQuery } from "@mui/material";
+import { Button, useScrollTrigger, useMediaQuery, Select, MenuItem, Paper } from "@mui/material";
 import variables from "@/styles/variables.module.scss";
 import { popupSet } from "@/store/reducers/PopupSlice";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/redux";
 import styles from "./styles.module.scss";
+
+const defaultStyles = {
+    borderRadius: '10px',
+    backgroundColor: variables.inputLight,
+    fontSize: '.9em',
+    padding: '0.2em 0',
+    '& .MuiOutlinedInput-input': {
+        padding: '0.5em 0.8em',
+
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: variables.inputLight,
+    }
+};
+
+const hoverStyles = {
+    backgroundColor: variables.inputDarker,
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: variables.inputDarker
+    }
+};
+
+const focusStyles = {
+    backgroundColor: variables.backgroundWhite,
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: variables.accent
+    }
+};
+
+const SearchPaper = (props) => {
+    return <Paper
+        {...props}
+        elevation={0}
+        style={{
+            width: "100vw",
+            marginLeft: "-20px",
+            marginTop: "10px",
+            height: 'calc(100vh - 120px)'
+        }}
+    />;
+};
 
 const ShopToolbar = ({ renderPagination }) => {
     const dispatch = useDispatch()
@@ -25,10 +66,47 @@ const ShopToolbar = ({ renderPagination }) => {
         }
     }
 
+    const sorts = [
+        {
+            name: 'popular',
+            label: 'Sortuj wg popularności'
+        },
+        {
+            name: 'new',
+            label: 'Sortuj od najnowszych'
+        },
+        {
+            name: 'expensive',
+            label: 'Sortuj po cenie od najwyższej'
+        },
+        {
+            name: 'cheap',
+            label: 'Sortuj po cenie od najniższej'
+        },
+        {
+            name: 'stocks',
+            label: 'Sortuj według stanów magazynowych'
+        }
+    ]
+
     return (
         <div className={`${styles['shop-toolbar']} ${isMobile && (trigger || popup === 'mobile-filter') ? styles['shop-toolbar_fixed'] : ''}`}>
             <div className={styles['shop-toolbar__sort']}>
-                <div></div>
+                <Select
+                    MenuProps={{
+                        elevation: 1,
+                    }}
+                    value="new"
+                    sx={{
+                        '&': defaultStyles,
+                        '&:hover': hoverStyles,
+                        '&.Mui-focused': focusStyles
+                    }}
+                >
+                    {sorts?.map(({ name, label }) => (
+                        <MenuItem key={name} value={name}>{label}</MenuItem>
+                    ))}
+                </Select>
                 {isMobile && (
                     <Button
                         onClick={onToggleSidebar}
@@ -64,7 +142,7 @@ const ShopToolbar = ({ renderPagination }) => {
             <div className={styles['shop-toolbar__pagination']}>
                 {renderPagination()}
             </div>
-        </div>
+        </div >
     );
 }
 

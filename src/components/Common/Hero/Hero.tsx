@@ -10,13 +10,13 @@ export const Hero: FC<HeroProps> = ({ section }) =>
 {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
-    const imagePaddingTop = isMobile && '40%' || isTablet && '80%' || '50%';
+    const imagePaddingTop = isMobile && '40%' || isTablet && '80%' || '60%';
     const isReverse = section.is_reverse;
     return (
         <>
             <Box display="flex"
                 flexDirection={isMobile ? "column-reverse" : (isReverse ? "row-reverse" : "row")}
-                gap={isMobile ? 0 : '20px'}
+                gap={isMobile ? 0 : '80px'}
             >
                 <Box width={isMobile ? "100%" : "60%"} sx={{
                     paddingTop: isMobile ? '20px' : 'initial',
@@ -25,17 +25,21 @@ export const Hero: FC<HeroProps> = ({ section }) =>
                     <Text className={styles.hero__text} text={section.text} />
                     {section.link_url && <Link className="more-link" href={section.link_url}>{section.link_text}</Link>}
                 </Box>
-                <Box width={isMobile ? "100%" : "40%"}
-                    position={'relative'}
-                    sx={{
-                        borderRadius: '10px',
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: isMobile ? "100%" : "40%",
+                    position: 'relative',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                }}>
+                    <Box sx={{
+                        position: 'relative',
+                        paddingTop: imagePaddingTop,
+                        flexGrow: 1,
                         overflow: 'hidden',
-                    }}>
-                    <Box position={'relative'}
-                        paddingTop={imagePaddingTop}
-                        overflow={"hidden"}
-                        borderRadius={"15px"}
-                    >
+                        borderRadius: '15px',
+                    }}                    >
                         <Image
                             src={section.image}
                             style={{

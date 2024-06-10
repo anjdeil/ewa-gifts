@@ -34,7 +34,7 @@ const ShopSidebar = () => {
                 <PriceFilter />
             </FilterCollapsed>
             <FilterCollapsed title={"Suppliers"} collapsed={false}>
-                {suppliers.length && suppliers.map(supplier => (
+                {suppliers?.map(supplier => (
                     <Box key={supplier.id}>
                         <FormControlLabel
                             sx={{

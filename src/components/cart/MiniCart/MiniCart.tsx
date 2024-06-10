@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchCartRows } from "@/store/reducers/CartSlice";
+import { decreasedCartQuantity, deletedFromCart, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
 
 const MiniCart = () => {
-    const { items, totals, cartRows } = useSelector(state => state.Cart);
+    const { items, totals, cartRows, isLoading } = useSelector(state => state.Cart);
     const dispatch = useDispatch();
 
 
@@ -19,7 +19,7 @@ const MiniCart = () => {
         <div className={styles["mini-cart"]}>
             <ul className={styles["mini-cart__items"]}>
                 {cartRows && cartRows.map((row) => (
-                    <li className={styles["mini-cart__item"]}>
+                    <li className={styles["mini-cart__item"]} key={row.id}>
                         <div className={styles["mini-cart__item-image-wrap"]}>
                             <Image
                                 alt={row.name}
@@ -42,11 +42,21 @@ const MiniCart = () => {
                                 </svg>
                                 <span className="cart-item-quty__price">{row.price}</span>
                             </div>
+                            <input type="nuber" value={row.quantity} onChange={(evt) => {
+                                dispatch(updatedCartQuantity({
+                                    id: row.id,
+                                    type: row.type,
+                                    quantity: evt.target.value
+                                }))
+                            }} />
                         </div>
                         <div className={styles["mini-cart__item-delete-wrap"]}>
-                            <button className={styles["mini-cart__item-delete"]}>
+                            <button
+                                className={styles["mini-cart__item-delete"]}
+                                onClick={() => dispatch(deletedFromCart({ id: row.id, type: row.type }))}
+                            >
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 1L1 13M1 1L13 13" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </div>

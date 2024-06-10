@@ -19,7 +19,7 @@ const ColorsFilter = ({ colors }) => {
 
     };
 
-    return colors.length && colors.map(color => (
+    return colors?.map(color => (
         <Radio
             key={color.id}
             onChange={handleChange}
