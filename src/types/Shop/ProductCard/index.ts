@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const ProductMetaSchema = z.object({
+    id: z.number(),
+    key: z.string(),
+    value: z.any()
+});
+
 export const ProductCardSchema = z.object({
     attributes: z.array(z.string()),
     categories: z.any(),
@@ -18,7 +24,8 @@ export const ProductCardSchema = z.object({
     default_attr: z.string(),
     isSized: z.boolean(),
     type: z.string(),
-    quantity: z.number().optional()
+    quantity: z.number().optional(),
+    metaData: z.array(ProductMetaSchema).optional()
 });
 
 const ProductCardPropsSchema = z.object({

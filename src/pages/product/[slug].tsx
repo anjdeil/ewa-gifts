@@ -6,18 +6,17 @@ import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
 import ProductInfo from '@/components/Shop/ProductInfo/ProductInfo';
 
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import {transformProductCard} from "@/services/transformers";
+import { transformProductCard } from "@/services/transformers";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 // import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 // import {useLazyFetchProductVariationsQuery} from '@/store/wooCommerce/wooCommerceApi';
 
-const Product = () =>
-{
+const Product = () => {
 
   // const router = useRouter();
   // const { slug } = router.query;
 
-  const { data } = useFetchProductListQuery({slug: '4-kolorowy-zakreslacz-kwadratowy-trafalgar' });
+  const { data, isLoading } = useFetchProductListQuery({ slug: 'lampka-czolowa-herlen-schwarzwolf' });
   console.log(data);
   let info;
   if (data) {
@@ -28,15 +27,15 @@ const Product = () =>
     return <p>No product found</p>;
   }
 
-  const [{ name, categories, type:typeVan }] = info;
+  const [{ name, categories, type: typeVan }] = info;
   const links = transformBreadcrumbsCategories(categories);
   console.log(
-      links, 'Breadcrumbs'
+    links, 'Breadcrumbs'
   )
   // const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
   //
   // const handlerClick = () => {
-    // fetchProductVariations(id);
+  // fetchProductVariations(id);
   // };
   // console.log(variations,isVariationsLoading,isVariationsError);
 
@@ -52,7 +51,7 @@ const Product = () =>
         <div className="container">
           <Breadcrumbs links={links} />
           <div>
-            {typeVan === 'simple' ? <ProductInfo data={info}/>:<p>No simple product found</p>}
+            {typeVan === 'simple' ? <ProductInfo data={info} /> : <p>No simple product found</p>}
           </div>
         </div>
       </main>

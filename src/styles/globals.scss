@@ -1,5 +1,11 @@
 @import './variables.module';
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .desc {
     font-weight: 400;
     font-size: 18px;
@@ -124,6 +130,13 @@
         margin: 0 0.3em;
     }
 
+}
+
+.product-page-h3 {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1em;
 }
 
 @media(max-width: 1024px) {
