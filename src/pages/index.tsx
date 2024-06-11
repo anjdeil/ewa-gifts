@@ -1,15 +1,9 @@
-// import { LoginForm } from "@/components/Forms/LoginForm";
-// import { RegistrationForm } from "@/components/Forms/RegistrationForm/RegistrationForm";
-// import { ResetPassword } from "@/components/Forms/ResetPassword";
 import { PageBuilder } from "@/components/PageBuilder";
 import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
-import { NewPassword } from "@/components/Forms/NewPassword";
-import { useFetchProductListQuery } from "@/services/wooCommerceApi";
-// import { NewPassword } from "@/components/Forms/NewPassword";
 
 
 const Home: FC<HomeProps> = ({ response, cookies }) =>
@@ -17,21 +11,9 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
   let sections;
   const pageTitle = response[0].title.rendered;
 
-  if ('userToken' in cookies)
-  {
-    // Change interface by adding rules 
-  }
-
   if ('sections' in response[0])
   {
     sections = response[0].sections;
-  }
-
-  const { data, isLoading } = useFetchProductListQuery({ slug: 'dlugopis-nash-z-bialym-korpusem-i-kolorwym-uchwytem' });
-
-  if (data)
-  {
-    console.log(data);
   }
 
   return (
@@ -42,9 +24,6 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
       </Head>
       <main>
         <h1>{pageTitle}</h1>
-        {/* <button onClick={() => OnClick()}>Register User</button> */}
-        {/* <RegistrationForm /> */}
-        {/* <LoginForm /> */}
         {/* <ResetPassword /> */}
         {/* <NewPassword /> */}
         <PageBuilder sections={sections} />

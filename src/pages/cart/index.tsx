@@ -62,7 +62,7 @@ const Product = () =>
                 updateOrder(productLineIds, [
                     {
                         id: 46817,
-                        quantity: 20,
+                        quantity: 30,
                         type: "simple"
                     },
                 ], orderId);
