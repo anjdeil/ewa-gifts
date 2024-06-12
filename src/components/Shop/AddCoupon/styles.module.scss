@@ -1,0 +1,29 @@
+@import '@/styles/variables.module.scss';
+
+.AddCoupon {
+    width: fit-content;
+    text-align: center;
+
+    &__content {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: fit-content;
+    }
+
+    &__input {
+        span {
+            margin-bottom: 0 !important;
+        }
+    }
+
+    &__button {
+        padding-right: 36px;
+        padding-left: 36px;
+    }
+
+    &__error {
+        color: $error;
+    }
+}
