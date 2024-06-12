@@ -7,6 +7,8 @@ import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
+import { AddCoupon } from "@/components/Shop/AddCoupon";
+import { Section } from "@/components/Layouts/Section";
 
 const Product = () =>
 {
@@ -80,13 +82,14 @@ const Product = () =>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <section className="section">
+                <Section className="section" isContainer={true}>
                     <h1>Koszyk</h1>
                     <Box display={"flex"}>
                         <CartTable products={cartRows} isLoading={isLoading} />
                         <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
                     </Box>
-                </section>
+                    <AddCoupon orderId={orderId && orderId} />
+                </Section>
             </main >
         </>
     );
