@@ -1,4 +1,4 @@
-import { CartItem } from "@/types";
+import { CartItem, CartSliceInitialStateType } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -78,7 +78,7 @@ const addCartItem = (prevCart, updatedItem) => {
     }
 }
 
-const updateCartItemQuantity = (prevCart, targetItemData, quantity = 1, type = "update") => {
+const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1, type = "update") => {
     const updateQuantity = (currentQuantity, type, quantity) => {
         switch (type) {
             case "update":
@@ -125,7 +125,7 @@ const updateCartItemQuantity = (prevCart, targetItemData, quantity = 1, type = "
     }
 }
 
-
+// To delete
 const transformCartRows = (cartItems, response) => {
 
     const parentsResponse = response[response.length - 1];
@@ -177,7 +177,7 @@ const transformCartRows = (cartItems, response) => {
     return cartRows;
 
 }
-
+// To delete
 export const fetchCartRows = createAsyncThunk<CartItem[]>(
     'Cart/fetchCartRows',
     async (cartItems, thunkAPI) => {
@@ -214,23 +214,27 @@ export const fetchCartRows = createAsyncThunk<CartItem[]>(
         return cartRows;
     }
 );
-
+// To delete
 const calculateTotal = (cartRows) => cartRows.reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
+
+
+
+const initialState: CartSliceInitialStateType = {
+    items: loadCartFromLocalStorage() || [],
+    cartRows: [], // to delete
+    totals: {// to delete
+        total: 0// to delete
+    },// to delete
+    itemsCount: 0,
+    isLoading: false,// to delete
+    isError: false,// to detele
+    error: "",// to delete
+    miniCartOpen: false,
+};
 
 export const CartSlice = createSlice({
     name: 'Cart',
-    initialState: {
-        items: loadCartFromLocalStorage() || [],
-        cartRows: [],
-        totals: {
-            total: 0
-        },
-        itemsCount: 0,
-        isLoading: false,
-        isError: false,
-        error: "",
-        miniCartOpen: false,
-    },
+    initialState,
     reducers: {
         addedToCart: (state, action) => {
             state.items = addCartItem(state.items, action.payload);
@@ -269,7 +273,7 @@ export const CartSlice = createSlice({
             state.itemsCount = getItemsCount(state.items);
         }
     },
-    extraReducers: (builder) => {
+    extraReducers: (builder) => { // to delete
         builder
             .addCase(fetchCartRows.pending, (state) => {
                 state.isLoading = true;

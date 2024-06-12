@@ -105,27 +105,41 @@ const CheckPage = () => {
                 <h1>Check Page</h1>
 
                 <form>
-
+                    <label>
+                        Quantity <br />
+                        <input type="number" defaultValue={0} name="quantity" />
+                    </label>
+                    <br /><br />
+                    <label>
+                        Choose a color <br />
+                        <select onChange={onChangeColor} value={choosenOptions.pa_kolor} name="pa_kolor">
+                            {
+                                product.attributes.find(({ slug }) => slug === "pa_kolor")?.options.map(option => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))
+                            }
+                        </select>
+                    </label>
+                    <br /><br />
+                    <button onClick={onAddedToCart}>Add to cart</button>
                     <button onClick={(evt) => {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 42926,
+                            id: 32937,
                             type: 'simple',
                             variationId: null,
-                            choosenOptions: null,
-                            imageUrl: "https://new.ewagifts.pl/wp-content/uploads/2024/06/lampka-czolowa-schwarzwolf-herlen-f2308800aj307.jpeg"
+                            choosenOptions: null
                         }))
                     }}>Add simple product</button>
                     <button onClick={(evt) => {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 47264,
+                            id: 35198,
                             type: 'variable',
-                            variationId: 47284,
+                            variationId: 35286,
                             choosenOptions: {
-                                pa_color: 'zielony (#3dcf27)'
-                            },
-                            imageUrl: "https://new.ewagifts.pl/wp-content/uploads/2024/06/kubek-do-sublimacji-300-ml-sofia-383509.jpg"
+                                pa_color: 'granatowy (#204060)'
+                            }
                         }))
                     }}>Add some variation</button>
                 </form>

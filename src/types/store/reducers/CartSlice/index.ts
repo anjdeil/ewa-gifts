@@ -4,14 +4,16 @@ const CartItemVariationSchema = z.object({
     attributes: z.array(z.any()).optional(),
     id: z.number(),
     quantity: z.number(),
-    type: z.string()
+    type: z.string(),
+    imageUrl: z.string()
 });
 
 const CartItemSchema = z.object({
     id: z.number(),
     options: z.array(CartItemVariationSchema),
     quantity: z.number(),
-    type: z.string()
+    type: z.string(),
+    imageUrl: z.string()
 });
 
 const lineOrderItemsSchema = z.object({
@@ -31,5 +33,13 @@ const lineOrderItemsSchema = z.object({
     price: z.number()
 });
 
+const CartSliceInitialStateSchema = z.object({
+    items: z.array(CartItemSchema),
+    itemsCount: z.number(),
+    miniCartOpen: z.boolean()
+});
+
+
 export type CartItem = z.infer<typeof CartItemSchema>
 export type lineOrderItems = z.infer<typeof lineOrderItemsSchema>;
+export type CartSliceInitialStateType = z.infer<typeof CartSliceInitialStateSchema>;
