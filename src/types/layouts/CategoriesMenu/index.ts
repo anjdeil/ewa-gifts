@@ -13,8 +13,7 @@ export const CategoriesMenuSchema = z.object({
     subcategories: z.array(SubcategorySchema),
 });
 
-export interface IconButtonProps
-{
+export interface IconButtonProps {
     src: string;
     alt: string;
     width: number;
@@ -28,4 +27,5 @@ const CategoriesMenuPropsSchema = z.object({
 
 export type RenderIconButtonProps = IconButtonProps;
 export type Category = z.infer<typeof CategoriesMenuSchema>;
+export type Subcategory = z.infer<typeof SubcategorySchema>;
 export type CategoriesMenuProps = z.infer<typeof CategoriesMenuPropsSchema>;

@@ -4,14 +4,14 @@ const CartItemVariationSchema = z.object({
     attributes: z.array(z.any()).optional(),
     id: z.number(),
     quantity: z.number(),
-    type: z.string().optional()
+    type: z.string()
 });
 
 const CartItemSchema = z.object({
     id: z.number(),
-    options: z.array(CartItemVariationSchema).optional(),
+    options: z.array(CartItemVariationSchema),
     quantity: z.number(),
-    type: z.string().optional()
+    type: z.string()
 });
 
 const lineOrderItemsSchema = z.object({

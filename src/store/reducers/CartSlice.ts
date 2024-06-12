@@ -2,7 +2,7 @@ import { CartItem } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const getItemsCount = (items) => {
+export const getItemsCount = (items: CartItem[]) => {
     return items.reduce((accumulator, item) => {
         if (item.type === 'variable') return accumulator + item.options.length;
         return accumulator + 1;
