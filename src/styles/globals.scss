@@ -73,7 +73,8 @@
 
 .btn-primary,
 .btn-transparent {
-    padding: 12px 18px;
+    height: fit-content;
+    padding: 13px 18px;
     border-radius: 10px;
     transition: background .2s ease-in-out;
 }

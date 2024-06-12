@@ -6,21 +6,17 @@ import { useSelector } from "react-redux";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { useLazyFetchProductVariationsQuery } from "@/store/wooCommerce/wooCommerceApi";
 
-const findVariationByOptions = (variations, options) =>
-{
-    return variations.find(variation =>
-    {
+const findVariationByOptions = (variations, options) => {
+    return variations.find(variation => {
         let found = true;
-        variation.attributes.forEach(({ slug, option }) =>
-        {
+        variation.attributes.forEach(({ slug, option }) => {
             if (options[slug] !== option) found = false;
         });
         return found;
     })
 }
 
-const CheckPage = () =>
-{
+const CheckPage = () => {
     const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
 
     const product = {
@@ -53,23 +49,19 @@ const CheckPage = () =>
         pa_color: 'bordowy (#990505)'
     });
 
-    const onChangeColor = (evt) =>
-    {
+    const onChangeColor = (evt) => {
         setChoosenOptions((choosenOptions) => ({
             ...choosenOptions,
             pa_color: evt.target.value
         }))
     }
 
-    const onAddedToCart = async (evt) =>
-    {
+    const onAddedToCart = async (evt) => {
         evt.preventDefault();
 
-        if (product.type === 'variable')
-        {
+        if (product.type === 'variable') {
             let variationsData = variations;
-            if (variationsData === undefined)
-            {
+            if (variationsData === undefined) {
                 const { data } = await fetchProductVariations(product.id);
                 variationsData = data;
             }
@@ -85,8 +77,7 @@ const CheckPage = () =>
                 })
             );
 
-        } else
-        {
+        } else {
             dispatch(
                 addedToCart({
                     id: product.id,
@@ -114,43 +105,27 @@ const CheckPage = () =>
                 <h1>Check Page</h1>
 
                 <form>
-                    <label>
-                        Quantity <br />
-                        <input type="number" defaultValue={0} name="quantity" />
-                    </label>
-                    <br /><br />
-                    <label>
-                        Choose a color <br />
-                        <select onChange={onChangeColor} value={choosenOptions.pa_kolor} name="pa_kolor">
-                            {
-                                product.attributes.find(({ slug }) => slug === "pa_kolor")?.options.map(option => (
-                                    <option key={option} value={option}>{option}</option>
-                                ))
-                            }
-                        </select>
-                    </label>
-                    <br /><br />
-                    <button onClick={onAddedToCart}>Add to cart</button>
-                    <button onClick={(evt) =>
-                    {
+
+                    <button onClick={(evt) => {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 32937,
+                            id: 42926,
                             type: 'simple',
                             variationId: null,
-                            choosenOptions: null
+                            choosenOptions: null,
+                            imageUrl: "https://new.ewagifts.pl/wp-content/uploads/2024/06/lampka-czolowa-schwarzwolf-herlen-f2308800aj307.jpeg"
                         }))
                     }}>Add simple product</button>
-                    <button onClick={(evt) =>
-                    {
+                    <button onClick={(evt) => {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 35198,
+                            id: 47264,
                             type: 'variable',
-                            variationId: 35286,
+                            variationId: 47284,
                             choosenOptions: {
-                                pa_color: 'granatowy (#204060)'
-                            }
+                                pa_color: 'zielony (#3dcf27)'
+                            },
+                            imageUrl: "https://new.ewagifts.pl/wp-content/uploads/2024/06/kubek-do-sublimacji-300-ml-sofia-383509.jpg"
                         }))
                     }}>Add some variation</button>
                 </form>

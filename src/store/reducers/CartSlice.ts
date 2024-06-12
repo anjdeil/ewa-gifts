@@ -29,7 +29,7 @@ const loadCartFromLocalStorage = () => {
     }
 }
 const addCartItem = (prevCart, updatedItem) => {
-    const { id: productId, type: productType, variationId, choosenOptions } = updatedItem;
+    const { id: productId, type: productType, variationId, choosenOptions, imageUrl } = updatedItem;
 
     const foundedItem = prevCart.find(({ id }) => id === productId);
 
@@ -58,7 +58,7 @@ const addCartItem = (prevCart, updatedItem) => {
                         ...cartItem,
                         options: [
                             ...cartItem.options,
-                            { id: variationId, attributes: { ...choosenOptions }, quantity: 1 }
+                            { id: variationId, attributes: { ...choosenOptions }, quantity: 1, imageUrl }
                         ]
                     };
                 }
@@ -70,8 +70,9 @@ const addCartItem = (prevCart, updatedItem) => {
         const newItem = {
             id: productId,
             type: productType,
-            options: productType === 'variable' ? [{ id: variationId, attributes: { ...choosenOptions }, quantity: 1 }] : [],
-            quantity: productType === 'variable' ? 0 : 1
+            options: productType === 'variable' ? [{ id: variationId, attributes: { ...choosenOptions }, quantity: 1, imageUrl }] : [],
+            quantity: productType === 'variable' ? 0 : 1,
+            imageUrl: productType === 'variable' ? null : imageUrl
         };
         return [...prevCart, newItem];
     }
