@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
+import ProductCalculations from "../ProductCalculations";
 // import {transformProductCard} from "@/services/transformers";
 
 
@@ -29,8 +30,7 @@ const ProductInfo = ({ data }) => {
                     </Typography>
                 </Box>
 
-                <ProductCirculations product={data[0]} onChange={() => { }} />
-                <ProductTotals />
+                <ProductCalculations product={data[0]} />
 
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>

@@ -16,7 +16,7 @@ const Product = () => {
   // const router = useRouter();
   // const { slug } = router.query;
 
-  const { data, isLoading } = useFetchProductListQuery({ slug: 'lampka-czolowa-herlen-schwarzwolf' });
+  const { data } = useFetchProductListQuery({ slug: 'lampka-czolowa-herlen-schwarzwolf' });
   console.log(data);
   let info;
   if (data) {

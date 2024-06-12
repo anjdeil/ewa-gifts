@@ -12,6 +12,7 @@ import Badge from '@mui/material/Badge';
 import { refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
 import { categoriesItems } from './cat';
 import MiniCart from '@/components/cart/MiniCart';
+import Link from 'next/link'
 
 const CustomBadge = styled(Badge)`
     .css-1abqjyq-MuiBadge-badge {
@@ -75,14 +76,16 @@ const Header: React.FC = () =>
                         <SearchBar />
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: "center", gap: '40px' }, position: 'relative' }}>
-                        <IconButton>
-                            <Image
-                                src={'/images/account.svg'}
-                                alt={'Account of current user'}
-                                width={24}
-                                height={24}
-                            />
-                        </IconButton>
+                        <Link href={'/my-account'}>
+                            <IconButton>
+                                <Image
+                                    src={'/images/account.svg'}
+                                    alt={'Account of current user'}
+                                    width={24}
+                                    height={24}
+                                />
+                            </IconButton>
+                        </Link>
                         <IconButton>
                             <Image
                                 src={'/images/like.svg'}

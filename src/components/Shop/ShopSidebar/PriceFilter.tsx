@@ -3,6 +3,7 @@ import React from "react";
 import variables from "@/styles/variables.module.scss";
 import FormInput from "@/components/EwaComponents/EwaInput";
 import EwaInput from "@/components/EwaComponents/EwaInput";
+import EwaSlider from "@/components/EwaComponents/EwaSlider";
 
 function valueText(value: number) {
     return `${value}°C`;
@@ -21,35 +22,13 @@ const PriceFilter = () => {
                     marginBottom: "1em"
                 }}
             >
-                <Slider
+                <EwaSlider
                     min={10} max={110}
                     getAriaLabel={() => 'Temperature range'}
                     value={value}
                     onChange={handleChange}
                     valueLabelDisplay="off"
                     getAriaValueText={valueText}
-                    sx={{
-                        color: variables.accent,
-                        ".MuiSlider-rail": {
-                            opacity: 1,
-                            backgroundColor: variables.inputLight,
-                        },
-                        ".MuiSlider-track": {
-                            backgroundColor: variables.accentLight,
-                            borderColor: variables.accentLight,
-                        },
-                        ".MuiSlider-thumb": {
-                            "&:hover, &.Mui-focusVisible": {
-                                boxShadow: `0px 0px 0px 8px rgba(254, 203, 0, 0.2)`
-                            },
-                            "&.Mui-active": {
-                                boxShadow: `0px 0px 0px 14px rgba(254, 203, 0, 0.2)`
-                            },
-                            "&::before": {
-                                boxShadow: "none"
-                            }
-                        }
-                    }}
                 />
             </Box>
             <Box sx={{

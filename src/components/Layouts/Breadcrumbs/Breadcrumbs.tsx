@@ -1,9 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import { Breadcrumbs as MuiBreadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
 import styles from "./styles.module.scss";
+import { BreadcrumbsProps } from "@/types/layouts/Breadcrumbs";
 
-const Breadcrumbs = ({ links }) => {
+const Breadcrumbs: FC<BreadcrumbsProps> = ({ links }) => {
 
     return (
         <MuiBreadcrumbs aria-label="Breadcrumbs">

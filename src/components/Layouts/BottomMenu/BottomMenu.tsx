@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import { popupSet } from "@/store/reducers/PopupSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@mui/material";
 import variables from "@/styles/variables.module.scss";
 import { refreshItemsCount } from "@/store/reducers/CartSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
 const BottomMenu = () => {
 
-    const dispatch = useDispatch();
-    const popup = useSelector(state => state.Popup);
-    const { itemsCount } = useSelector(state => state.Cart);
+    const dispatch = useAppDispatch();
+    const popup = useAppSelector(state => state.Popup);
+    const { itemsCount } = useAppSelector(state => state.Cart);
 
 
     useEffect(() => {
