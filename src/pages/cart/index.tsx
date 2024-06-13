@@ -15,10 +15,15 @@ const Product = () =>
     // const router = useRouter();
     // const { slug } = router.query;
     const dispatch = useAppDispatch();
-    const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
+    const { items, isLoading } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
     const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError } = useCreateOrderWoo();
     const { updateOrder } = useUpdateOrderWoo();
+
+    if (items)
+    {
+        console.log(items);
+    }
 
     useEffect(() =>
     {
@@ -31,22 +36,29 @@ const Product = () =>
                         {
                             id: 46817,
                             quantity: 2,
-                            type: "simple"
+                            type: "simple",
+                            options: [],
+                            imageUrl: ""
                         },
                         {
                             options: [
                                 {
                                     id: 43111,
                                     quantity: 10,
+                                    type: "",
+                                    imageUrl: ""
                                 },
                                 {
                                     id: 43106,
                                     quantity: 20,
+                                    type: "",
+                                    imageUrl: ""
                                 }
                             ],
                             id: 43081,
                             quantity: 0,
-                            type: "variable"
+                            type: "variable",
+                            imageUrl: ""
                         },
                     ],
                 )
@@ -65,7 +77,9 @@ const Product = () =>
                     {
                         id: 46817,
                         quantity: 30,
-                        type: "simple"
+                        type: "simple",
+                        options: [],
+                        imageUrl: ""
                     },
                 ], orderId);
             }
@@ -85,8 +99,8 @@ const Product = () =>
                 <Section className="section" isContainer={true}>
                     <h1>Koszyk</h1>
                     <Box display={"flex"}>
-                        <CartTable products={cartRows} isLoading={isLoading} />
-                        <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
+                        <CartTable products={items} isLoading={isLoading} />
+                        {/* <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} /> */}
                     </Box>
                     <AddCoupon orderId={orderId && orderId} />
                 </Section>

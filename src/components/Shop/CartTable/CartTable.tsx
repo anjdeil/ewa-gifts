@@ -7,8 +7,7 @@ import { useAppDispatch } from '@/hooks/redux';
 import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
 import { CartTableProps, cartProduct } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
-import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
-
+// import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
 export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
 {
@@ -67,12 +66,12 @@ export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
                                 </IconButton>
                             </Box>
                             <Box>
-                                <Image
+                                {/* <Image
                                     src={product.image.src}
                                     width={75}
                                     height={75}
                                     alt={product.name}
-                                />
+                                /> */}
                             </Box>
                             <Box className={`${styles.cartItem__title}`}>
                                 <Typography variant='h6' className='desc'>
