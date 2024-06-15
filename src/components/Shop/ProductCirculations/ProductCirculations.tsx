@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import EwaInput from "@/components/EwaComponents/EwaInput";
 import EwaSlider from "@/components/EwaComponents/EwaSlider";
 import Price from "../Price";
+import { circulatedPriceType } from "@/types/Shop/ProductCalculations";
 
-const ProductCirculations = ({ product, onChangeQuantity, circulatedPrices, currentQuantity }) => {
-    const lastCirculationQuantity = circulatedPrices.length ? circulatedPrices.at(-1).from : 10000;
+interface ProductCirculationsPropsType {
+    stock: number,
+    onChangeQuantity: any,
+    circulatedPrices: circulatedPriceType[],
+    currentQuantity: number
+}
+
+const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChangeQuantity, circulatedPrices, currentQuantity }) => {
+    const lastCirculationQuantity = circulatedPrices.length ? circulatedPrices.at(-1)?.from : 10000;
 
     const circulationMarks = circulatedPrices.map(({ from }) => ({
         value: from,
@@ -14,13 +22,13 @@ const ProductCirculations = ({ product, onChangeQuantity, circulatedPrices, curr
     return (
         <>
             <h3 className="product-page-h3">Cena za sztukę zależy od nakładu</h3>
-            {Boolean(product.stock) && (
+            {Boolean(stock) && (
                 <div className={styles["circulations-modifier"]}>
                     <EwaInput value={currentQuantity} type="number" onChange={onChangeQuantity} />
                     <EwaSlider
                         marks={circulationMarks}
                         min={1} max={lastCirculationQuantity}
-                        getAriaLabel={() => 'Temperature range'}
+                        getAriaLabel={() => 'Quantity range'}
                         value={currentQuantity}
                         onChange={onChangeQuantity}
                         valueLabelDisplay="off"
@@ -39,7 +47,7 @@ const ProductCirculations = ({ product, onChangeQuantity, circulatedPrices, curr
                 </div>
                 {circulatedPrices.map(({ label, from, price }, index, circulations) => {
                     const to = index !== circulations.length - 1 ? circulations[index + 1].from : Infinity;
-                    const isActive = (currentQuantity >= from && currentQuantity < to) && product.stock;
+                    const isActive = (currentQuantity >= from && currentQuantity < to) && stock;
                     return (
                         <div className={`${styles["circulations-table__col"]} ${isActive ? styles["circulations-table__col_active"] : ''}`}>
                             <div className={styles["circulations-table__col-header"]}>

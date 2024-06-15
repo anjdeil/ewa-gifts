@@ -1,6 +1,16 @@
-const getCirculatedPrices = (price, { type, circulations }) => {
-    const circulatedPrices = [];
-    const alreadyUsedCirculation = Object.values(circulations).at(-1);
+import { circulatedPriceType } from "@/types/Shop/ProductCalculations";
+
+interface circulationsMeta {
+    type: string,
+    circulations: {
+        [key: number]: number;
+    }
+};
+
+const getCirculatedPrices = (price: number, { type, circulations }: circulationsMeta) => {
+
+    const circulatedPrices: circulatedPriceType[] = [];
+    const alreadyUsedCirculation = Object.values(circulations).at(-1) || 0;
     const uncirculatedPrice = type === 'direct' ? alreadyUsedCirculation : price / alreadyUsedCirculation;
 
 

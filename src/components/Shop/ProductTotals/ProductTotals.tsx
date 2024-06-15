@@ -1,12 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import styles from "./styles.module.scss";
-import variables from "@/styles/variables.module.scss";
 import { EwaButton } from "@/components/EwaComponents/EwaButton";
-
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 import Price from "../Price";
-const ProductTotals = ({ currentQuantity, circulatedPrices }) => {
-    const circulatedPrice = getCirculatedPrice(currentQuantity, circulatedPrices);
+import { circulatedPriceType } from "@/types/Shop/ProductCalculations";
+
+interface ProductTotalsPropsType {
+    currentQuantity: number,
+    circulatedPrices: circulatedPriceType[]
+}
+
+const ProductTotals: FC<ProductTotalsPropsType> = ({ currentQuantity, circulatedPrices }) => {
+
+    const circulatedPrice = getCirculatedPrice(currentQuantity, circulatedPrices) || 0;
     const total = circulatedPrice * currentQuantity;
 
     return (

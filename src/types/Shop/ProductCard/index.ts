@@ -15,7 +15,7 @@ export const ProductCardSchema = z.object({
     images: z.array(z.string()),
     name: z.string(),
     sale_price: z.string(),
-    price: z.string(),
+    price: z.number().nullable(),
     price_html: z.string(),
     sku: z.string(),
     slug: z.string(),
@@ -25,7 +25,7 @@ export const ProductCardSchema = z.object({
     isSized: z.boolean(),
     type: z.string(),
     quantity: z.number().optional(),
-    metaData: z.array(ProductMetaSchema).optional()
+    metaData: z.array(ProductMetaSchema)
 });
 
 const ProductCardPropsSchema = z.object({
