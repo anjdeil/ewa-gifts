@@ -1,14 +1,11 @@
 import React from "react";
 import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
-// import {transformProductCard} from "@/services/transformers";
-
 
 const ProductInfo = ({data}) => {
     const [{name, description, price, sku, images }] = data;
-    console.log(data);
+
     return (
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
@@ -29,7 +26,10 @@ const ProductInfo = ({data}) => {
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
+                            expandIcon={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            }
                             aria-controls="panel1-content"
                             id="panel1-header"
                             className={styles.accordion__opis}
@@ -45,7 +45,10 @@ const ProductInfo = ({data}) => {
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
+                            expandIcon={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            }
                             aria-controls="panel1-content"
                             id="panel1-header"
                             className={styles.accordion__opis}

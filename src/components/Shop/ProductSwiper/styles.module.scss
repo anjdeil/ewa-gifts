@@ -1,15 +1,20 @@
 @import "@/styles/variables.module.scss";
 .forNav {
+	max-width: 600px;
 	&__nextBtn,
 	&__prevBtn {
 		width: 48px;
 		height: 48px;
+		& svg {
+			width: 20px;
+			height: 20px;
+		}
 	}
 	&__nextBtn {
-		right: 12px;
+		right: -12px;
 	}
 	&__prevBtn {
-		left: 12px;
+		left: -12px;
 	}
 	&__nextBtn:after,
 	&__prevBtn:after {
@@ -18,8 +23,15 @@
 }
 .slide {
 	text-align: center;
+	&__btn {
+		border: none;
+		background-color: transparent;
+		box-shadow: none;
+		padding: 0;
+		cursor: pointer;
+	}
 	&__img {
-		max-width: 630px;
+		max-width: 600px;
 		width: 100%;
 		height: auto;
 	}
@@ -30,9 +42,10 @@
 .navSlide {
 	text-align: center;
 	&__img {
-		max-width: 110px;
-		width: 100%;
-		height: auto;
+		width: 112px;
+		height: 112px;
+		object-fit: cover;
 		border-radius: 10px;
+		cursor: pointer;
 	}
 }
