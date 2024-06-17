@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 import React from 'react';
 import axios from "axios";
 import variables from '@/styles/variables.module.scss';
+import Link from "next/link";
 
 const NewPasswordSchema = z.object({
     email: z.string().email('Please, type valid email'),
@@ -43,10 +44,11 @@ export const NewPassword: FC = () =>
 
     const onSubmit = async (data: NewPassword) =>
     {
+        setErrorMessage('');
         const body = {
             email: data.email,
-            password: data.password,
             code: data.code,
+            password: data.password,
         }
 
         try
@@ -108,9 +110,14 @@ export const NewPassword: FC = () =>
                         key={'confirmPassword'}
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Reset'}</button>
-                    {(isSubmitSuccessful && !errorMessage) && <p style={{ color: variables.successfully }}>
-                        The password was successfully changed
-                    </p>}
+                    {(isSubmitSuccessful && !errorMessage && !isSubmitting) &&
+                        <p style={{ color: variables.successfully }}>
+                            The password was successfully changed.
+                            <Link style={{ marginLeft: '5px' }} href={"/my-account/login"}>
+                                Try to Login.
+                            </Link>
+                        </p>
+                    }
                     {errorMessage && (
                         <p style={{ color: variables.error }}>
                             {errorMessage}

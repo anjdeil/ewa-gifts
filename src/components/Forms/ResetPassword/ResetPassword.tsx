@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { object, z } from "zod";
+import { z } from "zod";
 import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
 import React from 'react';
 import axios from "axios";
 import variables from '@/styles/variables.module.scss';
+import Link from "next/link";
 
 const ResetPasswordSchema = z.object({
     email: z.string().email('Please, type valid email'),
@@ -24,6 +25,7 @@ export const ResetPassword: FC = () =>
 
     const onSubmit = async (data: ResetPassword) =>
     {
+        setErrorMessage('');
         try
         {
             const response = await axios({
@@ -68,9 +70,11 @@ export const ResetPassword: FC = () =>
                         errors={errors}
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Reset'}</button>
-                    {(isSubmitSuccessful && !errorMessage) && <p style={{ color: variables.successfully }}>
-                        Check your email to reset the password
-                    </p>}
+                    {(isSubmitSuccessful && !errorMessage && !isSubmitting) &&
+                        <p style={{ color: variables.successfully }}>
+                            Check your email to reset the password.
+                        </p>
+                    }
                     {errorMessage && (
                         <p style={{ color: variables.error }}>
                             {errorMessage}
