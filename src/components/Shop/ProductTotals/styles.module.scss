@@ -1,0 +1,19 @@
+.product-totals {
+    margin-bottom: 30px;
+
+    &__total {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        &-subtotal {
+            margin-top: 0.5em;
+            font-size: 0.9em;
+        }
+    }
+
+    &__button {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
