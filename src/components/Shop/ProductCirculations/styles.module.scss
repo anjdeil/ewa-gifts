@@ -1,0 +1,58 @@
+@import "@/styles/variables.module.scss";
+
+.circulations {
+    &-table {
+        display: flex;
+        color: $black-color;
+        border: 1px solid $input-darker;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+
+        &__col {
+            flex-grow: 1;
+            text-align: center;
+            border-right: 1px solid $input-darker;
+
+            &_active {
+                outline: 2px solid $accent;
+                border-right: none;
+                border-radius: 10px;
+
+                .circulations-table__col-header {
+                    border-bottom: 1px solid $accent;
+                }
+            }
+
+            &:last-child {
+                border-right: none;
+            }
+
+            &-header {
+                height: 50px;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid $input-darker;
+                justify-content: center;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+            &-cell {
+                height: 70px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    &-modifier {
+        margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 20px;
+    }
+}

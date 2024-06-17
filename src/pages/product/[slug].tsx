@@ -11,22 +11,19 @@ import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/
 // import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 // import {useLazyFetchProductVariationsQuery} from '@/store/wooCommerce/wooCommerceApi';
 
-const Product = () =>
-{
+const Product = () => {
 
   // const router = useRouter();
   // const { slug } = router.query;
 
-  const { data } = useFetchProductListQuery({ slug: '4-kolorowy-zakreslacz-kwadratowy-trafalgar' });
+  const { data } = useFetchProductListQuery({ slug: 'lampka-czolowa-herlen-schwarzwolf' });
   console.log(data);
   let info;
-  if (data)
-  {
+  if (data) {
     info = transformProductCard(data);
   }
 
-  if (!info || info.length === 0)
-  {
+  if (!info || info.length === 0) {
     return <p>No product found</p>;
   }
 
