@@ -6,17 +6,21 @@ import { useSelector } from "react-redux";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { useLazyFetchProductVariationsQuery } from "@/store/wooCommerce/wooCommerceApi";
 
-const findVariationByOptions = (variations, options) => {
-    return variations.find(variation => {
+const findVariationByOptions = (variations, options) =>
+{
+    return variations.find(variation =>
+    {
         let found = true;
-        variation.attributes.forEach(({ slug, option }) => {
+        variation.attributes.forEach(({ slug, option }) =>
+        {
             if (options[slug] !== option) found = false;
         });
         return found;
     })
 }
 
-const CheckPage = () => {
+const CheckPage = () =>
+{
     const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
 
     const product = {
@@ -49,19 +53,23 @@ const CheckPage = () => {
         pa_color: 'bordowy (#990505)'
     });
 
-    const onChangeColor = (evt) => {
+    const onChangeColor = (evt) =>
+    {
         setChoosenOptions((choosenOptions) => ({
             ...choosenOptions,
             pa_color: evt.target.value
         }))
     }
 
-    const onAddedToCart = async (evt) => {
+    const onAddedToCart = async (evt) =>
+    {
         evt.preventDefault();
 
-        if (product.type === 'variable') {
+        if (product.type === 'variable')
+        {
             let variationsData = variations;
-            if (variationsData === undefined) {
+            if (variationsData === undefined)
+            {
                 const { data } = await fetchProductVariations(product.id);
                 variationsData = data;
             }
@@ -77,7 +85,8 @@ const CheckPage = () => {
                 })
             );
 
-        } else {
+        } else
+        {
             dispatch(
                 addedToCart({
                     id: product.id,
@@ -122,21 +131,23 @@ const CheckPage = () => {
                     </label>
                     <br /><br />
                     <button onClick={onAddedToCart}>Add to cart</button>
-                    <button onClick={(evt) => {
+                    <button onClick={(evt) =>
+                    {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 32937,
+                            id: 47566,
                             type: 'simple',
                             variationId: null,
                             choosenOptions: null
                         }))
                     }}>Add simple product</button>
-                    <button onClick={(evt) => {
+                    <button onClick={(evt) =>
+                    {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 35198,
+                            id: 47426,
                             type: 'variable',
-                            variationId: 35286,
+                            variationId: 47441,
                             choosenOptions: {
                                 pa_color: 'granatowy (#204060)'
                             }
