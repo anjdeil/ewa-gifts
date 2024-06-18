@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { useFetchCategoryListQuery } from "@/store/custom/customApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./styles.module.scss";
 import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
@@ -11,13 +11,15 @@ import MobileCategoryBars from "./MobileCategoryBars";
 export const CategoryBars = () => {
     const isMobile = useMediaQuery('(max-width: 1200px)');
 
-    const { data = [], isLoading, isError, error } = useFetchAllCategoriesListQuery();
+    const { data = [], isLoading, isError, error } = useFetchCategoryListQuery({});
 
     if (isLoading) {
         return (<CategoryBarsSkeleton />)
     }
 
-    const categories = data.length ? transformCategoryBars(data) : [];
+    // console.log("Categories", data);
+    const categories = data.data.items.length ? transformCategoryBars(data.data.items) : [];
+
 
     if (isMobile) {
         return (<MobileCategoryBars categories={categories} />);

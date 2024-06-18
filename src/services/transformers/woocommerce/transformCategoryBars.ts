@@ -1,10 +1,8 @@
-const transformCategoryBars = (response) =>
-{
+const transformCategoryBars = (response) => {
     const categories = [];
 
-    response.forEach(parentRow =>
-    {
-        if (parentRow.parent) return;
+    response.forEach(parentRow => {
+        if (parentRow.parent_id) return;
 
         if (parentRow.slug === "uncategorized") return;
 
