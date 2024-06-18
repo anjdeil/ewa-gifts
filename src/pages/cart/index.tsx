@@ -41,7 +41,6 @@ const Product = () =>
             {
                 if (!productLineIds) return;
                 updateOrder(productLineIds, items, orderId);
-                console.log('asd')
                 if (updatedOrder)
                 {
                     setProducts(updatedOrder.line_items);

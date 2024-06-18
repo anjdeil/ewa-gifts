@@ -1,21 +1,45 @@
-import React from "react";
+import React, { FC } from "react";
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
 import ProductCalculations from "../ProductCalculations";
-// import {transformProductCard} from "@/services/transformers";
+import { ProductInfoProps } from "@/types";
 
+const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
+{
+    // if (product)
+    // {
+    //     console.log(product);
+    // }
 
-const ProductInfo = ({ data }) => {
-    const [{ name, description, price, sku, images }] = data;
+    const { name, description, price, sku, images, attributes } = product;
+    const colors = attributes.find(attr => attr.name === "color");
 
+    function transformProductColors(colorAttributes)
+    {
+        return colorAttributes.map(attr =>
+        {
+            const colorString = attr.name;
+            const startIndex = colorString.indexOf('#');
+            let newColorValue;
+            if (startIndex !== -1)
+            {
+                const endIndex = colorString.indexOf(')', startIndex);
+                newColorValue = colorString.substring(startIndex, endIndex);
+            }
+            // attr.
+        });
+    }
+
+    console.log(transformProductColors(colors.options));
 
     return (
+        // <div></div>
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
-                <ProductSwiper data={images} />
+                {/* <ProductSwiper data={images} /> */}
             </Box>
             <Box className={styles.product__info}>
                 <Typography variant='h1' className={styles.product__info_title} title={name}>
@@ -29,14 +53,19 @@ const ProductInfo = ({ data }) => {
                         {price}
                     </Typography>
                 </Box>
+                <Box>
+                    <Typography variant='h3' className={styles.product__info_sku}>
+                        Dostępne kolory:
+                    </Typography>
+                </Box>
 
-                <ProductCalculations product={data[0]} />
+                {/* <ProductCalculations product={product} /> */}
 
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary
                             expandIcon={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             }
                             aria-controls="panel1-content"
@@ -55,7 +84,7 @@ const ProductInfo = ({ data }) => {
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary
                             expandIcon={<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M1 7L7 1L13 7" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             }
                             aria-controls="panel1-content"
