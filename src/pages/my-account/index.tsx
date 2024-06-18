@@ -16,7 +16,7 @@ export type MyAccountProps = z.infer<typeof MyAccountPropsSchema>;
 const MyAccount: FC<MyAccountProps> = () =>
 {
   const [cookie] = useCookies(['userToken']);
-  const [fetchCheckLoggedIn, { data }] = useFetchCheckLoggedInMutation();
+  const [fetchCheckLoggedIn, { error, data }] = useFetchCheckLoggedInMutation();
   const router = useRouter();
   const pageTitle = "My-account";
 
@@ -25,9 +25,13 @@ const MyAccount: FC<MyAccountProps> = () =>
     if ("userToken" in cookie)
     {
       fetchCheckLoggedIn(cookie.userToken);
-      if (data && data.data.status !== 200)
+      if (data)
       {
-        router.push('/my-account/login');
+        console.log(data.data.status !== 200);
+      }
+      if (error)
+      {
+        console.log(error);
       }
     } else
     {
@@ -35,6 +39,11 @@ const MyAccount: FC<MyAccountProps> = () =>
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookie]);
+
+  if (data)
+  {
+    console.log(data.data.status !== 200);
+  }
 
   return (
     <>

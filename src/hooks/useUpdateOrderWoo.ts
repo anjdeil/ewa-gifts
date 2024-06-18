@@ -10,7 +10,7 @@ import { transformDeleteOrderProducts } from "@/services/transformers/woocommerc
 export const useUpdateOrderWoo = () =>
 {
     const dispatch = useAppDispatch();
-    const [fetchUpdateOrder] = useFetchUpdateOrderMutation();
+    const [fetchUpdateOrder, { data: updatedOrder }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,5 +55,5 @@ export const useUpdateOrderWoo = () =>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, fetchUpdateOrder]);
 
-    return { updateOrder, isLoading, error };
+    return { updateOrder, isLoading, error, updatedOrder };
 };

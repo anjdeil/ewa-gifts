@@ -16,7 +16,7 @@ export function handleError(error: AxiosError, res: CustomResponse)
 {
     if (error.response)
     {
-        const data = error.response.data as ErrorResponseData; // Type assertion
+        const data = error.response.data as ErrorResponseData;
         console.error('API error:', data);
         res.status(error.response.status).json({
             message: data.message || 'API Error',
