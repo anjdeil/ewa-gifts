@@ -1,12 +1,9 @@
 import Head from "next/head";
-import { useCookies } from 'react-cookie';
 import { z } from "zod";
-import { FC, useEffect } from "react";
-import { useFetchCheckLoggedInMutation } from "@/store/jwt/jwtApi";
+import { FC } from "react";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { useRouter } from "next/router";
-import { LoginForm } from "@/components/Forms/LoginForm";
 import { Section } from "@/components/Layouts/Section";
+import { ResetPassword } from "@/components/Forms/ResetPassword";
 
 export const MyAccountPropsSchema = z.object({
     userToken: z.string(),
@@ -16,24 +13,7 @@ export type MyAccountProps = z.infer<typeof MyAccountPropsSchema>;
 
 const MyAccount: FC<MyAccountProps> = () =>
 {
-    const [cookie] = useCookies(['userToken']);
-    const [fetchCheckLoggedIn, { data }] = useFetchCheckLoggedInMutation();
-    const router = useRouter();
-
-    useEffect(() =>
-    {
-        if ("userToken" in cookie)
-        {
-            fetchCheckLoggedIn(cookie.userToken);
-            if (data && data.data.status === 200)
-            {
-                router.push('/my-account');
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cookie]);
-
-    const pageTitle = "Login";
+    const pageTitle = "Reset-password";
     return (
         <>
             <Head>
@@ -44,10 +24,10 @@ const MyAccount: FC<MyAccountProps> = () =>
                 <Section className={"section"} isContainer={true}>
                     <Breadcrumbs links={[
                         { name: 'my-account', url: '/my-account' },
-                        { name: 'login', url: '/my-account/login' }
+                        { name: 'reset-password', url: '/my-account/reset-password' }
                     ]} />
                     <h1>{pageTitle}</h1>
-                    <LoginForm />
+                    <ResetPassword />
                 </Section>
 
             </main>

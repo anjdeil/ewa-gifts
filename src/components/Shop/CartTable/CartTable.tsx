@@ -7,11 +7,15 @@ import { useAppDispatch } from '@/hooks/redux';
 import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
 import { CartTableProps, cartProduct } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
-import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
-
+// import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
 export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
 {
+    if (products)
+    {
+        console.log(products);
+    }
+
     const dispatch = useAppDispatch();
 
     const changeProductsAmount = React.useCallback((product: cartProduct, count: string) =>
