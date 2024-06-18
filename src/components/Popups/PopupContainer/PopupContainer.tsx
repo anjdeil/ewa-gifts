@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MobileSearchPopup from "@/components/Popups/MobileSearchPopup";
 import HamburgerMenu from "@/components/Popups/HamburgerMenu";
 import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
+import SwiperPopup from "@/components/Popups/SwiperPopup/SwiperPopup";
 
 const PopupContainer = () => {
     const dispatch = useDispatch();
@@ -36,6 +37,11 @@ const PopupContainer = () => {
         case 'mobile-filter': {
             return (
                 <MobileSidebar />
+            )
+        }
+        case 'swiper-popup': {
+            return (
+                <SwiperPopup onClose={closePopup} />
             )
         }
     }

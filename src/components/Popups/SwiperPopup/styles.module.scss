@@ -1,0 +1,67 @@
+@import "@/styles/variables.module.scss";
+
+.swiper_popup {
+	position: fixed;
+	z-index: 1000;
+	background-color: #00000066;
+	inset: 0;
+	&__body {
+		max-width: 690px;
+		width: 100%;
+		height: auto;
+		background-color: $white;
+		padding: 20px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 10px;
+	}
+	&__close {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		border-radius: 10px;
+		z-index: 100;
+	}
+}
+.forNav {
+	max-width: 650px;
+	position: static;
+	&__nextBtn,
+	&__prevBtn {
+		width: 48px;
+		height: 48px;
+		& svg {
+			width: 20px;
+			height: 20px;
+		}
+	}
+	&__nextBtn {
+		right: 0;
+		z-index: 100;
+	}
+	&__prevBtn {
+		left: 0;
+		z-index: 100;
+	}
+	&__nextBtn:after,
+	&__prevBtn:after {
+		font-size: 0;
+	}
+}
+.slide {
+	text-align: center;
+	&__btn {
+		border: none;
+		background-color: transparent;
+		box-shadow: none;
+		padding: 0;
+		cursor: pointer;
+	}
+	&__img {
+		max-width: 590px;
+		width: 100%;
+		height: auto;
+	}
+}
