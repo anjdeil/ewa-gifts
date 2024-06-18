@@ -8,7 +8,7 @@ const CartItemVariationSchema = z.object({
     imageUrl: z.string()
 });
 
-const CartItemSchema = z.object({
+export const CartItemSchema = z.object({
     id: z.number(),
     options: z.array(CartItemVariationSchema),
     quantity: z.number(),

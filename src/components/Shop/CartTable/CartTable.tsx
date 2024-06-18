@@ -11,6 +11,11 @@ import IconButton from '@mui/material/IconButton';
 
 export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
 {
+    if (products)
+    {
+        console.log(products);
+    }
+
     const dispatch = useAppDispatch();
 
     const changeProductsAmount = React.useCallback((product: cartProduct, count: string) =>
@@ -66,12 +71,12 @@ export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
                                 </IconButton>
                             </Box>
                             <Box>
-                                {/* <Image
+                                <Image
                                     src={product.image.src}
                                     width={75}
                                     height={75}
                                     alt={product.name}
-                                /> */}
+                                />
                             </Box>
                             <Box className={`${styles.cartItem__title}`}>
                                 <Typography variant='h6' className='desc'>

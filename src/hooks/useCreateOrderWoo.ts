@@ -9,7 +9,7 @@ import { CartItem } from "@/types";
 export const useCreateOrderWoo = () =>
 {
     const dispatch = useAppDispatch();
-    const [fetchCreateOrder] = useFetchCreateOrderMutation();
+    const [fetchCreateOrder, { data: createdOrder }] = useFetchCreateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,5 +48,5 @@ export const useCreateOrderWoo = () =>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, fetchCreateOrder]);
 
-    return { createOrder, isLoading, error };
+    return { createOrder, isLoading, error, createdOrder };
 };

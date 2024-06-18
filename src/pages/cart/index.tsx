@@ -1,9 +1,8 @@
-// import { useRouter } from "next/router";
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { useEffect } from "react";
-import { CartSummary } from "@/components/Shop/CartSummary";
+import { useEffect, useState } from "react";
+// import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
@@ -12,18 +11,12 @@ import { Section } from "@/components/Layouts/Section";
 
 const Product = () =>
 {
-    // const router = useRouter();
-    // const { slug } = router.query;
     const dispatch = useAppDispatch();
     const { items, isLoading } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
-    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError } = useCreateOrderWoo();
-    const { updateOrder } = useUpdateOrderWoo();
-
-    if (items)
-    {
-        console.log(items);
-    }
+    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError, createdOrder } = useCreateOrderWoo();
+    const { updateOrder, updatedOrder } = useUpdateOrderWoo();
+    const [products, setProducts] = useState(null);
 
     useEffect(() =>
     {
@@ -31,37 +24,11 @@ const Product = () =>
         {
             if (!orderId)
             {
-                createOrder(
-                    [
-                        {
-                            id: 46817,
-                            quantity: 2,
-                            type: "simple",
-                            options: [],
-                            imageUrl: ""
-                        },
-                        {
-                            options: [
-                                {
-                                    id: 43111,
-                                    quantity: 10,
-                                    type: "",
-                                    imageUrl: ""
-                                },
-                                {
-                                    id: 43106,
-                                    quantity: 20,
-                                    type: "",
-                                    imageUrl: ""
-                                }
-                            ],
-                            id: 43081,
-                            quantity: 0,
-                            type: "variable",
-                            imageUrl: ""
-                        },
-                    ],
-                )
+                createOrder(items);
+                if (createdOrder)
+                {
+                    setProducts(createdOrder.line_items);
+                }
                 if (isCreatingOrder)
                 {
                     console.log('Loading...');
@@ -73,15 +40,12 @@ const Product = () =>
             } else
             {
                 if (!productLineIds) return;
-                updateOrder(productLineIds, [
-                    {
-                        id: 46817,
-                        quantity: 30,
-                        type: "simple",
-                        options: [],
-                        imageUrl: ""
-                    },
-                ], orderId);
+                updateOrder(productLineIds, items, orderId);
+                console.log('asd')
+                if (updatedOrder)
+                {
+                    setProducts(updatedOrder.line_items);
+                }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +63,7 @@ const Product = () =>
                 <Section className="section" isContainer={true}>
                     <h1>Koszyk</h1>
                     <Box display={"flex"}>
-                        <CartTable products={items} isLoading={isLoading} />
+                        {products && <CartTable products={products} isLoading={isLoading} />}
                         {/* <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} /> */}
                     </Box>
                     <AddCoupon orderId={orderId && orderId} />
