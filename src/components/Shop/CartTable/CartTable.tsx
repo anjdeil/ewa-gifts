@@ -1,24 +1,21 @@
-import * as React from 'react';
 import Image from 'next/image';
 import { Box, Skeleton, Typography } from '@mui/material';
 import styles from './styles.module.scss';
 import { Counter } from '@/components/Buttons';
 import { useAppDispatch } from '@/hooks/redux';
 import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
-import { CartTableProps, cartProduct } from '@/types/Cart';
+import { CartProduct, CartTableProps } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
+import { FC, useCallback } from 'react';
 // import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
 
-export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
+export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 {
-    if (products)
-    {
-        console.log(products);
-    }
-
     const dispatch = useAppDispatch();
 
-    const changeProductsAmount = React.useCallback((product: cartProduct, count: string) =>
+    console.log(products);
+
+    const changeProductsAmount = useCallback((product: CartProduct, count: string) =>
     {
         dispatch(updatedCartQuantity({
             id: product.id,
@@ -27,21 +24,13 @@ export const CartTable: React.FC<CartTableProps> = ({ products, isLoading }) =>
         }));
     }, [dispatch]);
 
-    const deleteProduct = (product: cartProduct) =>
+    const deleteProduct = (product: CartProduct) =>
     {
         dispatch(deletedFromCart({
             id: product.id,
             type: product.type,
         }));
     }
-    // console.log(products);
-
-    // const deleteProduct = () => {
-    //     dispatch(deletedFromCart({
-    //         id: ,
-    //         type: ,
-    //     }));
-    // 
 
     return (
         <Box className={styles.CartTable}>
