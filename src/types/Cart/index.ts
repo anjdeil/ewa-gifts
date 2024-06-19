@@ -35,3 +35,4 @@ export const createOrderProductsSchema = z.object({
 
 export type CartTableProps = z.infer<typeof CartTablePropsSchema>
 export type createOrderProducts = z.infer<typeof createOrderProductsSchema>;
+export type CartProduct = z.infer<typeof CartProductsSchema>;
