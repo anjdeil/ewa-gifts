@@ -4,21 +4,30 @@ import React from "react";
 import { useFetchCategoryListQuery } from "@/store/custom/customApi";
 import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./styles.module.scss";
-import transformCategoryBars from "@/services/transformers/woocommerce/transformCategoryBars";
 import { useMediaQuery } from "@mui/material";
 import MobileCategoryBars from "./MobileCategoryBars";
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
+import MobileCategoryBarsSkeleton from "./MobileCategoryBarsSkeleton";
 
 export const CategoryBars = () => {
     const isMobile = useMediaQuery('(max-width: 1200px)');
 
-    const { data = [], isLoading, isError, error } = useFetchCategoryListQuery({});
+    const { data = [], isLoading } = useFetchCategoryListQuery({});
 
     if (isLoading) {
-        return (<CategoryBarsSkeleton />)
+        if (isMobile) {
+            return (<MobileCategoryBarsSkeleton />)
+        } else {
+            return (<CategoryBarsSkeleton />)
+        }
     }
 
-    // console.log("Categories", data);
-    const categories = data.data.items.length ? transformCategoryBars(data.data.items) : [];
+    const categories: CategoryType[] = data.data.items.length ?
+        data.data.items.filter((item: CategoryType) => {
+            if (item.parent_id) return false;
+            else if (item.slug === "uncategorized") return false;
+            else return true;
+        }) : [];
 
 
     if (isMobile) {
@@ -26,7 +35,7 @@ export const CategoryBars = () => {
     } else {
         return (
             <ul className={styles["categories-list"]}>
-                {categories?.map(({ id, categoryName, imageSrc, slug }) => (
+                {categories?.map(({ id, name, slug }) => (
                     <li key={id} className={styles["categories-list__item"]}>
                         <Link
                             href={`/product-category/${slug}`}
@@ -37,9 +46,9 @@ export const CategoryBars = () => {
                                 src={`/images/categories/${slug}.svg`}
                                 width={60}
                                 height={60}
-                                alt={categoryName}
+                                alt={name}
                             />
-                            <div className={styles["categories-list__name"]}>{categoryName}</div>
+                            <div className={styles["categories-list__name"]}>{name}</div>
                         </Link>
                     </li>
                 ))}
