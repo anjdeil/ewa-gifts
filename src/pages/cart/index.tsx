@@ -10,7 +10,7 @@ import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
 
-const Product = () =>
+const Cart = () =>
 {
     const { items, isLoading } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
@@ -21,21 +21,18 @@ const Product = () =>
 
     useEffect(() =>
     {
-        if (items.length > 0)
+        if (items && items.length > 0)
         {
             if (!orderId)
             {
                 createOrder(items);
-            } else
+            } else if (productLineIds)
             {
-                if (productLineIds)
-                {
-                    updateOrder(productLineIds, items, orderId);
-                }
+                updateOrder(productLineIds, items, orderId);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [items, orderId]);
+    }, [items]);
 
     useEffect(() =>
     {
@@ -44,16 +41,20 @@ const Product = () =>
             setTotal(createdOrder.total);
             setProducts(createdOrder.line_items);
         }
-    }, [createdOrder]);
+    }, [createdOrder, updatedOrder]);
 
     useEffect(() =>
     {
         if (updatedOrder)
         {
+            // console.log('Line_items', updatedOrder.line_items)
+            setProducts(null);
             setTotal(updatedOrder.total);
             setProducts(updatedOrder.line_items);
         }
-    }, [updatedOrder]);
+    }, [createdOrder, updatedOrder]);
+
+    // console.log("Products:", products);
 
     if (isCreatingOrder || isUpdatingOrder)
     {
@@ -84,4 +85,4 @@ const Product = () =>
     );
 }
 
-export default Product;
+export default Cart;

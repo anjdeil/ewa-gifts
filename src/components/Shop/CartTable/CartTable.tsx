@@ -13,8 +13,6 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 {
     const dispatch = useAppDispatch();
 
-    console.log(products);
-
     const changeProductsAmount = useCallback((product: CartProduct, count: string) =>
     {
         dispatch(updatedCartQuantity({
