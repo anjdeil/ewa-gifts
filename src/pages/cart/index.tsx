@@ -19,6 +19,8 @@ const Cart = () =>
     const [products, setProducts] = useState(null);
     const [total, setTotal] = useState('0');
 
+    const it = items;
+
     useEffect(() =>
     {
         if (items && items.length > 0)
@@ -32,7 +34,7 @@ const Cart = () =>
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [items]);
+    }, [it]);
 
     useEffect(() =>
     {
@@ -41,20 +43,16 @@ const Cart = () =>
             setTotal(createdOrder.total);
             setProducts(createdOrder.line_items);
         }
-    }, [createdOrder, updatedOrder]);
+    }, [createdOrder]);
 
     useEffect(() =>
     {
         if (updatedOrder)
         {
-            // console.log('Line_items', updatedOrder.line_items)
-            setProducts(null);
             setTotal(updatedOrder.total);
             setProducts(updatedOrder.line_items);
         }
-    }, [createdOrder, updatedOrder]);
-
-    // console.log("Products:", products);
+    }, [updatedOrder]);
 
     if (isCreatingOrder || isUpdatingOrder)
     {
