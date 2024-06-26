@@ -6,13 +6,14 @@ import { ProductCardList } from "../ProductCardsList";
 export const TopSeller: FC = () => {
     return (
         <>
-            <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
+            <div></div>
+            {/* <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
                 flexDirection: 'row'
             }}>
                 <TopSellerCard />
                 <TopSellerCard />
             </Box>
-            <ProductCardList products={[]} isLoading={false} isError={false} />
+            <ProductCardList products={[]} isLoading={false} isError={false} /> */}
         </>
     )
 }
