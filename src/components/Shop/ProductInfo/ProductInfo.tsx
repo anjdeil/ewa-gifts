@@ -10,6 +10,7 @@ import { ColorOptions } from "../ColorOptions";
 import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
 
+// 46791
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     console.log(product);
@@ -26,6 +27,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     {
         colorAttributes = transformColors(colors.options);
     }
+    console.log(product);
+    // console.log(transformProductColors(colors.options));
 
     return (
         <Box className={styles.product}>
