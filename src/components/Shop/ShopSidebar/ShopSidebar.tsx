@@ -22,6 +22,10 @@ const ShopSidebar = () => {
 
     const { data: colorsData = [], isLoading: isColorsLoading, isError: isColorsError, error: colorsError } = useFetchAttributeTermsQuery(9);
     const colors = colorsData.length ? transformColors(colorsData) : [];
+    console.log(colorsData);
+    console.log(colors);
+
+
 
     const targetCategory = categories.find(({ slug }) => slug === categorySlug);
 

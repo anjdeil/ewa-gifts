@@ -25,25 +25,21 @@ const imageBoxStyle = {
     height: '100%'
 };
 
-export const TopSellerCard: FC = () =>
-{
+export const TopSellerCard: FC = () => {
     const { data, isError } = useFetchProductListQuery({ per_page: 10 });
 
-    if (!data)
-    {
+    if (!data) {
         return <div>Products not found.</div>
     }
 
     let products;
 
-    if (data)
-    {
+    if (data) {
         products = transformProductCard(data);
 
     }
 
-    if (isError)
-    {
+    if (isError) {
         return <h3>Products not found.</h3>
     }
 
