@@ -135,7 +135,7 @@ const CheckPage = () =>
                     {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 47566,
+                            id: 47587,
                             type: 'simple',
                             variationId: null,
                             choosenOptions: null
@@ -145,9 +145,9 @@ const CheckPage = () =>
                     {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 47426,
+                            id: 44657,
                             type: 'variable',
-                            variationId: 47441,
+                            variationId: 44667,
                             choosenOptions: {
                                 pa_color: 'granatowy (#204060)'
                             }

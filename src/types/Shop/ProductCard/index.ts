@@ -110,5 +110,5 @@ export const ProductSchema = simpleProductSchema.extend({
     variations: z.array(simpleProductSchema),
 });
 
+export type ProductOptions = z.infer<typeof ProductOptionsSchema>;
 export type typeProductType = z.infer<typeof ProductSchema>;
-
