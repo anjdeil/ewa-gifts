@@ -7,6 +7,7 @@ import ProductTotals from "../ProductTotals";
 import ProductCalculations from "../ProductCalculations";
 import { ProductInfoProps } from "@/types";
 
+// 46791
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     // if (product)
@@ -32,8 +33,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             // attr.
         });
     }
-
-    console.log(transformProductColors(colors.options));
+    console.log(product);
+    // console.log(transformProductColors(colors.options));
 
     return (
         // <div></div>
