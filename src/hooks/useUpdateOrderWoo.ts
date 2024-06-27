@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
 import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 import { CartItem, transformDeleteOrderProductsType } from "@/types";
@@ -13,47 +13,46 @@ export const useUpdateOrderWoo = () =>
     const [fetchUpdateOrder, { data: updatedOrder }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-    const updateOrder = useCallback(async (
+    const { currentOrder: { orderId: id, productLineIds: liness } } = useAppSelector(state => state.currentOrderSlice);
+    const updateOrder = async (
         productLineIds: transformDeleteOrderProductsType,
         items: CartItem[],
-        orderId: number) =>
+        orderId: number
+    ) =>
     {
         setIsLoading(true);
         setError(null);
 
-        const fetchUpdateOrderBody = {
-            credentials: {
-                line_items: [
-                    ...transformDeleteOrderProducts(productLineIds),
-                    ...transformCreateOrderProducts(items)
-                ]
-            },
-            id: orderId
-        };
         try
         {
-            const createOrderData = await fetchUpdateOrder(fetchUpdateOrderBody).unwrap();
-            const lineItemsIds = transformLineItemsId(createOrderData.line_items);
-
-            dispatch(setLineItemsIds(lineItemsIds));
-        } catch (error)
+            console.log('start');
+            const updateOrderData = await fetchUpdateOrder({
+                credentials: {
+                    line_items: [
+                        ...transformDeleteOrderProducts(productLineIds),
+                        ...transformCreateOrderProducts(items)
+                    ]
+                },
+                id: orderId
+            }).unwrap();
+            console.log('middle');
+            dispatch(setLineItemsIds(transformLineItemsId(updateOrderData.line_items)));
+            console.log('finish');
+        } catch (err)
         {
-            if (error instanceof Error)
+            if (err instanceof Error)
             {
-                setError(error.message);
+                setError(err.message);
             } else
             {
                 setError('An unknown error occurred');
             }
-            console.error(error, 'Failed to create order');
+            console.error(err, 'Failed to update order');
         } finally
         {
             setIsLoading(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, fetchUpdateOrder]);
+    };
 
     return { updateOrder, isLoading, error, updatedOrder };
 };

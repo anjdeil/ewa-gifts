@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
@@ -6,37 +6,28 @@ import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
 import ProductCalculations from "../ProductCalculations";
 import { ProductInfoProps } from "@/types";
+import { ColorOptions } from "../ColorOptions";
+import { transformColors } from "@/services/transformers/woocommerce/transformColors";
+import { SizeOptions } from "../SizeOptions";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
-    // if (product)
-    // {
-    //     console.log(product);
-    // }
+    console.log(product);
 
     const { name, description, price, sku, images, attributes } = product;
     const colors = attributes.find(attr => attr.name === "color");
+    const sizes = attributes.find(attr => attr.name === "size");
+    // const [currentProduct, setCurrentProduct] = useState(
+    //     {
+    //     });
 
-    function transformProductColors(colorAttributes)
+    let colorAttributes;
+    if (colors)
     {
-        return colorAttributes.map(attr =>
-        {
-            const colorString = attr.name;
-            const startIndex = colorString.indexOf('#');
-            let newColorValue;
-            if (startIndex !== -1)
-            {
-                const endIndex = colorString.indexOf(')', startIndex);
-                newColorValue = colorString.substring(startIndex, endIndex);
-            }
-            // attr.
-        });
+        colorAttributes = transformColors(colors.options);
     }
 
-    console.log(transformProductColors(colors.options));
-
     return (
-        // <div></div>
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
                 {/* <ProductSwiper data={images} /> */}
@@ -57,10 +48,16 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles.product__info_sku}>
                         Dostępne kolory:
                     </Typography>
+                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes} />}
+                </Box>
+                <Box>
+                    <Typography variant='h3' className={styles.product__info_sku}>
+                        Wybierz rozmiar:
+                    </Typography>
+                    {sizes && <SizeOptions sizeAttributes={sizes.options} />}
                 </Box>
 
                 {/* <ProductCalculations product={product} /> */}
-
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary

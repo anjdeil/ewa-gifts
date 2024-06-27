@@ -1,54 +1,63 @@
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
-// import { CartSummary } from "@/components/Shop/CartSummary";
+import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
+import { Loader } from "@/components/Layouts/Loader";
 
-const Product = () =>
+const Cart = () =>
 {
-    const dispatch = useAppDispatch();
     const { items, isLoading } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
-    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError, createdOrder } = useCreateOrderWoo();
-    const { updateOrder, updatedOrder } = useUpdateOrderWoo();
+    const { createOrder, isLoading: isCreatingOrder, createdOrder } = useCreateOrderWoo();
+    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
     const [products, setProducts] = useState(null);
+    const [total, setTotal] = useState('0');
+
+    const it = items;
 
     useEffect(() =>
     {
-        if (items.length > 0)
+        if (items && items.length > 0)
         {
             if (!orderId)
             {
                 createOrder(items);
-                if (createdOrder)
-                {
-                    setProducts(createdOrder.line_items);
-                }
-                if (isCreatingOrder)
-                {
-                    console.log('Loading...');
-                }
-                if (isCreateOrderError)
-                {
-                    console.log(isCreateOrderError);
-                }
-            } else
+            } else if (productLineIds)
             {
-                if (!productLineIds) return;
                 updateOrder(productLineIds, items, orderId);
-                if (updatedOrder)
-                {
-                    setProducts(updatedOrder.line_items);
-                }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, items, orderId]);
+    }, [it]);
+
+    useEffect(() =>
+    {
+        if (createdOrder)
+        {
+            setTotal(createdOrder.total);
+            setProducts(createdOrder.line_items);
+        }
+    }, [createdOrder]);
+
+    useEffect(() =>
+    {
+        if (updatedOrder)
+        {
+            setTotal(updatedOrder.total);
+            setProducts(updatedOrder.line_items);
+        }
+    }, [updatedOrder]);
+
+    if (isCreatingOrder || isUpdatingOrder)
+    {
+        return <Loader size={100} thickness={4} />
+    }
 
     return (
         <>
@@ -62,14 +71,16 @@ const Product = () =>
                 <Section className="section" isContainer={true}>
                     <h1>Koszyk</h1>
                     <Box display={"flex"}>
-                        {products && <CartTable products={products} isLoading={isLoading} />}
-                        {/* <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} /> */}
+                        <Box>
+                            {products && <CartTable products={products} isLoading={isLoading} />}
+                            <AddCoupon orderId={orderId && orderId} />
+                        </Box>
+                        <CartSummary total={total} sum={total} isLoading={isLoading} />
                     </Box>
-                    <AddCoupon orderId={orderId && orderId} />
                 </Section>
             </main >
         </>
     );
 }
 
-export default Product;
+export default Cart;
