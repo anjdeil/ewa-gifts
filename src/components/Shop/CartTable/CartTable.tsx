@@ -15,11 +15,11 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 
     const changeProductsAmount = useCallback((product: CartProduct, count: string) =>
     {
-        dispatch(updatedCartQuantity({
-            id: product.id,
-            type: product.type,
-            quantity: count,
-        }));
+        // dispatch(updatedCartQuantity({
+        //     id: product.id,
+        //     type: product.type,
+        //     quantity: count,
+        // }));
     }, [dispatch]);
 
     const deleteProduct = (product: CartProduct) =>
@@ -67,7 +67,8 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                             </Box>
                             <Box className={`${styles.cartItem__title}`}>
                                 <Typography variant='h6' className='desc'>
-                                    {product.name}
+                                    {/* {product.name} */}
+                                    {product.id}
                                 </Typography>
                             </Box>
                         </Box>

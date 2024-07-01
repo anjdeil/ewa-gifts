@@ -23,12 +23,7 @@ export const useCreateOrderWoo = () =>
         try
         {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
-            const currentOrderId = createOrderData.id;
             const lineItemsIds = transformLineItemsId(createOrderData.line_items);
-
-            localStorage.setItem('currentOrderItems', JSON.stringify(lineItemsIds));
-            localStorage.setItem('currentOrderId', currentOrderId);
-
             dispatch(setCurrentOrder(createOrderData.id));
             dispatch(setLineItemsIds(lineItemsIds));
         } catch (error)

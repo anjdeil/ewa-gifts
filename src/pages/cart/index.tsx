@@ -1,40 +1,64 @@
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
-import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
+// import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
+import { transformDeleteOrderProducts } from "@/services/transformers/woocommerce/transformDeleteOrderProducts";
+import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
+import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
+import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
+import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 
 const Cart = () =>
 {
     const { items, isLoading } = useAppSelector(state => state.Cart);
-    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
+    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrder);
     const { createOrder, isLoading: isCreatingOrder, createdOrder } = useCreateOrderWoo();
-    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
+    // const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
+    const [fetchUpdateOrder, { data: updatedOrder, isLoading: isUpdatingOrder }] = useFetchUpdateOrderMutation();
+    const dispatch = useAppDispatch();
     const [products, setProducts] = useState(null);
     const [total, setTotal] = useState('0');
+    const [isUpdating, setIsUpdating] = useState(false);
 
-    const it = items;
-
-    useEffect(() =>
+    const updateOrder = async () =>
     {
         if (items && items.length > 0)
         {
             if (!orderId)
             {
                 createOrder(items);
-            } else if (productLineIds)
+            } else if (productLineIds && !isUpdatingOrder && !isUpdating)
             {
-                updateOrder(productLineIds, items, orderId);
+                setIsUpdating(true);
+                const response = await fetchUpdateOrder({
+                    credentials: {
+                        line_items: [
+                            ...transformDeleteOrderProducts(productLineIds),
+                            ...transformCreateOrderProducts(items)
+                        ]
+                    },
+                    id: orderId
+                }).unwrap();
+                console.log(productLineIds);
+                console.log(response.line_items);
+                dispatch(setLineItemsIds(transformLineItemsId(response.line_items)));
+                // updateOrder(productLineIds, items, orderId);
+                setIsUpdating(false);
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [it]);
+    }
+
+    useEffect(() =>
+    {
+        updateOrder();
+    }, [items]);
 
     useEffect(() =>
     {
@@ -54,6 +78,7 @@ const Cart = () =>
         }
     }, [updatedOrder]);
 
+
     if (isCreatingOrder || isUpdatingOrder)
     {
         return <Loader size={100} thickness={4} />
@@ -72,7 +97,7 @@ const Cart = () =>
                     <h1>Koszyk</h1>
                     <Box display={"flex"}>
                         <Box>
-                            {products && <CartTable products={products} isLoading={isLoading} />}
+                            {updatedOrder && <CartTable products={updatedOrder.line_items} isLoading={isLoading} />}
                             <AddCoupon orderId={orderId && orderId} />
                         </Box>
                         <CartSummary total={total} sum={total} isLoading={isLoading} />
