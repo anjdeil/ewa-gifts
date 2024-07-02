@@ -19,10 +19,11 @@ const rootReducer = combineReducers({
     MenuCategoriesSlice: MenuCategoriesSlice.reducer,
     Cart: CartSlice,
     Popup: PopupSlice,
-    currentOrderSlice: CurrentOrder,
+    currentOrder: CurrentOrder,
 });
 
-export const setupStore = () => {
+export const setupStore = () =>
+{
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) =>

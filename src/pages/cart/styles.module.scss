@@ -1,0 +1,14 @@
+.Cart {
+    &__content {
+        display: flex;
+        gap: 40px;
+    }
+}
+
+@media(max-width: 1024px) {
+    .Cart {
+        &__content {
+            flex-direction: column;
+        }
+    }
+}
