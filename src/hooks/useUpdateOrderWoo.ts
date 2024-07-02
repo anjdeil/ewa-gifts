@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
 import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 import { CartItem, transformDeleteOrderProductsType } from "@/types";
@@ -13,7 +13,7 @@ export const useUpdateOrderWoo = () =>
     const [fetchUpdateOrder, { data: updatedOrder }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { currentOrder: { orderId: id, productLineIds: liness } } = useAppSelector(state => state.currentOrderSlice);
+
     const updateOrder = async (
         productLineIds: transformDeleteOrderProductsType,
         items: CartItem[],
@@ -25,7 +25,6 @@ export const useUpdateOrderWoo = () =>
 
         try
         {
-            console.log('start');
             const updateOrderData = await fetchUpdateOrder({
                 credentials: {
                     line_items: [
@@ -35,9 +34,7 @@ export const useUpdateOrderWoo = () =>
                 },
                 id: orderId
             }).unwrap();
-            console.log('middle');
             dispatch(setLineItemsIds(transformLineItemsId(updateOrderData.line_items)));
-            console.log('finish');
         } catch (err)
         {
             if (err instanceof Error)

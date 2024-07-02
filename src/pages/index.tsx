@@ -24,8 +24,6 @@ const Home: FC<HomeProps> = ({ response, cookies }) =>
       </Head>
       <main>
         <h1>{pageTitle}</h1>
-        {/* <ResetPassword /> */}
-        {/* <NewPassword /> */}
         <PageBuilder sections={sections} />
       </main >
     </>

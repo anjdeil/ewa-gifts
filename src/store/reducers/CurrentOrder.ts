@@ -21,10 +21,13 @@ const currentOrderSlice = createSlice({
         setCurrentOrder: (state, action) =>
         {
             state.currentOrder.orderId = action.payload;
+            localStorage.setItem('currentOrderId', action.payload);
+
         },
         setLineItemsIds: (state, action) =>
         {
             state.currentOrder.productLineIds = action.payload;
+            localStorage.setItem('currentOrderItems', JSON.stringify(action.payload));
         },
     },
 });

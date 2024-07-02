@@ -23,11 +23,11 @@
     &__row {
         padding: 15px 20px;
         display: grid;
-        grid-template-columns: 3fr 1fr 2fr 1fr;
         gap: 16px;
 
         &_head {
             background-color: $white-lilac;
+            // display: none;
         }
     }
 
@@ -37,5 +37,28 @@
         align-items: center;
         padding: 13px;
         text-align: center;
+    }
+}
+
+@media(max-width: 1024px) {
+    .CartTable {
+        // margin: 0 auto;
+        // max-width: 1000px;
+        // width: 100%;
+
+        &__row {
+            margin: 0 auto;
+            padding: 15px 20px;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border: 1px solid $input-light;
+            border-radius: 10px;
+
+            &_head {
+                display: none;
+            }
+        }
     }
 }
