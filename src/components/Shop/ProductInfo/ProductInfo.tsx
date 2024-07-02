@@ -9,7 +9,7 @@ import { ProductInfoProps } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
-import {spans} from "next/dist/build/webpack/plugins/profiling-plugin";
+import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 
 // 46791
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
@@ -28,26 +28,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     {
         colorAttributes = transformColors(colors.options);
     }
-    console.log(images,'images');
+    // console.log(images,'images');
     // console.log(transformProductColors(colors.options));
 
-    const getSupplierOptions = (product, nameAttribyte) => {
-        if (!product.attributes || !Array.isArray(product.attributes)) {
-            return [];
-        }
 
-        const supplierAttribute = product.attributes.find(attr => attr.name === nameAttribyte);
-
-        if (!supplierAttribute || !supplierAttribute.options) {
-            return [];
-        }
-
-        return supplierAttribute.options.map(option => option.name);
-    }
-
-    const supplierOptions = getSupplierOptions(product, 'supplier');
-    const colorOptions = getSupplierOptions(product, 'color');
-    console.log(colorOptions,'colorOptions');
     return (
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
@@ -80,54 +64,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
                 {/* <ProductCalculations product={product} /> */}
                 <Box className={styles['product-info__accordionWrapper']}>
-                    <Accordion defaultExpanded className={styles.accordion}>
-                        <AccordionSummary
-                            expandIcon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9L12 15L18 9" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            }
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                            className={styles.accordion__opis}
-                        >
-                            <Typography variant='caption'>
-                                OPIS PRODUKTU
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails dangerouslySetInnerHTML={{ __html: description }}
-                            className={styles.accordion__description} />
-                    </Accordion>
+                    <AccordionProduct text={description} title={'OPIS PRODUKTU'}/>
                 </Box>
                 <Box className={styles['product-info__accordionWrapper']}>
-                    <Accordion defaultExpanded className={styles.accordion}>
-                        <AccordionSummary
-                            expandIcon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9L12 15L18 9" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            }
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                            className={styles.accordion__opis}
-                        >
-                            <Typography variant='caption'>
-                                Informacje dodatkowe
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails className={styles.accordion__details}>
-                            <Box className={styles.accordion__item}>
-                                {supplierOptions.length === 0 ? null :
-                                   <>
-                                       <Typography className={styles.accordion__name}>Brand</Typography>
-                                       <Typography className={styles.accordion__value}>
-                                           {supplierOptions.map((item) => (
-                                               <span key={item}>{item}</span>
-                                           ))}
-                                       </Typography>
-                                   </>
-                                }
-                            </Box>
-                        </AccordionDetails>
-                    </Accordion>
+                   <AccordionProduct data={attributes} title={'Informacje dodatkowe'}/>
                 </Box>
             </Box>
         </Box>
