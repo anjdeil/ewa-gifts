@@ -47,16 +47,16 @@ const SwiperPopup = ({onClose}) => {
     const {slug} = router.query;
 
     const { data, isLoading } = useFetchProductListQuery({ slug: slug });
+    console.log(data,'data')
+    // let info = [];
+    // if (!isLoading && data) {
+    //     info = transformProductCard(data);
+    // }
 
-    let info = [];
-    if (!isLoading && data) {
-        info = transformProductCard(data);
-    }
-
-    let images = [];
-    if (info.length > 0) {
-        images = info[0].images;
-    }
+    // let images = [];
+    // if (info.length > 0) {
+    //     images = info[0].images;
+    // }
 
     return (
         <div className={styles.swiper_popup} onClick={handlerClickBg}>
@@ -83,13 +83,13 @@ const SwiperPopup = ({onClose}) => {
                         modules={[FreeMode, Navigation]}
                         className={`mySwiper3 ${styles.forNav}`}
                     >
-                        {images &&
-                            images.map((item, index) => (
-                                <SwiperSlide key={index} className={styles.slide}>
-                                    <Image src={item} alt={`Product image ${index + 1}`} width={600} height={590}
-                                           className={styles.slide__img}/>
-                                </SwiperSlide>
-                        ))}
+                        {/*{images &&*/}
+                        {/*    images.map((item, index) => (*/}
+                        {/*        <SwiperSlide key={item.id} className={styles.slide}>*/}
+                        {/*            <Image src={item.src} alt={`Product image ${index + 1}`} width={600} height={590}*/}
+                        {/*                   className={styles.slide__img}/>*/}
+                        {/*        </SwiperSlide>*/}
+                        {/*))}*/}
                         <div id={nextElId} className={`swiper-button-next ${styles.forNav__nextBtn}`}>
                             <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.1736 26.5765C16.9988 26.4023 16.8601 26.1953 16.7655 25.9674C16.6709 25.7395 16.6221 25.4951 16.6221 25.2484C16.6221 25.0016 16.6709 24.7572 16.7655 24.5293C16.8601 24.3014 16.9988 24.0944 17.1736 23.9202L25.2189 15.8749L2.25018 15.8749C1.7529 15.8749 1.27599 15.6774 0.924358 15.3258C0.572727 14.9741 0.375183 14.4972 0.375183 13.9999C0.375183 13.5026 0.572727 13.0257 0.924358 12.6741C1.27599 12.3225 1.7529 12.1249 2.25018 12.1249L25.2189 12.1249L17.1736 4.07649C16.8214 3.72425 16.6235 3.24651 16.6235 2.74837C16.6235 2.25023 16.8214 1.77248 17.1736 1.42024C17.5259 1.068 18.0036 0.870117 18.5017 0.870117C18.9999 0.870117 19.4776 1.068 19.8299 1.42024L31.0799 12.6702C31.2547 12.8444 31.3934 13.0514 31.488 13.2793C31.5826 13.5072 31.6313 13.7516 31.6313 13.9984C31.6313 14.2451 31.5826 14.4895 31.488 14.7174C31.3934 14.9453 31.2547 15.1523 31.0799 15.3265L19.8299 26.5765C19.6557 26.7513 19.4487 26.89 19.2208 26.9846C18.9929 27.0793 18.7485 27.128 18.5017 27.128C18.255 27.128 18.0106 27.0793 17.7827 26.9846C17.5548 26.89 17.3478 26.7513 17.1736 26.5765Z" fill="black"/>

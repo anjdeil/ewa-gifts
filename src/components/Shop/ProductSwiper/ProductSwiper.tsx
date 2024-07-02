@@ -26,7 +26,7 @@ const CustomSwiperNav = styled(Swiper)`
   .navSlide__img-wrapper {
     border: 1px solid transparent;
     border-radius: 10px;
-    padding: 1px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,9 +70,9 @@ const ProductSwiper = ({data}) => {
             >
                 {data &&
                     data.map((item, index) => (
-                        <SwiperSlide key={index} className={styles.slide}>
+                        <SwiperSlide key={item.id} className={styles.slide}>
                             <button type='button' className={styles.slide__btn} onClick={handlerOpen}>
-                                <Image src={item} alt={`Product image ${index + 1}`} width={600} height={600}
+                                <Image src={item.src} alt={`Product image ${index + 1}`} width={600} height={600}
                                        className={styles.slide__img}/>
                             </button>
                         </SwiperSlide>
@@ -125,9 +125,9 @@ const ProductSwiper = ({data}) => {
             >
                 {data &&
                     data.map((item, index) => (
-                        <SwiperSlide key={index} className={styles.navSlide}>
+                        <SwiperSlide key={item.id} className={styles.navSlide}>
                             <Box className='navSlide__img-wrapper'>
-                                <Image src={item} alt={`Thumbnail image ${index + 1}`} width={116} height={116}
+                                <Image src={item.src} alt={`Thumbnail image ${index + 1}`} width={116} height={116}
                                        className={styles.navSlide__img}/>
                             </Box>
                         </SwiperSlide>

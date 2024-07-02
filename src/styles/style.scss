@@ -30,6 +30,9 @@ body {
     margin: 0 auto;
     padding: 0 40px;
     max-width: 1360px;
+    &_product {
+        max-width: 1460px;
+    }
 }
 
 .section {

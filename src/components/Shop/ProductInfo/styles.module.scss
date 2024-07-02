@@ -13,41 +13,44 @@
 		padding-top: 40px;
 	}
 	&__slider {
-		flex: 0 1 50%;
+		flex: 0 1 max(630px);
 		overflow: hidden;
 		@media screen and (max-width: 768px) {
 			width: 100%;
 		}
 	}
 	&__info {
-		flex: 0 1 50%;
-		@media screen and (max-width: 768px) {
-			width: 100%;
-		}
-		&_title {
-			font-weight: 600;
-			font-size: 20px;
-			line-height: 120%;
-			text-transform: uppercase;
-			color: $black-color;
-			margin-bottom: 11px;
-		}
-		&_sku {
-			font-weight: 400;
-			font-size: 16px;
-			line-height: 150%;
-			color: $text-gray;
-			margin-bottom: 23px;
-		}
-		&_price {
-			font-weight: 400;
-			font-size: 18px;
-			color: $graphite;
-			margin-bottom: 22px;
-		}
-		&_accordionWrapper {
-			margin-bottom: 40px;
-		}
+
+	}
+}
+.product-info {
+	flex: 0 1 max(730px);
+	@media screen and (max-width: 768px) {
+		width: 100%;
+	}
+	&__title {
+		font-weight: 600;
+		font-size: 20px;
+		line-height: 120%;
+		text-transform: uppercase;
+		color: $black-color;
+		margin-bottom: 11px;
+	}
+	&__sku {
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 150%;
+		color: $text-gray;
+		margin-bottom: 23px;
+	}
+	&__price {
+		font-weight: 400;
+		font-size: 18px;
+		color: $graphite;
+		margin-bottom: 22px;
+	}
+	&__accordionWrapper {
+		margin-bottom: 40px;
 	}
 }
 .accordion {
@@ -77,6 +80,24 @@
 			font-size: 18px;
 			color: $black-color;
 			letter-spacing: 0;
+		}
+	}
+	&__details {
+		padding: 0 35px;
+	}
+	&__item {
+		display: flex;
+	}
+	&__name {
+		width: 100%;
+		max-width: 150px;
+	}
+	&__value {
+		& span {
+			display: inline-block;
+		}
+		& span:first-letter {
+			text-transform: uppercase;
 		}
 	}
 }

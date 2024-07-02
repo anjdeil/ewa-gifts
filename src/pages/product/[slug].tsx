@@ -21,7 +21,7 @@ const Product: FC<ProductProps> = ({ product, breadLinks }) =>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.product__info}>
-        <div className="container">
+        <div className="container container_product">
           <Breadcrumbs links={breadLinks} />
           <div>
             <ProductInfo product={product} />
