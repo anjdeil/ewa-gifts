@@ -9,9 +9,11 @@ export const SwiperSchema = z.object({
 export const SwiperPropsSchema = z.object({
     data: z.array(SwiperSchema),
 });
+
 export const SwiperPopupPropsSchema = z.object({
     data: z.function(),
 });
+
 export type SwiperType = z.infer<typeof SwiperSchema>;
 export type SwiperProps = z.infer<typeof SwiperPropsSchema>;
 export type SwiperPopupProps = z.infer<typeof SwiperPopupPropsSchema>;

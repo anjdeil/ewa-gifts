@@ -4,12 +4,12 @@ import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@m
 
 
 const AccordionProduct = ({data, title, text}) => {
-    const getSupplierOptions = (product, nameAttribyte) => {
+    const getSupplierOptions = (product, nameAttribute) => {
         if (!product || !Array.isArray(product)) {
             return [];
         }
 
-        const supplierAttribute = product.find(attr => attr.name === nameAttribyte);
+        const supplierAttribute = product.find(attr => attr.name === nameAttribute);
 
         if (!supplierAttribute || !supplierAttribute.options) {
             return [];
@@ -23,9 +23,9 @@ const AccordionProduct = ({data, title, text}) => {
             product.forEach(attr => {
                 if (attr.name === 'color') {
                     attr.options.forEach(option => {
-                        // Видаляємо хеш-коди кольорів за допомогою регулярного виразу
+
                         const cleanColors = option.name.replace(/\(#\w+\)/g, '');
-                        // Розділяємо рядок за комами та видаляємо пробіли
+
                         const splitColors = cleanColors.split(',').map(color => color.trim());
                         colors = colors.concat(splitColors);
                     });
@@ -37,9 +37,6 @@ const AccordionProduct = ({data, title, text}) => {
     const supplierOptions = getSupplierOptions(data, 'supplier');
     const colorOptions = getColors(data);
 
-
-
-    console.log(colorOptions);
     return (
         <Accordion defaultExpanded className={styles.accordion}>
             <AccordionSummary

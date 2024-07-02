@@ -8,9 +8,10 @@
 	box-shadow: none;
 	&__opis {
 		padding: 0 35px;
-		height: 52px;
-		&.Mui-expanded {
+		min-height: 52px !important;
+		& > div {
 			min-height: 0;
+			margin: 12px 0 !important;
 		}
 		span {
 			font-weight: 500;
