@@ -1,7 +1,7 @@
 @import "@/styles/variables.module.scss";
 
 .CartSummary {
-    margin: 0 auto;
+    // margin: 0 auto;
     padding: 30px;
     border: 2px solid $white-lilac;
     border-radius: 10px;
@@ -77,13 +77,40 @@
     }
 }
 
-@media(max-width: 768px) {
+@media(max-width: 1024px) {
     .CartSummary {
-        padding: 20px 15px;
+        padding: 30px 35px;
 
         &__title {
             font-size: 16px;
         }
+
+        &__list {
+            margin-bottom: 100px;
+
+            li {
+                &:last-child {
+                    .CartSummary__row {
+
+                        h3,
+                        span {
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &__row {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
+
+@media(max-width: 768px) {
+    .CartSummary {
+        padding: 20px 15px;
 
         &__list {
             margin-bottom: 20px;

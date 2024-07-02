@@ -14,7 +14,7 @@ import { transformCreateOrderProducts } from "@/services/transformers/woocommerc
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
 import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
-
+import styles from './styles.module.scss';
 const Cart = () =>
 {
     const { items, isLoading } = useAppSelector(state => state.Cart);
@@ -95,7 +95,7 @@ const Cart = () =>
             <main>
                 <Section className="section" isContainer={true}>
                     <h1>Koszyk</h1>
-                    <Box display={"flex"}>
+                    <Box className={styles.Cart__content}>
                         <Box>
                             {updatedOrder && <CartTable products={updatedOrder.line_items} isLoading={isLoading} />}
                             <AddCoupon orderId={orderId && orderId} />

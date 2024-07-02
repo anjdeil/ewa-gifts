@@ -67,8 +67,8 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                             </Box>
                             <Box className={`${styles.cartItem__title}`}>
                                 <Typography variant='h6' className='desc'>
-                                    {/* {product.name} */}
-                                    {product.id}
+                                    {product.name}
+                                    {/* {product.id} */}
                                 </Typography>
                             </Box>
                         </Box>
