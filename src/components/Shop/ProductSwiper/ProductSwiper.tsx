@@ -11,43 +11,66 @@ import {styled} from '@mui/material/styles';
 import {FreeMode, Navigation, Thumbs} from 'swiper/modules';
 import {useAppDispatch} from "@/hooks/redux";
 import {popupSet} from "@/store/reducers/PopupSlice";
+import {setData, setCurrentSlide} from "@/store/reducers/SwiperModal";
+import {SwiperProps} from '@/types';
 
 const CustomSwiperFor = styled(Swiper)`
-  .swiper-button-prev.swiper-button-disabled,
-  .swiper-button-next.swiper-button-disabled {
-    opacity: 1;
-  }
+	.swiper-button-prev.swiper-button-disabled,
+	.swiper-button-next.swiper-button-disabled {
+		opacity: 1;
+		pointer-events: auto;
+	}
 
-  .swiper-button-disabled svg path {
-    fill: #FECB00;
-  }
+	.swiper-button-disabled svg path {
+		fill: #FECB00;
+	}
 `
 const CustomSwiperNav = styled(Swiper)`
-  .navSlide__img-wrapper {
-    border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 118px;
-    height: 118px;
-  }
+	.img-wrapper {
+		border: 1px solid transparent;
+		border-radius: 10px;
+		padding: 6px;
+		margin: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 118px;
+		height: 118px;
+	}
 
-  .swiper-slide-thumb-active .navSlide__img-wrapper {
-    border-color: #FECB00;
-  }
+	@media screen and (max-width: 768px) {
+		.img-wrapper {
+			width: 80px;
+			height: 80px;
+		}
+	}
+
+	.swiper-slide-thumb-active .img-wrapper {
+		border-color: #FECB00;
+	}
 `;
 
-const ProductSwiper = ({data}) => {
+const ProductSwiper: React.FC<SwiperProps> = ({data}) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [activeSlide, setActiveSlide] = useState(0);
+    const dispatch = useAppDispatch();
+
     const swiperId = `swiper-2`;
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
 
-    const dispatch = useAppDispatch();
+    const updateSwiperState = (images: any[], slideNumber: string) => {
+        dispatch(setData(images));
+        dispatch(setCurrentSlide(slideNumber));
+    };
+
     const handlerOpen = () => {
+        updateSwiperState(data, activeSlide);
         dispatch(popupSet('swiper-popup'));
+    };
+
+    const handleSlideChange = (swiper) => {
+        setActiveSlide(swiper.activeIndex);
     };
 
     return (
@@ -67,6 +90,7 @@ const ProductSwiper = ({data}) => {
                 thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
                 modules={[FreeMode, Navigation, Thumbs]}
                 className={`mySwiper2 ${styles.forNav}`}
+                onSlideChange={handleSlideChange}
             >
                 {data &&
                     data.map((item, index) => (
@@ -95,14 +119,6 @@ const ProductSwiper = ({data}) => {
             <CustomSwiperNav
                 breakpoints={{
                     320: {
-                        slidesPerView: 2,
-                        spaceBetween: 0,
-                    },
-                    640: {
-                        slidesPerView: 3,
-                        spaceBetween: 0,
-                    },
-                    1024: {
                         slidesPerView: 3,
                         spaceBetween: 0,
                     },
@@ -126,7 +142,7 @@ const ProductSwiper = ({data}) => {
                 {data &&
                     data.map((item, index) => (
                         <SwiperSlide key={item.id} className={styles.navSlide}>
-                            <Box className='navSlide__img-wrapper'>
+                            <Box className='img-wrapper'>
                                 <Image src={item.src} alt={`Thumbnail image ${index + 1}`} width={116} height={116}
                                        className={styles.navSlide__img}/>
                             </Box>

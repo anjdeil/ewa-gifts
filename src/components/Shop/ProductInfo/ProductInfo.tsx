@@ -19,18 +19,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const { name, description, price, sku, images, attributes } = product;
     const colors = attributes.find(attr => attr.name === "color");
     const sizes = attributes.find(attr => attr.name === "size");
-    // const [currentProduct, setCurrentProduct] = useState(
-    //     {
-    //     });
+
 
     let colorAttributes;
     if (colors)
     {
         colorAttributes = transformColors(colors.options);
     }
-    // console.log(images,'images');
-    // console.log(transformProductColors(colors.options));
-
 
     return (
         <Box className={styles.product}>
