@@ -2,9 +2,13 @@ import React, { ChangeEvent, FC, useState } from "react";
 import getCirculatedPrices from "@/Utils/getCirculatedPrices";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
-import { ProductCardProps } from "@/types";
+import { typeProductType } from "@/types";
 
-const ProductCalculations: FC<ProductCardProps> = ({ product }) => {
+interface ProductCalculations {
+    product: typeProductType
+}
+
+const ProductCalculations: FC<ProductCalculations> = ({ product }) => {
     const productMeta = product.metaData;
     const productCirculationsMeta = productMeta.find(metaRow => metaRow.key === '_price_circulations');
     if (productCirculationsMeta === undefined) return;
