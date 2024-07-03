@@ -4,7 +4,8 @@ import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@m
 
 
 const AccordionProduct = ({data, title, text}) => {
-    const getSupplierOptions = (product, nameAttribute) => {
+    console.log(data,'data');
+    const getOptions = (product, nameAttribute) => {
         if (!product || !Array.isArray(product)) {
             return [];
         }
@@ -34,7 +35,12 @@ const AccordionProduct = ({data, title, text}) => {
         }
         return colors;
     }
-    const supplierOptions = getSupplierOptions(data, 'supplier');
+    const supplierOptions = getOptions(data, 'supplier');
+    const sizeOptions = getOptions(data, 'size').sort((a, b) => {
+        const numA = parseInt(a);
+        const numB = parseInt(b);
+        return numA - numB;
+    });
     const colorOptions = getColors(data);
 
     return (
@@ -58,10 +64,19 @@ const AccordionProduct = ({data, title, text}) => {
             }
             {data &&
 				<AccordionDetails className={styles.accordion__details}>
-
+                    {sizeOptions.length === 0 ? null :
+                        <Box className={styles.accordion__item}>
+                            <Typography className={styles.accordion__name}>Rozmiar</Typography>
+                            <Typography className={styles.accordion__value}>
+                                {sizeOptions.map((item) => (
+                                    <Typography variant='caption' key={item}>{`${item}, `}</Typography>
+                                ))}
+                            </Typography>
+                        </Box>
+                    }
                     {colorOptions.length === 0 ? null :
                         <Box className={styles.accordion__item}>
-                            <Typography className={styles.accordion__name}>Color</Typography>
+                            <Typography className={styles.accordion__name}>Kolor</Typography>
                             <Typography className={styles.accordion__value}>
                                 {colorOptions.map((item) => (
                                     <Typography variant='caption' key={item}>{`${item}, `}</Typography>
