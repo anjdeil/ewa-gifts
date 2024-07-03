@@ -46,11 +46,11 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                     Total
                 </Box>
             </Box >
-            <Box className={styles.CartTable__cell__row}>
+            <Box className={styles.CartTable__tableBody}>
                 {products.map((product, index) => (
                     <Box key={index} className={`${styles.CartTable__row}`}>
                         <Box className={`${styles.cartItem}`}>
-                            <Box>
+                            <Box className={styles.cartItem__delete}>
                                 <IconButton aria-label="delete" onClick={() => deleteProduct(product)}>
                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />

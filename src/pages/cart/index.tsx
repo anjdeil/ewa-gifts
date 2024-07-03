@@ -1,33 +1,26 @@
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
-// import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
+import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
-import { transformDeleteOrderProducts } from "@/services/transformers/woocommerce/transformDeleteOrderProducts";
-import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 import styles from './styles.module.scss';
 const Cart = () =>
 {
     const { items, isLoading } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrder);
     const { createOrder, isLoading: isCreatingOrder, createdOrder } = useCreateOrderWoo();
-    // const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
-    const [fetchUpdateOrder, { data: updatedOrder, isLoading: isUpdatingOrder }] = useFetchUpdateOrderMutation();
-    const dispatch = useAppDispatch();
+    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
     const [products, setProducts] = useState(null);
     const [total, setTotal] = useState('0');
     const [isUpdating, setIsUpdating] = useState(false);
 
-    const updateOrder = async () =>
+    useEffect(() =>
     {
         if (items && items.length > 0)
         {
@@ -37,27 +30,10 @@ const Cart = () =>
             } else if (productLineIds && !isUpdatingOrder && !isUpdating)
             {
                 setIsUpdating(true);
-                const response = await fetchUpdateOrder({
-                    credentials: {
-                        line_items: [
-                            ...transformDeleteOrderProducts(productLineIds),
-                            ...transformCreateOrderProducts(items)
-                        ]
-                    },
-                    id: orderId
-                }).unwrap();
-                console.log(productLineIds);
-                console.log(response.line_items);
-                dispatch(setLineItemsIds(transformLineItemsId(response.line_items)));
-                // updateOrder(productLineIds, items, orderId);
+                updateOrder(productLineIds, items, orderId);
                 setIsUpdating(false);
             }
         }
-    }
-
-    useEffect(() =>
-    {
-        updateOrder();
     }, [items]);
 
     useEffect(() =>
@@ -97,7 +73,7 @@ const Cart = () =>
                     <h1>Koszyk</h1>
                     <Box className={styles.Cart__content}>
                         <Box>
-                            {updatedOrder && <CartTable products={updatedOrder.line_items} isLoading={isLoading} />}
+                            {products && <CartTable products={products} isLoading={isLoading} />}
                             <AddCoupon orderId={orderId && orderId} />
                         </Box>
                         <CartSummary total={total} sum={total} isLoading={isLoading} />

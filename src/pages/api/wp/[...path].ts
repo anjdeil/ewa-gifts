@@ -1,5 +1,5 @@
 import { validateApiError } from "@/Utils/validateApiError";
-import wpRestApi from "@/services/wordpress/wpRestAPI";
+import wpRestApi from "@/services/wordpress/WPRestAPI";
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse)

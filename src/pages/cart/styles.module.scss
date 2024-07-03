@@ -1,6 +1,7 @@
 .Cart {
     &__content {
-        display: flex;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
         gap: 40px;
     }
 }
@@ -8,6 +9,7 @@
 @media(max-width: 1024px) {
     .Cart {
         &__content {
+            display: flex;
             flex-direction: column;
         }
     }

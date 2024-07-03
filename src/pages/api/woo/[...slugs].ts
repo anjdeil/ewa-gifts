@@ -1,4 +1,5 @@
 import { validateApiError } from "@/Utils/validateApiError";
+import { wooCustomRestApi } from "@/services";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -14,12 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const slug = typeof slugs === 'string' ? slugs : slugs.join('/');
 
-    if (req.body)
+    if (req.method !== "GET")
     {
         try
         {
             let response;
-            const { method, body } = req;
+            const { method, body, headers } = req;
 
             switch (method)
             {
@@ -28,6 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     break;
                 case 'PUT':
                     response = await wooCommerceRestApi.put(slug, body);
+                    break;
+                case 'DELETE':
+                    console.log('ss!')
+                    response = await wooCustomRestApi.get(slug, headers, method);
                     break;
                 default:
                     res.setHeader('Allow', ['POST', 'PUT']);

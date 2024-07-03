@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 
 const CustomSwiper = styled(Swiper)`
     .swiper-slide-active {
-        opacity: 0.5;
+        opacity: 1;
     }
 `;
 

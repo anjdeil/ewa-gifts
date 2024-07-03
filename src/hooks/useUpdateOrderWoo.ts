@@ -6,6 +6,7 @@ import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi"
 import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 import { CartItem, transformDeleteOrderProductsType } from "@/types";
 import { transformDeleteOrderProducts } from "@/services/transformers/woocommerce/transformDeleteOrderProducts";
+import axios, { AxiosResponse } from "axios";
 
 export const useUpdateOrderWoo = () =>
 {
@@ -25,6 +26,11 @@ export const useUpdateOrderWoo = () =>
 
         try
         {
+            const response: AxiosResponse = await axios({
+                url: `/api/woo/delete-order-items/${orderId}`,
+                method: 'DELETE',
+            });
+            console.log(response);
             const updateOrderData = await fetchUpdateOrder({
                 credentials: {
                     line_items: [
