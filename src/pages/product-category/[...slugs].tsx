@@ -55,6 +55,9 @@ export const getServerSideProps = async ({ query }) => {
         notFound: true
     };
 
+    /* Sort categories */
+    categories.sort((a, b) => a.parent_id - b.parent_id);
+
     /* Do not open a subcategory without a parent category */
     if (categories[0].parent_id !== 0) return {
         notFound: true
@@ -64,6 +67,7 @@ export const getServerSideProps = async ({ query }) => {
     if (categories[1] && categories[1].parent_id !== categories[0].id) return {
         notFound: true
     };
+
 
     /**
      * Products:

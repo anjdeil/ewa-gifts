@@ -1,7 +1,7 @@
 import { Category, Subcategory } from "@/types";
 import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 
-const transformResponse = (response: CategoryType[]): Category[] => {
+const transformCategoriesMenu = (response: CategoryType[]): Category[] => {
     const categories: Category[] = [];
 
     response.forEach(parentRow => {
@@ -15,14 +15,14 @@ const transformResponse = (response: CategoryType[]): Category[] => {
             subcategories.push({
                 id: childRow.id,
                 categoryName: childRow.name,
-                slug: childRow.slug
+                url: `/product-category/${parentRow.slug}/${childRow.slug}`
             });
         });
 
         categories.push({
             id: parentRow.id,
             categoryName: parentRow.name,
-            slug: parentRow.slug,
+            url: `/product-category/${parentRow.slug}`,
             subcategories
         });
     });
@@ -30,4 +30,4 @@ const transformResponse = (response: CategoryType[]): Category[] => {
     return categories;
 }
 
-export default transformResponse;
+export default transformCategoriesMenu;
