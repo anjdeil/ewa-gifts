@@ -68,12 +68,12 @@ export const getServerSideProps = async ({ query }) => {
         notFound: true
     };
 
-
     /**
      * Products:
      *
      * Collect filters:
      */
+
     // const productsPerPage = 21;
     // const productListQueryParams = {
     //     page,
