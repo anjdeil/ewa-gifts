@@ -1,4 +1,3 @@
-export * from './woocommerce/transformCategoryBars';
 export * from './woocommerce/transformSearchBarCategories';
 export * from './woocommerce/transformSearchBarProducts';
 export * from './pageBuilder';

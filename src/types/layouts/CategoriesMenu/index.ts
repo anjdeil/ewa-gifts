@@ -3,13 +3,13 @@ import { z } from "zod";
 export const SubcategorySchema = z.object({
     id: z.number(),
     categoryName: z.string(),
-    slug: z.string(),
+    url: z.string(),
 });
 
 export const CategoriesMenuSchema = z.object({
     id: z.number(),
     categoryName: z.string(),
-    slug: z.string(),
+    url: z.string(),
     subcategories: z.array(SubcategorySchema),
 });
 
