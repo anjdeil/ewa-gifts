@@ -6,21 +6,21 @@ import { useAppDispatch } from '@/hooks/redux';
 import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
 import { CartProduct, CartTableProps } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
-import { FC, useCallback } from 'react';
-// import { useFetchCreateOrderMutation } from '@/store/wooCommerce/wooCommerceApi';
+import { FC } from 'react';
 
 export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 {
     const dispatch = useAppDispatch();
 
-    const changeProductsAmount = useCallback((product: CartProduct, count: string) =>
+    const changeProductsAmount = (product: CartProduct, count: string) =>
     {
-        // dispatch(updatedCartQuantity({
-        //     id: product.id,
-        //     type: product.type,
-        //     quantity: count,
-        // }));
-    }, [dispatch]);
+        console.log('sdsd');
+        dispatch(updatedCartQuantity({
+            id: product.id,
+            type: product.type,
+            quantity: count,
+        }));
+    };
 
     const deleteProduct = (product: CartProduct) =>
     {
@@ -68,7 +68,7 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                             <Box className={`${styles.cartItem__title}`}>
                                 <Typography variant='h6' className='desc'>
                                     {product.name}
-                                    {/* {product.id} */}
+                                    {product.id}
                                 </Typography>
                             </Box>
                         </Box>

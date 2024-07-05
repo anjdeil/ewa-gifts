@@ -1,5 +1,4 @@
 import { validateApiError } from "@/Utils/validateApiError";
-import { wooCustomRestApi } from "@/services";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -31,8 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     response = await wooCommerceRestApi.put(slug, body);
                     break;
                 case 'DELETE':
-                    console.log('ss!')
-                    response = await wooCustomRestApi.get(slug, headers, method);
+                    response = await wooCommerceRestApi.delete(slug, headers, method);
                     break;
                 default:
                     res.setHeader('Allow', ['POST', 'PUT']);

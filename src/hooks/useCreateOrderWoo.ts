@@ -1,9 +1,8 @@
 import { useState, useCallback } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { setCurrentOrder, setLineItemsIds } from "@/store/reducers/CurrentOrder";
+import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
 import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
 import { CartItem } from "@/types";
 
 export const useCreateOrderWoo = () =>
@@ -23,9 +22,7 @@ export const useCreateOrderWoo = () =>
         try
         {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
-            const lineItemsIds = transformLineItemsId(createOrderData.line_items);
             dispatch(setCurrentOrder(createOrderData.id));
-            dispatch(setLineItemsIds(lineItemsIds));
         } catch (error)
         {
             if (error instanceof Error)

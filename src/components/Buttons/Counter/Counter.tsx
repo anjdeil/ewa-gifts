@@ -35,17 +35,18 @@ export const Counter: FC<CounterProps> = ({ count, changeQuantity, isLoading }) 
                 }
             };
         }
-    }, [localCount, isLoading, changeQuantity]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localCount]);
 
     const increment = useCallback(() =>
     {
         setLocalCount(prevCount => prevCount + 1);
     }, []);
 
-    const decrement = useCallback(() =>
+    const decrement = () =>
     {
         setLocalCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
-    }, []);
+    };
 
     const onInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) =>
     {

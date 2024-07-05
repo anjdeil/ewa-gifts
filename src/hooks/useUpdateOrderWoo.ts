@@ -1,22 +1,17 @@
 import { useState } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
-import { useAppDispatch } from "@/hooks/redux";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
-import { CartItem, transformDeleteOrderProductsType } from "@/types";
-import { transformDeleteOrderProducts } from "@/services/transformers/woocommerce/transformDeleteOrderProducts";
-import axios, { AxiosResponse } from "axios";
+import { CartItem } from "@/types";
+import axios from "axios";
 
 export const useUpdateOrderWoo = () =>
 {
-    const dispatch = useAppDispatch();
     const [fetchUpdateOrder, { data: updatedOrder }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const updateOrder = async (
-        productLineIds: transformDeleteOrderProductsType,
         items: CartItem[],
         orderId: number
     ) =>
@@ -26,21 +21,28 @@ export const useUpdateOrderWoo = () =>
 
         try
         {
-            const response: AxiosResponse = await axios({
-                url: `/api/woo/delete-order-items/${orderId}`,
-                method: 'DELETE',
-            });
-            console.log(response);
-            const updateOrderData = await fetchUpdateOrder({
-                credentials: {
-                    line_items: [
-                        ...transformDeleteOrderProducts(productLineIds),
-                        ...transformCreateOrderProducts(items)
-                    ]
-                },
-                id: orderId
-            }).unwrap();
-            dispatch(setLineItemsIds(transformLineItemsId(updateOrderData.line_items)));
+            if (!isUpdating)
+            {
+                setIsUpdating(true);
+
+                await axios({
+                    url: `/api/woo/delete-order-items/${orderId}`,
+                    method: 'DELETE',
+                });
+
+                const resp = await fetchUpdateOrder({
+                    credentials: {
+                        line_items: [
+                            ...transformCreateOrderProducts(items)
+                        ]
+                    },
+                    id: orderId
+                });
+
+                setIsUpdating(false);
+                console.log(resp.data.line_items);
+            }
+
         } catch (err)
         {
             if (err instanceof Error)

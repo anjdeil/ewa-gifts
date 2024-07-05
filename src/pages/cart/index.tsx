@@ -10,31 +10,42 @@ import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
+import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 const Cart = () =>
 {
-    const { items, isLoading } = useAppSelector(state => state.Cart);
-    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrder);
-    const { createOrder, isLoading: isCreatingOrder, createdOrder } = useCreateOrderWoo();
+    const { items } = useAppSelector(state => state.Cart);
+    const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
+    const { createOrder, createdOrder } = useCreateOrderWoo();
     const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
     const [products, setProducts] = useState(null);
     const [total, setTotal] = useState('0');
     const [isUpdating, setIsUpdating] = useState(false);
+    const breadLinks = [
+        {
+            name: 'Katalog',
+            url: '/'
+        },
+        {
+            name: 'Koszyk',
+            url: '/cart'
+        },
+    ]
 
     useEffect(() =>
     {
+        setIsUpdating(true);
         if (items && items.length > 0)
         {
             if (!orderId)
             {
                 createOrder(items);
-            } else if (productLineIds && !isUpdatingOrder && !isUpdating)
+            } else if (!isUpdatingOrder && !isUpdating)
             {
-                setIsUpdating(true);
-                updateOrder(productLineIds, items, orderId);
-                setIsUpdating(false);
+                updateOrder(items, orderId);
             }
         }
-    }, [items]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [items, orderId]);
 
     useEffect(() =>
     {
@@ -42,6 +53,7 @@ const Cart = () =>
         {
             setTotal(createdOrder.total);
             setProducts(createdOrder.line_items);
+            setIsUpdating(false);
         }
     }, [createdOrder]);
 
@@ -51,11 +63,12 @@ const Cart = () =>
         {
             setTotal(updatedOrder.total);
             setProducts(updatedOrder.line_items);
+            setIsUpdating(false);
         }
     }, [updatedOrder]);
 
 
-    if (isCreatingOrder || isUpdatingOrder)
+    if (isUpdating)
     {
         return <Loader size={100} thickness={4} />
     }
@@ -69,14 +82,17 @@ const Cart = () =>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <Section className="section" isContainer={true}>
-                    <h1>Koszyk</h1>
+                <Section className="section" isContainer={true} isBreadcrumbs={true}>
+                    <Box className={styles.Cart__top}>
+                        <Breadcrumbs links={breadLinks} />
+                        <h1 className="sub-title">Koszyk</h1>
+                    </Box>
                     <Box className={styles.Cart__content}>
                         <Box>
-                            {products && <CartTable products={products} isLoading={isLoading} />}
+                            {products && <CartTable products={products} isLoading={isUpdating} />}
                             <AddCoupon orderId={orderId && orderId} />
                         </Box>
-                        <CartSummary total={total} sum={total} isLoading={isLoading} />
+                        <CartSummary total={total} sum={total} isLoading={isUpdating} />
                     </Box>
                 </Section>
             </main >
