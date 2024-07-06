@@ -1,28 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import axios from "axios";
-
-const fetchAllCategories = async (page = 1, categories = []) =>
-{
-    try
-    {
-        const response = await axios.get("/api/woo/products/categories", {
-            params: {
-                per_page: 100,
-                page
-            }
-        });
-        const allCategories = categories.concat(response.data);
-
-        if (response.data.length === 100)
-        {
-            return fetchAllCategories(page + 1, allCategories);
-        }
-        return allCategories;
-    } catch (error)
-    {
-        throw error;
-    }
-}
 
 export const wooCommerceApi = createApi({
     reducerPath: 'wooCommerceApi',
@@ -69,19 +45,6 @@ export const wooCommerceApi = createApi({
                 }
             })
         }),
-        fetchAllCategoriesList: build.query({
-            queryFn: async () =>
-            {
-                try
-                {
-                    const data = await fetchAllCategories();
-                    return { data };
-                } catch (error)
-                {
-                    return { error: "Failed to fetch categories!" }
-                }
-            }
-        }),
         fetchAttributeTerms: build.query({
             query: (id) => ({
                 url: `/products/attributes/${id}/terms`,
@@ -97,7 +60,6 @@ export const wooCommerceApi = createApi({
 export const {
     useFetchAttributeTermsQuery,
     useFetchProductListQuery,
-    useFetchAllCategoriesListQuery,
     useLazyFetchProductVariationsQuery,
     useFetchProductVariationsQuery,
     useFetchUserRegistrationMutation,

@@ -10,8 +10,8 @@ import { ColorOptions } from "../ColorOptions";
 import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
 
-const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
-{
+// 46791
+const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     console.log(product);
 
     const { name, description, price, sku, images, attributes } = product;
@@ -22,10 +22,11 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     //     });
 
     let colorAttributes;
-    if (colors)
-    {
+    if (colors) {
         colorAttributes = transformColors(colors.options);
     }
+    console.log(product);
+    // console.log(transformProductColors(colors.options));
 
     return (
         <Box className={styles.product}>
@@ -57,7 +58,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     {sizes && <SizeOptions sizeAttributes={sizes.options} />}
                 </Box>
 
-                {/* <ProductCalculations product={product} /> */}
+                <ProductCalculations product={product} />
                 <Box className={styles.product__info_accordionWrapper}>
                     <Accordion defaultExpanded className={styles.accordion}>
                         <AccordionSummary

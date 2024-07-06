@@ -21,6 +21,11 @@ export const customApi = createApi({
                 url: `/categories`,
                 params
             })
+        }),
+        fetchAttributeTerms: build.query({
+            query: (slug) => ({
+                url: `/attributes/${slug}/terms`
+            })
         })
     })
 });
@@ -29,4 +34,5 @@ export const {
     useFetchProductListQuery,
     useFetchProductQuery,
     useFetchCategoryListQuery,
+    useFetchAttributeTermsQuery
 } = customApi;

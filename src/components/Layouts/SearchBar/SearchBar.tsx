@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Link from "next/link";
-import { useFetchProductListQuery, useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { useFetchProductListQuery } from "@/store/custom/customApi";
 import { transformSearchBarCategories, transformSearchBarProducts } from "@/services/transformers"
 import variables from '@/styles/variables.module.scss';
 import styles from './styles.module.scss';
+import { useFetchCategoryListQuery } from "@/store/custom/customApi";
 
 const defaultStyles = {
     borderRadius: '10px',
@@ -32,24 +33,33 @@ const focusStyles = {
     }
 };
 
+interface SearchBarOptionType {
+    key: string,
+    name: string,
+    type: string,
+    slug: string,
+    count?: number
+}
+
 const SearchBar = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isTyping, setTyping] = useState(false);
 
-    let { data: categories = [] } = useFetchAllCategoriesListQuery();
-    categories = categories.length ? transformSearchBarCategories(categories) : [];
+    const { data: categoriesData = [] } = useFetchCategoryListQuery({});
+    const categories = categoriesData.data ? transformSearchBarCategories(categoriesData.data.items) : [];
 
-    let { data: products = [], isLoading, isFetching, isError, error } = useFetchProductListQuery({
-        search: searchTerm
+    const { data: productsData = [], isLoading, isFetching } = useFetchProductListQuery({
+        search: searchTerm,
+        per_page: 20
     }, {
         skip: searchTerm?.length < 3 || isTyping
     });
-    products = transformSearchBarProducts(products);
+    const products = productsData.data ? transformSearchBarProducts(productsData.data.items) : [];
 
     const searchResults = [...categories, ...products];
 
-    const onSearch = (evt, value) => {
+    const onSearch = (evt: SyntheticEvent, value: string) => {
         setSearchTerm(value);
 
         if (value.length < 3) return
@@ -60,7 +70,7 @@ const SearchBar = () => {
         }, 2000);
     }
 
-    const renderOption = (props, option) => (
+    const renderOption = (props: React.JSX.IntrinsicAttributes & React.ClassAttributes<HTMLLIElement> & React.LiHTMLAttributes<HTMLLIElement>, option: SearchBarOptionType) => (
         <li key={option.key} {...props}>
             <Link href={`/${option.slug}`} className={styles['search-bar__option']}>
                 {option.name}
@@ -77,10 +87,11 @@ const SearchBar = () => {
 
     return (
         <Autocomplete
+            defaultValue={searchTerm}
             freeSolo
             loading={isLoading || isFetching}
             options={searchTerm?.length >= 3 ? searchResults : []}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
             renderOption={renderOption}
             onInputChange={onSearch}
             blurOnSelect

@@ -41,6 +41,12 @@
 .mobile-category-bars {
     user-select: none;
 
+    &__skeleton {
+        display: flex;
+        overflow: hidden;
+        gap: 10px;
+    }
+
     &__slide {
         width: auto;
     }

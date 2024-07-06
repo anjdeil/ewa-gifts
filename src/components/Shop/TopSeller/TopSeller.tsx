@@ -3,8 +3,7 @@ import { FC } from "react";
 import { TopSellerCard } from "../TopSellerCard";
 import { ProductCardList } from "../ProductCardsList";
 
-export const TopSeller: FC = () =>
-{
+export const TopSeller: FC = () => {
     return (
         <>
             <div></div>

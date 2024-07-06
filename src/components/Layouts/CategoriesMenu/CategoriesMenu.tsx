@@ -1,20 +1,20 @@
 import Link from "next/link";
 import styles from "./styles.module.scss";
-import { FC, useCallback } from "react";
+import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
-import { CategoriesMenuProps } from "@/types";
+import transformCategoriesMenu from '@/services/transformers/woocommerce/transformCategoriesMenu';
+import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 
-export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
-{
+export const CategoriesMenu = () => {
     const dispatch = useAppDispatch();
     const { isOpen, isCategoryActive } = useAppSelector(state => state.MenuCategoriesSlice);
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
+    const { data: categoriesData = [] } = useFetchCategoryListQuery({});
+    const categories = categoriesData.data ? transformCategoriesMenu(categoriesData.data.items) : [];
 
-    const onLinkClick = useCallback(() =>
-    {
-        if (isOpen)
-        {
+    const onLinkClick = useCallback(() => {
+        if (isOpen) {
             dispatch(setMenuOpen(false));
             dispatch(setCategory(null));
         }
@@ -24,26 +24,26 @@ export const CategoriesMenu: FC<CategoriesMenuProps> = ({ categoriesItems }) =>
         <div className={`${styles.categories} ${isOpen && styles.active}`}>
             <div className={styles['categories__list-wrapper']}>
                 <ul className={styles['categories__list']}>
-                    {categoriesItems.map((category) => (
-                        <li key={category.id} className={isCategoryActive === category.id ? styles.activeCategory : ''}>
-                            <Link href={category.slug} passHref
-                                className="link desc"
+                    {categories.map((category) => (
+                        <li key={category.id} className={styles['categories__list-item']}>
+                            <Link href={category.url} passHref
+                                className={`${styles['categories__link']} ${isCategoryActive === category.id ? styles['categories__link_active'] : ''} link desc`}
                                 onMouseEnter={() => dispatch(setCategory(category.id))}
                                 onClick={onLinkClick}
                             >
-                                {category.categoryName}
+                                <span className={styles['categories__link-text']}>{category.categoryName}</span>
                             </Link>
                         </li>
                     ))}
                 </ul>
             </div>
             <div className={`${styles['categories__list-wrapper']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
-                <ul className={`${styles['categories__list']} ${isCategoryActive ? styles.visible : styles.hidden}`}>
+                <ul className={styles['categories__list']}>
                     {isCategoryActive && (
-                        categoriesItems.find((category) => category.id === isCategoryActive)?.subcategories.map((subItem) => (
-                            <li key={subItem.id} className={`${isCategoryActive ? styles.visible : styles.hidden}`}>
-                                <Link href={subItem.slug} passHref className="link desc" onClick={onLinkClick}>
-                                    {subItem.categoryName}
+                        categories.find((category) => category.id === isCategoryActive)?.subcategories.map((subItem) => (
+                            <li key={subItem.id} className={styles['categories__list-item']}>
+                                <Link href={subItem.url} passHref className={`${styles['categories__link']} link desc`} onClick={onLinkClick}>
+                                    <span className={styles['categories__link-text']}>{subItem.categoryName}</span>
                                 </Link>
                             </li>
                         ))
