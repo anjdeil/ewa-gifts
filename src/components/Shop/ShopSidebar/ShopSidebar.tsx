@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import FilterCollapsed from './Filters/FilterCollapsed';
 import { useFetchAttributeTermsQuery } from '@/store/custom/customApi';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -9,11 +9,13 @@ import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
 
+type PriceRange = {
+    min: number,
+    max: number
+}
+
 interface ShopSidebarPropsType {
-    priceRange: {
-        min: number,
-        max: number
-    }
+    priceRange: PriceRange
 }
 
 const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
@@ -69,6 +71,55 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
         })
     }
 
+    /**
+     * Prices
+     */
+    const [minPrice, setMinPrice] = useState(searchParams.get('min_price') || String(priceRange.min));
+    const [maxPrice, setMaxPrice] = useState(searchParams.get('max_price') || String(priceRange.max));
+
+    const onChangePriceRange = (changedPriceRange: PriceRange) => {
+        if (changedPriceRange.min !== +minPrice) {
+            setMinPrice(String(changedPriceRange.min));
+        }
+        if (changedPriceRange.max !== +maxPrice) {
+            setMaxPrice(String(changedPriceRange.max));
+        }
+    }
+
+    useEffect(() => {
+        const { slugs, min_price, max_price, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
+
+        type PriceParams = {
+            min_price?: string,
+            max_price?: string
+        }
+        const newPriceParams: PriceParams = {};
+
+        if (+minPrice !== priceRange.min) {
+            newPriceParams.min_price = minPrice;
+        }
+
+        if (+maxPrice !== priceRange.max) {
+            newPriceParams.max_price = maxPrice;
+        }
+
+        if ((newPriceParams?.min_price !== min_price) ||
+            (newPriceParams?.max_price !== max_price)) {
+            const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
+
+            router.push({
+                pathname: router.pathname,
+                query: {
+                    slugs: newSlugs,
+                    ...params,
+                    ...newPriceParams
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [minPrice, maxPrice]);
+
     return (
         <>
             <FilterCollapsed title={currentCategory?.name} collapsed={false}>
@@ -76,7 +127,14 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
             </FilterCollapsed>
 
             <FilterCollapsed title={"Cena"} collapsed={false}>
-                <PriceFilter priceRange={priceRange} />
+                <PriceFilter
+                    onChange={onChangePriceRange}
+                    priceRange={priceRange}
+                    currentRange={{
+                        min: +minPrice,
+                        max: +maxPrice,
+                    }}
+                />
             </FilterCollapsed>
 
             <FilterCollapsed title={"Kolor"} collapsed={false}>

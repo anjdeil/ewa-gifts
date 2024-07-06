@@ -80,7 +80,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         category: categories[categories.length - 1].slug,
         attribute: typeof params?.attribute === 'string' ? params.attribute : undefined,
         attribute_term: typeof params?.attribute_term === 'string' ? params.attribute_term : undefined,
-        min_price: undefined
+        min_price: typeof params?.min_price === 'string' ? params.min_price : undefined,
+        max_price: typeof params?.max_price === 'string' ? params.max_price : undefined
     };
 
     /* Fetch products */

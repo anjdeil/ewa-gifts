@@ -1,29 +1,64 @@
-import { Box, Slider, TextField } from "@mui/material";
-import React, { FC, useState } from "react";
+import { Box } from "@mui/material";
+import React, { FC, FormEvent, useEffect, useState } from "react";
 import variables from "@/styles/variables.module.scss";
-import FormInput from "@/components/EwaComponents/EwaInput";
 import EwaInput from "@/components/EwaComponents/EwaInput";
 import EwaSlider from "@/components/EwaComponents/EwaSlider";
 
-function valueText(value: number) {
-    return `${value}°C`;
+type PriceRangeType = {
+    min: number,
+    max: number
 }
 
 interface PriceFilterPropsType {
-    priceRange: {
-        min: number,
-        max: number
-    }
+    onChange: (changedPriceRange: PriceRangeType) => void,
+    priceRange: PriceRangeType,
+    currentRange: PriceRangeType
 }
 
-const PriceFilter: FC<PriceFilterPropsType> = ({ priceRange }) => {
-    const [value, setValue] = useState<number[]>([priceRange.min, priceRange.max]);
+const PriceFilter: FC<PriceFilterPropsType> = ({ onChange, priceRange, currentRange }) => {
+    const [values, setValues] = useState([currentRange.min, currentRange.max]);
+    const [hasChanged, setChanged] = useState(false);
 
     const onChangeRange = (event: Event, newValue: number | number[]) => {
-        setValue(newValue as number[]);
+        setValues(newValue as number[]);
+        setChanged(true);
     };
 
-    // const onChangeMin
+    const onChangeMin = (event: FormEvent) => {
+        const target = event.target as HTMLInputElement;
+        const value = +target.value;
+
+        setValues((values) => [
+            (value >= priceRange.min) ? value : priceRange.min,
+            values[1]
+        ]);
+        setChanged(true);
+    }
+
+    const onChangeMax = (event: FormEvent) => {
+        const target = event.target as HTMLInputElement;
+        const value = +target.value;
+
+        setValues((values) => [
+            values[0],
+            (value <= priceRange.max) ? value : priceRange.max,
+        ]);
+        setChanged(true);
+    }
+
+    useEffect(() => {
+        if (hasChanged) {
+            const timeout = setTimeout(() => {
+                onChange({
+                    min: values[0],
+                    max: values[1]
+                });
+                setChanged(false);
+            }, 1000);
+            return () => clearTimeout(timeout);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hasChanged, values]);
 
     return (
         <>
@@ -35,11 +70,8 @@ const PriceFilter: FC<PriceFilterPropsType> = ({ priceRange }) => {
             >
                 <EwaSlider
                     min={priceRange?.min} max={priceRange?.max}
-                    getAriaLabel={() => 'Temperature range'}
-                    value={value}
+                    value={values}
                     onChange={onChangeRange}
-                    valueLabelDisplay="off"
-                    getAriaValueText={valueText}
                 />
             </Box>
             <Box sx={{
@@ -51,9 +83,9 @@ const PriceFilter: FC<PriceFilterPropsType> = ({ priceRange }) => {
                 color: variables.textGray
             }}>
                 <EwaInput
-                    value={value[0]}
+                    value={values[0]}
                     type="number"
-                    sx={{ textAlign: 'right' }}
+                    onInput={onChangeMin}
                 />
                 <div
                     aria-hidden
@@ -63,9 +95,9 @@ const PriceFilter: FC<PriceFilterPropsType> = ({ priceRange }) => {
                     }}
                 ></div>
                 <EwaInput
-                    value={value[1]}
+                    value={values[1]}
                     type="number"
-
+                    onInput={onChangeMax}
                 />
                 <p>zł</p>
             </Box>
