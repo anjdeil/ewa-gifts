@@ -6,15 +6,12 @@ import { useSelector } from "react-redux";
 import { decreasedCartQuantity, deletedFromCart, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { useAppDispatch } from "@/hooks/redux";
 
-const MiniCart = () =>
-{
+const MiniCart = () => {
     const dispatch = useAppDispatch();
     const { items, totals, cartRows, isLoading } = useSelector(state => state.Cart);
 
-    useEffect(() =>
-    {
-        if (items.length > 0)
-        {
+    useEffect(() => {
+        if (items.length > 0) {
             dispatch(fetchCartRows(items));
         }
     }, [items]);
@@ -59,7 +56,7 @@ const MiniCart = () =>
                                 className={styles["mini-cart__item-delete"]}
                                 onClick={() => dispatch(deletedFromCart({ id: row.id, type: row.type }))}
                             >
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CategoryTypeSchema = z.object({
+export const CategorySchema = z.object({
     id: z.number(),
     parent_id: z.number(),
     name: z.string(),
@@ -9,4 +9,4 @@ export const CategoryTypeSchema = z.object({
     count: z.number()
 });
 
-export type CategoryType = z.infer<typeof CategoryTypeSchema>;
+export type CategoryType = z.infer<typeof CategorySchema>;

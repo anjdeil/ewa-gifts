@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { CategoryTypeSchema } from "./CategoryType";
+import { CategorySchema } from "./CategoryType";
 
-export const ResponseCategoryListTypeSchema = z.object({
+export const ResponseCategoryListSchema = z.object({
     status: z.string(),
     data: z.object({
-        items: z.array(CategoryTypeSchema)
+        items: z.array(CategorySchema)
     }).optional(),
     error: z.object({
         message: z.string()
     }).optional()
 });
 
-export type ResponseCategoryListType = z.infer<typeof ResponseCategoryListTypeSchema>;
+export type ResponseCategoryListType = z.infer<typeof ResponseCategoryListSchema>;

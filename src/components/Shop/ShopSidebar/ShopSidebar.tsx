@@ -1,66 +1,86 @@
-import React from 'react';
-import FilterCollapsed from './FilterCollapsed';
-import { useFetchAllCategoriesListQuery, useFetchAttributeTermsQuery } from '@/store/wooCommerce/wooCommerceApi';
-import transformCategoriesMenu from '@/services/transformers/woocommerce/transformCategoriesMenu';
-import { useParams } from 'next/navigation';
-import PriceFilter from './PriceFilter';
+import React, { FC } from 'react';
+import FilterCollapsed from './Filters/FilterCollapsed';
+import { useFetchAttributeTermsQuery } from '@/store/custom/customApi';
+import { useParams, useSearchParams } from 'next/navigation';
+import PriceFilter from './Filters/PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
-import { Box, FormControlLabel } from '@mui/material';
-import EwaCheckbox from '@/components/EwaComponents/EwaCheckbox/EwaCheckbox';
-import { transformColors } from '@/services/transformers/woocommerce/transformColors';
-import ColorsFilter from './ColorsFilter';
+import ColorsFilter from './Filters/ColorsFilter';
+import { useFetchCategoryListQuery } from '@/store/custom/customApi';
+import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
+import { useRouter } from 'next/router';
 
-const ShopSidebar = () => {
+interface ShopSidebarPropsType {
+    priceRange: {
+        min: number,
+        max: number
+    }
+}
+
+const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
     const { slugs } = useParams();
-    const [categorySlug, subcategorySlug] = slugs;
+    const [categorySlug, subcategorySlug] = slugs as string[];
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const { data: categoriesData = [], isLoading: isCategoriesLoading, isError: isCategoriesError, error: categoriesError } = useFetchAllCategoriesListQuery();
-    const categories = categoriesData.length ? transformCategoriesMenu(categoriesData) : [];
+    /**
+     * Categories
+     */
+    const { data: categoriesData } = useFetchCategoryListQuery({});
+    const categories = categoriesData?.data && categoriesData.data.items as CategoryType[];
+    const currentCategory = categories?.find((category: CategoryType) => category.slug === categorySlug);
 
-    const { data: suppliersData = [], isLoading: isSuppliersLoading, isError: isSuppliersError, error: suppliersError } = useFetchAttributeTermsQuery(11);
-    const suppliers = suppliersData.length ? suppliersData : [];
+    /**
+     * Colors
+     */
+    const { data: colorsData } = useFetchAttributeTermsQuery('base_color');
+    const colors = colorsData?.data && colorsData.data.items;
+    const currentColor = searchParams.get('attribute_term');
 
-    const { data: colorsData = [], isLoading: isColorsLoading, isError: isColorsError, error: colorsError } = useFetchAttributeTermsQuery(9);
-    const colors = colorsData.length ? transformColors(colorsData) : [];
-    console.log(colorsData);
-    console.log(colors);
+    const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { slugs, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
 
+        const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
 
+        router.push({
+            pathname: router.pathname,
+            query: {
+                slugs: newSlugs,
+                ...params,
+                attribute: 'pa_base_color',
+                attribute_term: event.target.value,
+            }
+        })
 
-    const targetCategory = categories.find(({ slug }) => slug === categorySlug);
+    };
+
+    const resetColor = () => {
+        const { slugs, attribute, attribute_term, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
+
+        const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
+
+        if (attribute || attribute_term) router.push({
+            pathname: router.pathname,
+            query: {
+                slugs: newSlugs,
+                ...params
+            },
+        })
+    }
 
     return (
         <>
-            <FilterCollapsed title={targetCategory?.categoryName} collapsed={false}>
-                <SubcategoriesList targetCategory={targetCategory} currentSubcategorySlug={subcategorySlug} />
+            <FilterCollapsed title={currentCategory?.name} collapsed={false}>
+                <SubcategoriesList categories={categories} parent={currentCategory} currentSubcategorySlug={subcategorySlug} />
             </FilterCollapsed>
-            <FilterCollapsed title={"Price"} collapsed={false}>
-                <PriceFilter />
+
+            <FilterCollapsed title={"Cena"} collapsed={false}>
+                <PriceFilter priceRange={priceRange} />
             </FilterCollapsed>
-            <FilterCollapsed title={"Suppliers"} collapsed={false}>
-                {suppliers?.map(supplier => (
-                    <Box key={supplier.id}>
-                        <FormControlLabel
-                            sx={{
-                                '.MuiTypography-root': {
-                                    fontSize: '0.9em',
-                                }
-                            }}
-                            label={supplier.name}
-                            value={supplier.id}
-                            control={
-                                <EwaCheckbox
-                                    inputProps={{
-                                        "aria-label": supplier.name,
-                                    }}
-                                />
-                            }
-                        />
-                    </Box>
-                ))}
-            </FilterCollapsed>
-            <FilterCollapsed title={"Colors"} collapsed={false}>
-                <ColorsFilter colors={colors} />
+
+            <FilterCollapsed title={"Kolor"} collapsed={false}>
+                <ColorsFilter colors={colors} currentColor={currentColor} onChangeColor={handleChangeColor} onReset={() => resetColor()} />
             </FilterCollapsed>
         </>
     )

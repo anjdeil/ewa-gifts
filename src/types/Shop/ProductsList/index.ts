@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProductCardSchema } from "../ProductCard";
+import { ProductSchema } from "../ProductCard";
 
 export const ProductCardAdaptiveColumns = z.object({
     mobile: z.number().optional(),
@@ -8,9 +8,9 @@ export const ProductCardAdaptiveColumns = z.object({
 })
 
 export const ProductCardListPropsSchema = z.object({
-    isLoading: z.boolean(),
-    isError: z.boolean(),
-    products: z.array(ProductCardSchema),
+    isLoading: z.boolean().optional(),
+    isError: z.boolean().optional(),
+    products: z.array(ProductSchema),
     columns: ProductCardAdaptiveColumns.optional(),
 });
 
