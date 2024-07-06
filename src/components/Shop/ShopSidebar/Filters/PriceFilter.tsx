@@ -1,5 +1,5 @@
 import { Box, Slider, TextField } from "@mui/material";
-import React from "react";
+import React, { FC, useState } from "react";
 import variables from "@/styles/variables.module.scss";
 import FormInput from "@/components/EwaComponents/EwaInput";
 import EwaInput from "@/components/EwaComponents/EwaInput";
@@ -8,12 +8,23 @@ import EwaSlider from "@/components/EwaComponents/EwaSlider";
 function valueText(value: number) {
     return `${value}°C`;
 }
-const PriceFilter = () => {
-    const [value, setValue] = React.useState<number[]>([20, 37]);
 
-    const handleChange = (event: Event, newValue: number | number[]) => {
+interface PriceFilterPropsType {
+    priceRange: {
+        min: number,
+        max: number
+    }
+}
+
+const PriceFilter: FC<PriceFilterPropsType> = ({ priceRange }) => {
+    const [value, setValue] = useState<number[]>([priceRange.min, priceRange.max]);
+
+    const onChangeRange = (event: Event, newValue: number | number[]) => {
         setValue(newValue as number[]);
     };
+
+    // const onChangeMin
+
     return (
         <>
             <Box
@@ -23,10 +34,10 @@ const PriceFilter = () => {
                 }}
             >
                 <EwaSlider
-                    min={10} max={110}
+                    min={priceRange?.min} max={priceRange?.max}
                     getAriaLabel={() => 'Temperature range'}
                     value={value}
-                    onChange={handleChange}
+                    onChange={onChangeRange}
                     valueLabelDisplay="off"
                     getAriaValueText={valueText}
                 />
@@ -39,7 +50,11 @@ const PriceFilter = () => {
                 alignItems: 'center',
                 color: variables.textGray
             }}>
-                <EwaInput value={value[0]} sx={{ textAlign: 'right' }} />
+                <EwaInput
+                    value={value[0]}
+                    type="number"
+                    sx={{ textAlign: 'right' }}
+                />
                 <div
                     aria-hidden
                     style={{
@@ -47,7 +62,11 @@ const PriceFilter = () => {
                         backgroundColor: variables.inputDarker
                     }}
                 ></div>
-                <EwaInput value={value[1]} />
+                <EwaInput
+                    value={value[1]}
+                    type="number"
+
+                />
                 <p>zł</p>
             </Box>
         </>

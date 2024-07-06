@@ -6,7 +6,7 @@ import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
 
 
-const Home: FC<HomeProps> = ({ response, cookies }) => {
+const Home: FC<HomeProps> = ({ response }) => {
   let sections;
   const pageTitle = response[0].title.rendered;
 

@@ -1,29 +1,29 @@
-import React, { FC, useState } from "react";
-
+import React, { FC } from "react";
 import Head from "next/head";
-import { useParams } from 'next/navigation'
 import { useRouter } from "next/router";
-
-import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
-import { useFetchProductListQuery } from "@/store/custom/customApi";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
-import { transformProductCard } from "@/services/transformers";
-
 import { ProductCardList } from "@/components/Shop";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { Chip, useMediaQuery } from "@mui/material";
 import PagesNavigation from "@/components/Layouts/PagesNavigation";
-import ShopSidebar from "@/components/Shop/ShopSidebar";
-import ShopToolbar from "@/components/Shop/ShopToolbar";
-
-import styles from "./styles.module.scss";
 import { customRestApi } from "@/services/CustomRestApi";
 import { ResponseCategoryListType } from "@/types/Services/customApi/Category/ResponseCategoryListType";
 import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
+import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
+import { typeProductType } from "@/types";
+import { ResponseProductListType } from "@/types/Services/customApi/Product/ResponseProductListType";
+import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
+import ShopSidebar from "@/components/Shop/ShopSidebar";
+import ShopToolbar from "@/components/Shop/ShopToolbar";
+import styles from "./styles.module.scss";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-export const getServerSideProps = async ({ query }) => {
+/* eslint-disable-next-line react-refresh/only-export-components */
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
-    const { slugs } = query;
+    const { slugs, ...params } = context.query;
+    if (slugs === undefined || !Array.isArray(slugs)) return {
+        notFound: true
+    };
 
     /** Pagination:
      *
@@ -49,9 +49,9 @@ export const getServerSideProps = async ({ query }) => {
     const categoriesResponseData = await customRestApi.get(`categories`, {
         slugs: categorySlugs.join(',')
     });
-    const categoriesResponse = categoriesResponseData.data as ResponseCategoryListType;
-    const categories = categoriesResponse.data && categoriesResponse.data.items as CategoryType[];
-    if (!categories) return {
+    const categoriesResponse = categoriesResponseData?.data as ResponseCategoryListType;
+    const categories = categoriesResponse?.data && categoriesResponse.data.items as CategoryType[];
+    if (!categories?.length) return {
         notFound: true
     };
 
@@ -71,93 +71,97 @@ export const getServerSideProps = async ({ query }) => {
     /**
      * Products:
      *
-     * Collect filters:
-     */
+     * Collect filters: */
+    const productsPerPage = 21;
 
-    // const productsPerPage = 21;
-    // const productListQueryParams = {
-    //     page,
-    //     per_page: productsPerPage,
-    //     order_by: undefined,
-    //     order: undefined,
-    //     min_price: undefined,
-    //     max_price: undefined,
-    //     category: categories ? categories[categories.length - 1].slug : undefined,
-    //     attribute: undefined,
-
-    // };
-
+    const productListQueryParams: ProductListQueryParamsType = {
+        page: (page !== "1") ? page : undefined,
+        per_page: productsPerPage,
+        category: categories[categories.length - 1].slug,
+        attribute: typeof params?.attribute === 'string' ? params.attribute : undefined,
+        attribute_term: typeof params?.attribute_term === 'string' ? params.attribute_term : undefined,
+        min_price: undefined
+    };
 
     /* Fetch products */
+    const productsResponseData = await customRestApi.get(`products`, productListQueryParams);
+    const productsResponse = productsResponseData?.data as ResponseProductListType;
+    const products = productsResponse?.data && productsResponse.data.items;
 
+    /**
+     * Get statistic:
+     */
+    const statistic = productsResponse?.data && productsResponse.data.statistic;
+    if (!statistic) return {
+        notFound: true
+    };
 
-    // const notFoundIndex = categories.findIndex(category => category === undefined);
-    // if (notFoundIndex >= 0) {
-    //     return {
-    //         notFound: true
-    //     }
-    // }
-
-    // const productsPerPage = 21;
-    // let { count: categoryProductsCount } = categories[categories.length - 1];
-    // categoryProductsCount = categoryProductsCount || 1;
-    // const pagesCount = Math.ceil(categoryProductsCount / productsPerPage);
-
-    // if (+page > +pagesCount) return {
-    //     notFound: true
-    // }
+    /* Do not open if pagination page number is more than pages count */
+    const pagesCount = Math.ceil(statistic.products_count / productsPerPage);
+    if (pagesCount !== 0 && +page > pagesCount) return {
+        notFound: true
+    }
 
     return {
         props: {
+            products,
             categories,
-            page
+            page,
+            pagesCount,
+            priceRange: {
+                min: statistic.min_price,
+                max: statistic.max_price
+            }
         }
     };
 
 }
 
 interface CategoryPagePropsType {
+    products: typeProductType[]
     categories: CategoryType[],
-    page: string
+    page: string,
+    pagesCount: number,
+    priceRange: {
+        min: number,
+        max: number
+    }
 }
 
-const CategoryPage: FC<CategoryPagePropsType> = ({ categories, page }) => {
-    // const isMobile = useMediaQuery('(max-width: 768px)');
-
-    // console.log(categories);
-
-    // const router = useRouter();
-    // const { slugs } = useParams();
-    // const pageSlugIndex = slugs.findIndex(slug => slug === 'page');
-    // const lastCategorySlugIndex = pageSlugIndex >= 0 ? pageSlugIndex : slugs.length;
-    // const categorySlugs = slugs.slice(0, lastCategorySlugIndex);
-
-    const { name, description } = categories[categories.length - 1] as CategoryType;
-
-    const productsPerPage = 21;
-    // const pagesCount = Math.ceil(count / productsPerPage);
-
-    // const onChangePage = (evt, page) => {
-    //     router.push(`/product-category/${categorySlugs.join('/')}/page/${page}`);
-    // }
-
-    // let { data: products, isProductsLoading, isProductsError, productsError } = useFetchProductListQuery({ per_page: productsPerPage, category: id, page })
-    const { data: products, isLoading, isError } = useFetchProductListQuery({ per_page: productsPerPage })
-    // const products = productsData ? transformProductCard(productsData.data.items) : [];
-
+const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, pagesCount, priceRange }) => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const { name, description, count } = categories[categories.length - 1] as CategoryType;
     const links = transformBreadcrumbsCategories(categories);
+    const router = useRouter();
 
-    // const renderPagination = () => (
-    // <PagesNavigation
-    //     page={+page}
-    //     count={pagesCount}
-    //     siblingCount={1}
-    //     shape="rounded"
-    //     hidePrevButton
-    //     hideNextButton
-    //     onChange={onChangePage}
-    // />
-    // );
+    const switchPage = (page: number) => {
+        const { slugs, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
+
+        const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
+
+        if (page !== 1) newSlugs.push('page', String(page));
+
+        router.push({
+            pathname: router.pathname,
+            query: {
+                slugs: newSlugs,
+                ...params
+            }
+        })
+    }
+
+    const renderPagination = (page: string, pagesCount: number) => (
+        <PagesNavigation
+            page={+page}
+            count={pagesCount}
+            siblingCount={1}
+            shape="rounded"
+            hidePrevButton
+            hideNextButton
+            onChange={(_, page) => { switchPage(page) }}
+        />
+    );
 
     return (
         <>
@@ -169,29 +173,29 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ categories, page }) => {
                 <div className="container">
                     <Breadcrumbs links={links} />
                     <div className={styles['product-category__titling']}>
-                        {/* <h1 className={styles['product-category__title']}>{name}</h1> */}
-                        {/* <Chip
+                        <h1 className={styles['product-category__title']}>{name}</h1>
+                        <Chip
                             className={styles['product-category__count']}
                             label={count}
                             size="small"
-                        /> */}
+                        />
                     </div>
                     <div className={styles['product-category__container']}>
                         <aside className={styles['product-category__sidebar']}>
-                            {/* {!isMobile && <ShopSidebar />} */}
+                            {!isMobile && <ShopSidebar priceRange={priceRange} />}
                         </aside>
                         <div className={styles['product-category__archive']}>
-                            {/* <ShopToolbar renderPagination={renderPagination} /> */}
-                            {products && <ProductCardList isLoading={isLoading} isError={isError} products={products.data.items} columns={{ desktop: 3 }} />}
+                            <ShopToolbar renderPagination={() => renderPagination(page, pagesCount)} />
+                            {products && <ProductCardList products={products} columns={{ desktop: 3 }} />}
                             <div className={styles['product-category__nav-wrap']}>
-                                {/* {renderPagination()} */}
+                                {renderPagination(page, pagesCount)}
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
         </>
-    )
+    );
 }
 
 export default CategoryPage;
