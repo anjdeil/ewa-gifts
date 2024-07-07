@@ -16,6 +16,8 @@ import ShopSidebar from "@/components/Shop/ShopSidebar";
 import ShopToolbar from "@/components/Shop/ShopToolbar";
 import styles from "./styles.module.scss";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useAppSelector } from "@/hooks/redux";
+import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
 
 /* eslint-disable-next-line react-refresh/only-export-components */
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -80,6 +82,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         category: categories[categories.length - 1].slug,
         attribute: typeof params?.attribute === 'string' ? params.attribute : undefined,
         attribute_term: typeof params?.attribute_term === 'string' ? params.attribute_term : undefined,
+        order_by: typeof params?.order_by === 'string' ? params.order_by : undefined,
+        order: typeof params?.order === 'string' ? params.order : undefined,
         min_price: typeof params?.min_price === 'string' ? params.min_price : undefined,
         max_price: typeof params?.max_price === 'string' ? params.max_price : undefined
     };
@@ -133,6 +137,7 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
     const isMobile = useMediaQuery('(max-width: 768px)');
     const { name, description, count } = categories[categories.length - 1] as CategoryType;
     const links = transformBreadcrumbsCategories(categories);
+    const popup = useAppSelector(state => state.Popup);
     const router = useRouter();
 
     const switchPage = (page: number) => {
@@ -187,6 +192,7 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
                         </aside>
                         <div className={styles['product-category__archive']}>
                             <ShopToolbar renderPagination={() => renderPagination(page, pagesCount)} />
+                            {popup === 'mobile-filter' && <MobileSidebar priceRange={priceRange} />}
                             {products && <ProductCardList products={products} columns={{ desktop: 3 }} />}
                             <div className={styles['product-category__nav-wrap']}>
                                 {renderPagination(page, pagesCount)}

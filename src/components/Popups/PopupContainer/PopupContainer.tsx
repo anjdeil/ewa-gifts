@@ -3,7 +3,6 @@ import { popupClosed } from "@/store/reducers/PopupSlice";
 import { useDispatch } from "react-redux";
 import MobileSearchPopup from "@/components/Popups/MobileSearchPopup";
 import HamburgerMenu from "@/components/Popups/HamburgerMenu";
-import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
 import SwiperPopup from "@/components/Popups/SwiperPopup/SwiperPopup";
 import { useAppSelector } from "@/hooks/redux";
 
@@ -33,11 +32,6 @@ const PopupContainer = () => {
         case 'hamburger-menu': {
             return (
                 <HamburgerMenu onClose={closePopup} />
-            )
-        }
-        case 'mobile-filter': {
-            return (
-                <MobileSidebar />
             )
         }
         case 'swiper-popup': {

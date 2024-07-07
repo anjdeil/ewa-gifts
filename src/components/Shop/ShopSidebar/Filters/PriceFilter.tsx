@@ -19,6 +19,10 @@ const PriceFilter: FC<PriceFilterPropsType> = ({ onChange, priceRange, currentRa
     const [values, setValues] = useState([currentRange.min, currentRange.max]);
     const [hasChanged, setChanged] = useState(false);
 
+    useEffect(() => {
+        setValues([currentRange.min, currentRange.max]);
+    }, [currentRange]);
+
     const onChangeRange = (event: Event, newValue: number | number[]) => {
         setValues(newValue as number[]);
         setChanged(true);

@@ -8,6 +8,7 @@ import ColorsFilter from './Filters/ColorsFilter';
 import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
+import { AttributeTermType } from '@/types/Services/customApi/Attribute/AttributeTermType';
 
 type PriceRange = {
     min: number,
@@ -35,7 +36,7 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
      * Colors
      */
     const { data: colorsData } = useFetchAttributeTermsQuery('base_color');
-    const colors = colorsData?.data && colorsData.data.items;
+    const colors = colorsData?.data && colorsData.data.items as AttributeTermType[];
     const currentColor = searchParams.get('attribute_term');
 
     const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +77,11 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
      */
     const [minPrice, setMinPrice] = useState(searchParams.get('min_price') || String(priceRange.min));
     const [maxPrice, setMaxPrice] = useState(searchParams.get('max_price') || String(priceRange.max));
+
+    useEffect(() => {
+        setMinPrice(searchParams.get('min_price') || String(priceRange.min));
+        setMaxPrice(searchParams.get('max_price') || String(priceRange.max));
+    }, [priceRange, searchParams])
 
     const onChangePriceRange = (changedPriceRange: PriceRange) => {
         if (changedPriceRange.min !== +minPrice) {
