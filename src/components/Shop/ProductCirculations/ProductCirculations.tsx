@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { ChangeEvent, FC } from "react";
 import styles from "./styles.module.scss";
 import EwaInput from "@/components/EwaComponents/EwaInput";
 import EwaSlider from "@/components/EwaComponents/EwaSlider";
@@ -7,7 +7,7 @@ import { circulatedPriceType } from "@/types/Shop/ProductCalculations";
 
 interface ProductCirculationsPropsType {
     stock: number,
-    onChangeQuantity: any,
+    onChangeQuantity: (value: number) => void,
     circulatedPrices: circulatedPriceType[],
     currentQuantity: number
 }
@@ -19,18 +19,27 @@ const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChange
         value: from,
         label: from
     }));
+
+    const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
+        onChangeQuantity(+evt.target.value);
+    }
+
+    const handleSliderChange = (evt: Event, value: number | number[]) => {
+        onChangeQuantity(value as number);
+    }
+
     return (
         <>
             <h3 className="product-page-h3">Cena za sztukę zależy od nakładu</h3>
             {Boolean(stock) && (
                 <div className={styles["circulations-modifier"]}>
-                    <EwaInput value={currentQuantity} type="number" onChange={onChangeQuantity} />
+                    <EwaInput value={currentQuantity} type="number" onChange={handleInputChange} />
                     <EwaSlider
                         marks={circulationMarks}
                         min={1} max={lastCirculationQuantity}
                         getAriaLabel={() => 'Quantity range'}
                         value={currentQuantity}
-                        onChange={onChangeQuantity}
+                        onChange={handleSliderChange}
                         valueLabelDisplay="off"
                     />
                 </div>
@@ -49,7 +58,7 @@ const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChange
                     const to = index !== circulations.length - 1 ? circulations[index + 1].from : Infinity;
                     const isActive = (currentQuantity >= from && currentQuantity < to) && stock;
                     return (
-                        <div className={`${styles["circulations-table__col"]} ${isActive ? styles["circulations-table__col_active"] : ''}`}>
+                        <div key={from} className={`${styles["circulations-table__col"]} ${isActive ? styles["circulations-table__col_active"] : ''}`}>
                             <div className={styles["circulations-table__col-header"]}>
                                 {label}
                             </div>

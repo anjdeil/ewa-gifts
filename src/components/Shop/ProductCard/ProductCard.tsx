@@ -7,16 +7,15 @@ import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
 import { useAppDispatch } from "@/hooks/redux";
 import { updatedCartQuantity } from "@/store/reducers/CartSlice";
+import Link from "next/link";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
-export const ProductCard: FC<ProductCardProps> = ({ product }) =>
-{
+export const ProductCard: FC<ProductCardProps> = ({ product }) => {
     const [color, setColor] = useState('');
 
     const dispatch = useAppDispatch();
 
-    function changeProductsAmount(product: ProductType, count: number)
-    {
+    function changeProductsAmount(product: ProductType, count: number) {
         dispatch(updatedCartQuantity({
             id: product.id,
             type: product.type,
@@ -26,24 +25,21 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 
     const [isVariable, setVariable] = useState(false);
 
-    const changeQuantityState = () =>
-    {
-        if (!isVariable)
-        {
+    const changeQuantityState = () => {
+        if (!isVariable) {
             setVariable(true);
         }
     }
 
-    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) =>
-    {
+    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) => {
         setColor(newColor);
     }
 
     return (
-        <div className={styles.productCard}>
+        <Link href={`/product/${product.slug}`} className={styles.productCard}>
             <div className={styles.productCard__image}>
                 <Image
-                    src={product.image}
+                    src={product.images[0]?.src}
                     alt={product.name}
                     width={220}
                     height={220}
@@ -88,6 +84,6 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                     changeQuantity={(count) => changeProductsAmount(product, count)}
                 />
             )}
-        </div>
+        </Link>
     );
 }

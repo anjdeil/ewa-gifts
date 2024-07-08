@@ -10,7 +10,7 @@ import {SizeOptions} from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 
 // 46791
-const ProductInfo: FC<ProductInfoProps> = ({product}) => {
+const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
 
     const {name, description, price, sku, images, attributes} = product;
     const colors = attributes.find(attr => attr.name === "color");
@@ -51,10 +51,7 @@ const ProductInfo: FC<ProductInfoProps> = ({product}) => {
                     {sizes && <SizeOptions sizeAttributes={sizes.options}/>}
                 </Box>
 
-                {/* <ProductCalculations product={product} /> */}
-                <Box className={styles['product-info__accordionWrapper']}>
-                    <AccordionProduct text={description} title={'OPIS PRODUKTU'}/>
-                </Box>
+  {/* <ProductCalculations product={product} /> */}
                 <Box className={styles['product-info__accordionWrapper']}>
                     <AccordionProduct data={attributes} title={'Informacje dodatkowe'}/>
                 </Box>

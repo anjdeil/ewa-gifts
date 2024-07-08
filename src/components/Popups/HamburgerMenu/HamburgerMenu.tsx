@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import Nav from "@/components/Layouts/Navigation/Nav";
+import { PopupType } from "@/types/Popups/PopupType";
 
-const HamburgerMenu: FC = ({ onClose }) => {
+const HamburgerMenu: FC<PopupType> = ({ onClose }) => {
 
     return (
         <div className={styles["hamburger-menu"]}>

@@ -5,15 +5,13 @@ import { MobileSearchButton } from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
 import { IconButton, Box } from '@mui/material';
-import { categoriesItems } from '../Header/cat';
 import { CategoriesMenu } from '../CategoriesMenu';
 import Link from 'next/link';
 
-const MobileHeader: React.FC = () =>
-{
+const MobileHeader: React.FC = () => {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <CategoriesMenu categoriesItems={categoriesItems} />
+            <CategoriesMenu />
             <AppBar position="static" className={styles.header}>
                 <Toolbar sx={{ gap: '30px', justifyContent: 'space-between', minHeight: '100%!important' }}>
                     <Link href={'/'} passHref>

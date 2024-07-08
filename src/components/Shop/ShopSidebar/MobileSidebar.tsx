@@ -1,11 +1,20 @@
-import React from "react";
+import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import ShopSidebar from "./ShopSidebar";
 
-const MobileSidebar = () => {
+type PriceRange = {
+    min: number,
+    max: number
+}
+
+interface ShopSidebarPropsType {
+    priceRange: PriceRange
+}
+
+const MobileSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
     return (
         <div className={styles["mobile-sidebar"]}>
-            <ShopSidebar />
+            <ShopSidebar priceRange={priceRange} />
         </div>
     );
 }

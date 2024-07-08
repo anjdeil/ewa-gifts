@@ -1,9 +1,15 @@
 import { Button, Collapse } from '@mui/material';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import variables from '@/styles/variables.module.scss';
-import styles from './styles.module.scss';
+import styles from '../styles.module.scss';
 
-const FilterCollapsed = ({ title, children, collapsed }) => {
+interface FilterCollapsedPropsType {
+    title?: string,
+    children: React.ReactNode,
+    collapsed: boolean
+}
+
+const FilterCollapsed: FC<FilterCollapsedPropsType> = ({ title = "Filter", children, collapsed }) => {
     const [isCollapsed, setCollapsed] = useState(collapsed);
 
     return (
