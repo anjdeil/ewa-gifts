@@ -3,25 +3,29 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
 import { ProductCard } from "../ProductCard";
-import { productCarouselProps } from "@/types";
-import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
-import { transformProductCard } from "@/services/transformers";
+import { typeProductType } from "@/types";
+import { useFetchProductListQuery } from "@/store/custom/customApi";
 
-export const ProductCarousel: FC<productCarouselProps> = ({ ids }) => {
-    const { data, isLoading } = useFetchProductListQuery({ include: ids });
 
-    if (isLoading) {
+export const ProductCarousel: FC = () =>
+{
+    const { data, isLoading } = useFetchProductListQuery({})
+
+    if (isLoading)
+    {
         return <h3>Loading...</h3>
     }
 
-    if (!data) {
+    if (!data)
+    {
         return <div>Products not found.</div>
     }
 
     let products;
 
-    if (data) {
-        products = transformProductCard(data);
+    if (data)
+    {
+        products = data.data.items;
     }
 
     return (
@@ -47,8 +51,8 @@ export const ProductCarousel: FC<productCarouselProps> = ({ ids }) => {
             }}
         >
             {
-                products && products.map((product, index) => (
-                    <SwiperSlide key={index} style={{ height: 'auto' }}>
+                products && products.map((product: typeProductType) => (
+                    <SwiperSlide key={product.id} style={{ height: 'auto' }}>
                         <ProductCard product={product} />
                     </SwiperSlide>
                 ))

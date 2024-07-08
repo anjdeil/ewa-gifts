@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { CartTable } from "@/components/Shop/CartTable";
 import { useAppSelector } from "@/hooks/redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CartSummary } from "@/components/Shop/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
@@ -11,13 +11,18 @@ import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
+import { cartItem } from "@/types";
+import { ProductCard } from "@/components/Shop";
+import { useFetchProductQuery } from "@/store/custom/customApi";
+
 const Cart = () =>
 {
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
-    const { createOrder, createdOrder } = useCreateOrderWoo();
-    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder } = useUpdateOrderWoo();
-    const [products, setProducts] = useState(null);
+    const { createOrder, createdOrder, error: createError } = useCreateOrderWoo();
+    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [products, setProducts] = useState<Record<string, any>[]>([]);
     const [total, setTotal] = useState('0');
     const [isUpdating, setIsUpdating] = useState(false);
     const breadLinks = [
@@ -29,7 +34,13 @@ const Cart = () =>
             name: 'Koszyk',
             url: '/cart'
         },
-    ]
+    ];
+    const { data, isLoading } = useFetchProductQuery('pileczka-antystresowa-z-pianki-karabuk', {});
+    if (data)
+    {
+        console.log('Object', data);
+    }
+
 
     useEffect(() =>
     {
@@ -49,28 +60,41 @@ const Cart = () =>
 
     useEffect(() =>
     {
-        if (createdOrder)
+        if (updateError || items.length === 0)
         {
-            setTotal(createdOrder.total);
-            setProducts(createdOrder.line_items);
             setIsUpdating(false);
         }
-    }, [createdOrder]);
+    }, [updateError, items.length]);
+
+    const updateLocalState = useCallback((total: string, line_items: cartItem[], isLoading: boolean): void =>
+    {
+        if (!line_items) return;
+        setTotal(total);
+        setProducts(line_items);
+        setIsUpdating(isLoading);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, updatedOrder, updatedItems]);
 
     useEffect(() =>
     {
-        if (updatedOrder)
+        if (createdOrder)
         {
-            setTotal(updatedOrder.total);
-            setProducts(updatedOrder.line_items);
-            setIsUpdating(false);
+            updateLocalState(createdOrder.total, createdOrder.line_items, false);
         }
-    }, [updatedOrder]);
+    }, [createdOrder, updateLocalState]);
 
+    useEffect(() =>
+    {
+        if (updatedOrder && updatedItems)
+        {
+            updateLocalState(updatedOrder.total, updatedItems, false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder, updateLocalState]);
 
     if (isUpdating)
     {
-        return <Loader size={100} thickness={4} />
+        return <Loader size={100} thickness={4} />;
     }
 
     return (
@@ -95,7 +119,8 @@ const Cart = () =>
                         <CartSummary total={total} sum={total} isLoading={isUpdating} />
                     </Box>
                 </Section>
-            </main >
+                <ProductCard product={undefined} />
+            </main>
         </>
     );
 }

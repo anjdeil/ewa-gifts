@@ -1,4 +1,3 @@
-import { ProductCardProps, ProductType, ProductType } from "@/types";
 import { FC, useState } from "react";
 import Image from "next/image";
 import { RichTextComponent } from "../../Common/RichTextComponent";
@@ -7,15 +6,18 @@ import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
 import { useAppDispatch } from "@/hooks/redux";
 import { updatedCartQuantity } from "@/store/reducers/CartSlice";
+import { ProductCardProps, typeProductType } from "@/types";
+import { Stock } from "./Stock";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 {
     const [color, setColor] = useState('');
-
     const dispatch = useAppDispatch();
+    const [isVariable, setVariable] = useState(false);
+    if (!product) return;
 
-    function changeProductsAmount(product: ProductType, count: number)
+    function changeProductsAmount(product: typeProductType, count: number)
     {
         dispatch(updatedCartQuantity({
             id: product.id,
@@ -23,8 +25,6 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
             quantity: count,
         }));
     }
-
-    const [isVariable, setVariable] = useState(false);
 
     const changeQuantityState = () =>
     {
@@ -34,7 +34,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
         }
     }
 
-    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) =>
+    const onHandleColorClick = async (newColor: string) =>
     {
         setColor(newColor);
     }
@@ -43,7 +43,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
         <div className={styles.productCard}>
             <div className={styles.productCard__image}>
                 <Image
-                    src={product.image}
+                    src={product.images[0].src}
                     alt={product.name}
                     width={220}
                     height={220}
@@ -62,19 +62,13 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                         className={styles.productCard__colorsSlider}
                     />
                 }
-                {product.price_html &&
+                {product.price &&
                     <div className={`desc ${styles.productCard__price}`}>
-                        From <RichTextComponent text={product.price_html} />
+                        From <RichTextComponent text={product.price} />
                         <span className={styles.productCard__price_vat}>without VAT</span>
                     </div>
                 }
-                {product.stock && (
-                    <div className={`${styles.productCard__stock} desc`}>
-                        <div className={styles.productCard__stockCircle}></div>
-                        <span>{product.stock} in shop</span>
-                    </div>
-                )}
-
+                <Stock quantity={product.stock_quantity} />
             </div>
             {!isVariable ? (
                 <AddButton
@@ -84,7 +78,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 />
             ) : (
                 <Counter
-                    count={product.quantity ? product.quantity : 1}
+                    count={product.stock_quantity ? product.stock_quantity : 1}
                     changeQuantity={(count) => changeProductsAmount(product, count)}
                 />
             )}

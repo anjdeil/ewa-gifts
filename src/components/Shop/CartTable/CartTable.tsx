@@ -14,10 +14,9 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 
     const changeProductsAmount = (product: CartProduct, count: string) =>
     {
-        console.log('sdsd');
+        console.log('Change product', product, count);
         dispatch(updatedCartQuantity({
             id: product.id,
-            type: product.type,
             quantity: count,
         }));
     };

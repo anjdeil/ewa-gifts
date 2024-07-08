@@ -1,20 +1,62 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { CartItem } from "@/types";
 import axios from "axios";
+import { cartItem } from "@/types";
+import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
 
 export const useUpdateOrderWoo = () =>
 {
-    const [fetchUpdateOrder, { data: updatedOrder }] = useFetchUpdateOrderMutation();
+    const [fetchUpdateOrder, { data }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isUpdating, setIsUpdating] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [items, setItems] = useState<Record<string, any>[] | null>(null);
+    const updatedOrder = data;
 
-    const updateOrder = async (
-        items: CartItem[],
-        orderId: number
-    ) =>
+    useEffect(() =>
+    {
+        if (data)
+        {
+            setItems(RemoveObjectDuplicates(data.line_items, 'name'))
+        }
+    }, [data])
+
+    const localDeleteOrder = useCallback(async (orderId: number) =>
+    {
+        setIsUpdating(true);
+        try
+        {
+            await axios({
+                url: `/api/woo/delete-order-items/${orderId}`,
+                method: 'DELETE',
+            });
+        } catch (error)
+        {
+            console.error("Error deleting order items:", error);
+            throw error;
+        } finally
+        {
+            setIsUpdating(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder]);
+
+    const localUpdateOrder = useCallback(async (items: cartItem[], orderId: number) =>
+    {
+        await fetchUpdateOrder({
+            credentials: {
+                line_items: [
+                    ...transformCreateOrderProducts(items)
+                ]
+            },
+            id: orderId
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder]);
+
+    const updateOrder = async (items: cartItem[], orderId: number) =>
     {
         setIsLoading(true);
         setError(null);
@@ -23,24 +65,9 @@ export const useUpdateOrderWoo = () =>
         {
             if (!isUpdating)
             {
-                setIsUpdating(true);
-
-                await axios({
-                    url: `/api/woo/delete-order-items/${orderId}`,
-                    method: 'DELETE',
-                });
-
-                const resp = await fetchUpdateOrder({
-                    credentials: {
-                        line_items: [
-                            ...transformCreateOrderProducts(items)
-                        ]
-                    },
-                    id: orderId
-                });
-
+                await localDeleteOrder(orderId);
+                await localUpdateOrder(items, orderId);
                 setIsUpdating(false);
-                console.log(resp.data.line_items);
             }
 
         } catch (err)
@@ -59,5 +86,5 @@ export const useUpdateOrderWoo = () =>
         }
     };
 
-    return { updateOrder, isLoading, error, updatedOrder };
+    return { updateOrder, isLoading, error, updatedOrder, items };
 };
