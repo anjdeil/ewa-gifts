@@ -5,78 +5,105 @@
 	display: flex;
 	align-items: flex-start;
 	grid-gap: 20px;
-	@media screen and (max-width: 768px) {
-		padding-top: 50px;
-		flex-direction: column;
+	@media screen and (max-width: 1024px) {
+		padding-top: 49px;
 	}
-	@media screen and (max-width: 580px) {
-		padding-top: 40px;
+	@media screen and (max-width: 768px) {
+		padding-top: 41px;
+		flex-direction: column;
+		grid-gap: 27px;
 	}
 	&__slider {
 		flex: 0 1 50%;
+		width: 50%;
+		max-width: 630px;
 		overflow: hidden;
 		@media screen and (max-width: 768px) {
 			width: 100%;
+			flex: 0 1 100%;
 		}
 	}
 	&__info {
-		flex: 0 1 50%;
+
+	}
+}
+.product-info {
+	flex: 0 1 50%;
+	width: 50%;
+	max-width: 630px;
+	@media screen and (max-width: 768px) {
+		width: 100%;
+		flex: 0 1 100%;
+	}
+	&__title {
+		font-weight: 600;
+		font-size: 20px;
+		line-height: 120%;
+		text-transform: uppercase;
+		color: $black-color;
+		margin-bottom: 11px;
+	}
+	&__sku {
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 150%;
+		color: $text-gray;
+		margin-bottom: 23px;
+	}
+	&__price {
+		font-weight: 400;
+		font-size: 18px;
+		color: $graphite;
+		margin-bottom: 22px;
+	}
+	&__accordionWrapper {
+		margin-bottom: 40px;
+	}
+}
+
+.price-wrapper {
+	margin: 23px 0 21px;
+}
+.color-wrapper {
+	margin-bottom: 39px;
+	@media screen and (max-width: 1024px) {
+		margin-bottom: 26px;
+	}
+	& h3 {
+		margin-bottom: 20px;
+		
 		@media screen and (max-width: 768px) {
-			width: 100%;
-		}
-		&_title {
-			font-weight: 600;
-			font-size: 20px;
-			line-height: 120%;
-			text-transform: uppercase;
-			color: $black-color;
-			margin-bottom: 11px;
-		}
-		&_sku {
-			font-weight: 400;
-			font-size: 16px;
-			line-height: 150%;
-			color: $text-gray;
-			margin-bottom: 23px;
-		}
-		&_price {
-			font-weight: 400;
-			font-size: 18px;
-			color: $graphite;
-			margin-bottom: 22px;
-		}
-		&_accordionWrapper {
-			margin-bottom: 40px;
+			margin-bottom: 16px;
 		}
 	}
 }
-.accordion {
-	border: 1px solid $input-light;
-	border-radius: 10px;
-	padding: 12px 0;
-	box-shadow: none;
-	&__opis {
-		padding: 0 35px;
-		height: 52px;
-		&.Mui-expanded {
-			min-height: 0;
-		}
-		span {
-			font-weight: 500;
-			font-size: 16px;
-			text-transform: uppercase;
-			text-align: center;
-			color: $black-color;
-			letter-spacing: 0;
+.size-wrapper {
+	margin-bottom: 46px;
+	@media screen and (max-width: 1024px) {
+		margin-bottom: 20px;
+	}
+	@media screen and (max-width: 768px) {
+		margin-bottom: 26px;
+	}
+	& h3 {
+		margin-bottom: 20px;
+		@media screen and (max-width: 768px) {
+			margin-bottom: 16px;
 		}
 	}
-	&__description{
-		padding: 16px 35px 23px;
-		p {
-			font-weight: 400;
-			font-size: 18px;
-			color: $black-color;
-			letter-spacing: 0;
+}
+.delivery-wrapper {
+	margin-bottom: 36px;
+	@media screen and (max-width: 1024px) {
+		margin-bottom: 35px;
+	}
+	@media screen and (max-width: 768px) {
+		margin-bottom: 16px;
+	}
+	& h3 {
+		margin-bottom: 20px;
+		@media screen and (max-width: 768px) {
+			margin-bottom: 16px;
 		}
 	}
 }
