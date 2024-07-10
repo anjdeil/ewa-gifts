@@ -23,12 +23,18 @@ const OrderTotals: FC<OrderTotalsPropsType> = ({ order }) => {
                     <div className={styles['totals-table__value']}>{line.total} zł</div>
                 </div>
             ))}
-            {order?.fee_lines.map(line => (
-                <div key={line.id} className={styles['totals-table__row']}>
-                    <div className={styles['totals-table__label']}>{line.name}</div>
-                    <div className={styles['totals-table__value']}>{line.total} zł</div>
-                </div>
-            ))}
+            {order?.coupon_lines.map(line => {
+                const name = `Kod rabatowy ${line.discount_type === 'percent' ? `-${line.nominal_amount}% ` : ""}`;
+                return (
+                    <div key={line.id} className={styles['totals-table__row']}>
+                        <div className={styles['totals-table__label']}>
+                            {name} <br />
+                            <span className={styles['totals-table__label-code']}>{line.code}</span>
+                        </div>
+                        <div className={styles['totals-table__value']}>- {line.discount} zł</div>
+                    </div>
+                );
+            })}
             {order?.tax_lines.map(line => (
                 <div key={line.id} className={styles['totals-table__row']}>
                     <div className={styles['totals-table__label']}>{line.label} ({line.rate_percent}%)</div>
