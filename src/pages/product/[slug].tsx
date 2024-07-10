@@ -15,7 +15,7 @@ const Product: FC<ProductProps> = ({ product, breadLinks }) =>
   return (
     <>
       <Head>
-        <title>{"name"}</title>
+        <title>{product.name}</title>
         <meta name="description" content={"name"} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

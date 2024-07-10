@@ -8,13 +8,15 @@ import { useAppDispatch } from "@/hooks/redux";
 import { updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { ProductCardProps, typeProductType } from "@/types";
 import { Stock } from "./Stock";
+import Link from "next/link";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 {
     const [color, setColor] = useState('');
-    const dispatch = useAppDispatch();
     const [isVariable, setVariable] = useState(false);
+    const [count, setCount] = useState(0);
+    const dispatch = useAppDispatch();
     if (!product) return;
 
     function changeProductsAmount(product: typeProductType, count: number)
@@ -40,14 +42,14 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
     }
 
     return (
-        <div className={styles.productCard}>
+        <Link href={`/product/${product.slug}`} className={styles.productCard}>
             <div className={styles.productCard__image}>
-                <Image
-                    src={product.images[0].src}
+                {/* <Image
+                    src={product.images[0]?.src}
                     alt={product.name}
                     width={220}
                     height={220}
-                />
+                /> */}
             </div>
             <div className={styles.productCard__content}>
                 <h3 className={`desc ${styles.productCard__title}`}>
@@ -64,7 +66,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 }
                 {product.price &&
                     <div className={`desc ${styles.productCard__price}`}>
-                        From <RichTextComponent text={product.price} />
+                        From <RichTextComponent text={product.price.toString()} />
                         <span className={styles.productCard__price_vat}>without VAT</span>
                     </div>
                 }
@@ -78,10 +80,10 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 />
             ) : (
                 <Counter
-                    count={product.stock_quantity ? product.stock_quantity : 1}
+                    count={count}
                     changeQuantity={(count) => changeProductsAmount(product, count)}
                 />
             )}
-        </div>
+        </Link>
     );
 }

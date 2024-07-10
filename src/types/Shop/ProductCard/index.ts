@@ -36,6 +36,11 @@ export const productImagesSchema = z.object({
     src: z.string()
 });
 
+export const PriceCirculationsSchema = z.object({
+    type: z.string(),
+    circulations: z.record(z.number())
+});
+
 export const simpleProductSchema = z.object({
     attributes: z.array(ProductAttributesSchema),
     categories: z.array(ProductCategorySchema),
@@ -47,6 +52,7 @@ export const simpleProductSchema = z.object({
     modified: z.string(),
     name: z.string(),
     price: z.union([z.number(), z.boolean()]),
+    price_circulations: PriceCirculationsSchema,
     sku: z.string(),
     slug: z.string(),
     stock_quantity: z.union([z.number(), z.boolean()]),

@@ -1,0 +1,65 @@
+@import "@/styles/variables.module.scss";
+
+.accordion {
+	max-width: 630px;
+	border: 1px solid $input-light;
+	border-radius: 10px;
+	padding: 12px 0;
+	box-shadow: none;
+	&__opis {
+		padding: 0 35px;
+		min-height: 52px !important;
+		& > div {
+			min-height: 0;
+			margin: 12px 0 !important;
+		}
+		span {
+			font-weight: 500;
+			font-size: 16px;
+			text-transform: uppercase;
+			text-align: center;
+			color: $black-color;
+			letter-spacing: 0;
+		}
+	}
+	&__description{
+		padding: 16px 35px 23px;
+		p {
+			font-weight: 400;
+			font-size: 18px;
+			color: $black-color;
+			letter-spacing: 0;
+		}
+	}
+	&__details {
+		padding: 0 35px;
+	}
+	&__item {
+		display: flex;
+		margin-bottom: 10px;
+	}
+	&__name {
+		width: 100%;
+		max-width: 150px;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 19px;
+		padding: 8px 0 9px;
+		border-bottom: 1px solid $input-light;
+	}
+	&__value {
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 19px;
+		letter-spacing: 0;
+		padding: 8px 0 9px;
+		border-bottom: 1px solid $input-light;
+		& span {
+			display: inline-block;
+			margin-right: 4px;
+		}
+		& span:first-letter {
+			text-transform: uppercase;
+		}
+	}
+}
