@@ -1,11 +1,13 @@
 import React, { FC } from "react";
 import AccountLayout from "@/components/MyAccount/AccountLayout";
-import OrderList from "@/components/MyAccount/OrderList";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import parseCookies from "@/Utils/parseCookies";
 import axios, { AxiosResponse } from "axios";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
+import OrderItems from "@/components/MyAccount/OrderItems";
+import AddressDetails from "@/components/MyAccount/AddressDetails";
+import OrderTotals from "@/components/MyAccount/OrderTotals";
 import Notification from "@/components/Layouts/Notification";
 
 const redirectToLogin = {
@@ -17,6 +19,8 @@ const redirectToLogin = {
 
 /* eslint-disable-next-line react-refresh/only-export-components */
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+    const { slug } = context.query;
+
     const cookies = context.req.headers.cookie;
     if (!cookies) return redirectToLogin;
 
@@ -33,13 +37,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         const userData = userResponse.data;
         if (!userData?.id) return redirectToLogin;
 
-        const userOrdersResponse = await wooCommerceRestApi.get('orders', {
-            customer: userData.id
-        });
+        const orderResponse = await wooCommerceRestApi.get(`orders/${slug}`);
+
+        if (orderResponse?.data?.customer_id !== userData?.id) return redirectToLogin;
 
         return {
             props: {
-                orders: userOrdersResponse.data
+                order: orderResponse.data
             }
         }
 
@@ -56,26 +60,36 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     }
 }
 
-interface OrdersPropsType {
-    orders: OrderType[]
+interface OrderPropsType {
+    order: OrderType
 }
 
-const Orders: FC<OrdersPropsType> = ({ orders }) => {
+const Order: FC<OrderPropsType> = ({ order }) => {
+    const dateCreated = order.date_created && new Date(order.date_created).toLocaleDateString("pl-PL", {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    const status = order?.status?.charAt(0).toUpperCase() + order?.status?.slice(1);
+
     return (
         <AccountLayout
-            title="Zamówienia"
+            title={`Zamówienie #${order.id}`}
+
             breadcrumbs={[
-                { name: 'Zamówienia', url: '/my-account/orders' }
+                { name: 'Zamówienia', url: '/my-account/orders' },
+                { name: `#${order.id}`, url: `/my-account/${order.id}` }
             ]}
         >
-            {orders?.length ?
-                <OrderList orders={orders} /> :
-                <Notification>
-                    Żadne zamówienia nie zostały złożone
-                </Notification>
-            }
+            <Notification>
+                Zamówienie #{order.id} złożone {dateCreated} jest obecnie {status}.
+            </Notification>
+            <OrderItems orderItems={order.line_items} />
+            <OrderTotals order={order} />
+            <AddressDetails order={order} />
         </AccountLayout>
     );
 }
 
-export default Orders;
+export default Order;

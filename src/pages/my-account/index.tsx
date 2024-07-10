@@ -1,66 +1,72 @@
-import Head from "next/head";
-import { useCookies } from 'react-cookie';
-import { z } from "zod";
-import { FC, useEffect } from "react";
-import { useFetchCheckLoggedInMutation } from "@/store/jwt/jwtApi";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { useRouter } from "next/router";
-import { Section } from "@/components/Layouts/Section";
+import { FC } from "react";
+import AccountLayout from "@/components/MyAccount/AccountLayout";
+import Notification from '@/components/Layouts/Notification';
+import Link from 'next/link';
+import axios, { AxiosResponse } from 'axios';
+import parseCookies from '@/Utils/parseCookies';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
-export const MyAccountPropsSchema = z.object({
-  userToken: z.string(),
-});
-
-export type MyAccountProps = z.infer<typeof MyAccountPropsSchema>;
-
-const MyAccount: FC<MyAccountProps> = () =>
-{
-  const [cookie] = useCookies(['userToken']);
-  const [fetchCheckLoggedIn, { error, data }] = useFetchCheckLoggedInMutation();
-  const router = useRouter();
-  const pageTitle = "My-account";
-
-  useEffect(() =>
-  {
-    if ("userToken" in cookie)
-    {
-      fetchCheckLoggedIn(cookie.userToken);
-      if (data)
-      {
-        console.log(data.data.status !== 200);
-      }
-      if (error)
-      {
-        console.log(error);
-      }
-    } else
-    {
-      router.push('/my-account/login');
+const redirectToLogin = {
+    redirect: {
+        destination: '/my-account/login',
+        permanent: false,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cookie]);
+};
 
-  if (data)
-  {
-    console.log(data.data.status !== 200);
-  }
+/* eslint-disable-next-line react-refresh/only-export-components */
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+    const cookies = context.req.headers.cookie;
+    if (!cookies) return redirectToLogin;
 
-  return (
-    <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={`This is ${pageTitle}`} />
-      </Head>
-      <main style={{ minHeight: '100vh' }}>
-        <Section className={"section"} isContainer={true}>
-          <Breadcrumbs links={[
-            { name: 'my-account', url: '/my-account' },
-          ]} />
-          <h1>{pageTitle}</h1>
-        </Section>
-      </main>
-    </>
-  );
+    const cookieRows = parseCookies(cookies)
+    if (!cookieRows.userToken) return redirectToLogin;
+
+    try {
+        const userResponse = await axios.get(`${process.env.SITE_URL}/wp-json/wp/v2/users/me`, {
+            headers: {
+                'Authorization': `Bearer ${cookieRows.userToken}`
+            }
+        });
+
+        const userData = userResponse.data;
+        if (!userData?.id) return redirectToLogin;
+
+        return {
+            props: {
+                userId: userData.id,
+                userName: userData.name,
+            }
+        }
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            const response = error?.response as AxiosResponse;
+            if (response?.data?.code === 'jwt_auth_invalid_token') return redirectToLogin;
+        }
+
+        return {
+            notFound: true
+        }
+    }
+}
+
+interface MyAccountPropsType {
+    userId: string,
+    userName: string,
+}
+
+const MyAccount: FC<MyAccountPropsType> = ({ userName }) => {
+    return (
+        <AccountLayout title="Moje konto">
+            <Notification>
+                Witaj {userName}! Nie jesteś {userName}? <Link href={'/my-account/logout'}>Wyloguj się</Link>
+            </Notification>
+            <Notification>
+                W ustawieniach swojego konta możesz przejrzeć swoje ostatnie zamówienia, zarządzać adresami płatności i dostawy oraz zmieniać hasło i szczegóły konta.
+            </Notification>
+        </AccountLayout>
+    );
 };
 
 export default MyAccount;
