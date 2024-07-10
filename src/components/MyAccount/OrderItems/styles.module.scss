@@ -33,6 +33,11 @@
             display: none;
         }
 
+        &-postfix {
+            font-size: 0.9em;
+            color: $text-gray;
+        }
+
         &-image {
             object-fit: contain;
             margin-right: 10px;

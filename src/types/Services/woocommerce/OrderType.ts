@@ -67,7 +67,16 @@ export const OrderTypeSchema = z.object({
         taxes: z.array(z.any()),
         meta_data: z.any()
     })),
-    coupon_lines: z.any(),
+    coupon_lines: z.array(z.object({
+        id: z.number(),
+        code: z.string(),
+        discount: z.string(),
+        discount_tax: z.string(),
+        meta_data: z.any(),
+        discount_type: z.string(),
+        nominal_amount: z.number(),
+        free_shipping: z.boolean()
+    })),
     refunds: z.any(),
     payment_url: z.string(),
     is_editable: z.boolean(),
