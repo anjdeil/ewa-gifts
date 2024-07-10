@@ -177,14 +177,16 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
             </Head>
             <main className={styles['product-category']}>
                 <div className="container">
-                    <Breadcrumbs links={links} />
-                    <div className={styles['product-category__titling']}>
-                        <h1 className={styles['product-category__title']}>{name}</h1>
-                        <Chip
-                            className={styles['product-category__count']}
-                            label={count}
-                            size="small"
-                        />
+                    <div className="page-top">
+                        <Breadcrumbs links={links} />
+                        <div className="page-top__titling">
+                            <h1 className="page-top__title">{name}</h1>
+                            <Chip
+                                className="page-top__count"
+                                label={count}
+                                size="small"
+                            />
+                        </div>
                     </div>
                     <div className={styles['product-category__container']}>
                         <aside className={styles['product-category__sidebar']}>

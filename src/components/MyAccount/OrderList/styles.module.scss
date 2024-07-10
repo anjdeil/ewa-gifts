@@ -1,0 +1,80 @@
+@import "@/styles/variables.module.scss";
+
+.orders-table {
+    font-size: 0.9rem;
+
+    &__row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding: 1.2em 1.5em;
+        gap: 20px;
+        align-items: center;
+        border-radius: 10px;
+        border: 2px solid $white-lilac;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &_header {
+            background-color: $white-lilac;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+    }
+
+    &__cell {
+        text-align: center;
+
+        &-prefix {
+            display: none;
+        }
+
+        &-button {
+            display: inline-flex;
+        }
+    }
+}
+
+@media(max-width: 1024px) {
+    .orders-table {
+        &__row {
+            margin-bottom: 20px;
+            padding: 1em;
+            display: block;
+
+            &_header {
+                display: none;
+            }
+        }
+
+        &__cell {
+            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.2em;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &-prefix {
+                display: block;
+                text-align: left;
+                color: $text-gray;
+                width: 100px;
+            }
+
+            &-button {
+                display: flex;
+                justify-content: center;
+            }
+
+            &_button {
+                display: block;
+            }
+        }
+    }
+}

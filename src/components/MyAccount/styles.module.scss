@@ -1,0 +1,31 @@
+.my-account {
+    margin-bottom: 80px;
+
+    &__container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+
+        &_simple {
+            display: block;
+        }
+    }
+
+    &__content {
+        grid-column: 2/4;
+    }
+}
+
+@media(max-width: 768px) {
+    .my-account {
+        margin-bottom: 40px;
+
+        &__container {
+            display: block;
+        }
+
+        &__sidebar {
+            margin-bottom: 30px;
+        }
+    }
+}

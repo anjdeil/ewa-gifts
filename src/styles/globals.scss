@@ -146,6 +146,35 @@ input[type=number]::-webkit-outer-spin-button {
     }
 }
 
+.page-top {
+    padding: 40px 0;
+
+    &_center {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__titling {
+        margin-top: 40px;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    &__title {
+        font-size: 1.15em;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    &__count {
+        margin-top: -1px;
+        margin-left: 0.6em;
+        background-color: $input-light;
+    }
+}
+
 @media(max-width: 1024px) {
 
     .desc,
@@ -159,7 +188,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-@media(max-width: 768) {
+@media(max-width: 768px) {
 
     .desc,
     .sub-title {
@@ -168,5 +197,17 @@ input[type=number]::-webkit-outer-spin-button {
 
     .more-link {
         font-size: 14px;
+    }
+
+    .page-top {
+        padding: 25px 0;
+
+        &__titling {
+            margin-top: 25px;
+        }
+
+        &__count {
+            margin-top: -4px;
+        }
     }
 }

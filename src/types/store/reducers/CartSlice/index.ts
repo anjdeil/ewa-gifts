@@ -16,7 +16,7 @@ export const CartItemSchema = z.object({
     imageUrl: z.string()
 });
 
-const lineOrderItemsSchema = z.object({
+export const lineOrderItemsSchema = z.object({
     id: z.number(),
     name: z.string(),
     product_id: z.number(),
@@ -29,6 +29,10 @@ const lineOrderItemsSchema = z.object({
     total_tax: z.string(),
     taxes: z.array(z.any()),
     meta_data: z.array(z.any()),
+    image: z.object({
+        id: z.number(),
+        src: z.string()
+    }),
     sku: z.string(),
     price: z.number()
 });
