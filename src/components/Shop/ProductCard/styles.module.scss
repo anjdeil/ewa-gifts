@@ -18,8 +18,6 @@
         margin: 0 auto;
         margin-bottom: 15px;
         overflow: hidden;
-        // text-overflow: ellipsis;
-        // white-space: nowrap;
         opacity: 0.5;
     }
 
@@ -47,7 +45,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 10px;
         margin-bottom: 10px;
         font-size: 16px;
 
@@ -60,6 +58,10 @@
         width: 12px;
         height: 12px;
         border-radius: 100%;
-        background-color: #01A900;
+        background-color: $successfully;
+
+        &_empty {
+            background-color: $dusty-gray;
+        }
     }
 }

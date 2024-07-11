@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
 import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { setCurrentOrder, setLineItemsIds } from "@/store/reducers/CurrentOrder";
+import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
 import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
-import { CartItem } from "@/types";
+import { cartItem } from "@/types";
+import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
 
 export const useCreateOrderWoo = () =>
 {
@@ -12,9 +12,11 @@ export const useCreateOrderWoo = () =>
     const [fetchCreateOrder, { data: createdOrder }] = useFetchCreateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [items, setItems] = useState<Record<string, any>[] | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-    const createOrder = useCallback(async (items: CartItem[]) =>
+    const createOrder = useCallback(async (items: cartItem[]) =>
     {
         setIsLoading(true);
         setError(null);
@@ -23,9 +25,8 @@ export const useCreateOrderWoo = () =>
         try
         {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
-            const lineItemsIds = transformLineItemsId(createOrderData.line_items);
             dispatch(setCurrentOrder(createOrderData.id));
-            dispatch(setLineItemsIds(lineItemsIds));
+            setItems(RemoveObjectDuplicates(createOrderData.line_items, 'name'));
         } catch (error)
         {
             if (error instanceof Error)
@@ -43,5 +44,5 @@ export const useCreateOrderWoo = () =>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, fetchCreateOrder]);
 
-    return { createOrder, isLoading, error, createdOrder };
+    return { createOrder, isLoading, error, createdOrder, items };
 };

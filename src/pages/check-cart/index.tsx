@@ -145,7 +145,7 @@ const CheckPage = () =>
                     {
                         evt.preventDefault();
                         dispatch(addedToCart({
-                            id: 44657,
+                            id: 46288,
                             type: 'variable',
                             variationId: 44667,
                             choosenOptions: {

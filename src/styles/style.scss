@@ -30,6 +30,10 @@ body {
     margin: 0 auto;
     padding: 0 40px;
     max-width: 1360px;
+
+    &_bread {
+        padding-top: 40px;
+    }
 }
 
 .section {
@@ -54,6 +58,10 @@ body {
 @media(max-width: 1024px) {
     .container {
         padding: 0 20px;
+
+        &_bread {
+            padding-top: 30px;
+        }
     }
 
     .section {

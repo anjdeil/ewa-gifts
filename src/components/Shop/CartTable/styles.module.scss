@@ -17,17 +17,17 @@
 
 .CartTable {
     margin: 0 auto;
-    max-width: 1000px;
     width: 100%;
 
     &__row {
         padding: 15px 20px;
         display: grid;
+        grid-template-columns: 3fr 1fr 1fr 1fr;
         gap: 16px;
 
         &_head {
             background-color: $white-lilac;
-            // display: none;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
         }
     }
 
@@ -40,11 +40,30 @@
     }
 }
 
-@media(max-width: 1024px) {
+@media(max-width: 1200px) {
     .CartTable {
-        // margin: 0 auto;
-        // max-width: 1000px;
-        // width: 100%;
+        margin-bottom: 30px;
+
+        &__row {
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 16px;
+
+            &_head {
+                background-color: $white-lilac;
+            }
+        }
+    }
+}
+
+@media(max-width: 876px) {
+    .CartTable {
+        &__tableBody {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
         &__row {
             margin: 0 auto;
@@ -59,6 +78,12 @@
             &_head {
                 display: none;
             }
+        }
+    }
+
+    .cartItem {
+        &__delete {
+            order: 2;
         }
     }
 }

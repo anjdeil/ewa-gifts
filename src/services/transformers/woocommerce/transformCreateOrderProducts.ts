@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CartItem } from "@/types";
+import { lineItem } from "@/store/reducers/CartSlice";
 import { createOrderProducts } from "@/types/Cart";
 
-export function transformCreateOrderProducts(products: CartItem[]): createOrderProducts[]
+export function transformCreateOrderProducts(products: lineItem[]): createOrderProducts[]
 {
-    return products.reduce((acc: createOrderProducts[], product: CartItem) =>
+    return products.reduce((acc: createOrderProducts[], product: lineItem) =>
     {
         if (product.type === 'variable' && product.options)
         {

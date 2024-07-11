@@ -1,50 +1,64 @@
-import { CartItem, CartSliceInitialStateType } from "@/types";
+import { cartItem } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { z } from "zod";
 
-export const getItemsCount = (items: CartItem[]) => {
-    return items.reduce((accumulator, item) => {
+export const getItemsCount = (items: CartItem[]) =>
+{
+    return items.reduce((accumulator, item) =>
+    {
         if (item.type === 'variable') return accumulator + item.options.length;
         return accumulator + 1;
     }, 0);
 }
 
-const saveCartToLocalStorage = (state) => {
-    try {
+const saveCartToLocalStorage = (state) =>
+{
+    try
+    {
         const cartJSON = JSON.stringify(state);
         localStorage.setItem('cart', cartJSON);
-    } catch (e) {
+    } catch (e)
+    {
         console.warn(e);
     }
 }
 
-const loadCartFromLocalStorage = () => {
-    try {
+const loadCartFromLocalStorage = () =>
+{
+    try
+    {
         const cartJSON = localStorage.getItem('cart') || undefined;
         const cart = JSON.parse(cartJSON);
         return cart;
-    } catch (e) {
+    } catch (e)
+    {
         console.warn(e);
         return undefined;
     }
 }
-const addCartItem = (prevCart, updatedItem) => {
+const addCartItem = (prevCart, updatedItem) =>
+{
     const { id: productId, type: productType, variationId, choosenOptions, imageUrl } = updatedItem;
 
     const foundedItem = prevCart.find(({ id }) => id === productId);
 
-    if (foundedItem) {
-        return prevCart.map(cartItem => {
+    if (foundedItem)
+    {
+        return prevCart.map(cartItem =>
+        {
             if (cartItem.id !== productId) return cartItem;
 
-            if (productType === 'variable') {
+            if (productType === 'variable')
+            {
                 const foundedOptionIndex = cartItem.options.findIndex(option =>
                     Object.entries(option.attributes).every(([slug, value]) =>
                         choosenOptions[slug] === value
                     )
                 );
 
-                if (foundedOptionIndex !== -1) {
+                if (foundedOptionIndex !== -1)
+                {
                     return {
                         ...cartItem,
                         options: cartItem.options.map((option, index) =>
@@ -53,7 +67,8 @@ const addCartItem = (prevCart, updatedItem) => {
                                 : option
                         )
                     };
-                } else {
+                } else
+                {
                     return {
                         ...cartItem,
                         options: [
@@ -62,11 +77,13 @@ const addCartItem = (prevCart, updatedItem) => {
                         ]
                     };
                 }
-            } else {
+            } else
+            {
                 return { ...cartItem, quantity: cartItem.quantity + 1 };
             }
         });
-    } else {
+    } else
+    {
         const newItem = {
             id: productId,
             type: productType,
@@ -78,9 +95,12 @@ const addCartItem = (prevCart, updatedItem) => {
     }
 }
 
-const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1, type = "update") => {
-    const updateQuantity = (currentQuantity, type, quantity) => {
-        switch (type) {
+const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1, type = "update") =>
+{
+    const updateQuantity = (currentQuantity, type, quantity) =>
+    {
+        switch (type)
+        {
             case "update":
                 return quantity;
             case "increase":
@@ -92,10 +112,12 @@ const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1
         }
     };
 
-    for (let cartItemIndex = prevCart.length - 1; cartItemIndex >= 0; cartItemIndex--) {
+    for (let cartItemIndex = prevCart.length - 1; cartItemIndex >= 0; cartItemIndex--)
+    {
         const cartItem = prevCart[cartItemIndex];
 
-        if (targetItemData.type === 'variation') {
+        if (targetItemData.type === 'variation')
+        {
             if (cartItem.type !== 'variable') continue;
 
             const foundedOptionIndex = cartItem.options.findIndex(({ id }) => id === targetItemData.id);
@@ -103,21 +125,26 @@ const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1
 
             const targetQuantity = updateQuantity(cartItem.options[foundedOptionIndex].quantity, type, quantity);
 
-            if (targetQuantity > 0) {
+            if (targetQuantity > 0)
+            {
                 cartItem.options[foundedOptionIndex].quantity = targetQuantity;
-            } else {
+            } else
+            {
                 cartItem.options.splice(foundedOptionIndex, 1);
             }
 
             if (!cartItem.options.length) prevCart.splice(cartItemIndex, 1);
 
 
-        } else if (cartItem.id === targetItemData.id) {
+        } else if (cartItem.id === targetItemData.id)
+        {
             const targetQuantity = updateQuantity(cartItem.quantity, type, quantity);
 
-            if (targetQuantity > 0) {
+            if (targetQuantity > 0)
+            {
                 cartItem.quantity = targetQuantity;
-            } else {
+            } else
+            {
                 prevCart.splice(cartItemIndex, 1);
             }
             break;
@@ -126,24 +153,30 @@ const updateCartItemQuantity = (prevCart: CartItem, targetItemData, quantity = 1
 }
 
 // To delete
-const transformCartRows = (cartItems, response) => {
+const transformCartRows = (cartItems, response) =>
+{
 
     const parentsResponse = response[response.length - 1];
     const variationsResponse = response.slice(0, response.length - 1);
 
     const parentsData = parentsResponse.data;
-    const variationsData = variationsResponse.reduce((prevData, currData) => {
+    const variationsData = variationsResponse.reduce((prevData, currData) =>
+    {
         return [...prevData, ...currData.data];
     }, []);
 
 
     const cartRows = [];
-    parentsData.forEach(parentData => {
+    parentsData.forEach(parentData =>
+    {
         const relevantCartItem = cartItems.find(({ id }) => id === parentData.id);
 
-        if (parentData.type === 'variable') {
-            variationsData.forEach(variationData => {
-                if (variationData.parent_id === parentData.id) {
+        if (parentData.type === 'variable')
+        {
+            variationsData.forEach(variationData =>
+            {
+                if (variationData.parent_id === parentData.id)
+                {
                     const name = `${parentData.name} — ${variationData.name.split(' (#')[0]}`;
                     const relevantCartItemVariation = relevantCartItem.options.find(({ id }) => id === variationData.id);
                     const quantity = relevantCartItemVariation.quantity;
@@ -159,7 +192,8 @@ const transformCartRows = (cartItems, response) => {
                     });
                 }
             });
-        } else {
+        } else
+        {
             const image = parentData.images.length ? parentData.images[0] : null;
 
             cartRows.push({
@@ -180,17 +214,21 @@ const transformCartRows = (cartItems, response) => {
 // To delete
 export const fetchCartRows = createAsyncThunk<CartItem[]>(
     'Cart/fetchCartRows',
-    async (cartItems, thunkAPI) => {
+    async (cartItems, thunkAPI) =>
+    {
         const productPromises = [];
 
         const productIds = [];
 
-        cartItems.forEach(({ id, type, options }) => {
+        cartItems.forEach(({ id, type, options }) =>
+        {
             productIds.push(id);
 
-            if (type === 'variable') {
+            if (type === 'variable')
+            {
                 const variationIds = [];
-                options.forEach(({ id: variationId }) => {
+                options.forEach(({ id: variationId }) =>
+                {
                     variationIds.push(variationId);
                 });
                 productPromises.push(axios.get(`/api/woo/products/${id}/variations`, {
@@ -217,7 +255,12 @@ export const fetchCartRows = createAsyncThunk<CartItem[]>(
 // To delete
 const calculateTotal = (cartRows) => cartRows.reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
 
+export const initialStateSchema = z.object({
+    items: z.array(cartItem)
+    // Add new lines here
+});
 
+type initialState = z.infer<typeof initialStateSchema>;
 
 const initialState: CartSliceInitialStateType = {
     items: loadCartFromLocalStorage() || [],
@@ -236,54 +279,56 @@ export const CartSlice = createSlice({
     name: 'Cart',
     initialState,
     reducers: {
-        addedToCart: (state, action) => {
+        addedToCart: (state, action) =>
+        {
             state.items = addCartItem(state.items, action.payload);
             state.itemsCount = getItemsCount(state.items);
         },
-        increasedCartQuantity: (state, action) => {
+        increasedCartQuantity: (state, action) =>
+        {
             updateCartItemQuantity(state.items, action.payload, 1, 'increase');
             state.itemsCount = getItemsCount(state.items);
         },
-        decreasedCartQuantity: (state, action) => {
+        decreasedCartQuantity: (state, action) =>
+        {
             updateCartItemQuantity(state.items, action.payload, 1, 'decrease');
             state.itemsCount = getItemsCount(state.items);
         },
-        updatedCartQuantity: (state, action) => {
-            const { id, type, quantity } = action.payload;
-            updateCartItemQuantity(state.items, { id, type }, quantity, 'update');
+        updatedCartQuantity: (state, action) =>
+        {
+            const { id, quantity } = action.payload;
+            updateCartItemQuantity(state.items, { id }, quantity, 'update');
             state.itemsCount = getItemsCount(state.items);
         },
-        deletedFromCart: (state, action) => {
+        deletedFromCart: (state, action) =>
+        {
             updateCartItemQuantity(state.items, action.payload, 0, 'update');
             state.itemsCount = getItemsCount(state.items);
         },
-        decreasedCartQuantity: (state) => {
-
-        },
-        updatedCartQuantity: (state, action) => {
-
-        },
-        deletedFromCart: (state, action) => {
-
-        },
-        toggleMiniCart: (state) => {
+        toggleMiniCart: (state) =>
+        {
             state.miniCartOpen = !state.miniCartOpen
         },
-        refreshItemsCount: (state) => {
+        refreshItemsCount: (state) =>
+        {
             state.itemsCount = getItemsCount(state.items);
         }
     },
-    extraReducers: (builder) => { // to delete
+    extraReducers: (builder) =>
+    { // to delete
         builder
-            .addCase(fetchCartRows.pending, (state) => {
+            .addCase(fetchCartRows.pending, (state) =>
+            {
                 state.isLoading = true;
             })
-            .addCase(fetchCartRows.fulfilled, (state, action) => {
+            .addCase(fetchCartRows.fulfilled, (state, action) =>
+            {
                 state.isLoading = false;
                 state.cartRows = action.payload;
                 state.totals.total = calculateTotal(action.payload);
             })
-            .addCase(fetchCartRows.rejected, (state, action) => {
+            .addCase(fetchCartRows.rejected, (state, action) =>
+            {
                 state.isLoading = false;
                 state.error = action.error.message;
                 state.isError = true;
@@ -291,7 +336,8 @@ export const CartSlice = createSlice({
     },
 })
 
-export const cartLocalStorageMiddleware = store => next => action => {
+export const cartLocalStorageMiddleware = store => next => action =>
+{
     const result = next(action);
     const { items } = store.getState().Cart;
     saveCartToLocalStorage(items);

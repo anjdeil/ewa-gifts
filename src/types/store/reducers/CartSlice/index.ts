@@ -1,16 +1,22 @@
 import { z } from "zod";
 
-const CartItemVariationSchema = z.object({
-    attributes: z.array(z.any()).optional(),
+export const option = z.object({
+    attributes: z.record(z.string()),
     id: z.number(),
+    quantity: z.number()
+});
+
+export const cartItem = z.object({
+    id: z.number(),
+    imageUrl: z.string(),
     quantity: z.number(),
+    options: z.array(option),
     type: z.string(),
-    imageUrl: z.string()
 });
 
 export const CartItemSchema = z.object({
     id: z.number(),
-    options: z.array(CartItemVariationSchema),
+    options: z.array(option),
     quantity: z.number(),
     type: z.string(),
     imageUrl: z.string()
