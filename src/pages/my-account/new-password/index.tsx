@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { z } from "zod";
 import { FC } from "react";
+import styles from "@/components/MyAccount/styles.module.scss";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { Section } from "@/components/Layouts/Section";
 import { NewPassword } from "@/components/Forms/NewPassword";
 
 export const MyAccountPropsSchema = z.object({
@@ -11,25 +11,27 @@ export const MyAccountPropsSchema = z.object({
 
 export type MyAccountProps = z.infer<typeof MyAccountPropsSchema>;
 
-const MyAccount: FC<MyAccountProps> = () =>
-{
-    const pageTitle = "New-password";
+const MyAccount: FC<MyAccountProps> = () => {
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
-                <meta name="description" content={`This is ${pageTitle}`} />
+                <title>Nowe hasło</title>
             </Head>
-            <main style={{ minHeight: '100vh' }}>
-                <Section className={"section"} isContainer={true}>
-                    <Breadcrumbs links={[
-                        { name: 'my-account', url: '/my-account' },
-                        { name: 'new-password', url: '/my-account/new-password' }
-                    ]} />
-                    <h1>{pageTitle}</h1>
-                    <NewPassword />
-                </Section>
-
+            <main className={styles['my-account']}>
+                <div className="container">
+                    <div className="page-top page-top_center">
+                        <Breadcrumbs links={[
+                            { name: 'Moje konto', url: '/my-account' },
+                            { name: 'Nowe hasło', url: '/my-account/new-password' }
+                        ]} />
+                        <div className="page-top__titling">
+                            <h1 className="page-top__title">Nowe hasło</h1>
+                        </div>
+                    </div>
+                    <div className={`${styles['my-account__container']} ${styles['my-account__container_simple']}`}>
+                        <NewPassword />
+                    </div>
+                </div>
             </main>
         </>
     );

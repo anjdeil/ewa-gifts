@@ -16,41 +16,6 @@
     }
 }
 
-.categories-list {
-    &__list {
-        &-item {
-            list-style: none;
-        }
-    }
-
-    &__button {
-        color: $black-color;
-        text-decoration: none;
-        font-size: 0.9em;
-        padding: 0.7em 0.6em;
-        display: flex;
-        align-items: center;
-        border-radius: 10px;
-        transition: .2s ease;
-
-        &:hover,
-        &:focus {
-            background-color: $white-lilac;
-        }
-
-        &_active,
-        &_active:hover,
-        &_active:focus {
-            background-color: $accent-hover;
-
-        }
-
-        &-icon {
-            margin-right: 0.4em;
-        }
-    }
-}
-
 .mobile-sidebar {
     padding: 20px;
     position: fixed;

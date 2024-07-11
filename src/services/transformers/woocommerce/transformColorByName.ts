@@ -1,16 +1,14 @@
+import { transColorsType } from "@/types";
 import getCssGradient from "@/Utils/getCssGradient";
 
-type ColorLabelAndCssType = {
-    cssColor: string,
-    label: string
-}
-
-export const transformColorByName = (untransformedName: string): ColorLabelAndCssType => {
+export const transformColorByName = (untransformedName: string): transColorsType =>
+{
     const colorNames: string[] = [];
     const colorHexs: string[] = [];
 
     const colorPairs = untransformedName.split(', ');
-    colorPairs.forEach(colorPair => {
+    colorPairs.forEach(colorPair =>
+    {
         const [colorName, colorHex] = colorPair.split(" (");
         const cleanedColorHex = colorHex.slice(0, -1);
 

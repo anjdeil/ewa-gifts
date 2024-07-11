@@ -67,6 +67,7 @@ const ProductCardPropsSchema = z.object({
     product: ProductSchema,
 });
 
+export type ProductAttributesType = z.infer<typeof ProductAttributesSchema>;
 export type ProductCardProps = z.infer<typeof ProductCardPropsSchema>;
 export type ProductOptions = z.infer<typeof ProductOptionsSchema>;
 export type typeProductType = z.infer<typeof ProductSchema>;

@@ -9,6 +9,7 @@ import { updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { ProductCardProps, typeProductType } from "@/types";
 import { Stock } from "./Stock";
 import Link from "next/link";
+import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 // import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
@@ -18,6 +19,11 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
     const [count, setCount] = useState(0);
     const dispatch = useAppDispatch();
     if (!product) return;
+    // console.log(product);
+
+    let colors;
+    if (product.type === "variable")
+        colors = transformColorsArray(product.attributes);
 
     function changeProductsAmount(product: typeProductType, count: number)
     {
@@ -44,18 +50,18 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
     return (
         <Link href={`/product/${product.slug}`} className={styles.productCard}>
             <div className={styles.productCard__image}>
-                {/* <Image
+                <Image
                     src={product.images[0]?.src}
                     alt={product.name}
                     width={220}
                     height={220}
-                /> */}
+                />
             </div>
             <div className={styles.productCard__content}>
                 <h3 className={`desc ${styles.productCard__title}`}>
                     {product.name}
                 </h3>
-                {isVariable &&
+                {/* {colors &&
                     <ColorSlider
                         colors={product.attributes}
                         currentColor={color}
@@ -63,7 +69,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                         onColorClick={onHandleColorClick}
                         className={styles.productCard__colorsSlider}
                     />
-                }
+                } */}
                 {product.price &&
                     <div className={`desc ${styles.productCard__price}`}>
                         From <RichTextComponent text={product.price.toString()} />

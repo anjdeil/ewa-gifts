@@ -35,11 +35,6 @@ const Cart = () =>
             url: '/cart'
         },
     ];
-    const { data, isLoading } = useFetchProductQuery("46591", {});
-    if (data)
-    {
-        console.log('Object', data);
-    }
 
     useEffect(() =>
     {
@@ -118,7 +113,6 @@ const Cart = () =>
                         <CartSummary total={total} sum={total} isLoading={isUpdating} />
                     </Box>
                 </Section>
-                <ProductCard product={data && data} />
             </main>
         </>
     );
