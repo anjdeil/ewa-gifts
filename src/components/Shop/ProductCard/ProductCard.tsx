@@ -10,16 +10,15 @@ import { ProductCardProps, typeProductType } from "@/types";
 import { Stock } from "./Stock";
 import Link from "next/link";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
-// import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
+import { Box } from "@mui/material";
 
 export const ProductCard: FC<ProductCardProps> = ({ product }) =>
 {
-    const [color, setColor] = useState('');
+    const [inputId, setInputId] = useState<string>('');
     const [isVariable, setVariable] = useState(false);
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState<number>(0);
     const dispatch = useAppDispatch();
     if (!product) return;
-    // console.log(product);
 
     let colors;
     if (product.type === "variable")
@@ -32,6 +31,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
             type: product.type,
             quantity: count,
         }));
+        setCount(0);
     }
 
     const changeQuantityState = () =>
@@ -42,42 +42,44 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
         }
     }
 
-    const onHandleColorClick = async (newColor: string) =>
+    const onInputClick = (id: string) =>
     {
-        setColor(newColor);
-    }
+        setInputId(id);
+    };
 
     return (
-        <Link href={`/product/${product.slug}`} className={styles.productCard}>
-            <div className={styles.productCard__image}>
-                <Image
-                    src={product.images[0]?.src}
-                    alt={product.name}
-                    width={220}
-                    height={220}
-                />
-            </div>
-            <div className={styles.productCard__content}>
+        <Box className={styles.productCard}>
+            <Link href={`/product/${product.slug}`}>
+                <Box className={styles.productCard__image}>
+                    <Image
+                        src={product.images[0]?.src}
+                        alt={product.name}
+                        width={220}
+                        height={220}
+                    />
+                </Box>
                 <h3 className={`desc ${styles.productCard__title}`}>
                     {product.name}
                 </h3>
-                {/* {colors &&
+            </Link>
+            <Box className={styles.productCard__content}>
+                {colors &&
                     <ColorSlider
-                        colors={product.attributes}
-                        currentColor={color}
+                        colors={colors}
+                        currentColor={inputId}
                         productId={product.id}
-                        onColorClick={onHandleColorClick}
+                        onColorClick={onInputClick}
                         className={styles.productCard__colorsSlider}
                     />
-                } */}
+                }
                 {product.price &&
-                    <div className={`desc ${styles.productCard__price}`}>
+                    <Box className={`desc ${styles.productCard__price}`}>
                         From <RichTextComponent text={product.price.toString()} />
                         <span className={styles.productCard__price_vat}>without VAT</span>
-                    </div>
+                    </Box>
                 }
                 <Stock quantity={product.stock_quantity} />
-            </div>
+            </Box>
             {!isVariable ? (
                 <AddButton
                     onClickHandler={changeQuantityState}
@@ -90,6 +92,6 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                     changeQuantity={(count) => changeProductsAmount(product, count)}
                 />
             )}
-        </Link>
+        </Box>
     );
 }
