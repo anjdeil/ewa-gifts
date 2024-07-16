@@ -74,8 +74,8 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 }
                 {product.price &&
                     <Box className={`desc ${styles.productCard__price}`}>
-                        From <RichTextComponent text={product.price.toString()} />
-                        <span className={styles.productCard__price_vat}>without VAT</span>
+                        Od zł<RichTextComponent text={product.price.toString()} />
+                        <span className={styles.productCard__price_vat}>bez VAT</span>
                     </Box>
                 }
                 <Stock quantity={product.stock_quantity} />

@@ -1,30 +1,33 @@
-import React, {FC} from "react";
-import {Box, Typography} from "@mui/material";
+import React, { FC } from "react";
+import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import {ProductInfoProps} from "@/types";
-import {ColorOptions} from "../ColorOptions";
-import {transformColors} from "@/services/transformers/woocommerce/transformColors";
-import {SizeOptions} from "../SizeOptions";
+import { ProductInfoProps } from "@/types";
+import { ColorOptions } from "../ColorOptions";
+import { transformColors } from "@/services/transformers/woocommerce/transformColors";
+import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 
-// 46791
-const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
-
-    const {name, description, price, sku, images, attributes} = product;
+const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
+{
+    const { name, description, price, sku, images, attributes } = product;
     const colors = attributes.find(attr => attr.name === "color");
     const sizes = attributes.find(attr => attr.name === "size");
 
     let colorAttributes;
-    if (colors) {
+    if (colors)
+    {
         colorAttributes = transformColors(colors.options);
     }
+
+    console.log('Product', product);
+    console.log('Colors', colorAttributes);
 
     return (
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
-                <ProductSwiper data={images}/>
+                <ProductSwiper data={images} />
             </Box>
             <Box className={styles.product__info}>
                 <Typography variant='h1' className={styles['product-info__title']} title={name}>
@@ -42,18 +45,18 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
-                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes}/>}
+                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes} />}
                 </Box>
                 <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {sizes && <SizeOptions sizeAttributes={sizes.options}/>}
+                    {sizes && <SizeOptions sizeAttributes={sizes.options} />}
                 </Box>
 
-  {/* <ProductCalculations product={product} /> */}
+                {/* <ProductCalculations product={product} /> */}
                 <Box className={styles['product-info__accordionWrapper']}>
-                    <AccordionProduct data={attributes} title={'Informacje dodatkowe'}/>
+                    <AccordionProduct data={attributes} title={'Informacje dodatkowe'} />
                 </Box>
             </Box>
         </Box>
