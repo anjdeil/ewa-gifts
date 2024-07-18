@@ -11,9 +11,6 @@ import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { cartItem } from "@/types";
-import { ProductCard } from "@/components/Shop";
-import { useFetchProductQuery } from "@/store/custom/customApi";
 import { CartItem } from "@/types/Cart";
 
 const Cart = () => {

@@ -4,7 +4,6 @@ import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@m
 
 
 const AccordionProduct = ({data, title, text}) => {
-    console.log(data,'data');
     const getOptions = (product, nameAttribute) => {
         if (!product || !Array.isArray(product)) {
             return [];

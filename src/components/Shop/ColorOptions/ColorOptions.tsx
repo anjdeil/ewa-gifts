@@ -6,8 +6,6 @@ import { ColorOptionsProps } from '@/types';
 
 export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes }) =>
 {
-    // console.log(colorAttributes);
-
     const [inputId, setInputId] = useState<string | null>(null);
 
     const onInputClick = (id: string | null) =>
