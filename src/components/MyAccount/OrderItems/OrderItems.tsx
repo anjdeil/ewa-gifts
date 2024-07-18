@@ -17,6 +17,8 @@ const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
                 <div className={styles["order-items__cell"]}>Kwota</div>
             </div>
             {orderItems?.map((item) => {
+                const totalDifference = +item.total - +item.subtotal;
+
                 return (
                     <div key={item.id} className={styles["order-items__row"]}>
                         <div className={`${styles["order-items__cell"]} ${styles["order-items__cell_product"]}`}>
@@ -31,7 +33,7 @@ const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
                         </div>
                         <div className={styles["order-items__cell"]}>
                             <div className={styles["order-items__cell-prefix"]}>Cena</div>
-                            {formatPrice(item.price)}
+                            {item.subtotal} zł
                         </div>
                         <div className={styles["order-items__cell"]}>
                             <div className={styles["order-items__cell-prefix"]}>Ilość</div>
@@ -39,7 +41,10 @@ const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
                         </div>
                         <div className={styles["order-items__cell"]}>
                             <div className={styles["order-items__cell-prefix"]}>Kwota</div>
-                            {item.subtotal} zł
+                            <span>
+                                {item.total} zł <br />
+                                {(totalDifference !== 0) && <span className={styles["order-items__cell-postfix"]}>{formatPrice(totalDifference)}</span>}
+                            </span>
                         </div>
                     </div>
                 )
