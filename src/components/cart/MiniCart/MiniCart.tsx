@@ -3,18 +3,20 @@ import styles from "./styles.module.scss"
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { decreasedCartQuantity, deletedFromCart, fetchCartRows, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
+import { decreasedCartQuantity, deletedFromCart, increasedCartQuantity, updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { useAppDispatch } from "@/hooks/redux";
 
 const MiniCart = () => {
     const dispatch = useAppDispatch();
-    const { items, totals, cartRows, isLoading } = useSelector(state => state.Cart);
+    const { items } = useSelector(state => state.Cart);
+    const cartRows = [];
+    const totals = { total: 0 };
 
-    useEffect(() => {
-        if (items.length > 0) {
-            dispatch(fetchCartRows(items));
-        }
-    }, [items]);
+    // useEffect(() => {
+    //     if (items.length > 0) {
+    //         dispatch(fetchCartRows(items));
+    //     }
+    // }, [items]);
 
     return (
         <div className={styles["mini-cart"]}>
