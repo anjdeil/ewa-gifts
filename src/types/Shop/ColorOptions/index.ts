@@ -7,7 +7,9 @@ export const AttributeColorOptionSchema = ProductOptionsSchema.extend({
 });
 
 export const ColorOptionsPropsSchema = z.object({
-    colorAttributes: z.array(AttributeColorOptionSchema)
+    colorAttributes: z.array(AttributeColorOptionSchema),
+    baseColor: AttributeColorOptionSchema,
+    onColorChange: z.function().args(z.string()).returns(z.void())
 });
 
 export type AttributeColorOption = z.infer<typeof AttributeColorOptionSchema>;

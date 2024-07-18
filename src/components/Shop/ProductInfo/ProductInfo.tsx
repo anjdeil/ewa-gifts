@@ -1,28 +1,50 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { ProductInfoProps } from "@/types";
+import { ProductInfoProps, simpleProduct } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
+import { transformProductSizes } from "@/Utils/transformProductSizes";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
-    const { name, description, price, sku, images, attributes } = product;
-    const colors = attributes.find(attr => attr.name === "color");
-    const sizes = attributes.find(attr => attr.name === "size");
+    const [currentColor, setCurrentColor] = useState('');
 
+    function onColorChange(checkedColor: string): void
+    {
+        setCurrentColor(checkedColor);
+        console.log('Checked color', checkedColor);
+    }
+
+    function filterOptionsByColor(variations: simpleProduct[], currentColor: string)
+    {
+        variations.map(variation =>
+        {
+            // variation.attributes.filter((attr, index) => attr.name === 'color' && attr[index]option === currentColor);
+        })
+    }
+
+    const { name, description, price, sku, images, attributes } = product;
+    const sizes = transformProductSizes(attributes);
+    const baseColorAttr = attributes.find(attr => attr.name === "base_color");
+    const colors = attributes.find(attr => attr.name === "color");
     let colorAttributes;
     if (colors)
     {
         colorAttributes = transformColors(colors.options);
     }
-
+    let baseColor;
+    if (baseColorAttr)
+    {
+        baseColor = transformColors(baseColorAttr.options);
+    }
     console.log('Product', product);
     console.log('Colors', colorAttributes);
+    console.log('Sizes', sizes);
 
     return (
         <Box className={styles.product}>
@@ -45,13 +67,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
-                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes} />}
+                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes} baseColor={baseColor} onColorChange={onColorChange} />}
                 </Box>
                 <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {sizes && <SizeOptions sizeAttributes={sizes.options} />}
+                    {sizes && <SizeOptions sizeAttributes={sizes} />}
                 </Box>
 
                 {/* <ProductCalculations product={product} /> */}

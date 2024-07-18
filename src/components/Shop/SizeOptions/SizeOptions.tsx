@@ -5,8 +5,6 @@ import styles from './styles.module.scss';
 
 export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes }) =>
 {
-    console.log(sizeAttributes);
-
     const [buttonId, setButtonId] = useState<string | null>(null);
 
     const onButtonClick = (id: string | null) =>

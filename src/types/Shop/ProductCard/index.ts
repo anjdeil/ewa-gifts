@@ -4,6 +4,7 @@ export const ProductOptionsSchema = z.object({
     id: z.number(),
     name: z.string(),
     slug: z.string(),
+    // option: z.string().optional(),
 });
 
 export const ProductAttributesSchema = z.object({
@@ -70,4 +71,5 @@ const ProductCardPropsSchema = z.object({
 export type ProductAttributesType = z.infer<typeof ProductAttributesSchema>;
 export type ProductCardProps = z.infer<typeof ProductCardPropsSchema>;
 export type ProductOptions = z.infer<typeof ProductOptionsSchema>;
+export type simpleProduct = z.infer<typeof simpleProductSchema>;
 export type typeProductType = z.infer<typeof ProductSchema>;
