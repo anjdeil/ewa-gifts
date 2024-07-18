@@ -12,7 +12,7 @@ import AccordionProduct from "@/components/Accordions/AccordionProduct/Accordion
 // 46791
 const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
 
-    const {name, description, price, sku, images, attributes} = product;
+    const {name,  price, sku, images, attributes} = product;
     const colors = attributes.find(attr => attr.name === "color");
     const sizes = attributes.find(attr => attr.name === "size");
 
