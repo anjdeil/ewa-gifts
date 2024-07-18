@@ -14,6 +14,7 @@ import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { cartItem } from "@/types";
 import { ProductCard } from "@/components/Shop";
 import { useFetchProductQuery } from "@/store/custom/customApi";
+import { CartItem } from "@/types/Cart";
 
 const Cart = () => {
     const { items } = useAppSelector(state => state.Cart);
@@ -53,7 +54,7 @@ const Cart = () => {
         }
     }, [updateError, items.length]);
 
-    const updateLocalState = useCallback((total: string, line_items: cartItem[], isLoading: boolean): void => {
+    const updateLocalState = useCallback((total: string, line_items: CartItem[], isLoading: boolean): void => {
         if (!line_items) return;
         setTotal(total);
         setProducts(line_items);
