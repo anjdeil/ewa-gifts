@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { ProductInfoProps, simpleProduct } from "@/types";
+import { ProductInfoProps, simpleProduct, typeProductType } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
@@ -17,15 +17,29 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     function onColorChange(checkedColor: string): void
     {
         setCurrentColor(checkedColor);
-        console.log('Checked color', checkedColor);
     }
 
-    function filterOptionsByColor(variations: simpleProduct[], currentColor: string)
+    useEffect(() =>
     {
-        variations.map(variation =>
+        if (!currentColor)
+            return;
+        // console.log(product.variations)
+        if (product.variations)
         {
-            // variation.attributes.filter((attr, index) => attr.name === 'color' && attr[index]option === currentColor);
+            filterOptionsByName(product.variations, currentColor);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentColor])
+
+    function filterOptionsByName(variations: simpleProduct[], name: string)
+    {
+        console.log(variations);
+        const newArr = variations.map(variation =>
+        {
+            // console.log(variation.attributes);
+            return variation.attributes.filter(attr => attr.name === 'color');
         })
+        console.log(newArr);
     }
 
     const { name, description, price, sku, images, attributes } = product;
@@ -42,9 +56,9 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     {
         baseColor = transformColors(baseColorAttr.options);
     }
-    console.log('Product', product);
-    console.log('Colors', colorAttributes);
-    console.log('Sizes', sizes);
+    // console.log('Product', product);
+    // console.log('Colors', colorAttributes);
+    // console.log('Sizes', sizes);
 
     return (
         <Box className={styles.product}>
