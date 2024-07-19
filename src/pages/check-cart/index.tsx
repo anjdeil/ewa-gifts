@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import Head from "next/head";
@@ -9,7 +8,8 @@ import Image from "next/image";
 import { updateCart } from "@/store/reducers/CartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
-const CheckPage = () => {
+const CheckPage = () =>
+{
     const { data } = useFetchProductQuery({ slug: 'dlugopis-vivid' });
     const product = data?.data?.item as typeProductType;
 
@@ -20,11 +20,15 @@ const CheckPage = () => {
     const [choosenVariation, setVariation] = useState();
     const [quantity, setQuantity] = useState(0);
 
-    useEffect(() => {
-        if (product?.type === 'variable') {
+    useEffect(() =>
+    {
+        if (product?.type === 'variable')
+        {
             const variableAttributes = {};
-            product?.attributes?.forEach(attribute => {
-                if (attribute.name === 'size' || attribute.name === 'color') {
+            product?.attributes?.forEach(attribute =>
+            {
+                if (attribute.name === 'size' || attribute.name === 'color')
+                {
                     variableAttributes[attribute.name] = product.default_attributes?.find(defaultAttribute => defaultAttribute.id === attribute.id).option;
                 }
             });
@@ -35,9 +39,12 @@ const CheckPage = () => {
 
     console.log(choosenOptions);
 
-    useEffect(() => {
-        if (product?.type === 'variable') {
-            const targetVariation = product?.variations.find(variation => {
+    useEffect(() =>
+    {
+        if (product?.type === 'variable')
+        {
+            const targetVariation = product?.variations.find(variation =>
+            {
                 return Boolean(variation?.attributes?.find(({ name, option }) => choosenOptions[name] === option));
             });
             setVariation(targetVariation);
@@ -47,7 +54,8 @@ const CheckPage = () => {
     console.log(choosenVariation);
 
 
-    const handleChangeColor = (evt) => {
+    const handleChangeColor = (evt) =>
+    {
         setOptions(options => ({ ...options, color: evt.target.value }))
     }
 
@@ -88,7 +96,8 @@ const CheckPage = () => {
                                 <input type="number" value={quantity} onChange={(evt) => { setQuantity(evt.target.value) }} defaultValue={0} name="quantity" max={choosenVariation?.stock_quantity || 0} />
                             </div>
                             <br />
-                            <button onClick={() => {
+                            <button onClick={() =>
+                            {
                                 dispatch(updateCart({
                                     id: product.id,
                                     variationId: choosenVariation.id,
@@ -110,7 +119,8 @@ const CheckPage = () => {
                                         Product #{item.product_id}<br />
                                         {item?.variation_id && <>Variation #{item.variation_id}<br /></>}
                                         x{item.quantity} <br />
-                                        <button onClick={() => {
+                                        <button onClick={() =>
+                                        {
                                             dispatch(updateCart({
                                                 id: item.product_id,
                                                 ...(item.variation_id && { variationId: item.variation_id }),

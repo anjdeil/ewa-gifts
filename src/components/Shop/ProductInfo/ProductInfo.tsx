@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { ProductInfoProps, ProductOptions, simpleProduct } from "@/types";
+import { defaultAttributesType, ProductInfoProps, ProductOptions, simpleProduct, typeProductType } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
@@ -11,12 +11,12 @@ import { transformProductSizes } from "@/Utils/transformProductSizes";
 import ProductCalculations from "../ProductCalculations";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
+import { sortProductSizes } from "@/Utils/sortProductSizes";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
-    // console.log('Product', product);
     const { name, description, price, sku, images, attributes } = product;
-    const [currentColor, setCurrentColor] = useState<string | null>(null);
+    const [currentColor, setCurrentColor] = useState<string>('');
     const [availableVariations, setAvailableVariations] = useState<simpleProduct[] | null>(null);
     const [sizes, setSizes] = useState<ProductOptions[] | null>(null);
     const allColors = transformColorsArray(attributes);
@@ -24,7 +24,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     useEffect(() =>
     {
-        if (allColors.length > 0)
+        if (allColors && allColors.length > 0)
         {
             const colorAttribute = attributes.find(attr => attr.name === "color")?.id;
             if (!colorAttribute)
@@ -34,16 +34,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             if (defaultColorAttr)
             {
                 const baseColor = transformColorByName(defaultColorAttr.name);
-                setCurrentColor(baseColor.cssColor);
+                baseColor.slug = defaultColorAttr.option;
+                console.log('Basic', baseColor);
+                onColorChange(baseColor.slug);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() =>
-    {
-
-    }, [currentColor])
 
     function onColorChange(checkedColor: string): void
     {
@@ -56,23 +53,31 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             return;
         if (product.variations)
         {
-            filterOptionsByName(product.variations, currentColor, 'color');
-            console.log(availableVariations);
+            filterOptionsByName(product.variations, currentColor);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentColor])
 
-    function filterOptionsByName(variations: simpleProduct[], name: string, fieldName: string): void
+    function filterOptionsByName(variations: simpleProduct[], name: string): void
     {
         const filteredVariations: simpleProduct[] = [];
+        const availableVariations: object[] = [];
         variations.forEach(variation =>
         {
-            const res = variation.attributes.filter(attr => attr.name === fieldName && attr.option === name);
+            const res = variation.attributes.filter(attr => attr.name === 'color' && attr.option === name);
             if (res.length > 0)
+            {
                 filteredVariations.push(variation);
+                const arr = transformProductSizes(variation.attributes);
+                if (arr)
+                {
+                    availableVariations.push(arr[0]);
+                }
+
+            }
         });
-        setAvailableVariations(filteredVariations);
     }
+
 
     useEffect(() =>
     {
@@ -105,13 +110,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
-                    {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor && currentColor} onColorChange={onColorChange} />}
+                    {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor} onColorChange={onColorChange} />}
                 </Box>
                 <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {sizes && <SizeOptions sizeAttributes={sizes} />}
+                    {allSizes && <SizeOptions sizeAttributes={allSizes} />}
                 </Box>
 
                 {/* <ProductCalculations product={product} /> */}

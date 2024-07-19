@@ -24,6 +24,6 @@ export const transformColorByName = (untransformedName: string): transColorsType
 
     return {
         label: combinedColorName,
-        cssColor
+        cssColor,
     }
 }

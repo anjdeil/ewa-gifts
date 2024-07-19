@@ -1,12 +1,24 @@
-import { ProductAttributesType, ProductOptions } from "@/types";
+import { defaultAttributesType, ProductAttributesType, ProductOptions } from "@/types";
 import { sortProductSizes } from "./sortProductSizes";
 
-export function transformProductSizes(attributes: ProductAttributesType[]): ProductOptions[] | null 
+export function transformProductSizes(attrArray: ProductAttributesType[] | defaultAttributesType[]): ProductOptions[] | defaultAttributesType[] | null
 {
-    const sizes = attributes.find(attr => attr.name === "size");
+    const simple = attrArray.filter(attr => "options" in attr);
+    const variable = attrArray.filter(attr => "option" in attr);
 
-    if (!sizes || !sizes.options)
-        return null;
+    if (simple.length > 0)
+    {
+        const options = simple.filter(variation => variation.name === 'size');
+        if (options.length > 0)
+            return sortProductSizes(options[0].options);
+    }
 
-    return sortProductSizes(sizes.options);
+    if (variable.length > 0)
+    {
+        const options = variable.filter(variation => variation.name === 'size');
+        if (options.length > 0)
+            return sortProductSizes(options);
+    }
+
+    return [];
 }

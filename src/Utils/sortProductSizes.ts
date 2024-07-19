@@ -1,9 +1,8 @@
-import { ProductOptions } from "@/types";
-
-export function sortProductSizes(array: Array<ProductOptions>): Array<ProductOptions>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sortProductSizes(array: any): any[]
 {
     return (
-        array.sort((a, b) =>
+        array.sort((a: { name: string; }, b: { name: string; }) =>
         {
             const nameA = parseInt(a.name);
             const nameB = parseInt(b.name);
