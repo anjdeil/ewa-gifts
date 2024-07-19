@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { CartTable } from "@/components/Cart/CartTable";
+import { CartTable } from "@/components/CartR/CartTable";
 import { useAppSelector } from "@/hooks/redux";
 import { useCallback, useEffect, useState } from "react";
-import { CartSummary } from "@/components/Cart/CartSummary";
+import { CartSummary } from "@/components/CartR/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
