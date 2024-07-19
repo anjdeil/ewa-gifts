@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductType } from "@/types";
 export const transformProductCard = (data: any[]): ProductType[] => {

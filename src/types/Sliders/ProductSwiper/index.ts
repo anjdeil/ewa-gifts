@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const SwiperSchema = z.object({
     id: z.number(),
@@ -11,7 +11,7 @@ export const SwiperPropsSchema = z.object({
 });
 
 export const SwiperPopupPropsSchema = z.object({
-    data: z.function(),
+    onClose: z.function()
 });
 
 export type SwiperType = z.infer<typeof SwiperSchema>;

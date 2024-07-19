@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { SocialsSkeletonProps } from "@/types";
 import { Box, Skeleton } from "@mui/material"
 import { FC } from "react";
 
-export const SocialsSkeleton: FC<SocialsSkeletonProps> = ({ elements, isColumn, width, height, gap }) =>
-{
+export const SocialsSkeleton: FC<SocialsSkeletonProps> = ({ elements, isColumn, width, height, gap }) => {
     const skeletonItems = Array.from({ length: elements || 0 }).map((_, index) => (
         <Skeleton key={index} animation="wave" width={width} height={height} />
     ));

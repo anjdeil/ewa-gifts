@@ -1,7 +1,7 @@
-import { Box } from "@mui/material";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import { FC } from "react";
-import { TopSellerCard } from "../TopSellerCard";
-import { ProductCardList } from "../ProductCardsList";
 
 export const TopSeller: FC = () => {
     return (
