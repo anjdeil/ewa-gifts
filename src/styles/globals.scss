@@ -1,5 +1,11 @@
 @import './variables.module';
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .desc {
     font-weight: 400;
     font-size: 18px;
@@ -73,7 +79,8 @@
 
 .btn-primary,
 .btn-transparent {
-    padding: 12px 18px;
+    height: fit-content;
+    padding: 13px 18px;
     border-radius: 10px;
     transition: background .2s ease-in-out;
 }
@@ -126,6 +133,48 @@
 
 }
 
+.product-page-h3 {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1em;
+}
+
+.price {
+    &__tax {
+        color: $text-gray;
+    }
+}
+
+.page-top {
+    padding: 40px 0;
+
+    &_center {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__titling {
+        margin-top: 40px;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    &__title {
+        font-size: 1.15em;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    &__count {
+        margin-top: -1px;
+        margin-left: 0.6em;
+        background-color: $input-light;
+    }
+}
+
 @media(max-width: 1024px) {
 
     .desc,
@@ -139,7 +188,7 @@
 }
 
 
-@media(max-width: 768) {
+@media(max-width: 768px) {
 
     .desc,
     .sub-title {
@@ -148,5 +197,17 @@
 
     .more-link {
         font-size: 14px;
+    }
+
+    .page-top {
+        padding: 25px 0;
+
+        &__titling {
+            margin-top: 25px;
+        }
+
+        &__count {
+            margin-top: -4px;
+        }
     }
 }

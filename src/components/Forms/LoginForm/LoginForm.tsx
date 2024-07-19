@@ -98,17 +98,17 @@ export const LoginForm: FC = () =>
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Sign in'}</button>
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
-                        The account was created successfully
+                        You have successfully logged into my account.
                     </p>}
                     {isError && <p style={{ color: variables.error }}
                         dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
                 </Box>
             </form>
             <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
-                <Link href={"/"} className="desc link">
+                <Link href={"/my-account/reset-password"} className="desc link">
                     Nie pamiętasz hasła?
                 </Link>
-                <Link href={"/"} className="desc link">
+                <Link href={"/my-account/registration"} className="desc link">
                     Nie masz konta? Zarejestruj się!
                 </Link>
             </Box>

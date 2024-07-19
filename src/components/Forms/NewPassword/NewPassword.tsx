@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -7,6 +10,7 @@ import { Box } from "@mui/material";
 import React from 'react';
 import axios from "axios";
 import variables from '@/styles/variables.module.scss';
+import Link from "next/link";
 
 const NewPasswordSchema = z.object({
     email: z.string().email('Please, type valid email'),
@@ -33,24 +37,22 @@ const NewPasswordSchema = z.object({
 
 type NewPassword = z.infer<typeof NewPasswordSchema>;
 
-export const NewPassword: FC = () =>
-{
+export const NewPassword: FC = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, reset } = useForm<NewPassword>({
         resolver: zodResolver(NewPasswordSchema)
     });
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const onSubmit = async (data: NewPassword) =>
-    {
+    const onSubmit = async (data: NewPassword) => {
+        setErrorMessage('');
         const body = {
             email: data.email,
-            password: data.password,
             code: data.code,
+            password: data.password,
         }
 
-        try
-        {
+        try {
             const response = await axios({
                 url: '/api/password/set-password',
                 method: 'POST',
@@ -60,14 +62,11 @@ export const NewPassword: FC = () =>
                 }
             });
             return response.data;
-        } catch (err)
-        {
-            if (err.response)
-            {
+        } catch (err) {
+            if (err.response) {
                 setErrorMessage(err.response.data?.message || "An unknown error occurred");
             }
-        } finally
-        {
+        } finally {
             reset();
         }
     }
@@ -108,9 +107,14 @@ export const NewPassword: FC = () =>
                         key={'confirmPassword'}
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Reset'}</button>
-                    {(isSubmitSuccessful && !errorMessage) && <p style={{ color: variables.successfully }}>
-                        The password was successfully changed
-                    </p>}
+                    {(isSubmitSuccessful && !errorMessage && !isSubmitting) &&
+                        <p style={{ color: variables.successfully }}>
+                            The password was successfully changed.
+                            <Link style={{ marginLeft: '5px' }} href={"/my-account/login"}>
+                                Try to Login.
+                            </Link>
+                        </p>
+                    }
                     {errorMessage && (
                         <p style={{ color: variables.error }}>
                             {errorMessage}

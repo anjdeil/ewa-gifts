@@ -1,19 +1,19 @@
-import { Box } from "@mui/material";
-import { FC } from "react";
-import { TopSellerCard } from "../TopSellerCard";
-import { ProductCardList } from "../ProductCardsList";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 
-export const TopSeller: FC = () =>
-{
+import { FC } from "react";
+
+export const TopSeller: FC = () => {
     return (
         <>
-            <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
+            <div></div>
+            {/* <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{
                 flexDirection: 'row'
             }}>
                 <TopSellerCard />
                 <TopSellerCard />
             </Box>
-            <ProductCardList products={[]} isLoading={false} isError={false} />
+            <ProductCardList products={[]} isLoading={false} isError={false} /> */}
         </>
     )
 }

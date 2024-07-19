@@ -1,59 +1,75 @@
-import { useState, useCallback } from "react";
-import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { setLineItemsIds } from "@/store/reducers/CurrentOrder";
-import { useAppDispatch } from "@/hooks/redux";
+import { useCallback, useEffect, useState } from "react";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
-import { CartItem, transformDeleteOrderProductsType } from "@/types";
-import { transformDeleteOrderProducts } from "@/services/transformers/woocommerce/transformDeleteOrderProducts";
+import axios from "axios";
+import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
+import { CartItem } from "@/types/Cart";
+import { lineOrderItems } from "@/types";
 
-export const useUpdateOrderWoo = () =>
-{
-    const dispatch = useAppDispatch();
-    const [fetchUpdateOrder] = useFetchUpdateOrderMutation();
+export const useUpdateOrderWoo = () => {
+    const [fetchUpdateOrder, { data }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isUpdating, setIsUpdating] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [items, setItems] = useState<lineOrderItems[] | null>(null);
+    const updatedOrder = data;
 
-    const updateOrder = useCallback(async (
-        productLineIds: transformDeleteOrderProductsType,
-        items: CartItem[],
-        orderId: number) =>
-    {
-        setIsLoading(true);
-        setError(null);
+    useEffect(() => {
+        if (data) {
+            setItems(RemoveObjectDuplicates(data.line_items, 'name'))
+        }
+    }, [data])
 
-        const fetchUpdateOrderBody = {
+    const localDeleteOrder = useCallback(async (orderId: number) => {
+        setIsUpdating(true);
+        try {
+            await axios({
+                url: `/api/woo/delete-order-items/${orderId}`,
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.error("Error deleting order items:", error);
+            throw error;
+        } finally {
+            setIsUpdating(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder]);
+
+    const localUpdateOrder = useCallback(async (items: CartItem[], orderId: number) => {
+        await fetchUpdateOrder({
             credentials: {
                 line_items: [
-                    ...transformDeleteOrderProducts(productLineIds),
-                    ...transformCreateOrderProducts(items)
+                    ...items
                 ]
             },
             id: orderId
-        };
-        try
-        {
-            const createOrderData = await fetchUpdateOrder(fetchUpdateOrderBody).unwrap();
-            const lineItemsIds = transformLineItemsId(createOrderData.line_items);
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder]);
 
-            dispatch(setLineItemsIds(lineItemsIds));
-        } catch (error)
-        {
-            if (error instanceof Error)
-            {
-                setError(error.message);
-            } else
-            {
+    const updateOrder = async (items: CartItem[], orderId: number) => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            if (!isUpdating) {
+                await localDeleteOrder(orderId);
+                await localUpdateOrder(items, orderId);
+                setIsUpdating(false);
+            }
+
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
                 setError('An unknown error occurred');
             }
-            console.error(error, 'Failed to create order');
-        } finally
-        {
+            console.error(err, 'Failed to update order');
+        } finally {
             setIsLoading(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, fetchUpdateOrder]);
+    };
 
-    return { updateOrder, isLoading, error };
+    return { updateOrder, isLoading, error, updatedOrder, items };
 };

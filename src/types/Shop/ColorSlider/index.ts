@@ -1,10 +1,11 @@
+import { transColorsSchema } from "@/types/Services/transformers";
 import { z } from "zod";
 
 const ColorSliderPropsSchema = z.object({
-    colors: z.array(z.string()),
+    colors: z.array(transColorsSchema).nullable(),
     onColorClick: z.function()
-        .args(z.string(), z.number())
-        .returns(z.promise(z.void())),
+        .args(z.string())
+        .returns(z.void()),
     currentColor: z.string(),
     productId: z.number(),
     className: z.string()

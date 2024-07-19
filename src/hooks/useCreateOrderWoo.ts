@@ -1,52 +1,41 @@
 import { useState, useCallback } from "react";
-import { transformCreateOrderProducts } from "@/services/transformers/woocommerce/transformCreateOrderProducts";
-import { setCurrentOrder, setLineItemsIds } from "@/store/reducers/CurrentOrder";
+import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
 import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { transformLineItemsId } from "@/services/transformers/woocommerce/transformLineItemsId";
-import { CartItem } from "@/types";
+import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
+import { CartItem } from "@/types/Cart";
+import { lineOrderItems } from "@/types";
 
-export const useCreateOrderWoo = () =>
-{
+export const useCreateOrderWoo = () => {
     const dispatch = useAppDispatch();
-    const [fetchCreateOrder] = useFetchCreateOrderMutation();
+    const [fetchCreateOrder, { data: createdOrder }] = useFetchCreateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [items, setItems] = useState<lineOrderItems[] | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-    const createOrder = useCallback(async (items: CartItem[]) =>
-    {
+    const createOrder = useCallback(async (items: CartItem[]) => {
         setIsLoading(true);
         setError(null);
-        const fetchCreateOrderBody = { line_items: transformCreateOrderProducts(items) };
+        const fetchCreateOrderBody = { line_items: items };
 
-        try
-        {
+        try {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
-            const currentOrderId = createOrderData.id;
-            const lineItemsIds = transformLineItemsId(createOrderData.line_items);
-
-            localStorage.setItem('currentOrderItems', JSON.stringify(lineItemsIds));
-            localStorage.setItem('currentOrderId', currentOrderId);
-
             dispatch(setCurrentOrder(createOrderData.id));
-            dispatch(setLineItemsIds(lineItemsIds));
-        } catch (error)
-        {
-            if (error instanceof Error)
-            {
+            setItems(RemoveObjectDuplicates(createOrderData.line_items, 'name'));
+        } catch (error) {
+            if (error instanceof Error) {
                 setError(error.message);
-            } else
-            {
+            } else {
                 setError('An unknown error occurred');
             }
             console.error(error, 'Failed to create order');
-        } finally
-        {
+        } finally {
             setIsLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, fetchCreateOrder]);
 
-    return { createOrder, isLoading, error };
+    return { createOrder, isLoading, error, createdOrder, items };
 };

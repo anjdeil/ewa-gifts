@@ -1,9 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductType } from "@/types";
-export const transformProductCard = (data: any[]): ProductType[] =>
-{
-    return data.map((product: any): ProductType =>
-    {
+export const transformProductCard = (data: any[]): ProductType[] => {
+    return data.map((product: any): ProductType => {
         const colorAttribute = product.attributes.find((element: { slug: string; options: string | any[]; }) => element.slug === 'pa_color' && element.options.length > 0)?.options || [];
         const sizes = product.attributes.find((attr: any) => attr.slug === 'pa_rozmiar' && attr.options.length > 0);
 
@@ -27,6 +28,7 @@ export const transformProductCard = (data: any[]): ProductType[] =>
             default_attr: '',
             isSized: sizes ? sizes : [],
             type: product.type,
+            metaData: product.meta_data
         };
     });
 };

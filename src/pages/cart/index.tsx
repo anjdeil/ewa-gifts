@@ -1,75 +1,76 @@
-// import { useRouter } from "next/router";
 import Head from "next/head";
-import { CartTable } from "@/components/Shop/CartTable";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { useEffect } from "react";
-import { CartSummary } from "@/components/Shop/CartSummary";
+import { CartTable } from "@/components/Cart/CartTable";
+import { useAppSelector } from "@/hooks/redux";
+import { useCallback, useEffect, useState } from "react";
+import { CartSummary } from "@/components/Cart/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
+import { AddCoupon } from "@/components/Shop/AddCoupon";
+import { Section } from "@/components/Layouts/Section";
+import { Loader } from "@/components/Layouts/Loader";
+import styles from './styles.module.scss';
+import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
+import { lineOrderItems } from "@/types";
 
-const Product = () =>
-{
-    // const router = useRouter();
-    // const { slug } = router.query;
-    const dispatch = useAppDispatch();
-    const { items, totals, cartRows, isLoading } = useAppSelector(state => state.Cart);
-    const { currentOrder: { orderId, productLineIds } } = useAppSelector(state => state.currentOrderSlice);
-    const { createOrder, isLoading: isCreatingOrder, error: isCreateOrderError } = useCreateOrderWoo();
-    const { updateOrder } = useUpdateOrderWoo();
-
-    useEffect(() =>
-    {
-        if (items.length > 0)
+const Cart = () => {
+    const { items } = useAppSelector(state => state.Cart);
+    const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
+    const { createOrder, createdOrder } = useCreateOrderWoo();
+    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [products, setProducts] = useState<lineOrderItems[]>([]);
+    const [total, setTotal] = useState('0');
+    const [isUpdating, setIsUpdating] = useState(false);
+    const breadLinks = [
         {
-            if (!orderId)
-            {
-                createOrder(
-                    [
-                        {
-                            id: 46817,
-                            quantity: 2,
-                            type: "simple"
-                        },
-                        {
-                            options: [
-                                {
-                                    id: 43111,
-                                    quantity: 10,
-                                },
-                                {
-                                    id: 43106,
-                                    quantity: 20,
-                                }
-                            ],
-                            id: 43081,
-                            quantity: 0,
-                            type: "variable"
-                        },
-                    ],
-                )
-                if (isCreatingOrder)
-                {
-                    console.log('Loading...');
-                }
-                if (isCreateOrderError)
-                {
-                    console.log(isCreateOrderError);
-                }
-            } else
-            {
-                if (!productLineIds) return;
-                updateOrder(productLineIds, [
-                    {
-                        id: 46817,
-                        quantity: 20,
-                        type: "simple"
-                    },
-                ], orderId);
+            name: 'Koszyk',
+            url: '/cart'
+        },
+    ];
+
+    useEffect(() => {
+        setIsUpdating(true);
+        if (items && items.length > 0) {
+            if (!orderId) {
+                createOrder(items);
+            } else if (!isUpdatingOrder && !isUpdating) {
+                updateOrder(items, orderId);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, items, orderId]);
+    }, [items, orderId]);
+
+    useEffect(() => {
+        if (updateError || items.length === 0) {
+            setIsUpdating(false);
+        }
+    }, [updateError, items.length]);
+
+    const updateLocalState = useCallback((total: string, line_items: lineOrderItems[], isLoading: boolean): void => {
+        if (!line_items) return;
+        setTotal(total);
+        setProducts(line_items);
+        setIsUpdating(isLoading);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, updatedOrder, updatedItems]);
+
+    useEffect(() => {
+        if (createdOrder) {
+            updateLocalState(createdOrder.total, createdOrder.line_items, false);
+        }
+    }, [createdOrder, updateLocalState]);
+
+    useEffect(() => {
+        if (updatedOrder && updatedItems) {
+            updateLocalState(updatedOrder.total, updatedItems, false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updatedOrder, updateLocalState]);
+
+    if (isUpdating) {
+        return <Loader size={100} thickness={4} />;
+    }
 
     return (
         <>
@@ -80,16 +81,22 @@ const Product = () =>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <section className="section">
-                    <h1>Koszyk</h1>
-                    <Box display={"flex"}>
-                        <CartTable products={cartRows} isLoading={isLoading} />
-                        <CartSummary total={totals.total} sum={totals.total} isLoading={isLoading} />
+                <Section className="section" isContainer={true} isBreadcrumbs={true}>
+                    <Box className={styles.Cart__top}>
+                        <Breadcrumbs links={breadLinks} />
+                        <h1 className="sub-title">Koszyk</h1>
                     </Box>
-                </section>
-            </main >
+                    <Box className={styles.Cart__content}>
+                        <Box>
+                            {products && <CartTable products={products} isLoading={isUpdating} />}
+                            <AddCoupon orderId={orderId && orderId} />
+                        </Box>
+                        <CartSummary total={total} sum={total} isLoading={isUpdating} />
+                    </Box>
+                </Section>
+            </main>
         </>
     );
 }
 
-export default Product;
+export default Cart;

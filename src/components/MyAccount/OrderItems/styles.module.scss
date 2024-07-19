@@ -1,0 +1,85 @@
+@import "@/styles/variables.module.scss";
+
+.order-items {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+
+    &__row {
+        display: grid;
+        grid-template-columns: 250px 1fr 1fr 1fr;
+        padding: 1.2em 1.5em;
+        gap: 20px;
+        align-items: center;
+        border-radius: 10px;
+        border: 2px solid $white-lilac;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+
+        &_header {
+            background-color: $white-lilac;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+    }
+
+    &__cell {
+        text-align: right;
+
+        &:first-child {
+            text-align: left;
+        }
+
+        &-prefix {
+            display: none;
+        }
+
+        &-postfix {
+            font-size: 0.9em;
+            color: $text-gray;
+        }
+
+        &-image {
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+    }
+
+    &__product {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+}
+
+@media(max-width: 1024px) {
+    .order-items {
+        &__row {
+            margin-bottom: 20px;
+            padding: 1em;
+            display: block;
+
+            &_header {
+                display: none;
+            }
+        }
+
+        &__cell {
+            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.2em;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &-prefix {
+                display: block;
+                text-align: left;
+                color: $text-gray;
+                width: 100px;
+            }
+        }
+    }
+}

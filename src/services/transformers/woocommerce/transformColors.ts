@@ -1,5 +1,11 @@
+/* eslint-disable prefer-const */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
+import { AttributeColorOption } from "@/types";
+
 const getCssGradientFrom = (colorHexs) => {
-    const gradientParts = colorHexs.map((colorHex, index) => {
+    const gradientParts = colorHexs.map((colorHex, index): AttributeColorOption => {
         const percent = index / (colorHexs.length - 1) * 100;
         return `${colorHex} ${percent}%`;
     });
@@ -28,10 +34,7 @@ export const transformColors = (colorsData) => {
             : colorHexs[0];
 
         return {
-            id: colorData.id,
-            count: colorData.count,
-            slug: colorData.slug,
-            name: colorData.name,
+            ...colorData,
             label: combinedColorName,
             cssColor
         }

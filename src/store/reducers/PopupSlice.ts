@@ -4,10 +4,10 @@ export const PopupSlice = createSlice({
     name: 'Popup',
     initialState: '',
     reducers: {
-        popupSet: (state, action) => {
+        popupSet: (_state, action) => {
             return action.payload;
         },
-        popupClosed: (state) => {
+        popupClosed: () => {
             return "";
         }
     }

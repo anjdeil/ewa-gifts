@@ -1,6 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import styles from './styles.module.scss';
 import Image from "next/image";
-import {Container,Box} from "@mui/material";
+import { Container, Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
 const CustomBox = styled(Box)`
@@ -33,7 +36,7 @@ const CustomBox = styled(Box)`
 
 export const BlogPost = ({ post }) => {
 
-    const {date, title,image_src,content } = post;
+    const { date, title, image_src, content } = post;
     const dateTime: Date = new Date(date);
     const monthsPolish: string[] = [
         "stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca",
@@ -44,7 +47,7 @@ export const BlogPost = ({ post }) => {
     const year: number = dateTime.getFullYear();
 
     return (
-        <Container  className={styles.article}>
+        <Container className={styles.article}>
             <header className={styles.article__header}>
                 <h1 className='sub-title'>
                     {title.rendered}
@@ -54,11 +57,11 @@ export const BlogPost = ({ post }) => {
                 </time>
             </header>
             <div className={styles.article__img}>
-                <Image src={image_src} alt={title.rendered} sx={{position:'static'}} width={1135} height={518} priority/>
+                <Image src={image_src} alt={title.rendered} sx={{ position: 'static' }} width={1135} height={518} priority />
             </div>
-           <div className={styles.article__text_wrapper}>
-               <CustomBox dangerouslySetInnerHTML={{__html: content.rendered}}  className={styles.article__text}/>
-           </div>
+            <div className={styles.article__text_wrapper}>
+                <CustomBox dangerouslySetInnerHTML={{ __html: content.rendered }} className={styles.article__text} />
+            </div>
         </Container>
     );
 };

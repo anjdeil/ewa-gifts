@@ -1,0 +1,56 @@
+@import "@/styles/variables.module.scss";
+
+.totals-table {
+    font-size: 0.9rem;
+    padding: 0.5em 0;
+    border-radius: 10px;
+    border: 2px solid $white-lilac;
+    margin-bottom: 20px;
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6em 1.5em;
+
+        &:last-child {
+            margin-top: 0.6em;
+            padding-top: 1em;
+            border-top: 2px solid $white-lilac;
+            margin-bottom: 0;
+
+            .totals-table__value {
+                font-size: 1.2em;
+
+            }
+        }
+    }
+
+    &__label {
+        color: $text-gray;
+        width: 170px;
+
+        &-code {
+            background-color: $input-light;
+            padding: 0.2em 0.4em;
+            display: inline-block;
+            margin-top: 0.2em;
+            border-radius: 6px;
+        }
+    }
+
+    &__value {
+        text-align: right;
+    }
+}
+
+@media(max-width: 1024px) {
+    .totals-table {
+        &__row {
+            padding: 0.5em 1em;
+
+            &:last-child {
+                margin-top: 0.5em;
+            }
+        }
+    }
+}

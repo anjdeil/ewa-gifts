@@ -1,12 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 
-const MobileCategoryBars = ({ categories }) => {
+interface MobileCategoryBarsProps {
+    categories: CategoryType[]
+}
+
+const MobileCategoryBars: FC<MobileCategoryBarsProps> = ({ categories }) => {
 
     return (
         <>
@@ -18,7 +23,7 @@ const MobileCategoryBars = ({ categories }) => {
                 }}
                 className="mobile-category-bars"
             >
-                {categories?.map(({ id, categoryName, imageSrc, slug }) => (
+                {categories?.map(({ id, name, slug }) => (
                     <SwiperSlide key={id} className={styles["mobile-category-bars__slide"]}>
                         <Link
                             href={`/product-category/${slug}`}
@@ -30,10 +35,10 @@ const MobileCategoryBars = ({ categories }) => {
                                     src={`/images/categories/${slug}.svg`}
                                     width={60}
                                     height={60}
-                                    alt={categoryName}
+                                    alt={name}
                                 />
                             </div>
-                            <div className={styles["mobile-category-bars__name"]}>{categoryName}</div>
+                            <div className={styles["mobile-category-bars__name"]}>{name}</div>
                         </Link>
                     </SwiperSlide>
                 ))}

@@ -1,4 +1,7 @@
-import { ProductCardProps, ProductType, ProductType } from "@/types";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import { FC, useState } from "react";
 import Image from "next/image";
 import { RichTextComponent } from "../../Common/RichTextComponent";
@@ -6,76 +9,72 @@ import styles from './styles.module.scss';
 import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
 import { useAppDispatch } from "@/hooks/redux";
-import { updatedCartQuantity } from "@/store/reducers/CartSlice";
-// import { useLazyFetchProductVariationsQuery, useFetchProductVariationsQuery } from "@/services/wooCommerceApi";
+import { ProductCardProps, typeProductType } from "@/types";
+import { Stock } from "./Stock";
+import Link from "next/link";
+import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
+import { Box } from "@mui/material";
 
-export const ProductCard: FC<ProductCardProps> = ({ product }) =>
-{
-    const [color, setColor] = useState('');
-
+export const ProductCard: FC<ProductCardProps> = ({ product }) => {
+    const [inputId, setInputId] = useState<string>('');
+    const [isVariable, setVariable] = useState(false);
+    const [count, setCount] = useState<number>(0);
     const dispatch = useAppDispatch();
+    if (!product) return;
 
-    function changeProductsAmount(product: ProductType, count: number)
-    {
-        dispatch(updatedCartQuantity({
-            id: product.id,
-            type: product.type,
-            quantity: count,
-        }));
+    let colors;
+    if (product.type === "variable")
+        colors = transformColorsArray(product.attributes);
+
+    function changeProductsAmount(product: typeProductType, count: number) {
+        console.log(product, count);
+
+        setCount(0);
     }
 
-    const [isVariable, setVariable] = useState(false);
-
-    const changeQuantityState = () =>
-    {
-        if (!isVariable)
-        {
+    const changeQuantityState = () => {
+        if (!isVariable) {
             setVariable(true);
         }
     }
 
-    const onHandleColorClick = async (newColor: string, productId: ProductType['id']) =>
-    {
-        setColor(newColor);
-    }
+    const onInputClick = (id: string) => {
+        setInputId(id);
+    };
 
     return (
-        <div className={styles.productCard}>
-            <div className={styles.productCard__image}>
-                <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={220}
-                    height={220}
-                />
-            </div>
-            <div className={styles.productCard__content}>
+        <Box className={styles.productCard}>
+            <Link href={`/product/${product.slug}`}>
+                <Box className={styles.productCard__image}>
+                    <Image
+                        src={product.images[0]?.src}
+                        alt={product.name}
+                        width={220}
+                        height={220}
+                    />
+                </Box>
                 <h3 className={`desc ${styles.productCard__title}`}>
                     {product.name}
                 </h3>
-                {isVariable &&
+            </Link>
+            <Box className={styles.productCard__content}>
+                {colors &&
                     <ColorSlider
-                        colors={product.attributes}
-                        currentColor={color}
+                        colors={colors}
+                        currentColor={inputId}
                         productId={product.id}
-                        onColorClick={onHandleColorClick}
+                        onColorClick={onInputClick}
                         className={styles.productCard__colorsSlider}
                     />
                 }
-                {product.price_html &&
-                    <div className={`desc ${styles.productCard__price}`}>
-                        From <RichTextComponent text={product.price_html} />
+                {product.price &&
+                    <Box className={`desc ${styles.productCard__price}`}>
+                        From <RichTextComponent text={product.price.toString()} />
                         <span className={styles.productCard__price_vat}>without VAT</span>
-                    </div>
+                    </Box>
                 }
-                {product.stock && (
-                    <div className={`${styles.productCard__stock} desc`}>
-                        <div className={styles.productCard__stockCircle}></div>
-                        <span>{product.stock} in shop</span>
-                    </div>
-                )}
-
-            </div>
+                <Stock quantity={product.stock_quantity} />
+            </Box>
             {!isVariable ? (
                 <AddButton
                     onClickHandler={changeQuantityState}
@@ -84,10 +83,10 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
                 />
             ) : (
                 <Counter
-                    count={product.quantity ? product.quantity : 1}
+                    count={count}
                     changeQuantity={(count) => changeProductsAmount(product, count)}
                 />
             )}
-        </div>
+        </Box>
     );
 }

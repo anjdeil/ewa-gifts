@@ -1,8 +1,9 @@
 // import wpRestApi from "@/services/wordpress/WPRestAPI";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import Head from "next/head";
 
-const Blog = ({ response }) =>
-{
+const Blog = ({ response }) => {
   const pageTitle = "Blog";
   console.log(response);
 

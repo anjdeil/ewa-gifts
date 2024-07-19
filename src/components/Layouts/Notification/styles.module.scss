@@ -1,0 +1,20 @@
+@import "@/styles/variables.module.scss";
+
+.notification {
+    padding: 1.2em 1.5em;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: $white-lilac;
+    font-size: 0.9rem;
+
+    a {
+        color: $text-gray;
+        text-decoration: none;
+    }
+}
+
+@media(max-width: 1024px) {
+    .notification {
+        padding: 1em;
+    }
+}
