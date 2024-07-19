@@ -2,161 +2,129 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import Head from "next/head";
-import { useState } from "react";
-import { addedToCart } from "@/store/reducers/CartSlice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { useLazyFetchProductVariationsQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { useEffect, useState } from "react";
+import { useFetchProductQuery } from "@/store/custom/customApi";
+import { typeProductType } from "@/types";
+import Image from "next/image";
+import { updateCart } from "@/store/reducers/CartSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
-const findVariationByOptions = (variations, options) =>
-{
-    return variations.find(variation =>
-    {
-        let found = true;
-        variation.attributes.forEach(({ slug, option }) =>
-        {
-            if (options[slug] !== option) found = false;
-        });
-        return found;
-    })
-}
+const CheckPage = () => {
+    const { data } = useFetchProductQuery({ slug: 'dlugopis-vivid' });
+    const product = data?.data?.item as typeProductType;
 
-const CheckPage = () =>
-{
-    const [fetchProductVariations, { data: variations, isLoading: isVariationsLoading, isError: isVariationsError }] = useLazyFetchProductVariationsQuery();
+    const cart = useAppSelector(state => state.Cart);
+    const dispatch = useAppDispatch();
 
-    const product = {
-        id: 32706,
-        type: 'variable',
-        attributes: [
-            {
-                "id": 8,
-                "name": "Kolor",
-                "slug": "pa_kolor",
-                "position": 0,
-                "visible": true,
-                "variation": true,
-                "options": [
-                    "bordowy (#990505)",
-                    "biały (#ffffff)",
-                    "czarny (#000000)",
-                    "czerwony (#e61717)",
-                    "granatowy (#0c0878)",
-                    "niebieski (#298df2)"
-                ]
-            }
-        ]
-    };
-    const dispatch = useDispatch();
-    const cart = useSelector(state => state.Cart.items);
+    const [choosenOptions, setOptions] = useState();
+    const [choosenVariation, setVariation] = useState();
+    const [quantity, setQuantity] = useState(0);
 
-
-    const [choosenOptions, setChoosenOptions] = useState({
-        pa_color: 'bordowy (#990505)'
-    });
-
-    const onChangeColor = (evt) =>
-    {
-        setChoosenOptions((choosenOptions) => ({
-            ...choosenOptions,
-            pa_color: evt.target.value
-        }))
-    }
-
-    const onAddedToCart = async (evt) =>
-    {
-        evt.preventDefault();
-
-        if (product.type === 'variable')
-        {
-            let variationsData = variations;
-            if (variationsData === undefined)
-            {
-                const { data } = await fetchProductVariations(product.id);
-                variationsData = data;
-            }
-
-            const choosenVariation = findVariationByOptions(variationsData, choosenOptions);
-
-            dispatch(
-                addedToCart({
-                    id: product.id,
-                    type: product.type,
-                    variationId: choosenVariation.id,
-                    choosenOptions: { ...choosenOptions }
-                })
-            );
-
-        } else
-        {
-            dispatch(
-                addedToCart({
-                    id: product.id,
-                    type: product.type,
-                    variationId: null,
-                    choosenOptions: null
-                })
-            );
+    useEffect(() => {
+        if (product?.type === 'variable') {
+            const variableAttributes = {};
+            product?.attributes?.forEach(attribute => {
+                if (attribute.name === 'size' || attribute.name === 'color') {
+                    variableAttributes[attribute.name] = product.default_attributes?.find(defaultAttribute => defaultAttribute.id === attribute.id).option;
+                }
+            });
+            setOptions(variableAttributes);
         }
 
+    }, [product]);
 
+    console.log(choosenOptions);
+
+    useEffect(() => {
+        if (product?.type === 'variable') {
+            const targetVariation = product?.variations.find(variation => {
+                return Boolean(variation?.attributes?.find(({ name, option }) => choosenOptions[name] === option));
+            });
+            setVariation(targetVariation);
+        }
+    }, [choosenOptions]);
+
+    console.log(choosenVariation);
+
+
+    const handleChangeColor = (evt) => {
+        setOptions(options => ({ ...options, color: evt.target.value }))
     }
+
 
     return (
         <>
             <Head>
                 <title>Check Page</title>
             </Head>
-            <Breadcrumbs links={[
-                { name: "Home", url: "/", isCurrent: false },
-                { name: "Check page", url: "/check", isCurrent: false },
-                { name: "Cart", url: "check-cart", isCurrent: true }
-            ]} />
-            <main>
-                <h1>Check Page</h1>
+            <main className="container">
 
-                <form>
-                    <label>
-                        Quantity <br />
-                        <input type="number" defaultValue={0} name="quantity" />
-                    </label>
-                    <br /><br />
-                    <label>
-                        Choose a color <br />
-                        <select onChange={onChangeColor} value={choosenOptions.pa_kolor} name="pa_kolor">
-                            {
-                                product.attributes.find(({ slug }) => slug === "pa_kolor")?.options.map(option => (
-                                    <option key={option} value={option}>{option}</option>
-                                ))
+                {product && (
+                    <div style={{ display: "grid", gridTemplateColumns: '1fr 1fr 1fr' }}>
+                        <div>
+                            <h1>{product.name}</h1>
+                            <ul>
+                                <li>Price: {choosenVariation?.price}</li>
+                                <li>Stock: {choosenVariation?.stock_quantity}</li>
+                            </ul><br />
+                            <div>
+                                <div>Choose a color</div>
+                                <select name="pa_kolor" onChange={handleChangeColor}>
+                                    <option value={undefined}>Choose a color</option>
+                                    {product.attributes.find(({ slug }) => slug === "color")?.options.map(option => (
+                                        <option
+                                            key={option.slug}
+                                            value={option.slug}
+                                            selected={choosenOptions?.color === option.slug}
+                                        >
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <br />
+                            <div>
+                                <div>Quantity</div>
+                                <input type="number" value={quantity} onChange={(evt) => { setQuantity(evt.target.value) }} defaultValue={0} name="quantity" max={choosenVariation?.stock_quantity || 0} />
+                            </div>
+                            <br />
+                            <button onClick={() => {
+                                dispatch(updateCart({
+                                    id: product.id,
+                                    variationId: choosenVariation.id,
+                                    quantity: +quantity
+                                }))
+                            }}>Add to cart</button>
+                        </div>
+                        <div>
+                            {choosenVariation &&
+
+                                <Image alt="777" width={300} height={300} src={choosenVariation.images[0].src} />
                             }
-                        </select>
-                    </label>
-                    <br /><br />
-                    <button onClick={onAddedToCart}>Add to cart</button>
-                    <button onClick={(evt) =>
-                    {
-                        evt.preventDefault();
-                        dispatch(addedToCart({
-                            id: 47587,
-                            type: 'simple',
-                            variationId: null,
-                            choosenOptions: null
-                        }))
-                    }}>Add simple product</button>
-                    <button onClick={(evt) =>
-                    {
-                        evt.preventDefault();
-                        dispatch(addedToCart({
-                            id: 46288,
-                            type: 'variable',
-                            variationId: 44667,
-                            choosenOptions: {
-                                pa_color: 'granatowy (#204060)'
-                            }
-                        }))
-                    }}>Add some variation</button>
-                </form>
+                        </div>
+                        <div>
+                            <ul>
+                                {cart?.items?.map(item => (
+
+                                    <li key={item?.variation_id || item?.product_id}>
+                                        Product #{item.product_id}<br />
+                                        {item?.variation_id && <>Variation #{item.variation_id}<br /></>}
+                                        x{item.quantity} <br />
+                                        <button onClick={() => {
+                                            dispatch(updateCart({
+                                                id: item.product_id,
+                                                ...(item.variation_id && { variationId: item.variation_id }),
+                                                quantity: 0
+                                            }))
+                                        }}>Delete</button>
+                                        <br />
+                                        <br />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
             </main >
         </>
     );

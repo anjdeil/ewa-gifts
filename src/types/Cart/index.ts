@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { cartItem } from "../store";
+import { lineOrderItemsSchema } from "../store";
 
 const CartProductsSchema = z.object({
     id: z.number(),
@@ -23,17 +23,17 @@ const CartProductsSchema = z.object({
     variation_id: z.number()
 })
 
-export const CartTablePropsSchema = z.object({
-    products: z.array(cartItem),
-    isLoading: z.boolean()
-});
-
-export const createOrderProductsSchema = z.object({
+export const CartItemSchema = z.object({
     product_id: z.number(),
     variation_id: z.number().optional(),
     quantity: z.number()
 });
 
+export const CartTablePropsSchema = z.object({
+    products: z.array(lineOrderItemsSchema),
+    isLoading: z.boolean()
+});
+
 export type CartTableProps = z.infer<typeof CartTablePropsSchema>
-export type createOrderProducts = z.infer<typeof createOrderProductsSchema>;
+export type CartItem = z.infer<typeof CartItemSchema>;
 export type CartProduct = z.infer<typeof CartProductsSchema>;

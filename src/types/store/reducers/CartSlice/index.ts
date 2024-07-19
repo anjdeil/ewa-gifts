@@ -1,30 +1,10 @@
+import { CartItemSchema } from "@/types/Cart";
 import { z } from "zod";
-
-export const option = z.object({
-    attributes: z.record(z.string()),
-    id: z.number(),
-    quantity: z.number()
-});
-
-export const cartItem = z.object({
-    id: z.number(),
-    imageUrl: z.string(),
-    quantity: z.number(),
-    options: z.array(option),
-    type: z.string(),
-});
-
-export const CartItemSchema = z.object({
-    id: z.number(),
-    options: z.array(option),
-    quantity: z.number(),
-    type: z.string(),
-    imageUrl: z.string()
-});
 
 export const lineOrderItemsSchema = z.object({
     id: z.number(),
     name: z.string(),
+    parent_name: z.string().nullable(),
     product_id: z.number(),
     variation_id: z.number(),
     quantity: z.number(),
