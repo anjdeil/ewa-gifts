@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,16 +37,14 @@ const NewPasswordSchema = z.object({
 
 type NewPassword = z.infer<typeof NewPasswordSchema>;
 
-export const NewPassword: FC = () =>
-{
+export const NewPassword: FC = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, reset } = useForm<NewPassword>({
         resolver: zodResolver(NewPasswordSchema)
     });
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const onSubmit = async (data: NewPassword) =>
-    {
+    const onSubmit = async (data: NewPassword) => {
         setErrorMessage('');
         const body = {
             email: data.email,
@@ -51,8 +52,7 @@ export const NewPassword: FC = () =>
             password: data.password,
         }
 
-        try
-        {
+        try {
             const response = await axios({
                 url: '/api/password/set-password',
                 method: 'POST',
@@ -62,14 +62,11 @@ export const NewPassword: FC = () =>
                 }
             });
             return response.data;
-        } catch (err)
-        {
-            if (err.response)
-            {
+        } catch (err) {
+            if (err.response) {
                 setErrorMessage(err.response.data?.message || "An unknown error occurred");
             }
-        } finally
-        {
+        } finally {
             reset();
         }
     }

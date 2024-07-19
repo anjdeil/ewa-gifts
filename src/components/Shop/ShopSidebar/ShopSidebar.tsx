@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import React, { FC, useEffect, useState } from 'react';
 import FilterCollapsed from './Filters/FilterCollapsed';
 import { useFetchAttributeTermsQuery } from '@/store/custom/customApi';

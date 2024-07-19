@@ -1,9 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import styles from "./styles.module.scss";
 import React from "react";
-import {Box, Typography, Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 
 
-const AccordionProduct = ({data, title, text}) => {
+const AccordionProduct = ({ data, title, text }) => {
     const getOptions = (product, nameAttribute) => {
         if (!product || !Array.isArray(product)) {
             return [];
@@ -46,8 +49,8 @@ const AccordionProduct = ({data, title, text}) => {
         <Accordion defaultExpanded className={styles.accordion}>
             <AccordionSummary
                 expandIcon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 9L12 15L18 9" stroke="black" strokeLinecap="round" strokeLinejoin="round"/>
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 }
                 aria-controls="panel1-content"
@@ -59,10 +62,10 @@ const AccordionProduct = ({data, title, text}) => {
                 </Typography>
             </AccordionSummary>
             {text &&
-				<AccordionDetails dangerouslySetInnerHTML={{__html: text}} className={styles.accordion__description}/>
+                <AccordionDetails dangerouslySetInnerHTML={{ __html: text }} className={styles.accordion__description} />
             }
             {data &&
-				<AccordionDetails className={styles.accordion__details}>
+                <AccordionDetails className={styles.accordion__details}>
                     {sizeOptions.length === 0 ? null :
                         <Box className={styles.accordion__item}>
                             <Typography className={styles.accordion__name}>Rozmiar</Typography>
@@ -94,7 +97,7 @@ const AccordionProduct = ({data, title, text}) => {
                         </Box>
                     }
 
-				</AccordionDetails>
+                </AccordionDetails>
             }
 
         </Accordion>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Chip, CircularProgress, Button, Paper } from "@mui/material";
+import React, { FC, SyntheticEvent, useState } from 'react';
+import { Chip, CircularProgress, Button, Paper, PaperOwnProps } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Link from "next/link";
-import { useFetchProductListQuery, useFetchAllCategoriesListQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { useFetchProductListQuery, useFetchCategoryListQuery } from "@/store/custom/customApi";
 import { transformSearchBarCategories, transformSearchBarProducts } from "@/services/transformers"
 import variables from '@/styles/variables.module.scss';
 import styles from './styles.module.scss';
@@ -32,7 +32,15 @@ const focusStyles = {
     }
 };
 
-const SearchPaper = (props) => {
+interface SearchBarOptionType {
+    key: string,
+    name: string,
+    type: string,
+    slug: string,
+    count?: number
+}
+
+const SearchPaper = (props: PaperOwnProps) => {
     return <Paper
         {...props}
         elevation={0}
@@ -45,23 +53,28 @@ const SearchPaper = (props) => {
     />;
 };
 
-const MobileSearchPopup = ({ onClose }) => {
+interface MobileSearchPopup {
+    onClose: () => void
+}
+
+const MobileSearchPopup: FC<MobileSearchPopup> = ({ onClose }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isTyping, setTyping] = useState(false);
 
-    let { data: categories = [] } = useFetchAllCategoriesListQuery();
-    categories = categories.length ? transformSearchBarCategories(categories) : [];
+    const { data: categoriesData = [] } = useFetchCategoryListQuery({});
+    const categories = categoriesData.data ? transformSearchBarCategories(categoriesData.data.items) : [];
 
-    let { data: products = [], isLoading, isFetching, isError, error } = useFetchProductListQuery({
-        search: searchTerm
+    const { data: productsData = [], isLoading, isFetching } = useFetchProductListQuery({
+        search: searchTerm,
+        per_page: 20
     }, {
         skip: searchTerm?.length < 3 || isTyping
     });
-    products = transformSearchBarProducts(products);
+    const products = productsData.data ? transformSearchBarProducts(productsData.data.items) : [];
 
-    const searchResults = [{ key: 'seach', name: searchTerm, type: "Search" }, ...categories, ...products];
+    const searchResults = [...categories, ...products];
 
-    const onSearch = (evt, value) => {
+    const onSearch = (evt: SyntheticEvent, value: string) => {
         setSearchTerm(value);
 
         if (value.length < 3) return
@@ -72,7 +85,7 @@ const MobileSearchPopup = ({ onClose }) => {
         }, 2000);
     }
 
-    const renderOption = (props, option) => (
+    const renderOption = (props: React.JSX.IntrinsicAttributes & React.ClassAttributes<HTMLLIElement> & React.LiHTMLAttributes<HTMLLIElement>, option: SearchBarOptionType) => (
         <li
             {...props}
             className={styles['search-popup__list-item']}
@@ -105,7 +118,7 @@ const MobileSearchPopup = ({ onClose }) => {
                     freeSolo
                     loading={isLoading || isFetching}
                     options={searchTerm?.length >= 3 ? searchResults : []}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
                     renderOption={renderOption}
                     onInputChange={onSearch}
                     blurOnSelect

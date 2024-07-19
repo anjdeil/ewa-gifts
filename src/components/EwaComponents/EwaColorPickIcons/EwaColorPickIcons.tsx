@@ -1,6 +1,5 @@
 import variables from "@/styles/variables.module.scss";
 import { styled } from "@mui/material";
-import Radio, { RadioProps } from "@mui/material/Radio";
 
 export const EwaColorPickIcon = styled('span')(({ color = '#ffffff' }) => ({
     display: 'flex',

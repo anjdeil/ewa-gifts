@@ -1,19 +1,17 @@
 import { PageBuilder } from "@/components/PageBuilder";
-import wpRestApi from "@/services/wordpress/wpRestAPI";
+import wpRestApi from "@/services/WordPress/WPRestAPI";
 import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
 
 
-const Home: FC<HomeProps> = ({ response }) =>
-{
+const Home: FC<HomeProps> = ({ response }) => {
   let sections;
   // const pageTitle = response[0].title.rendered;
   const pageTitle = 'Home';
 
-  if ('sections' in response[0])
-  {
+  if ('sections' in response[0]) {
     sections = response[0].sections;
   }
 
@@ -26,24 +24,21 @@ const Home: FC<HomeProps> = ({ response }) =>
       <main>
         <h1>{pageTitle}</h1>
         <PageBuilder sections={sections} />
-        
+
       </main >
     </>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function getServerSideProps(context: GetServerSidePropsContext)
-{
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const cookies = req.cookies || {};
   let response;
-  try
-  {
+  try {
     response = await wpRestApi.get('pages', { slug: `homepage` });
     response = response.data;
-  } catch (error)
-  {
+  } catch (error) {
     response = (error as Error).message;
   }
 

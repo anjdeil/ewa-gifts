@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
-import build from "next/dist/build";
 
 const initialState = {
     links: [],
@@ -12,18 +10,15 @@ export const MenuSlice = createSlice({
     name: 'MenuSlice',
     initialState,
     reducers: {
-        menuFetching(state)
-        {
+        menuFetching(state) {
             state.isLoading = true;
         },
-        menuFetchingSuccess(state, action)
-        {
+        menuFetchingSuccess(state, action) {
             state.isLoading = false;
             state.links = action.payload;
             state.error = '';
         },
-        menuFetchingError(state, action)
-        {
+        menuFetchingError(state, action) {
             state.isLoading = false;
             state.error = action.payload;
         },
