@@ -10,7 +10,7 @@ import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
 import { refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
-import MiniCart from '@/components/CartR/MiniCart';
+import MiniCart from '@/components/Cart/MiniCart';
 import Link from 'next/link'
 
 const CustomBadge = styled(Badge)`
