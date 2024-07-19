@@ -3,29 +3,28 @@ import { Box, Skeleton, Typography } from '@mui/material';
 import styles from './styles.module.scss';
 import { Counter } from '@/components/Buttons';
 import { useAppDispatch } from '@/hooks/redux';
-import { deletedFromCart, updatedCartQuantity } from '@/store/reducers/CartSlice';
-import { CartProduct, CartTableProps } from '@/types/Cart';
+import { updateCart } from '@/store/reducers/CartSlice';
+import { CartTableProps } from '@/types/Cart';
 import IconButton from '@mui/material/IconButton';
 import { FC } from 'react';
+import { lineOrderItems } from '@/types';
 
-export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
-{
+export const CartTable: FC<CartTableProps> = ({ products, isLoading }) => {
     const dispatch = useAppDispatch();
 
-    const changeProductsAmount = (product: CartProduct, count: string) =>
-    {
-        console.log('Change product', product, count);
-        dispatch(updatedCartQuantity({
-            id: product.id,
-            quantity: count,
+    const changeProductsAmount = (product: lineOrderItems, count: string) => {
+        dispatch(updateCart({
+            id: product.product_id,
+            quantity: +count,
+            ...(product.variation_id && { variationId: product.variation_id })
         }));
     };
 
-    const deleteProduct = (product: CartProduct) =>
-    {
-        dispatch(deletedFromCart({
-            id: product.id,
-            type: product.type,
+    const deleteProduct = (product: lineOrderItems) => {
+        dispatch(updateCart({
+            id: product.product_id,
+            quantity: 0,
+            ...(product.variation_id && { variationId: product.variation_id })
         }));
     }
 

@@ -15,6 +15,11 @@ export const wooCommerceApi = createApi({
                 url: `/products/${id}/variations`
             })
         }),
+        fetchOrder: build.query({
+            query: (id) => ({
+                url: `/orders/${id}`
+            })
+        }),
         fetchUserRegistration: build.mutation({
             query: (credentials) => ({
                 url: `/customers`,
@@ -62,6 +67,7 @@ export const {
     useFetchProductListQuery,
     useLazyFetchProductVariationsQuery,
     useFetchProductVariationsQuery,
+    useFetchOrderQuery,
     useFetchUserRegistrationMutation,
     useFetchCreateOrderMutation,
     useFetchUpdateOrderMutation,

@@ -6,7 +6,7 @@ import MenuCategoriesSlice from "./reducers/MenuCategoriesSlice";
 import { contactForm7Api } from "./contactForm7/contactForm7Api";
 import CartSlice from "./reducers/CartSlice";
 import PopupSlice from "./reducers/PopupSlice";
-import { cartLocalStorageMiddleware } from "./reducers/CartSlice";
+import { saveCartItemsToLocalStorageMiddleware } from "./reducers/CartSlice";
 import { jwtApi } from "./jwt/jwtApi";
 import CurrentOrder from "./reducers/CurrentOrder";
 import SwiperModal from "@/store/reducers/SwiperModal";
@@ -24,8 +24,7 @@ const rootReducer = combineReducers({
     swiperModal: SwiperModal
 });
 
-export const setupStore = () =>
-{
+export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) =>
@@ -34,8 +33,8 @@ export const setupStore = () =>
                 .concat(contactForm7Api.middleware)
                 .concat(wooCommerceApi.middleware)
                 .concat(customApi.middleware)
-                .concat(cartLocalStorageMiddleware)
                 .concat(jwtApi.middleware)
+                .concat(saveCartItemsToLocalStorageMiddleware)
     })
 }
 
