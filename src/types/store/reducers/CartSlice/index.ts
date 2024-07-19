@@ -4,6 +4,7 @@ import { z } from "zod";
 export const lineOrderItemsSchema = z.object({
     id: z.number(),
     name: z.string(),
+    parent_name: z.string().nullable(),
     product_id: z.number(),
     variation_id: z.number(),
     quantity: z.number(),

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { lineOrderItemsSchema } from "../store";
 
 const CartProductsSchema = z.object({
     id: z.number(),
@@ -29,7 +30,7 @@ export const CartItemSchema = z.object({
 });
 
 export const CartTablePropsSchema = z.object({
-    products: z.array(CartItemSchema),
+    products: z.array(lineOrderItemsSchema),
     isLoading: z.boolean()
 });
 

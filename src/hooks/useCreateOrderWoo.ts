@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
 import { CartItem } from "@/types/Cart";
+import { lineOrderItems } from "@/types";
 
 export const useCreateOrderWoo = () => {
     const dispatch = useAppDispatch();
@@ -11,7 +12,7 @@ export const useCreateOrderWoo = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [items, setItems] = useState<Record<string, any>[] | null>(null);
+    const [items, setItems] = useState<lineOrderItems[] | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
     const createOrder = useCallback(async (items: CartItem[]) => {

@@ -11,22 +11,18 @@ import { Section } from "@/components/Layouts/Section";
 import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { CartItem } from "@/types/Cart";
+import { lineOrderItems } from "@/types";
 
 const Cart = () => {
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
-    const { createOrder, createdOrder, error: createError } = useCreateOrderWoo();
+    const { createOrder, createdOrder } = useCreateOrderWoo();
     const { updateOrder, isLoading: isUpdatingOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [products, setProducts] = useState<Record<string, any>[]>([]);
+    const [products, setProducts] = useState<lineOrderItems[]>([]);
     const [total, setTotal] = useState('0');
     const [isUpdating, setIsUpdating] = useState(false);
     const breadLinks = [
-        {
-            name: 'Katalog',
-            url: '/'
-        },
         {
             name: 'Koszyk',
             url: '/cart'
@@ -51,7 +47,7 @@ const Cart = () => {
         }
     }, [updateError, items.length]);
 
-    const updateLocalState = useCallback((total: string, line_items: CartItem[], isLoading: boolean): void => {
+    const updateLocalState = useCallback((total: string, line_items: lineOrderItems[], isLoading: boolean): void => {
         if (!line_items) return;
         setTotal(total);
         setProducts(line_items);
