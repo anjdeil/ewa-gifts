@@ -8,7 +8,6 @@ import MiniCartItem from "./MiniCartItem";
 const MiniCart = () => {
     const testOrderId = 83866;
     const totals = { total: 0 };
-
     const { data: orderData } = useFetchOrderQuery(testOrderId);
 
     return (
