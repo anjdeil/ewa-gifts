@@ -17,6 +17,7 @@ export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes, onColorCh
     useEffect(() =>
     {
         onColorChange(currentInput);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentInput])
 
 
@@ -27,10 +28,10 @@ export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes, onColorCh
         return (
             <Radio
                 key={uniqueId}
-                onChange={() => onInputClick(uniqueId, color.slug)}
+                onChange={() => onInputClick(uniqueId, color.slug ? color.slug : '')}
                 checked={uniqueId === inputId}
                 inputProps={{ 'aria-label': color.label }}
-                value={color.name}
+                value={color.label}
                 icon={<EwaColorPickIcon color={color.cssColor} />}
                 checkedIcon={< EwaColorPickCheckedIcon color={color.cssColor} />}
             />

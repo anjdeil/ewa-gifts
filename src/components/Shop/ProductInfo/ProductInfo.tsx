@@ -1,18 +1,49 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { ProductInfoProps, simpleProduct, typeProductType } from "@/types";
+import { ProductInfoProps, ProductOptions, simpleProduct } from "@/types";
 import { ColorOptions } from "../ColorOptions";
-import { transformColors } from "@/services/transformers/woocommerce/transformColors";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 import { transformProductSizes } from "@/Utils/transformProductSizes";
+import ProductCalculations from "../ProductCalculations";
+import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
+import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
-    const [currentColor, setCurrentColor] = useState('');
+    // console.log('Product', product);
+    const { name, description, price, sku, images, attributes } = product;
+    const [currentColor, setCurrentColor] = useState<string | null>(null);
+    const [availableVariations, setAvailableVariations] = useState<simpleProduct[] | null>(null);
+    const [sizes, setSizes] = useState<ProductOptions[] | null>(null);
+    const allColors = transformColorsArray(attributes);
+    const allSizes = transformProductSizes(attributes);
+
+    useEffect(() =>
+    {
+        if (allColors.length > 0)
+        {
+            const colorAttribute = attributes.find(attr => attr.name === "color")?.id;
+            if (!colorAttribute)
+                return;
+            const colorId = colorAttribute;
+            const defaultColorAttr = product.default_attributes.find(attr => attr.id === colorId);
+            if (defaultColorAttr)
+            {
+                const baseColor = transformColorByName(defaultColorAttr.name);
+                setCurrentColor(baseColor.cssColor);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() =>
+    {
+
+    }, [currentColor])
 
     function onColorChange(checkedColor: string): void
     {
@@ -23,42 +54,35 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     {
         if (!currentColor)
             return;
-        // console.log(product.variations)
         if (product.variations)
         {
-            filterOptionsByName(product.variations, currentColor);
+            filterOptionsByName(product.variations, currentColor, 'color');
+            console.log(availableVariations);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentColor])
 
-    function filterOptionsByName(variations: simpleProduct[], name: string)
+    function filterOptionsByName(variations: simpleProduct[], name: string, fieldName: string): void
     {
-        console.log(variations);
-        const newArr = variations.map(variation =>
+        const filteredVariations: simpleProduct[] = [];
+        variations.forEach(variation =>
         {
-            // console.log(variation.attributes);
-            return variation.attributes.filter(attr => attr.name === 'color');
-        })
-        console.log(newArr);
+            const res = variation.attributes.filter(attr => attr.name === fieldName && attr.option === name);
+            if (res.length > 0)
+                filteredVariations.push(variation);
+        });
+        setAvailableVariations(filteredVariations);
     }
 
-    const { name, description, price, sku, images, attributes } = product;
-    const sizes = transformProductSizes(attributes);
-    const baseColorAttr = attributes.find(attr => attr.name === "base_color");
-    const colors = attributes.find(attr => attr.name === "color");
-    let colorAttributes;
-    if (colors)
+    useEffect(() =>
     {
-        colorAttributes = transformColors(colors.options);
-    }
-    let baseColor;
-    if (baseColorAttr)
-    {
-        baseColor = transformColors(baseColorAttr.options);
-    }
-    // console.log('Product', product);
-    // console.log('Colors', colorAttributes);
-    // console.log('Sizes', sizes);
+        if (availableVariations)
+        {
+            // setSizes(transformProductSizes(attributes));
+            // console.log(availableVariations);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [availableVariations])
 
     return (
         <Box className={styles.product}>
@@ -81,7 +105,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
-                    {colorAttributes && <ColorOptions colorAttributes={colorAttributes} baseColor={baseColor} onColorChange={onColorChange} />}
+                    {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor && currentColor} onColorChange={onColorChange} />}
                 </Box>
                 <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>

@@ -4,13 +4,13 @@ export const ProductOptionsSchema = z.object({
     id: z.number(),
     name: z.string(),
     slug: z.string(),
-    // option: z.string().optional(),
 });
 
 export const ProductAttributesSchema = z.object({
     id: z.number(),
     name: z.string(),
     options: z.array(ProductOptionsSchema),
+    option: z.string().optional(),
     slug: z.string(),
     variation: z.boolean(),
     visible: z.boolean(),
@@ -71,5 +71,6 @@ const ProductCardPropsSchema = z.object({
 export type ProductAttributesType = z.infer<typeof ProductAttributesSchema>;
 export type ProductCardProps = z.infer<typeof ProductCardPropsSchema>;
 export type ProductOptions = z.infer<typeof ProductOptionsSchema>;
+export type defaultAttributesType = z.infer<typeof defaultAttributesSchema>;
 export type simpleProduct = z.infer<typeof simpleProductSchema>;
 export type typeProductType = z.infer<typeof ProductSchema>;
