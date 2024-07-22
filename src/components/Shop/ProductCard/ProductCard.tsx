@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { VariationType, typeProductType } from "@/types";
+import { variationsProductType, typeProductType } from "@/types";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
@@ -41,8 +41,8 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     const [choosenColor, setColor] = useState<string | undefined>();
     const [choosenSize, setSize] = useState<string | undefined>();
-    const [matchedVariationsByColor, updateMatchedVariationsByColor] = useState<VariationType[]>([]);
-    const [choosenVariation, setVariation] = useState<VariationType | undefined>();
+    const [matchedVariationsByColor, updateMatchedVariationsByColor] = useState<variationsProductType[]>([]);
+    const [choosenVariation, setVariation] = useState<variationsProductType | undefined>();
     const [productInfo, setProductInfo] = useState<ProductInfoType | undefined>();
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
 
@@ -83,6 +83,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             });
         }
     }, [baseColor]);
+
 
     /* Finding: Image, Price, Stock - from current variation or product */
     useEffect(() => {
@@ -191,6 +192,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     const handleDecrement = () => {
         if (cartMatch === undefined) return;
+
 
         dispatch(updateCart({
             id: product.id,

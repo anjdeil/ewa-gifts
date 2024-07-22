@@ -1,28 +1,39 @@
 @font-face {
-    font-family: 'Urbanist';
-    src: url('../fonts/Urbanist-Regular.ttf');
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
 
-  @font-face {
-    font-family: 'Urbanist';
-    src: url('../fonts/Urbanist-Medium.ttf');
-    font-weight: 500;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  
-  @font-face {
-    font-family: 'Urbanist';
-    src: url('../fonts/Urbanist-SemiBold.ttf');
-    font-weight: 600;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
-  @font-face {
-    font-family: 'Urbanist';
-    src: url('../fonts/Urbanist-Bold.ttf');
-    font-weight: 700;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

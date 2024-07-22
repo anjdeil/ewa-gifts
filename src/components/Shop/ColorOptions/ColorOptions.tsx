@@ -1,29 +1,19 @@
 import { Radio } from '@mui/material';
 import { EwaColorPickIcon, EwaColorPickCheckedIcon } from '@/components/EwaComponents/EwaColorPickIcons';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { ColorOptionsProps } from '@/types';
 
-
-export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes }) =>
+export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes, currentColor, onColorChange }) =>
 {
-    const [inputId, setInputId] = useState<string | null>(null);
-
-    const onInputClick = (id: string | null) =>
+    return colorAttributes.map(color =>
     {
-        setInputId(id);
-    };
-
-    return colorAttributes.map((color, index) =>
-    {
-        const uniqueId = `color-radio-${index}`;
-
         return (
             <Radio
-                key={uniqueId}
-                onChange={() => onInputClick(uniqueId)}
-                checked={uniqueId === inputId}
+                key={color.slug}
+                onChange={() => onColorChange(color.slug)}
+                checked={color.slug === currentColor}
                 inputProps={{ 'aria-label': color.label }}
-                value={color.name}
+                value={color.label}
                 icon={<EwaColorPickIcon color={color.cssColor} />}
                 checkedIcon={< EwaColorPickCheckedIcon color={color.cssColor} />}
             />
