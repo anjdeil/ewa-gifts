@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, simpleProduct, transColorsType, typeProductType, variationsProductType } from "@/types";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
@@ -12,7 +12,6 @@ import ProductCalculations from "../ProductCalculations";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
 import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
-import { Loader } from "@/components/Layouts/Loader";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
