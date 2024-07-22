@@ -236,7 +236,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                 {(Boolean(colors.length)) &&
                     <div className={styles['product-card__colors']}>
                         <Swiper
-                            className="color-slider"
+                            className="product-card-slider"
                             slidesPerView={isTablet ? 3 : 6}
                             spaceBetween={0}
                             modules={[Navigation]}
@@ -261,24 +261,22 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     </div>
                 }
                 {(Boolean(sizes.length)) &&
-                    <>
-                        <div className={styles['product-card__sizes']}>
-                            {sizes.map(option => (
-                                <label key={option.slug} className="size-pick">
-                                    <input
-                                        className="size-pick__input"
-                                        type="radio"
-                                        value={option.slug}
-                                        disabled={!checkSizeAvailability(option.slug)}
-                                        checked={checkIsSizeChecked(option.slug)}
-                                        onChange={handleChangeSize}
-                                    />
-                                    <div className="size-pick__island">{option.name}</div>
+                    <div className={`size-picks ${styles['product-card__sizes']}`}>
+                        {sizes.map(option => (
+                            <label key={option.slug} className="size-pick">
+                                <input
+                                    className="size-pick__input"
+                                    type="radio"
+                                    value={option.slug}
+                                    disabled={!checkSizeAvailability(option.slug)}
+                                    checked={checkIsSizeChecked(option.slug)}
+                                    onChange={handleChangeSize}
+                                />
+                                <div className="size-pick__island">{option.name}</div>
 
-                                </label>
-                            ))}
-                        </div>
-                    </>
+                            </label>
+                        ))}
+                    </div>
                 }
             </div>
             {productInfo?.price &&
