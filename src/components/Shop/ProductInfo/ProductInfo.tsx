@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import React, { FC, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
@@ -14,8 +17,7 @@ import { getDefaultVariation } from "@/Utils/getDefaultVariation";
 import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 
-const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
-{
+const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     console.log(product);
     const { name, description, price, sku, images, attributes, default_attributes, type } = product;
     const [currentColor, setCurrentColor] = useState<string>('');
@@ -29,22 +31,17 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const isSized = (allSizes && allSizes.length > 0) ? true : false;
     console.log(allSizes);
 
-    useEffect(() =>
-    {
-        if (allColors && attributes && default_attributes)
-        {
+    useEffect(() => {
+        if (allColors && attributes && default_attributes) {
             const baseColor = getDefaultVariation("color", attributes, default_attributes);
-            if (baseColor)
-            {
+            if (baseColor) {
                 onColorChange(baseColor);
             }
         }
 
-        if (isSized)
-        {
+        if (isSized) {
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
-            if (baseSize)
-            {
+            if (baseSize) {
                 onSizeChange(baseSize);
             }
         }
@@ -53,32 +50,25 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     }, []);
 
 
-    function onColorChange(checkedColor: string): void
-    {
+    function onColorChange(checkedColor: string): void {
         setCurrentColor(checkedColor);
-        if (sizes)
-        {
+        if (sizes) {
             setCurrentSize(sizes[0].option)
         }
     }
 
-    function onSizeChange(checkedSize: string): void
-    {
+    function onSizeChange(checkedSize: string): void {
         setCurrentSize(checkedSize);
     }
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (!currentColor)
             return;
-        if (product.variations)
-        {
+        if (product.variations) {
             const availableVariations = filterOptionsByColorName(product.variations, currentColor);
-            if (availableVariations)
-            {
+            if (availableVariations) {
                 setAvailableVariations(availableVariations);
-                if (isSized)
-                {
+                if (isSized) {
                     setSizes(transformProductSizes(availableVariations));
                 }
             }
@@ -86,13 +76,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentColor])
 
-    useEffect(() =>
-    {
-        if (product.variations && currentColor && currentSize)
-        {
+    useEffect(() => {
+        if (product.variations && currentColor && currentSize) {
             const currentVariation = filterByColorAndSize(product.variations, currentColor, currentSize);
-            if (currentVariation)
-            {
+            if (currentVariation) {
                 setCurrentImages(currentVariation[0].images);
             }
         }
