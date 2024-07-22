@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import React, { FC, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';

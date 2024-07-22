@@ -1,4 +1,4 @@
-import { transColorsSchema } from "@/types/Services/fransformers";
+import { transColorsSchema } from "@/types/Services/transformers";
 import { z } from "zod";
 
 export const ColorOptionsPropsSchema = z.object({
