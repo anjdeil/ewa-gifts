@@ -189,7 +189,6 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
-
     const handleDecrement = () => {
         if (cartMatch === undefined) return;
 
@@ -200,6 +199,15 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
+    const checkIsSizeChecked = (size: string) => {
+        if (choosenVariation === undefined) return false;
+
+        return choosenVariation.attributes.some(({ name, option }) => {
+            if (name === 'size' && option === size) return true;
+        });
+    }
+
+    /* Generate link to the product page */
     const productPageBase = `/product/${product.slug}`;
     const productPageParams = [];
     if (choosenColor) productPageParams.push(`color=${choosenColor}`);
@@ -253,19 +261,24 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     </div>
                 }
                 {(Boolean(sizes.length)) &&
-                    <select name="size" onChange={handleChangeSize}>
-                        <option value={choosenSize}>Choose a size</option>
-                        {sizes.map(option => (
-                            <option
-                                key={option.slug}
-                                value={option.slug}
-                                disabled={!checkSizeAvailability(option.slug)}
-                                selected={choosenSize === option.slug}
-                            >
-                                {option.name}
-                            </option>
-                        ))}
-                    </select>
+                    <>
+                        <div className={styles['product-card__sizes']}>
+                            {sizes.map(option => (
+                                <label key={option.slug} className="size-pick">
+                                    <input
+                                        className="size-pick__input"
+                                        type="radio"
+                                        value={option.slug}
+                                        disabled={!checkSizeAvailability(option.slug)}
+                                        checked={checkIsSizeChecked(option.slug)}
+                                        onChange={handleChangeSize}
+                                    />
+                                    <div className="size-pick__island">{option.name}</div>
+
+                                </label>
+                            ))}
+                        </div>
+                    </>
                 }
             </div>
             {productInfo?.price &&

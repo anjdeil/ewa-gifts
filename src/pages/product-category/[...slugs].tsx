@@ -18,6 +18,7 @@ import styles from "./styles.module.scss";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useAppSelector } from "@/hooks/redux";
 import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
+import Notification from "@/components/Layouts/Notification";
 
 /* eslint-disable-next-line react-refresh/only-export-components */
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -195,7 +196,10 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
                         <div className={styles['product-category__archive']}>
                             <ShopToolbar renderPagination={() => renderPagination(page, pagesCount)} />
                             {popup === 'mobile-filter' && <MobileSidebar priceRange={priceRange} />}
-                            {products && <ProductCardList products={products} columns={{ desktop: 3 }} isShopPage={true} />}
+                            {products.length ?
+                                <ProductCardList products={products} columns={{ desktop: 3 }} isShopPage={true} /> :
+                                <Notification><p>Nie znaleziono żadnych produktów dla tego żądania.</p></Notification>
+                            }
                             <div className={styles['product-category__nav-wrap']}>
                                 {renderPagination(page, pagesCount)}
                             </div>
