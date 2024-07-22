@@ -195,7 +195,7 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
                         <div className={styles['product-category__archive']}>
                             <ShopToolbar renderPagination={() => renderPagination(page, pagesCount)} />
                             {popup === 'mobile-filter' && <MobileSidebar priceRange={priceRange} />}
-                            {products && <ProductCardList products={products} columns={{ desktop: 3 }} />}
+                            {products && <ProductCardList products={products} columns={{ desktop: 3 }} isShopPage={true} />}
                             <div className={styles['product-category__nav-wrap']}>
                                 {renderPagination(page, pagesCount)}
                             </div>
