@@ -6,7 +6,7 @@ import { ProductCard } from "../ProductCard";
 import { useMediaQuery } from "@mui/material";
 
 
-export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns }) => {
+export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns, isShopPage = false }) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
@@ -18,17 +18,15 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
         (columns?.desktop !== undefined ? columns.desktop : 4);
 
     return (
-        <ul
-            className={`list-reset ${styles.productList}`}
+        <div
+            className={`list-reset ${styles.productList} ${isShopPage && styles['productList_shop-page']}`}
             style={{
                 gridTemplateColumns: `repeat(${column}, 1fr)`,
             }}
         >
-            {products && products.map((product, index) => (
-                <li key={index}>
-                    <ProductCard key={index} product={product} />
-                </li>
+            {products && products.map((product) => (
+                <ProductCard key={product.id} product={product} />
             ))}
-        </ul>
+        </div>
     );
 }

@@ -1,32 +1,29 @@
 import { SizeOptionsProps } from "@/types/Shop/SizeOptions";
 import { Box, Button } from "@mui/material";
-import { FC, useState } from "react";
+import { FC } from "react";
 import styles from './styles.module.scss';
 
-export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes }) =>
+export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes, onSizeChange, currentSize, availableSizes }) =>
 {
-    console.log(sizeAttributes);
-
-    const [buttonId, setButtonId] = useState<string | null>(null);
-
-    const onButtonClick = (id: string | null) =>
-    {
-        setButtonId(id);
-    };
     return (
         <Box className={styles.SizeOptions}>
-            {sizeAttributes.map((attr, index) =>
+            {sizeAttributes.map(attr =>
             {
-                const uniqueId = `size-button-${index}`;
+                const uniqId = "slug" in attr ? attr.slug : attr.option;
+                let isAvailable = true;
+
+                if (availableSizes)
+                    isAvailable = availableSizes.some(size => "option" in size && size.option === uniqId);
 
                 return (
                     <Button
-                        key={uniqueId}
+                        key={uniqId}
                         className={`
                             ${styles.SizeOptions__button}
-                            ${buttonId === uniqueId && styles.SizeOptions__button_active}
+                            ${currentSize === uniqId && styles.SizeOptions__button_active}
                             `}
-                        onClick={() => onButtonClick(uniqueId)}
+                        onClick={() => onSizeChange(uniqId)}
+                        disabled={!isAvailable}
                     >
                         {attr.name}
                     </Button>

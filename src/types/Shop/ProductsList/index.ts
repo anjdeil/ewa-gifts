@@ -12,6 +12,7 @@ export const ProductCardListPropsSchema = z.object({
     isError: z.boolean().optional(),
     products: z.array(ProductSchema),
     columns: ProductCardAdaptiveColumns.optional(),
+    isShopPage: z.boolean().optional()
 });
 
 export type ProductCardListProps = z.infer<typeof ProductCardListPropsSchema>;

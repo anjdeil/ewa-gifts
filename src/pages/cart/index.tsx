@@ -1,8 +1,6 @@
 import Head from "next/head";
-import { CartTable } from "@/components/Cart/CartTable";
 import { useAppSelector } from "@/hooks/redux";
 import { useCallback, useEffect, useState } from "react";
-import { CartSummary } from "@/components/Cart/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
@@ -12,6 +10,8 @@ import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { lineOrderItems } from "@/types";
+import { CartSummary } from "@/components/Cart/CartSummary";
+import { CartTable } from "@/components/Cart/CartTable";
 
 const Cart = () => {
     const { items } = useAppSelector(state => state.Cart);

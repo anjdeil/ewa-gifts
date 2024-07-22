@@ -1,70 +1,153 @@
 @import "@/styles/variables.module.scss";
 
-.productCard {
+.product-card {
     background: $white;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    align-items: center;
+    justify-content: space-between;
     padding: 24px;
     border-radius: 10px;
-    text-align: center;
+    border: 1px solid $input-light;
+    box-sizing: border-box;
+    overflow: hidden;
 
-    a {
+    &__link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-decoration: none;
+        color: $text-gray;
+        margin-bottom: 0.8em;
     }
 
-    &__image {
-        margin-bottom: 20px;
+    &__calculations {
+        padding: 0 5px;
+        width: 100%;
+        margin-bottom: 0.8em;
     }
 
-    &__title {
-        margin: 0 auto;
-        margin-bottom: 15px;
-        overflow: hidden;
-        opacity: 0.5;
+    &__sizes {
+        margin-top: 0.8em;
     }
 
-    &__colorsSlider {
-        margin: 0 auto 15px;
+    &__color-slider {
+
+        &-slide {
+            display: flex;
+            justify-content: center;
+        }
     }
 
     &__price {
-        margin-bottom: 10px;
-        display: flex;
-        gap: 5px;
-        align-items: center;
-        justify-content: center;
-    }
+        margin-bottom: 0.8em;
+        text-align: center;
 
-    &__price_vat {
-        opacity: 0.5;
-    }
-
-    &__content {
-        margin-bottom: auto;
+        &-ending {
+            color: $text-gray;
+        }
     }
 
     &__stock {
+        color: $text-gray;
+        font-size: 0.9em;
+        margin-bottom: 0.8em;
+
+        &-dot {
+            display: inline-block;
+            background: $text-gray;
+            width: 0.75em;
+            height: 0.75em;
+            border-radius: 50%;
+
+            &_active {
+                background: #01a900;
+            }
+        }
+    }
+
+    &__title {
+        text-align: center;
+        margin-top: 1.2em;
+    }
+
+    &__image {
+        object-fit: contain;
+        object-position: center;
+    }
+
+    &__button {
+        font-size: 1em;
+    }
+
+    &__swatches {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 10px;
-        font-size: 16px;
+        align-self: stretch;
+        flex-direction: column;
+        height: 46px;
+    }
+}
 
-        span {
-            opacity: 0.5;
+@media (max-width: 1024px) {
+    .product-card {
+        padding: 10px;
+
+        &__price {
+
+            &-ending {
+                display: block;
+            }
+        }
+    }
+}
+
+.counter {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: auto 130px auto;
+    gap: 10px;
+
+    &__window {
+        padding: 10px 0;
+        min-width: 70px;
+        border: none;
+        border-radius: 10px;
+        background-color: $white-lilac;
+
+        input {
+            padding: 0;
+            text-align: center;
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
         }
     }
 
-    &__stockCircle {
-        width: 12px;
-        height: 12px;
-        border-radius: 100%;
-        background-color: $successfully;
+    &__window::after {
+        display: none;
+    }
 
-        &_empty {
-            background-color: $dusty-gray;
+    &__window::before {
+        display: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .counter {
+        gap: 0px;
+        grid-template-columns: auto 70px auto;
+
+        &__window {
+            padding: 1px 0;
         }
     }
+
 }
