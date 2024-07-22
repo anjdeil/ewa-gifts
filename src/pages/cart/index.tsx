@@ -1,8 +1,6 @@
 import Head from "next/head";
-import { CartTable } from "@/components/Cart/CartTable";
 import { useAppSelector } from "@/hooks/redux";
 import { useCallback, useEffect, useState } from "react";
-import { CartSummary } from "@/components/Cart/CartSummary";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
@@ -12,8 +10,11 @@ import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { lineOrderItems } from "@/types";
+import { CartSummary } from "@/components/cart/CartSummary";
+import { CartTable } from "@/components/cart/CartTable";
 
-const Cart = () => {
+const Cart = () =>
+{
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
     const { createOrder, createdOrder } = useCreateOrderWoo();
@@ -29,25 +30,32 @@ const Cart = () => {
         },
     ];
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setIsUpdating(true);
-        if (items && items.length > 0) {
-            if (!orderId) {
+        if (items && items.length > 0)
+        {
+            if (!orderId)
+            {
                 createOrder(items);
-            } else if (!isUpdatingOrder && !isUpdating) {
+            } else if (!isUpdatingOrder && !isUpdating)
+            {
                 updateOrder(items, orderId);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items, orderId]);
 
-    useEffect(() => {
-        if (updateError || items.length === 0) {
+    useEffect(() =>
+    {
+        if (updateError || items.length === 0)
+        {
             setIsUpdating(false);
         }
     }, [updateError, items.length]);
 
-    const updateLocalState = useCallback((total: string, line_items: lineOrderItems[], isLoading: boolean): void => {
+    const updateLocalState = useCallback((total: string, line_items: lineOrderItems[], isLoading: boolean): void =>
+    {
         if (!line_items) return;
         setTotal(total);
         setProducts(line_items);
@@ -55,20 +63,25 @@ const Cart = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createdOrder, updatedOrder, updatedItems]);
 
-    useEffect(() => {
-        if (createdOrder) {
+    useEffect(() =>
+    {
+        if (createdOrder)
+        {
             updateLocalState(createdOrder.total, createdOrder.line_items, false);
         }
     }, [createdOrder, updateLocalState]);
 
-    useEffect(() => {
-        if (updatedOrder && updatedItems) {
+    useEffect(() =>
+    {
+        if (updatedOrder && updatedItems)
+        {
             updateLocalState(updatedOrder.total, updatedItems, false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [updatedOrder, updateLocalState]);
 
-    if (isUpdating) {
+    if (isUpdating)
+    {
         return <Loader size={100} thickness={4} />;
     }
 

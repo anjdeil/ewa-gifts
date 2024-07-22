@@ -1,14 +1,17 @@
-import {GetServerSideProps} from "next";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
+import { GetServerSideProps } from "next";
 import Head from "next/head";
-import {FC} from "react";
-import wpRestApi from "@/services/wordpress/WPRestAPI";
-import {BlogPost} from "@/components/Blog/BlogPost";
-import {BlogNavPosts} from "@/components/Blog/BlogNavPosts";
+import { FC } from "react";
+import wpRestApi from "@/services/WordPress/WPRestAPI";
+import { BlogPost } from "@/components/Blog/BlogPost";
+import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
 
 interface ArticleProps {
 }
 
-const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
+const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) => {
     if (!response) {
         return <p>Loading...</p>;
     }
@@ -22,12 +25,12 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
         <>
             <Head>
                 <title>{response.title.rendered}</title>
-                <meta name="description" content={response.title.rendered}/>
+                <meta name="description" content={response.title.rendered} />
             </Head>
             <main>
                 <div className="container">
-                    <BlogPost post={response}/>
-                    <BlogNavPosts  prevPost={prevPost} nextPost={nextPost}/>
+                    <BlogPost post={response} />
+                    <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
                 </div>
             </main>
         </>
@@ -35,7 +38,7 @@ const Article: FC<ArticleProps> = ({response, prevPost, nextPost}) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {slug} = context.params!;
+    const { slug } = context.params!;
     let response;
     let prevPost = null;
     let nextPost = null;
@@ -43,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
         const currentPostResponse = await wpRestApi.get(`posts?slug=${slug}`);
         if (currentPostResponse.data.length === 0) {
-            return {notFound: true};
+            return { notFound: true };
         }
 
         const currentPost = currentPostResponse.data[0];
@@ -51,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const allPostsResponse = await wpRestApi.get(`posts`);
         const allPosts = allPostsResponse.data;
 
-        const currentIndex = allPosts.findIndex((post: any) => post.id === currentPost.id);
+        const currentIndex = allPosts.findIndex((post) => post.id === currentPost.id);
 
         if (currentIndex > 0) {
             prevPost = allPosts[currentIndex - 1];

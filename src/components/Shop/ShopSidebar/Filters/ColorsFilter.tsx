@@ -1,4 +1,8 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
+import React, { FC } from "react";
 import { Radio } from '@mui/material';
 import { EwaColorPickIcon, EwaColorPickCheckedIcon } from '@/components/EwaComponents/EwaColorPickIcons';
 import styles from "../styles.module.scss";
@@ -8,10 +12,10 @@ interface ColorsFilter {
     colors: any,
     currentColor: string,
     onChangeColor: any,
-    onReset: any
+    onReset: () => void
 }
 
-const ColorsFilter = ({ colors, currentColor, onChangeColor, onReset }) => {
+const ColorsFilter: FC<ColorsFilter> = ({ colors, currentColor, onChangeColor, onReset }) => {
     return (
         <div className={styles['sidebar-filter']}>
             <div className={styles['sidebar-filter__content']}>

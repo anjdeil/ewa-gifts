@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { defaultAttributesType, ProductInfoProps, ProductOptions, simpleProduct, typeProductType } from "@/types";
+import { defaultAttributesType, ProductInfoProps, ProductOptions, simpleProduct, transColorsType, typeProductType } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
@@ -12,39 +12,51 @@ import ProductCalculations from "../ProductCalculations";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 import { sortProductSizes } from "@/Utils/sortProductSizes";
+import { getDefaultVariation } from "@/Utils/getDefaultVariation";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
-    const { name, description, price, sku, images, attributes } = product;
+    console.log(product);
+    const { name, description, price, sku, images, attributes, default_attributes } = product;
     const [currentColor, setCurrentColor] = useState<string>('');
+    const [currentSize, setCurrentSize] = useState<string>('');
     const [availableVariations, setAvailableVariations] = useState<simpleProduct[] | null>(null);
-    const [sizes, setSizes] = useState<ProductOptions[] | null>(null);
+    // const [sizes, setSizes] = useState<ProductOptions[] | null>(null);
     const allColors = transformColorsArray(attributes);
     const allSizes = transformProductSizes(attributes);
 
     useEffect(() =>
     {
-        if (allColors && allColors.length > 0)
+        if (allColors && attributes && default_attributes)
         {
-            const colorAttribute = attributes.find(attr => attr.name === "color")?.id;
-            if (!colorAttribute)
-                return;
-            const colorId = colorAttribute;
-            const defaultColorAttr = product.default_attributes.find(attr => attr.id === colorId);
-            if (defaultColorAttr)
+            const baseColor = getDefaultVariation("color", attributes, default_attributes);
+            if (baseColor)
             {
-                const baseColor = transformColorByName(defaultColorAttr.name);
-                baseColor.slug = defaultColorAttr.option;
-                console.log('Basic', baseColor);
-                onColorChange(baseColor.slug);
+                onColorChange(baseColor);
             }
         }
+
+        if (allSizes)
+        {
+            const baseSize = getDefaultVariation("size", attributes, default_attributes);
+            if (baseSize)
+            {
+                onSizeChange(baseSize);
+            }
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     function onColorChange(checkedColor: string): void
     {
         setCurrentColor(checkedColor);
+    }
+
+    function onSizeChange(checkedSize: string): void
+    {
+        setCurrentSize(checkedSize);
     }
 
     useEffect(() =>
@@ -116,11 +128,16 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {allSizes && <SizeOptions sizeAttributes={allSizes} />}
+                    {allSizes &&
+                        <SizeOptions
+                            sizeAttributes={allSizes}
+                            onSizeChange={onSizeChange}
+                            currentSize={currentSize} />}
                 </Box>
 
                 {/* <ProductCalculations product={product} /> */}
                 <Box className={styles['product-info__accordionWrapper']}>
+                    <AccordionProduct title={'OPIS PRODUKTU'} text={description} />
                     <AccordionProduct data={attributes} title={'Informacje dodatkowe'} />
                 </Box>
             </Box>

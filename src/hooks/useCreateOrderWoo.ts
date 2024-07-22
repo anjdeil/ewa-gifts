@@ -2,11 +2,12 @@ import { useState, useCallback } from "react";
 import { setCurrentOrder } from "@/store/reducers/CurrentOrder";
 import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import { RemoveObjectDuplicates } from "@/Utils/RemoveObjectDuplicates";
 import { CartItem } from "@/types/Cart";
 import { lineOrderItems } from "@/types";
+import { removeObjectDuplicates } from "@/Utils/removeObjectDuplicates";
 
-export const useCreateOrderWoo = () => {
+export const useCreateOrderWoo = () =>
+{
     const dispatch = useAppDispatch();
     const [fetchCreateOrder, { data: createdOrder }] = useFetchCreateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
@@ -15,23 +16,29 @@ export const useCreateOrderWoo = () => {
     const [items, setItems] = useState<lineOrderItems[] | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-    const createOrder = useCallback(async (items: CartItem[]) => {
+    const createOrder = useCallback(async (items: CartItem[]) =>
+    {
         setIsLoading(true);
         setError(null);
         const fetchCreateOrderBody = { line_items: items };
 
-        try {
+        try
+        {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
             dispatch(setCurrentOrder(createOrderData.id));
-            setItems(RemoveObjectDuplicates(createOrderData.line_items, 'name'));
-        } catch (error) {
-            if (error instanceof Error) {
+            setItems(removeObjectDuplicates(createOrderData.line_items, 'name'));
+        } catch (error)
+        {
+            if (error instanceof Error)
+            {
                 setError(error.message);
-            } else {
+            } else
+            {
                 setError('An unknown error occurred');
             }
             console.error(error, 'Failed to create order');
-        } finally {
+        } finally
+        {
             setIsLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

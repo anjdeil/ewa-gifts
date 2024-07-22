@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
+
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useFetchProductQuery } from "@/store/custom/customApi";

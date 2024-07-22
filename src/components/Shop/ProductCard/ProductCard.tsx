@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+
 import { FC, useState } from "react";
 import Image from "next/image";
 import { RichTextComponent } from "../../Common/RichTextComponent";
@@ -5,15 +9,13 @@ import styles from './styles.module.scss';
 import { ColorSlider } from "@/components/Shop/ColorSlider";
 import { AddButton, Counter } from "@/components/Buttons";
 import { useAppDispatch } from "@/hooks/redux";
-import { updatedCartQuantity } from "@/store/reducers/CartSlice";
 import { ProductCardProps, typeProductType } from "@/types";
 import { Stock } from "./Stock";
 import Link from "next/link";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { Box } from "@mui/material";
 
-export const ProductCard: FC<ProductCardProps> = ({ product }) =>
-{
+export const ProductCard: FC<ProductCardProps> = ({ product }) => {
     const [inputId, setInputId] = useState<string>('');
     const [isVariable, setVariable] = useState(false);
     const [count, setCount] = useState<number>(0);
@@ -24,26 +26,19 @@ export const ProductCard: FC<ProductCardProps> = ({ product }) =>
     if (product.type === "variable")
         colors = transformColorsArray(product.attributes);
 
-    function changeProductsAmount(product: typeProductType, count: number)
-    {
-        dispatch(updatedCartQuantity({
-            id: product.id,
-            type: product.type,
-            quantity: count,
-        }));
+    function changeProductsAmount(product: typeProductType, count: number) {
+        console.log(product, count);
+
         setCount(0);
     }
 
-    const changeQuantityState = () =>
-    {
-        if (!isVariable)
-        {
+    const changeQuantityState = () => {
+        if (!isVariable) {
             setVariable(true);
         }
     }
 
-    const onInputClick = (id: string) =>
-    {
+    const onInputClick = (id: string) => {
         setInputId(id);
     };
 

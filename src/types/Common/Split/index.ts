@@ -1,4 +1,4 @@
-import { PageBuilderPropsSchema, PageBuilderSectionSchema } from "@/types/PageBuilder";
+import { PageBuilderSectionSchema } from "@/types/PageBuilder";
 import { z } from "zod";
 
 export const SplitPropsSchema = z.object({

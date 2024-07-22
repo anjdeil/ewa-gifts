@@ -5,9 +5,6 @@ import { z } from "zod";
 const menuResponseSchema = z.record(z.any());
 type menuResponseType = z.infer<typeof menuResponseSchema>;
 
-console.log('Я был запущен')
-
-
 export const wpAPI = createApi({
     reducerPath: 'wpAPI',
     baseQuery: fetchBaseQuery({ baseUrl: '/api/wp' }),
@@ -17,8 +14,7 @@ export const wpAPI = createApi({
                 url: '/menu-items',
                 params,
             }),
-            transformResponse: (response: menuResponseType): wpNavLink[] =>
-            {
+            transformResponse: (response: menuResponseType): wpNavLink[] => {
                 const links = Object.values(response).map(obj => ({
                     title: obj.title.rendered,
                     url: obj.url,
