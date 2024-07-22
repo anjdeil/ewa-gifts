@@ -5,9 +5,9 @@ import styles from './styles.module.scss';
 export const AddButton: FC<AddButtonProps> = ({ onClickHandler, className, disabled = false }) => (
     <button
         className={`${styles.addButton} ${className} btn`}
-        onClick={() => onClickHandler()}
+        onClick={onClickHandler}
         disabled={disabled}
     >
-        Add to card
+        Do koszyka
     </button >
 );

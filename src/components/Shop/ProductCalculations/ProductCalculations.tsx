@@ -15,7 +15,9 @@ const ProductCalculations: FC<ProductCalculations> = ({ product }) => {
     const productStock = product.stock_quantity as number || 0;
 
     const productCirculations = product.price_circulations;
-    if (productCirculations === undefined) return;
+
+    if (productCirculations === null) return;
+
     const circulatedPrices = getCirculatedPrices(productPrice, productCirculations);
 
     const onChangeQuantity = (inputValue: number) => {

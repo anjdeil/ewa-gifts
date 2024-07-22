@@ -6,6 +6,21 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.color-slider {
+
+    .swiper-button-prev {
+        left: -10px;
+        color: $text-gray;
+        transform: scale(0.3);
+    }
+
+    .swiper-button-next {
+        right: -10px;
+        color: $text-gray;
+        transform: scale(0.3);
+    }
+}
+
 .desc {
     font-weight: 400;
     font-size: 18px;

@@ -6,6 +6,29 @@ export const ProductOptionsSchema = z.object({
     slug: z.string(),
 });
 
+export const VariationTypeSchema = z.object({
+    id: z.number(),
+    parent_id: z.number(),
+    sku: z.string(),
+    name: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    stock_quantity: z.number(),
+    price: z.number(),
+    created: z.string(),
+    modified: z.string(),
+    images: z.array(z.object({
+        id: z.number(),
+        name: z.string(),
+        src: z.string()
+    })),
+    attributes: z.array(z.object({
+        id: z.number(),
+        name: z.string(),
+        option: z.string()
+    })),
+});
+
 export const ProductAttributesSchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -60,7 +83,7 @@ export const simpleProductSchema = z.object({
 })
 
 export const ProductSchema = simpleProductSchema.extend({
-    variations: z.array(simpleProductSchema),
+    variations: z.array(VariationTypeSchema),
 });
 
 const ProductCardPropsSchema = z.object({
@@ -71,3 +94,4 @@ export type ProductAttributesType = z.infer<typeof ProductAttributesSchema>;
 export type ProductCardProps = z.infer<typeof ProductCardPropsSchema>;
 export type ProductOptions = z.infer<typeof ProductOptionsSchema>;
 export type typeProductType = z.infer<typeof ProductSchema>;
+export type VariationType = z.infer<typeof VariationTypeSchema>;
