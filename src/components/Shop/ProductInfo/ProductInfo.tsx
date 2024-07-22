@@ -26,6 +26,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const allColors = transformColorsArray(attributes);
     const allSizes = transformProductSizes(attributes);
     const isSimple = type === "simple";
+    const isSized = (allSizes && allSizes.length > 0) ? true : false;
+    console.log(allSizes);
 
     useEffect(() =>
     {
@@ -36,10 +38,9 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             {
                 onColorChange(baseColor);
             }
-
         }
 
-        if (allSizes)
+        if (isSized)
         {
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
             if (baseSize)
@@ -58,7 +59,6 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
         if (sizes)
         {
             setCurrentSize(sizes[0].option)
-
         }
     }
 
@@ -77,7 +77,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             if (availableVariations)
             {
                 setAvailableVariations(availableVariations);
-                setSizes(transformProductSizes(availableVariations));
+                if (isSized)
+                {
+                    setSizes(transformProductSizes(availableVariations));
+                }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,11 +122,11 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     </Typography>
                     {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor} onColorChange={onColorChange} />}
                 </Box>}
-                {!isSimple && <Box className={styles['size-wrapper']}>
+                {(!isSimple && isSized) && <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {(allSizes && sizes) &&
+                    {isSized &&
                         <SizeOptions
                             sizeAttributes={allSizes}
                             onSizeChange={onSizeChange}
