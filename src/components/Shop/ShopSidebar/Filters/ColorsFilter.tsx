@@ -16,10 +16,16 @@ interface ColorsFilter {
 }
 
 const ColorsFilter: FC<ColorsFilter> = ({ colors, currentColor, onChangeColor, onReset }) => {
+
+    const filteredColors = colors?.filter(color => {
+        if (color.name.split(', ').length === 1) return true;
+    });
+
+    console.log(filteredColors);
     return (
         <div className={styles['sidebar-filter']}>
             <div className={styles['sidebar-filter__content']}>
-                {Boolean(colors?.length) && colors.map(color => {
+                {Boolean(filteredColors?.length) && filteredColors.map(color => {
                     const { label, cssColor } = transformColorByName(color.name);
                     return (
                         <Radio

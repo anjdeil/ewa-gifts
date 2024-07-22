@@ -33,7 +33,6 @@ const Header: React.FC = () => {
 
     const onBurgerClick = () => {
         if (!isOpen) {
-            alert('open');
             dispatch(setMenuOpen(true));
         } else {
             dispatch(setMenuOpen(false))
