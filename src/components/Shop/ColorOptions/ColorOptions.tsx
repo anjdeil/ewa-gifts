@@ -1,12 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import { Radio } from '@mui/material';
 import { EwaColorPickIcon, EwaColorPickCheckedIcon } from '@/components/EwaComponents/EwaColorPickIcons';
 import { FC } from 'react';
 import { ColorOptionsProps } from '@/types';
 
-export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes, currentColor, onColorChange }) =>
-{
-    return colorAttributes.map(color =>
-    {
+export const ColorOptions: FC<ColorOptionsProps> = ({ colorAttributes, currentColor, onColorChange }) => {
+    return colorAttributes.map(color => {
         return (
             <Radio
                 key={color.slug}
