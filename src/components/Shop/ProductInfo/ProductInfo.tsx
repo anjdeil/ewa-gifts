@@ -3,27 +3,30 @@ import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 // import ProductCalculations from "../ProductCalculations";
-import { defaultAttributesType, ProductInfoProps, ProductOptions, simpleProduct, transColorsType, typeProductType } from "@/types";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, simpleProduct, transColorsType, typeProductType, variationsProductType } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 import { transformProductSizes } from "@/Utils/transformProductSizes";
 import ProductCalculations from "../ProductCalculations";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
-import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
-import { sortProductSizes } from "@/Utils/sortProductSizes";
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
+import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
+import { Loader } from "@/components/Layouts/Loader";
+import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     console.log(product);
-    const { name, description, price, sku, images, attributes, default_attributes } = product;
+    const { name, description, price, sku, images, attributes, default_attributes, type } = product;
     const [currentColor, setCurrentColor] = useState<string>('');
     const [currentSize, setCurrentSize] = useState<string>('');
-    const [availableVariations, setAvailableVariations] = useState<simpleProduct[] | null>(null);
-    // const [sizes, setSizes] = useState<ProductOptions[] | null>(null);
+    const [availableVariations, setAvailableVariations] = useState<defaultAttributesType[] | null>(null);
+    const [currentImages, setCurrentImages] = useState<ProductImagesType[]>(images);
+    const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
     const allColors = transformColorsArray(attributes);
     const allSizes = transformProductSizes(attributes);
+    const isSimple = type === "simple";
 
     useEffect(() =>
     {
@@ -34,6 +37,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             {
                 onColorChange(baseColor);
             }
+
         }
 
         if (allSizes)
@@ -52,6 +56,11 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     function onColorChange(checkedColor: string): void
     {
         setCurrentColor(checkedColor);
+        if (sizes)
+        {
+            setCurrentSize(sizes[0].option)
+
+        }
     }
 
     function onSizeChange(checkedSize: string): void
@@ -65,46 +74,33 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             return;
         if (product.variations)
         {
-            filterOptionsByName(product.variations, currentColor);
+            const availableVariations = filterOptionsByColorName(product.variations, currentColor);
+            if (availableVariations)
+            {
+                setAvailableVariations(availableVariations);
+                setSizes(transformProductSizes(availableVariations));
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentColor])
 
-    function filterOptionsByName(variations: simpleProduct[], name: string): void
-    {
-        const filteredVariations: simpleProduct[] = [];
-        const availableVariations: object[] = [];
-        variations.forEach(variation =>
-        {
-            const res = variation.attributes.filter(attr => attr.name === 'color' && attr.option === name);
-            if (res.length > 0)
-            {
-                filteredVariations.push(variation);
-                const arr = transformProductSizes(variation.attributes);
-                if (arr)
-                {
-                    availableVariations.push(arr[0]);
-                }
-
-            }
-        });
-    }
-
-
     useEffect(() =>
     {
-        if (availableVariations)
+        if (product.variations && currentColor && currentSize)
         {
-            // setSizes(transformProductSizes(attributes));
-            // console.log(availableVariations);
+            const currentVariation = filterByColorAndSize(product.variations, currentColor, currentSize);
+            if (currentVariation)
+            {
+                setCurrentImages(currentVariation[0].images);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [availableVariations])
+    }, [currentColor, currentSize])
 
     return (
         <Box className={styles.product}>
             <Box className={styles.product__slider}>
-                <ProductSwiper data={images} />
+                <ProductSwiper data={currentImages} />
             </Box>
             <Box className={styles.product__info}>
                 <Typography variant='h1' className={styles['product-info__title']} title={name}>
@@ -118,24 +114,26 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                         {price}
                     </Typography>
                 </Box>
-                <Box className={styles['color-wrapper']}>
+                {!isSimple && <Box className={styles['color-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
                     {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor} onColorChange={onColorChange} />}
-                </Box>
-                <Box className={styles['size-wrapper']}>
+                </Box>}
+                {!isSimple && <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {allSizes &&
+                    {(allSizes && sizes) &&
                         <SizeOptions
                             sizeAttributes={allSizes}
                             onSizeChange={onSizeChange}
-                            currentSize={currentSize} />}
-                </Box>
+                            currentSize={currentSize}
+                            availableSizes={sizes}
+                        />}
+                </Box>}
 
-                {/* <ProductCalculations product={product} /> */}
+                <ProductCalculations product={product} />
                 <Box className={styles['product-info__accordionWrapper']}>
                     <AccordionProduct title={'OPIS PRODUKTU'} text={description} />
                     <AccordionProduct data={attributes} title={'Informacje dodatkowe'} />

@@ -16,6 +16,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { popupSet } from "@/store/reducers/PopupSlice";
 import { setData, setCurrentSlide } from "@/store/reducers/SwiperModal";
 import { SwiperProps } from '@/types';
+// import Skeleton from '@mui/material/Skeleton';
 
 const CustomSwiperFor = styled(Swiper)`
 	.swiper-button-prev.swiper-button-disabled,
@@ -53,7 +54,8 @@ const CustomSwiperNav = styled(Swiper)`
 	}
 `;
 
-const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
+const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
+{
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [activeSlide, setActiveSlide] = useState(0);
     const dispatch = useAppDispatch();
@@ -62,17 +64,20 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
 
-    const updateSwiperState = (images, slideNumber) => {
+    const updateSwiperState = (images, slideNumber) =>
+    {
         dispatch(setData(images));
         dispatch(setCurrentSlide(slideNumber));
     };
 
-    const handlerOpen = () => {
+    const handlerOpen = () =>
+    {
         updateSwiperState(data, activeSlide);
         dispatch(popupSet('swiper-popup'));
     };
 
-    const handleSlideChange = (swiper) => {
+    const handleSlideChange = (swiper) =>
+    {
         setActiveSlide(swiper.activeIndex);
     };
 
@@ -104,6 +109,13 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
                             </button>
                         </SwiperSlide>
                     ))}
+                {/* {!data &&
+                    <Skeleton
+                        sx={{ width: '100%', borderRadius: '10px' }}
+                        variant="rectangular"
+                        height={600}
+                    />
+                } */}
                 <div id={nextElId} className={`swiper-button-next ${styles.forNav__nextBtn}`}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -130,8 +142,10 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
                         spaceBetween: 0,
                     },
                 }}
-                onSwiper={(swiper) => {
-                    if (!swiper.destroyed) {
+                onSwiper={(swiper) =>
+                {
+                    if (!swiper.destroyed)
+                    {
                         setThumbsSwiper(swiper);
                     }
                 }}

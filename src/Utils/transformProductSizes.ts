@@ -1,7 +1,7 @@
 import { defaultAttributesType, ProductAttributesType, ProductOptions } from "@/types";
 import { sortProductSizes } from "./sortProductSizes";
 
-export function transformProductSizes(attrArray: ProductAttributesType[] | defaultAttributesType[]): ProductOptions[] | defaultAttributesType[] | null
+export function transformProductSizes(attrArray: ProductAttributesType[] | defaultAttributesType[]): ProductOptions[] & defaultAttributesType[] | null
 {
     const simple = attrArray.filter(attr => "options" in attr);
     const variable = attrArray.filter(attr => "option" in attr);
