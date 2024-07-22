@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { VariationType, typeProductType } from "@/types";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import formatPrice from "@/Utils/formatPrice";
-import { AddButton, Counter } from "@/components/Buttons";
+import { AddButton } from "@/components/Buttons";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { updateCart } from "@/store/reducers/CartSlice";
 import { CartItem } from "@/types/Cart";
@@ -15,6 +15,7 @@ import { EwaColorPickCheckedIcon, EwaColorPickIcon } from "@/components/EwaCompo
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import { useSearchParams } from "next/navigation";
 
 interface ProductCardPropsType {
     product: typeProductType
@@ -29,6 +30,9 @@ type ProductInfoType = {
 export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
+    const searchParams = useSearchParams();
+    const baseColor = searchParams.get('attribute_term');
+
     const colors = product.attributes.find(({ slug, variation }) => slug === "color" && variation)?.options || [];
     const sizes = product.attributes.find(({ slug, variation }) => slug === "size" && variation)?.options || [];
 
@@ -42,6 +46,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const [productInfo, setProductInfo] = useState<ProductInfoType | undefined>();
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
 
+    /* Finding relevant product and variation from CartItems */
     useEffect(() => {
         setCartMatch(cartItems.find(cartItem => {
             if (cartItem.product_id === product.id) {
@@ -54,19 +59,32 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }, [choosenVariation, cartItems]);
 
+    /* Set default options */
     useEffect(() => {
         if (product.type === 'variable') {
             product.attributes.forEach(({ id, slug, variation }) => {
-                if (slug === 'color' && variation) {
-                    setColor(product.default_attributes?.find(defaultAttribute => defaultAttribute.id === id)?.option);
+                if (baseColor) {
+                    if (slug === 'base_color' && variation) {
+                        const matchedVariation = product?.variations?.find(({ attributes }) => {
+                            return attributes.some(({ name, option }) => name === "base_color" && option === baseColor);
+                        });
+                        if (matchedVariation !== undefined) {
+                            setColor(matchedVariation.attributes.find(({ name }) => name == "color")?.option);
+                        }
+                    }
+                } else {
+                    if (slug === 'color' && variation) {
+                        setColor(product.default_attributes?.find(defaultAttribute => defaultAttribute.id === id)?.option);
+                    }
                 }
                 if (slug === 'size' && variation) {
                     setSize(product.default_attributes?.find(defaultAttribute => defaultAttribute.id === id)?.option);
                 }
             });
         }
-    }, []);
+    }, [baseColor]);
 
+    /* Finding: Image, Price, Stock - from current variation or product */
     useEffect(() => {
         if (choosenVariation !== undefined) {
             setProductInfo({
@@ -83,6 +101,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }
     }, [choosenVariation])
 
+    /* Finding matched variations by color */
     useEffect(() => {
         if (choosenColor === undefined) return;
 
@@ -94,6 +113,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }
     }, [choosenColor]);
 
+    /* Seting matched variation by picked size */
     useEffect(() => {
         if (choosenSize === undefined) return;
 
@@ -111,6 +131,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     }, [choosenSize]);
 
+    /* Set first matched variation as choosen */
     useEffect(() => {
         if (matchedVariationsByColor.length > 0) {
             setVariation(matchedVariationsByColor[0]);
@@ -179,9 +200,18 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
+    const productPageBase = `/product/${product.slug}`;
+    const productPageParams = [];
+    if (choosenColor) productPageParams.push(`color=${choosenColor}`);
+    if (choosenSize) productPageParams.push(`size=${choosenSize}`);
+
+    const productPageLink = productPageParams.reduce((link, param, index) => {
+        return `${link}${index === 0 ? "?" : "&"}${param}`;
+    }, productPageBase);
+
     return (
         <div className={styles["product-card"]}>
-            <Link className={styles["product-card__link"]} href={`/product/${product.slug}`}>
+            <Link className={styles["product-card__link"]} href={productPageLink}>
                 {productInfo?.image &&
                     <Image
                         className={styles["product-card__image"]}
