@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { VariationType, typeProductType } from "@/types";
+import { variationsProductType, typeProductType } from "@/types";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
@@ -17,7 +17,8 @@ import { SwiperSlide, Swiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
 
-interface ProductCardPropsType {
+interface ProductCardPropsType
+{
     product: typeProductType
 }
 
@@ -27,7 +28,8 @@ type ProductInfoType = {
     price?: number
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
+{
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -41,18 +43,23 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     const [choosenColor, setColor] = useState<string | undefined>();
     const [choosenSize, setSize] = useState<string | undefined>();
-    const [matchedVariationsByColor, updateMatchedVariationsByColor] = useState<VariationType[]>([]);
-    const [choosenVariation, setVariation] = useState<VariationType | undefined>();
+    const [matchedVariationsByColor, updateMatchedVariationsByColor] = useState<variationsProductType[]>([]);
+    const [choosenVariation, setVariation] = useState<variationsProductType | undefined>();
     const [productInfo, setProductInfo] = useState<ProductInfoType | undefined>();
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
 
     /* Finding relevant product and variation from CartItems */
-    useEffect(() => {
-        setCartMatch(cartItems.find(cartItem => {
-            if (cartItem.product_id === product.id) {
-                if (choosenVariation) {
+    useEffect(() =>
+    {
+        setCartMatch(cartItems.find(cartItem =>
+        {
+            if (cartItem.product_id === product.id)
+            {
+                if (choosenVariation)
+                {
                     if (choosenVariation.id === cartItem.variation_id) return true;
-                } else {
+                } else
+                {
                     return true;
                 }
             }
@@ -60,39 +67,53 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     }, [choosenVariation, cartItems]);
 
     /* Set default options */
-    useEffect(() => {
-        if (product.type === 'variable') {
-            product.attributes.forEach(({ id, slug, variation }) => {
-                if (baseColor) {
-                    if (slug === 'base_color' && variation) {
-                        const matchedVariation = product?.variations?.find(({ attributes }) => {
+    useEffect(() =>
+    {
+        if (product.type === 'variable')
+        {
+            product.attributes.forEach(({ id, slug, variation }) =>
+            {
+                if (baseColor)
+                {
+                    if (slug === 'base_color' && variation)
+                    {
+                        const matchedVariation = product?.variations?.find(({ attributes }) =>
+                        {
                             return attributes.some(({ name, option }) => name === "base_color" && option === baseColor);
                         });
-                        if (matchedVariation !== undefined) {
+                        if (matchedVariation !== undefined)
+                        {
                             setColor(matchedVariation.attributes.find(({ name }) => name == "color")?.option);
                         }
                     }
-                } else {
-                    if (slug === 'color' && variation) {
+                } else
+                {
+                    if (slug === 'color' && variation)
+                    {
                         setColor(product.default_attributes?.find(defaultAttribute => defaultAttribute.id === id)?.option);
                     }
                 }
-                if (slug === 'size' && variation) {
+                if (slug === 'size' && variation)
+                {
                     setSize(product.default_attributes?.find(defaultAttribute => defaultAttribute.id === id)?.option);
                 }
             });
         }
     }, [baseColor]);
 
+
     /* Finding: Image, Price, Stock - from current variation or product */
-    useEffect(() => {
-        if (choosenVariation !== undefined) {
+    useEffect(() =>
+    {
+        if (choosenVariation !== undefined)
+        {
             setProductInfo({
                 image: choosenVariation.images.length > 0 ? choosenVariation.images[0].src : "",
                 stock: (typeof choosenVariation.stock_quantity === 'number') ? choosenVariation.stock_quantity : 0,
                 ...((typeof choosenVariation.price === 'number') && { price: Number(choosenVariation.price) })
             });
-        } else {
+        } else
+        {
             setProductInfo({
                 image: product.images.length > 0 ? product.images[0].src : "",
                 stock: (typeof product.stock_quantity === 'number') ? product.stock_quantity : 0,
@@ -102,29 +123,38 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     }, [choosenVariation])
 
     /* Finding matched variations by color */
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (choosenColor === undefined) return;
 
-        if (product.type === 'variable') {
+        if (product.type === 'variable')
+        {
             setSize(undefined);
-            updateMatchedVariationsByColor(product.variations.filter(variation => {
+            updateMatchedVariationsByColor(product.variations.filter(variation =>
+            {
                 return Boolean(variation.attributes.find(({ name, option }) => name === "color" && option === choosenColor));
             }));
         }
     }, [choosenColor]);
 
     /* Seting matched variation by picked size */
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (choosenSize === undefined) return;
 
-        if (colors.length > 0) {
-            if (matchedVariationsByColor.length > 0) {
-                setVariation(matchedVariationsByColor.find(variation => {
+        if (colors.length > 0)
+        {
+            if (matchedVariationsByColor.length > 0)
+            {
+                setVariation(matchedVariationsByColor.find(variation =>
+                {
                     return variation.attributes.some(({ option }) => option === choosenSize);
                 }));
             }
-        } else {
-            setVariation(product.variations.find(variation => {
+        } else
+        {
+            setVariation(product.variations.find(variation =>
+            {
                 return variation.attributes.some(({ option }) => option === choosenSize);
             }));
         }
@@ -132,29 +162,36 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     }, [choosenSize]);
 
     /* Set first matched variation as choosen */
-    useEffect(() => {
-        if (matchedVariationsByColor.length > 0) {
+    useEffect(() =>
+    {
+        if (matchedVariationsByColor.length > 0)
+        {
             setVariation(matchedVariationsByColor[0]);
         }
     }, [matchedVariationsByColor]);
 
-    const handleChangeColor = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+    const handleChangeColor = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void =>
+    {
         setColor(event.target.value);
     }
 
-    const handleChangeSize = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+    const handleChangeSize = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void =>
+    {
         setSize(event.target.value);
     }
 
-    const checkSizeAvailability = (sizeOption: string): boolean => {
+    const checkSizeAvailability = (sizeOption: string): boolean =>
+    {
         if (colors.length <= 0) return true;
 
-        return matchedVariationsByColor.some(variation => {
+        return matchedVariationsByColor.some(variation =>
+        {
             return variation.attributes.some(({ option }) => option === sizeOption);
         });
     }
 
-    const handleAddToCart = () => {
+    const handleAddToCart = () =>
+    {
         if (!productInfo?.stock) return;
         dispatch(updateCart({
             id: product.id,
@@ -163,7 +200,8 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
-    const handleChangeQuantity = (evt: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeQuantity = (evt: ChangeEvent<HTMLInputElement>) =>
+    {
         if (!productInfo?.stock) return;
 
         let newQuantity = +evt.target.value;
@@ -176,7 +214,8 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
-    const handleIncrement = () => {
+    const handleIncrement = () =>
+    {
         if (cartMatch === undefined || !productInfo?.stock) return;
 
         let newQuantity = cartMatch.quantity + 1;
@@ -189,8 +228,10 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
-    const handleDecrement = () => {
+    const handleDecrement = () =>
+    {
         if (cartMatch === undefined) return;
+
 
         dispatch(updateCart({
             id: product.id,
@@ -199,10 +240,12 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         }));
     }
 
-    const checkIsSizeChecked = (size: string) => {
+    const checkIsSizeChecked = (size: string) =>
+    {
         if (choosenVariation === undefined) return false;
 
-        return choosenVariation.attributes.some(({ name, option }) => {
+        return choosenVariation.attributes.some(({ name, option }) =>
+        {
             if (name === 'size' && option === size) return true;
         });
     }
@@ -213,7 +256,8 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     if (choosenColor) productPageParams.push(`color=${choosenColor}`);
     if (choosenSize) productPageParams.push(`size=${choosenSize}`);
 
-    const productPageLink = productPageParams.reduce((link, param, index) => {
+    const productPageLink = productPageParams.reduce((link, param, index) =>
+    {
         return `${link}${index === 0 ? "?" : "&"}${param}`;
     }, productPageBase);
 
@@ -242,7 +286,8 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                             modules={[Navigation]}
                             navigation={true}
                         >
-                            {colors.map(color => {
+                            {colors.map(color =>
+                            {
                                 const { label, cssColor } = transformColorByName(color.name);
                                 return (
                                     <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
@@ -274,6 +319,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                                         onChange={handleChangeSize}
                                     />
                                     <div className="size-pick__island">{option.name}</div>
+
 
                                 </label>
                             ))}

@@ -6,26 +6,35 @@ import React from "react";
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 
 
-const AccordionProduct = ({ data, title, text }) => {
-    const getOptions = (product, nameAttribute) => {
-        if (!product || !Array.isArray(product)) {
+const AccordionProduct = ({ data, title, text }) =>
+{
+    const getOptions = (product, nameAttribute) =>
+    {
+        if (!product || !Array.isArray(product))
+        {
             return [];
         }
 
         const supplierAttribute = product.find(attr => attr.name === nameAttribute);
 
-        if (!supplierAttribute || !supplierAttribute.options) {
+        if (!supplierAttribute || !supplierAttribute.options)
+        {
             return [];
         }
 
         return supplierAttribute.options.map(option => option.name);
     }
-    const getColors = (product) => {
+    const getColors = (product) =>
+    {
         let colors = [];
-        if (product) {
-            product.forEach(attr => {
-                if (attr.name === 'color') {
-                    attr.options.forEach(option => {
+        if (product)
+        {
+            product.forEach(attr =>
+            {
+                if (attr.name === 'color')
+                {
+                    attr.options.forEach(option =>
+                    {
 
                         const cleanColors = option.name.replace(/\(#\w+\)/g, '');
 
@@ -38,7 +47,8 @@ const AccordionProduct = ({ data, title, text }) => {
         return colors;
     }
     const supplierOptions = getOptions(data, 'supplier');
-    const sizeOptions = getOptions(data, 'size').sort((a, b) => {
+    const sizeOptions = getOptions(data, 'size').sort((a, b) =>
+    {
         const numA = parseInt(a);
         const numB = parseInt(b);
         return numA - numB;

@@ -1,28 +1,35 @@
 @import "@/styles/variables.module.scss";
+
 .forNav {
-	max-width: 600px;
+
 	&__nextBtn,
 	&__prevBtn {
 		width: 48px;
 		height: 48px;
+
 		& svg {
 			width: 20px;
 			height: 20px;
 		}
 	}
+
 	&__nextBtn {
 		right: -12px;
 	}
+
 	&__prevBtn {
 		left: -12px;
 	}
+
 	&__nextBtn:after,
 	&__prevBtn:after {
 		font-size: 0;
 	}
 }
+
 .slide {
 	text-align: center;
+
 	&__btn {
 		border: none;
 		background-color: transparent;
@@ -30,17 +37,21 @@
 		padding: 0;
 		cursor: pointer;
 	}
+
 	&__img {
-		max-width: 600px;
 		width: 100%;
+		max-width: 600px;
 		height: auto;
 	}
 }
+
 .nav {
 	padding-top: 20px;
 }
+
 .navSlide {
 	text-align: center;
+
 	&__img {
 		width: 100%;
 		height: 100%;
