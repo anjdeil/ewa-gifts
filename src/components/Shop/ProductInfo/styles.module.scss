@@ -26,8 +26,6 @@
 			// flex: 0 1 100%;
 		}
 	}
-
-	&__info {}
 }
 
 .product-info {
@@ -62,6 +60,10 @@
 		font-size: 18px;
 		color: $graphite;
 		margin-bottom: 22px;
+
+		&_vat {
+			color: $text-gray;
+		}
 	}
 
 	&__accordionWrapper {

@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
@@ -17,7 +14,7 @@ import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 import { filterByColor } from "@/Utils/filterByColor";
 import { useRouter } from "next/router";
-
+import formatPrice from "@/Utils/formatPrice";
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     // console.log(product);
@@ -25,128 +22,110 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const { name, description, price, sku, images, attributes, default_attributes, type } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
-    const [availableVariations, setAvailableVariations] = useState<defaultAttributesType[] | null>(null);
-    const [currentImages, setCurrentImages] = useState<ProductImagesType[]>(images);
+    const [currentPrice, setCurrentPrice] = useState<number | null>(Number(price) || null);
+    const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
+    const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
-    const allColors = transformColorsArray(attributes);
-    // There is a problem with type here!
-    const allSizes = transformProductSizes(attributes);
+
+    const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
+    const allSizes = useMemo(() => transformProductSizes(attributes), [attributes]);
     const isSimple = type === "simple";
-    const isSized = (allSizes && allSizes.length > 0) ? true : false;
+    const isSized = Boolean(allSizes && allSizes.length > 0);
     const { color, size } = router.query;
-
-    useEffect(() =>
-    {
-        if (color)
-        {
-            console.log('Color from params', color);
-        }
-
-        if (size)
-        {
-            console.log('Color from params', size);
-        }
-    }, [color])
 
     useEffect(() =>
     {
         if (allColors && attributes && default_attributes)
         {
             const baseColor = getDefaultVariation("color", attributes, default_attributes);
-            if (baseColor)
-            {
-                onColorChange(baseColor);
-            }
+            if (baseColor) setCurrentColor(baseColor);
         }
 
         if (isSized)
         {
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
-            if (baseSize)
-            {
-                onSizeChange(baseSize);
-            }
+            if (baseSize) setCurrentSize(baseSize);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-
-    function onColorChange(checkedColor: string): void
-    {
-        setCurrentColor(checkedColor);
-        if (sizes)
-        {
-            setCurrentSize(sizes[0].option)
-        }
-    }
-
-    function onSizeChange(checkedSize: string): void
-    {
-        setCurrentSize(checkedSize);
-    }
+    }, [allColors, attributes, default_attributes, isSized]);
 
     useEffect(() =>
     {
-        if (!currentColor)
-            return;
+        if (color) setCurrentColor(color as string);
+        if (size) setCurrentSize(size as string);
+    }, [color, size]);
+
+
+    const onColorChange = (checkedColor: string): void =>
+    {
+        setCurrentColor(checkedColor);
+        if (sizes) setCurrentSize(sizes[0].option);
+    };
+
+    const onSizeChange = (checkedSize: string): void =>
+    {
+        setCurrentSize(checkedSize);
+    };
+
+    useEffect(() =>
+    {
+        if (!currentColor) return;
+
         if (product.variations)
         {
             const availableVariations = filterOptionsByColorName(product.variations, currentColor);
-            if (availableVariations)
-            {
-                setAvailableVariations(availableVariations);
-                if (isSized)
-                {
-                    setSizes(transformProductSizes(availableVariations));
-                }
-            }
+            if (availableVariations) if (isSized) setSizes(transformProductSizes(availableVariations));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentColor])
+    }, [currentColor, product.variations, isSized]);
+
+    const getCurrentVariation = useCallback(() =>
+    {
+        if (currentSize && isSized)
+        {
+            return filterByColorAndSize(product.variations, currentColor as string, currentSize);
+        } else
+        {
+            return filterByColor(product.variations, currentColor as string);
+        }
+    }, [currentColor, currentSize, isSized, product.variations]);
 
     useEffect(() =>
     {
         if (!product.variations || isSimple || !currentColor) return;
-        if (currentSize && isSized)
+
+        const currentVariation = getCurrentVariation();
+        if (currentVariation && currentVariation.length > 0)
         {
-            const currentVariation = filterByColorAndSize(product.variations, currentColor, currentSize);
-            if (currentVariation)
-            {
-                setCurrentImages(currentVariation[0].images);
-            }
-        } else
-        {
-            const currentVariation = filterByColor(product.variations, currentColor);
-            if (currentVariation)
-            {
-                setCurrentImages(currentVariation[0].images);
-            }
+            setCurrentImages(currentVariation[0].images);
+            setCurrentPrice(Number(currentVariation[0].price));
+            setCurrentSku(currentVariation[0].sku);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentColor, currentSize])
+    }, [currentColor, currentSize, getCurrentVariation, isSimple, product.variations]);
 
     return (
         <Box className={styles.product}>
-            <Box className={styles.product__slider}>
-                <ProductSwiper data={currentImages} />
-            </Box>
+            {currentImages &&
+                <Box className={styles.product__slider}>
+                    <ProductSwiper data={currentImages} />
+                </Box>}
             <Box className={styles.product__info}>
-                <Typography variant='h1' className={styles['product-info__title']} title={name}>
+                {name && <Typography variant='h1' className={styles['product-info__title']} title={name}>
                     {name}
-                </Typography>
-                <Typography variant='caption' className={styles['product-info__sku']}>
-                    {sku}
-                </Typography>
-                <Box className={styles['price-wrapper']}>
+                </Typography>}
+                {currentSku && <Typography variant='caption' className={styles['product-info__sku']}>
+                    {currentSku}
+                </Typography>}
+                {currentPrice && <Box className={styles['price-wrapper']}>
                     <Typography variant='body2' className={styles['product-info__price']}>
-                        {price}
+                        Od {formatPrice(currentPrice)}
+                        &nbsp;<span className={styles["product-info__price_vat"]}>Bez VAT</span>
                     </Typography>
-                </Box>
+                </Box>}
                 {!isSimple && <Box className={styles['color-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
                     </Typography>
-                    {allColors && <ColorOptions colorAttributes={allColors} currentColor={currentColor} onColorChange={onColorChange} />}
+                    {(allColors && currentColor) &&
+                        <ColorOptions colorAttributes={allColors} currentColor={currentColor} onColorChange={onColorChange} />}
                 </Box>}
                 {(!isSimple && isSized) && <Box className={styles['size-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
@@ -160,7 +139,6 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                             availableSizes={sizes}
                         />}
                 </Box>}
-
                 <ProductCalculations product={product} />
                 <Box className={styles['product-info__accordionWrapper']}>
                     <AccordionProduct title={'OPIS PRODUKTU'} text={description} />
