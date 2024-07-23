@@ -1,16 +1,16 @@
 import { Box } from "@mui/material";
 import { FC } from "react";
 import styles from "./styles.module.scss";
-import { CartSummaryRow } from "./CartSummaryRow";
 import Link from "next/link";
 import { CartSummaryProps } from "@/types";
+import OrderTotals from "@/components/MyAccount/OrderTotals";
 
-export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
+export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
 {
     return (
         <Box className={styles.CartSummary}>
             <h2 className={`${styles.CartSummary__title}`}>Podsumowanie koszyka</h2>
-            <ul className={`list-reset ${styles.CartSummary__list}`}>
+            {/* <ul className={`list-reset ${styles.CartSummary__list}`}>
                 <li>
                     <CartSummaryRow title={'Kwota'}
                         value={total + ' zł'}
@@ -55,7 +55,8 @@ export const CartSummary: FC<CartSummaryProps> = ({ total, sum, isLoading }) =>
                         }}
                     />
                 </li>
-            </ul>
+            </ul> */}
+            <OrderTotals order={order} includeBorders={false} />
             <Box className={`${styles.CartSummary__btnWrapper}`}>
                 <Link className={`link btn btn-primary ${styles.CartSummary__btn}`} href={""}>
                     Przejdz Do Platnosci

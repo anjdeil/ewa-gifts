@@ -6,11 +6,13 @@ import { CartTableProps } from '@/types/Cart';
 import { FC } from 'react';
 import { lineOrderItems } from '@/types';
 import { CartTableRow } from './CartTableRow';
+import React from 'react';
 
 export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 {
     const dispatch = useAppDispatch();
     const lineItems = useAppSelector(state => state.Cart.items);
+    const MemoizedCartTableRow = React.memo(CartTableRow);
 
     const onProductChange = (product: lineOrderItems, count: number): void =>
     {
@@ -51,7 +53,7 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
             </Box >
             <Box className={styles.CartTable__tableBody}>
                 {products.map((product) => (
-                    <CartTableRow
+                    <MemoizedCartTableRow
                         key={product.id}
                         product={product}
                         onProductChange={onProductChange}

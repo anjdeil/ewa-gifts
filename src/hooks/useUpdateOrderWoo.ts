@@ -19,7 +19,7 @@ export const useUpdateOrderWoo = () =>
     {
         if (data)
         {
-            setItems(removeObjectDuplicates(data.line_items, 'name'))
+            setItems(removeObjectDuplicates(data.line_items, 'name'));
         }
     }, [data])
 

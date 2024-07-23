@@ -1,12 +1,15 @@
-import { lineOrderItemsSchema } from "@/types"
+import { lineOrderItemsSchema } from "@/types";
 import { Box, IconButton, Skeleton, Typography } from "@mui/material";
 import Image from 'next/image';
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { z } from "zod"
+import { FC, useEffect, useRef, useState } from "react";
+import { z } from "zod";
 import styles from './styles.module.scss';
 import { Counter } from "@/components/Buttons";
 import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
 import { CartItemSchema } from "@/types/Cart";
+import formatPrice from "@/Utils/formatPrice";
+import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
+import React from "react";
 
 export const CartTableRowProps = z.object({
     product: lineOrderItemsSchema,
@@ -20,16 +23,17 @@ export type CartTableRowType = z.infer<typeof CartTableRowProps>;
 
 export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, onProductDelete, lineItems, isLoading }) =>
 {
-    const [count, setCount] = useState<number>(0);
+    const [count, setCount] = useState<number | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const productName = transformCartItemName(product);
+    const productPrice = formatPrice(product.price);
+    const MemoizedCounter = React.memo(Counter);
 
     useEffect(() =>
     {
         if (product && lineItems)
         {
-            const hasItemQuantity = getLineItemQuantity(product.id, lineItems);
-            console.log(lineItems);
-            alert(hasItemQuantity);
+            const hasItemQuantity = getLineItemQuantity(product.product_id, lineItems);
             if (hasItemQuantity) setCount(hasItemQuantity);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,17 +41,17 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
 
     useEffect(() =>
     {
-        // if (isLoading) return;
+        if (isLoading) return;
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() =>
         {
-            onProductChange(product, count);
+            onProductChange(product, Number(count));
         }, 1000)
 
         return () => { if (timerRef.current) clearTimeout(timerRef.current); }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [count])
+    }, [onCountChange])
 
     function onCountChange(count: number)
     {
@@ -74,29 +78,32 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
                 </Box>
                 <Box className={`${styles.cartItem__title}`}>
                     <Typography variant='h6' className='desc'>
-                        {product.name}
-                        {product.id}
+                        {productName}
                     </Typography>
                 </Box>
             </Box>
             <Box className={styles.CartTable__cell}>
                 <Typography variant='body1'>
-                    {product.price} zł
+                    {isLoading ? (
+                        <Skeleton width={'100px'} height={'50px'} animation="wave" />
+                    ) : (
+                        productPrice
+                    )}
                 </Typography>
             </Box>
             <Box className={styles.CartTable__cell}>
-                <Counter
+                {count && <MemoizedCounter
                     count={count}
                     onCountChange={onCountChange}
                     isLoading={isLoading}
                     currentProduct={product.id}
-                />
+                />}
             </Box>
             <Box className={styles.CartTable__cell}>
                 {isLoading ? (
                     <Skeleton width={'100px'} height={'50px'} animation="wave" />
                 ) : (
-                    product.price * product.quantity + ' zł'
+                    productPrice
                 )}
             </Box>
         </Box>
