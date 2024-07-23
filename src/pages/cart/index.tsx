@@ -6,7 +6,6 @@ import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 // import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
-import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { CartItem, lineOrderItems } from "@/types";
@@ -101,7 +100,7 @@ const Cart = () =>
                             {products && <CartTable products={products} isLoading={isUpdating} />}
                             {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
-                        <CartSummary order={currentOrder} isLoading={isUpdating} />
+                        {currentOrder && <CartSummary order={currentOrder as OrderType} isLoading={isUpdating} />}
                     </Box>
                 </Section>
             </main>
