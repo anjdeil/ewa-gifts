@@ -2,10 +2,13 @@
 
 .totals-table {
     font-size: 0.9rem;
-    padding: 0.5em 0;
-    border-radius: 10px;
-    border: 2px solid $white-lilac;
     margin-bottom: 20px;
+
+    &_borders {
+        padding: 0.5em 0;
+        border-radius: 10px;
+        border: 2px solid $white-lilac;
+    }
 
     &__row {
         display: flex;
@@ -17,11 +20,8 @@
             padding-top: 1em;
             border-top: 2px solid $white-lilac;
             margin-bottom: 0;
-
-            .totals-table__value {
-                font-size: 1.2em;
-
-            }
+            font-weight: 500;
+            font-size: 1.2em;
         }
     }
 

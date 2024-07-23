@@ -5,14 +5,15 @@ import formatPrice from "@/Utils/formatPrice";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 
 interface OrderTotalsPropsType {
-    order: OrderType
+    order: OrderType,
+    includeBorders?: boolean
 }
 
-const OrderTotals: FC<OrderTotalsPropsType> = ({ order }) => {
+const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true }) => {
     const subtotal = getSubtotalByLineItems(order.line_items);
 
     return (
-        <div className={styles['totals-table']}>
+        <div className={`${styles['totals-table']} ${includeBorders && styles['totals-table_borders']}`}>
             <div className={styles['totals-table__row']}>
                 <div className={styles['totals-table__label']}>Kwota</div>
                 <div className={styles['totals-table__value']}>{formatPrice(subtotal)}</div>
@@ -35,6 +36,12 @@ const OrderTotals: FC<OrderTotalsPropsType> = ({ order }) => {
                     </div>
                 );
             })}
+            {order?.fee_lines.map(line => (
+                <div key={line.id} className={styles['totals-table__row']}>
+                    <div className={styles['totals-table__label']}>{line.name}</div>
+                    <div className={styles['totals-table__value']}>{line.total} zł</div>
+                </div>
+            ))}
             {order?.tax_lines.map(line => (
                 <div key={line.id} className={styles['totals-table__row']}>
                     <div className={styles['totals-table__label']}>{line.label} ({line.rate_percent}%)</div>
