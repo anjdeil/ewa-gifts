@@ -6,7 +6,6 @@ import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOpti
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
-import { transformProductSizes } from "@/Utils/transformProductSizes";
 import ProductCalculations from "../ProductCalculations";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
@@ -15,6 +14,7 @@ import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 import { filterByColor } from "@/Utils/filterByColor";
 import { useRouter } from "next/router";
 import formatPrice from "@/Utils/formatPrice";
+import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     // console.log(product);
