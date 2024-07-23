@@ -9,18 +9,24 @@ import IconButton from '@mui/material/IconButton';
 import { FC } from 'react';
 import { lineOrderItems } from '@/types';
 
-export const CartTable: FC<CartTableProps> = ({ products, isLoading }) => {
+export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
+{
     const dispatch = useAppDispatch();
 
-    const changeProductsAmount = (product: lineOrderItems, count: string) => {
-        dispatch(updateCart({
-            id: product.product_id,
-            quantity: +count,
-            ...(product.variation_id && { variationId: product.variation_id })
-        }));
+    const changeProductsAmount = (product: lineOrderItems, count: string) =>
+    {
+        if (count)
+        {
+            dispatch(updateCart({
+                id: product.product_id,
+                quantity: count,
+                ...(product.variation_id && { variationId: product.variation_id })
+            }));
+        }
     };
 
-    const deleteProduct = (product: lineOrderItems) => {
+    const deleteProduct = (product: lineOrderItems) =>
+    {
         dispatch(updateCart({
             id: product.product_id,
             quantity: 0,
