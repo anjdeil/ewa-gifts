@@ -18,11 +18,12 @@ const Cart = () =>
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
     const { createOrder, createdOrder, error: createError } = useCreateOrderWoo();
-    const { updateOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
+    const { updateOrder, updatedOrder, error: updateError } = useUpdateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [products, setProducts] = useState<lineOrderItems[]>([]);
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [currentTotal, setCurrentTotal] = useState<string>("");
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
     useEffect(() =>
     {
@@ -55,12 +56,12 @@ const Cart = () =>
             updateLocalState(createdOrder.line_items, createdOrder, false);
         }
 
-        if (updatedItems && updatedOrder)
+        if (updatedOrder)
         {
-            updateLocalState(updatedItems, updatedOrder, false);
+            updateLocalState(updatedOrder.line_items, updatedOrder, false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder, updatedItems, updatedOrder])
+    }, [createdOrder, updatedOrder])
 
 
     useEffect(() =>
@@ -78,8 +79,9 @@ const Cart = () =>
         setProducts(line_items);
         setIsUpdating(isLoading);
         setCurrentOrder(currentOrder);
+        setCurrentTotal(currentOrder.total);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder, updatedOrder, updatedItems]);
+    }, [createdOrder, updatedOrder]);
 
     return (
         <>
@@ -97,7 +99,7 @@ const Cart = () =>
                     </Box>
                     <Box className={styles.Cart__content}>
                         <Box>
-                            {products && <CartTable products={products} isLoading={isUpdating} />}
+                            {products && <CartTable products={products} isLoading={isUpdating} total={currentTotal} />}
                             {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
                         {currentOrder && <CartSummary order={currentOrder as OrderType} isLoading={isUpdating} />}

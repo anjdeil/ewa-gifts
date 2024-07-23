@@ -31,6 +31,7 @@ export const CartItemSchema = z.object({
 
 export const CartTablePropsSchema = z.object({
     products: z.array(lineOrderItemsSchema),
+    total: z.string(),
     isLoading: z.boolean()
 });
 
