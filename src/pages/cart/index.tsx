@@ -4,86 +4,82 @@ import { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
-import { AddCoupon } from "@/components/Shop/AddCoupon";
+// import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
-import { Loader } from "@/components/Layouts/Loader";
 import styles from './styles.module.scss';
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { lineOrderItems } from "@/types";
+import { CartItem, lineOrderItems } from "@/types";
 import { CartSummary } from "@/components/Cart/CartSummary";
 import { CartTable } from "@/components/Cart/CartTable";
+import { OrderType } from "@/types/Services/woocommerce/OrderType";
 
 const Cart = () =>
 {
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
-    const { createOrder, createdOrder } = useCreateOrderWoo();
-    const { updateOrder, isLoading: isUpdatingOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
+    const { createOrder, createdOrder, error: createError } = useCreateOrderWoo();
+    const { updateOrder, updatedOrder, error: updateError, items: updatedItems } = useUpdateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [products, setProducts] = useState<lineOrderItems[]>([]);
-    const [total, setTotal] = useState('0');
+    const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     const [isUpdating, setIsUpdating] = useState(false);
-    const breadLinks = [
-        {
-            name: 'Koszyk',
-            url: '/cart'
-        },
-    ];
-
+    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
     useEffect(() =>
     {
-        setIsUpdating(true);
-        if (items && items.length > 0)
+        if (orderId && items)
         {
-            if (!orderId)
-            {
-                createOrder(items);
-            } else if (!isUpdatingOrder && !isUpdating)
-            {
-                updateOrder(items, orderId);
-            }
+            setIsUpdating(true);
+            createUpdateOrder(orderId, items);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items, orderId]);
 
-    useEffect(() =>
+    function createUpdateOrder(orderId: number, items: CartItem[])
     {
-        if (updateError || items.length === 0)
+        if (!items || items.length < 0) return;
+        if (orderId)
         {
-            setIsUpdating(false);
+            updateOrder(items, orderId);
+            return;
+        } else
+        {
+            createOrder(items);
+            return;
         }
-    }, [updateError, items.length]);
-
-    const updateLocalState = useCallback((total: string, line_items: lineOrderItems[], isLoading: boolean): void =>
-    {
-        if (!line_items) return;
-        setTotal(total);
-        setProducts(line_items);
-        setIsUpdating(isLoading);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder, updatedOrder, updatedItems]);
+    }
 
     useEffect(() =>
     {
         if (createdOrder)
         {
-            updateLocalState(createdOrder.total, createdOrder.line_items, false);
+            updateLocalState(createdOrder.line_items, createdOrder, false);
         }
-    }, [createdOrder, updateLocalState]);
+
+        if (updatedItems && updatedOrder)
+        {
+            updateLocalState(updatedItems, updatedOrder, false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, updatedItems, updatedOrder])
+
 
     useEffect(() =>
     {
-        if (updatedOrder && updatedItems)
+        if (createError || updateError)
         {
-            updateLocalState(updatedOrder.total, updatedItems, false);
+            setIsUpdating(false);
+            alert('Sorry, but it was server error.');
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [updatedOrder, updateLocalState]);
+    }, [createError, updateError])
 
-    if (isUpdating)
+    const updateLocalState = useCallback((line_items: lineOrderItems[], currentOrder: OrderType, isLoading: boolean): void =>
     {
-        return <Loader size={100} thickness={4} />;
-    }
+        if (!line_items) return;
+        setProducts(line_items);
+        setIsUpdating(isLoading);
+        setCurrentOrder(currentOrder);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, updatedOrder, updatedItems]);
 
     return (
         <>
@@ -102,9 +98,9 @@ const Cart = () =>
                     <Box className={styles.Cart__content}>
                         <Box>
                             {products && <CartTable products={products} isLoading={isUpdating} />}
-                            <AddCoupon orderId={orderId && orderId} />
+                            {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
-                        <CartSummary total={total} sum={total} isLoading={isUpdating} />
+                        {currentOrder && <CartSummary order={currentOrder as OrderType} isLoading={isUpdating} />}
                     </Box>
                 </Section>
             </main>

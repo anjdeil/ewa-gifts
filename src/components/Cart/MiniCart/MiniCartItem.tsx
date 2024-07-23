@@ -3,23 +3,27 @@ import { lineOrderItems } from "@/types";
 import React, { FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Image from "next/image";
-import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 import { useAppDispatch } from "@/hooks/redux";
 import { updateCart } from "@/store/reducers/CartSlice";
+import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 
-interface MiniCartItemPropsType {
+interface MiniCartItemPropsType
+{
     cartItem: lineOrderItems
 }
 
-const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
+const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) =>
+{
     const dispatch = useAppDispatch();
     const [quantity, setQuantity] = useState(cartItem.quantity);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setQuantity(cartItem.quantity);
     }, [cartItem.quantity])
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         dispatch(updateCart({
             id: cartItem.product_id,
             ...(cartItem.variation_id && { variationId: cartItem.variation_id }),
@@ -27,7 +31,8 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
         }));
     }, [quantity])
 
-    const deleteCartItem = () => {
+    const deleteCartItem = () =>
+    {
         dispatch(updateCart({
             id: cartItem.product_id,
             ...(cartItem.variation_id && { variationId: cartItem.variation_id }),
@@ -35,16 +40,7 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
         }));
     }
 
-    let cartItemName = cartItem.name;
-
-    if (cartItem?.parent_name) {
-        const [, nameTail] = cartItem.name.split(cartItem.parent_name);
-        if (nameTail) {
-            const { label } = transformColorByName(nameTail);
-            const [colorTail] = label ? label.split(',') : [''];
-            cartItemName = `${cartItem.parent_name} ${colorTail}`;
-        }
-    }
+    const cartItemName = transformCartItemName(cartItem);
 
     return (
         <li className={styles["mini-cart__item"]} key={cartItem.id}>

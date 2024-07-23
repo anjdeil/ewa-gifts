@@ -1,5 +1,5 @@
 import { defaultAttributesType, variationsProductType } from "@/types";
-import { transformProductSizes } from "./transformProductSizes";
+import { transformProductSizes } from "../types/Services/transformers/transformProductSizes";
 
 export function filterOptionsByColorName(variations: variationsProductType[], name: string): defaultAttributesType[]
 {

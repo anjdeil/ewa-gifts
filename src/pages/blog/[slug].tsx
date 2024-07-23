@@ -1,18 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
-import wpRestApi from "@/services/WordPress/WPRestAPI";
+import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
 
-interface ArticleProps {
+interface ArticleProps
+{
 }
 
-const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) => {
-    if (!response) {
+const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) =>
+{
+    if (!response)
+    {
         return <p>Loading...</p>;
     }
     console.log(response);
@@ -37,15 +39,18 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) =>
+{
     const { slug } = context.params!;
     let response;
     let prevPost = null;
     let nextPost = null;
 
-    try {
+    try
+    {
         const currentPostResponse = await wpRestApi.get(`posts?slug=${slug}`);
-        if (currentPostResponse.data.length === 0) {
+        if (currentPostResponse.data.length === 0)
+        {
             return { notFound: true };
         }
 
@@ -56,15 +61,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         const currentIndex = allPosts.findIndex((post) => post.id === currentPost.id);
 
-        if (currentIndex > 0) {
+        if (currentIndex > 0)
+        {
             prevPost = allPosts[currentIndex - 1];
         }
-        if (currentIndex < allPosts.length - 1) {
+        if (currentIndex < allPosts.length - 1)
+        {
             nextPost = allPosts[currentIndex + 1];
         }
 
         response = currentPost;
-    } catch (error) {
+    } catch (error)
+    {
         console.log(error, '77777777');
         return {
             props: {
