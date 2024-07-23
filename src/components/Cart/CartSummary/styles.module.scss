@@ -1,64 +1,15 @@
 @import "@/styles/variables.module.scss";
 
 .CartSummary {
-    // margin: 0 auto;
-    padding: 30px;
     border: 2px solid $white-lilac;
     border-radius: 10px;
     height: fit-content;
 
     &__title {
-        margin-bottom: 17px;
+        padding: 0.6em 1.5em;
+        padding-top: 1em;
         font-size: 20px;
         text-transform: uppercase;
-    }
-
-    &__list {
-        margin-bottom: 100px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-        li {
-            &:first-child {
-                padding-top: 20px;
-                border-top: 2px solid $white-lilac;
-            }
-
-            &:last-child {
-                padding-top: 20px;
-                border-top: 2px solid $white-lilac;
-
-                .CartSummary__row {
-
-                    h3,
-                    span {
-                        font-size: 18px;
-                        font-weight: bold;
-                    }
-                }
-            }
-        }
-    }
-
-    &__row {
-        display: flex;
-        justify-content: space-between;
-
-        h3,
-        span {
-            max-width: 162px;
-            font-size: 16px;
-            font-weight: normal;
-        }
-
-        h3 {
-            color: $gray-transparent;
-        }
-
-        span {
-            text-align: right;
-        }
     }
 
     &__btnWrapper {

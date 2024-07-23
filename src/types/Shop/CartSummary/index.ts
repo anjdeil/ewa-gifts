@@ -1,8 +1,8 @@
+import { OrderTypeSchema } from "@/types/Services/woocommerce/OrderType";
 import { z } from "zod";
 
 export const CartSummaryPropsSchema = z.object({
-    total: z.string(),
-    sum: z.string(),
+    order: OrderTypeSchema,
     isLoading: z.boolean().optional()
 });
 

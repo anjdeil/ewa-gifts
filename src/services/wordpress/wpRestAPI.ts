@@ -5,7 +5,7 @@ const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
     password: process.env.USER_PASSWORD || ''
 };
-export class WPRestAPI
+export class WpRestApi
 {
     private readonly _apiBase: string;
     private readonly _authConfig: AuthConfig;
@@ -47,5 +47,5 @@ export class WPRestAPI
     }
 }
 
-const wpRestApi = new WPRestAPI(authConfig);
+const wpRestApi = new WpRestApi(authConfig);
 export default wpRestApi;
