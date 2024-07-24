@@ -1,21 +1,27 @@
 import { RegistrationForm } from "@/components/Forms/RegistrationForm";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { Section } from "@/components/Layouts/Section";
-import parseCookies from "@/Utils/parseCookies";
+import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
+import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
 import { Box } from "@mui/material";
-import axios, { AxiosResponse } from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { FC } from "react";
-// import { GetServerSidePropsContext } from 'next';
+import { z } from "zod";
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
-const Checkout: FC = ({ response }) =>
+const CheckoutPropsSchema = z.object({
+    userData: z.number().nullable()
+})
+
+type CheckoutProps = z.infer<typeof CheckoutPropsSchema>;
+
+const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
     const pageTitle = 'Składania zamowienia';
-    if (response)
+    if (userData)
     {
-        console.dir(response);
+        console.dir(userData);
     }
     return (
         <>
@@ -35,102 +41,41 @@ const Checkout: FC = ({ response }) =>
     );
 };
 
-async function checkUserTokenInServerSide(destination: string, context: GetServerSidePropsContext, cookieName: string)
-{
-    const cookies = context.req.headers.cookie;
-    if (!cookies)
-    {
-        return {
-            redirect: {
-                destination: destination,
-                permanent: false,
-            },
-        };
-    }
-
-    const cookieRows = parseCookies(cookies);
-    if (!(cookieName in cookieRows))
-    {
-        return {
-            redirect: {
-                destination: destination,
-                permanent: false,
-            },
-        };
-    }
-
-    try
-    {
-        const userResponse = await axios.get(`${process.env.SITE_URL}/wp-json/wp/v2/users/me`, {
-            headers: {
-                'Authorization': `Bearer ${cookieRows[cookieName]}`,
-            },
-        });
-
-        const userData = userResponse.data;
-        if (userData)
-        {
-            return userData;
-        }
-        // if (!userData?.id)
-        // {
-        //     return {
-        //         redirect: {
-        //             destination: destination,
-        //             permanent: false,
-        //         },
-        //     };
-        // }
-
-        // return { props: {} };
-
-    } catch (err)
-    {
-        if (axios.isAxiosError(err))
-        {
-            const response = err.response as AxiosResponse;
-            if (response?.data?.code === 'jwt_auth_invalid_token')
-            {
-                return {
-                    redirect: {
-                        destination: destination,
-                        permanent: false,
-                    },
-                };
-            }
-        }
-
-        return {
-            notFound: true
-        };
-    }
-}
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => 
 {
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
-
-    if ('redirect' in result)
+    let userData = null;
+    if ('id' in result)
     {
-        return {
-            props: {
-                response: result
+        try
+        {
+            const resp = await wooCommerceRestApi.get('customers/1');
+            userData = resp.data;
+        } catch (err)
+        {
+            if (err instanceof Error)
+            {
+                userData = { error: err.message };
+            } else
+            {
+                userData = { error: 'Unknown error' };
             }
         }
     }
 
-    if (result.notFound)
-    {
-        return {
-            notFound: true,
-        };
-    }
-    return {
-        props: {
-            response: result
-        }
-    }
+    // if ('redirect' in result)
+    // {
+    //     return {
+    //         redirect: {
+    //             ...result.redirect
+    //         },
+    //     }
+    // }
+    if ('redirect' in result) return { props: { userData: userData } };
+    if (result.notFound) return { notFound: true };
+
+    return { props: { userData: userData } };
 }
 
 export default Checkout;
