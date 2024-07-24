@@ -10,8 +10,8 @@ import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
 import { refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
-import MiniCart from '@/components/Cart/MiniCart';
 import Link from 'next/link'
+import MiniCartPopup from '@/components/Popups/MiniCartPopup';
 
 const CustomBadge = styled(Badge)`
     .css-1abqjyq-MuiBadge-badge {
@@ -98,7 +98,7 @@ const Header: React.FC = () => {
                                 />
                             </CustomBadge>
                         </IconButton>
-                        {miniCartOpen && (<MiniCart />)}
+                        {miniCartOpen && (<MiniCartPopup />)}
                     </Box>
                 </Toolbar>
             </AppBar>
