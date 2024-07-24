@@ -6,12 +6,14 @@ import Image from "next/image";
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 import { useAppDispatch } from "@/hooks/redux";
 import { updateCart } from "@/store/reducers/CartSlice";
+import formatPrice from "@/Utils/formatPrice";
 
 interface MiniCartItemPropsType {
-    cartItem: lineOrderItems
+    cartItem: lineOrderItems,
+    showSubtotal?: boolean
 }
 
-const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
+const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartItem }) => {
     const dispatch = useAppDispatch();
     const [quantity, setQuantity] = useState(cartItem.quantity);
 
@@ -46,6 +48,8 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
         }
     }
 
+    const subtotal = cartItem.price * cartItem.quantity;
+
     return (
         <li className={styles["mini-cart__item"]} key={cartItem.id}>
             <div className={styles["mini-cart__item-image-wrap"]}>
@@ -68,20 +72,23 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ cartItem }) => {
                     <svg className="cart-item-quty__x" width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 0.5L1 8.5M1 0.5L9 8.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span className="cart-item-quty__price">{cartItem.price}</span>
+                    <span className="cart-item-quty__price">{formatPrice(cartItem.price)}</span>
                 </div>
-                <input type="number" value={quantity} onChange={(evt) => setQuantity(+evt.target.value)} />
+                {/* <input type="number" value={quantity} onChange={(evt) => setQuantity(+evt.target.value)} /> */}
             </div>
-            <div className={styles["mini-cart__item-delete-wrap"]}>
-                <button
-                    className={styles["mini-cart__item-delete"]}
-                    onClick={deleteCartItem}
-                >
-                    <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </button>
-            </div>
+            {showSubtotal ?
+                <p>{formatPrice(subtotal)}</p> :
+                <div className={styles["mini-cart__item-delete-wrap"]}>
+                    <button
+                        className={styles["mini-cart__item-delete"]}
+                        onClick={deleteCartItem}
+                    >
+                        <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            }
         </li>
     );
 }
