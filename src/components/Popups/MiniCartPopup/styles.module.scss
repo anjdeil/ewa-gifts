@@ -1,0 +1,32 @@
+@import "@/styles/variables.module.scss";
+
+.mini-cart-popup {
+    position: absolute;
+    top: 105%;
+    width: 380px;
+    right: 0;
+    background-color: $bg-accent;
+    color: $black-color;
+    font-size: 0.9rem;
+    padding: 30px 20px;
+    border-radius: 10px;
+    z-index: 1000;
+
+    &__content {
+        max-height: 360px;
+        overflow: auto;
+        margin-bottom: 20px;
+    }
+
+    &__subtotal {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 20px;
+
+        &-price {
+            font-size: 1.25em;
+            font-weight: 600;
+        }
+    }
+}

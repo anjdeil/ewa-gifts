@@ -5,6 +5,7 @@
     padding: 12px;
     background-color: rgba(254, 203, 0, 0.4);
     transition: background-color .3s ease-in-out;
+    color: $black-color;
 
     &:hover {
         background-color: rgba(254, 203, 0, 0.7);
