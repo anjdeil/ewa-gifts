@@ -2,7 +2,7 @@
 //@ts-nocheck
 
 import { defaultAttributesType, ProductAttributesType, ProductOptions } from "@/types";
-import { sortProductSizes } from "./sortProductSizes";
+import { sortProductSizes } from "../../../Utils/sortProductSizes";
 
 export function transformProductSizes(attrArray: ProductAttributesType[] | defaultAttributesType[]): ProductOptions[] & defaultAttributesType[] | null
 {

@@ -1,21 +1,22 @@
-import Image from 'next/image';
-import { Box, Skeleton, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import styles from './styles.module.scss';
-import { Counter } from '@/components/Buttons';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateCart } from '@/store/reducers/CartSlice';
 import { CartTableProps } from '@/types/Cart';
-import IconButton from '@mui/material/IconButton';
 import { FC } from 'react';
 import { lineOrderItems } from '@/types';
+import { CartTableRow } from './CartTableRow';
+import React from 'react';
 
 export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
 {
     const dispatch = useAppDispatch();
+    const lineItems = useAppSelector(state => state.Cart.items);
+    const MemoizedCartTableRow = React.memo(CartTableRow);
 
-    const changeProductsAmount = (product: lineOrderItems, count: string) =>
+    const onProductChange = (product: lineOrderItems, count: number): void =>
     {
-        if (count)
+        if (count >= 0)
         {
             dispatch(updateCart({
                 id: product.product_id,
@@ -25,7 +26,7 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
         }
     };
 
-    const deleteProduct = (product: lineOrderItems) =>
+    const onProductDelete = (product: lineOrderItems): void =>
     {
         dispatch(updateCart({
             id: product.product_id,
@@ -51,51 +52,15 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                 </Box>
             </Box >
             <Box className={styles.CartTable__tableBody}>
-                {products.map((product, index) => (
-                    <Box key={index} className={`${styles.CartTable__row}`}>
-                        <Box className={`${styles.cartItem}`}>
-                            <Box className={styles.cartItem__delete}>
-                                <IconButton aria-label="delete" onClick={() => deleteProduct(product)}>
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </IconButton>
-                            </Box>
-                            <Box>
-                                <Image
-                                    src={product.image.src}
-                                    width={75}
-                                    height={75}
-                                    alt={product.name}
-                                />
-                            </Box>
-                            <Box className={`${styles.cartItem__title}`}>
-                                <Typography variant='h6' className='desc'>
-                                    {product.name}
-                                    {product.id}
-                                </Typography>
-                            </Box>
-                        </Box>
-                        <Box className={styles.CartTable__cell}>
-                            <Typography variant='body1'>
-                                {product.price} zł
-                            </Typography>
-                        </Box>
-                        <Box className={styles.CartTable__cell}>
-                            <Counter
-                                count={product.quantity}
-                                changeQuantity={(count) => changeProductsAmount(product, count)}
-                                isLoading={isLoading}
-                            />
-                        </Box>
-                        <Box className={styles.CartTable__cell}>
-                            {isLoading ? (
-                                <Skeleton width={'100px'} height={'50px'} animation="wave" />
-                            ) : (
-                                product.price * product.quantity + ' zł'
-                            )}
-                        </Box>
-                    </Box>
+                {products.map((product) => (
+                    <MemoizedCartTableRow
+                        key={product.id}
+                        product={product}
+                        onProductChange={onProductChange}
+                        onProductDelete={onProductDelete}
+                        lineItems={lineItems}
+                        isLoading={isLoading}
+                    />
                 ))}
             </Box>
         </Box >

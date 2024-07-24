@@ -11,7 +11,7 @@ interface MiniCartPropsType {
     isLoading?: boolean
 }
 
-const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = true, isLoading = false }) => {
+const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isLoading = false }) => {
 
     if (isLoading) {
         return <MiniCartSkeleton showSubtotals={showSubtotals} />

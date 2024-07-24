@@ -22,12 +22,11 @@
     &__row {
         padding: 15px 20px;
         display: grid;
-        grid-template-columns: 3fr 1fr 1fr 1fr;
+        grid-template-columns: 35% 20% 20% 20%;
         gap: 16px;
 
         &_head {
             background-color: $white-lilac;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
         }
     }
 
@@ -35,7 +34,7 @@
         justify-content: center;
         display: flex;
         align-items: center;
-        padding: 13px;
+        padding: 13px 0;
         text-align: center;
     }
 }
