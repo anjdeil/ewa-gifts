@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateCart } from '@/store/reducers/CartSlice';
 import { CartTableProps } from '@/types/Cart';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { lineOrderItems } from '@/types';
 import { CartTableRow } from './CartTableRow';
 import React from 'react';
@@ -13,13 +13,6 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
     const dispatch = useAppDispatch();
     const lineItems = useAppSelector(state => state.Cart.items);
     const MemoizedCartTableRow = React.memo(CartTableRow);
-    // const [isLoading, setLoading] = useState<boolean>(true);
-
-    useEffect(() =>
-    {
-        if (products)
-            console.log(products);
-    }, [products])
 
     const onProductChange = (product: lineOrderItems, count: number): void =>
     {
