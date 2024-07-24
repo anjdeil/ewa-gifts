@@ -39,6 +39,15 @@ export const RegistrationForm: FC = () =>
                 postcode: data.postCode,
                 phone: data.phoneNumber,
             },
+            shipping: {
+                first_name: '',
+                last_name: '',
+                company: '',
+                address_1: '',
+                city: '',
+                postcode: '',
+                country: 'Poland'
+            }
         }
 
         try
