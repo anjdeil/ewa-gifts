@@ -4,16 +4,15 @@ import axios, { AxiosResponse } from "axios";
 
 export async function checkUserTokenInServerSide(destination: string, context: GetServerSidePropsContext, cookieName: string)
 {
-    const cookies = context.req.headers.cookie;
     const redirect = {
         destination: destination,
         permanent: false,
     }
 
+    const cookies = context.req.headers.cookie;
     if (!cookies) return { redirect: redirect };
 
     const cookieRows = parseCookies(cookies);
-
     if (!(cookieName in cookieRows)) return { redirect: redirect };
 
     try

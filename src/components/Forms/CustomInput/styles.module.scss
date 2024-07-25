@@ -62,6 +62,14 @@
         &_error {
             outline-color: $error !important;
         }
+
+        &_textarea {
+            min-height: 150px;
+
+            &::placeholder {
+                text-align: top;
+            }
+        }
     }
 
     &__error {

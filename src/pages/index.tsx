@@ -4,13 +4,15 @@ import { HomeProps } from "@/types";
 import Head from "next/head";
 import { FC } from "react";
 import { GetServerSidePropsContext } from 'next';
+import { PageHeader } from "@/components/Layouts/PageHeader";
+import { Section } from "@/components/Layouts/Section";
 
 
 const Home: FC<HomeProps> = ({ response }) =>
 {
   let sections;
   // const pageTitle = response[0].title.rendered;
-  const pageTitle = 'Home';
+  const pageTitle = 'Główna';
 
   if ('sections' in response[0])
   {
@@ -24,9 +26,10 @@ const Home: FC<HomeProps> = ({ response }) =>
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
       <main>
-        <h1>{pageTitle}</h1>
+        <Section className={""} isBreadcrumbs={false} isContainer={true}>
+          <PageHeader title={pageTitle} />
+        </Section>
         <PageBuilder sections={sections} />
-
       </main >
     </>
   );

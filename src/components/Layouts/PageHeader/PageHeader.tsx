@@ -6,7 +6,7 @@ import { BreadcrumbType } from "@/types/layouts/Breadcrumbs";
 interface PageHeaderProps
 {
     title: string;
-    breadLinks: BreadcrumbType[],
+    breadLinks?: BreadcrumbType[],
     count?: number;
     isCentered?: boolean;
 }
@@ -14,7 +14,7 @@ export const PageHeader: FC<PageHeaderProps> = ({ title, breadLinks, count = 0, 
 {
     return (
         <Box className={`page-top ${isCentered && "page-top_center"}`}>
-            <Breadcrumbs links={breadLinks} />
+            {breadLinks && <Breadcrumbs links={breadLinks} />}
             <Box className={'page-top__titling'}>
                 <Typography className="main-title" variant="h1">{title}</Typography>
                 {count > 0 &&

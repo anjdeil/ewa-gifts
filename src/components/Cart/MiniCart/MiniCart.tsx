@@ -5,15 +5,18 @@ import MiniCartItem from "./MiniCartItem";
 import MiniCartSkeleton from "./MiniCartSkeleton";
 import Notification from "@/components/Layouts/Notification";
 
-interface MiniCartPropsType {
+interface MiniCartPropsType
+{
     lineItems: lineOrderItems[] | undefined,
     showSubtotals?: boolean,
     isLoading?: boolean
 }
 
-const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isLoading = false }) => {
+const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isLoading = false }) =>
+{
 
-    if (isLoading) {
+    if (isLoading)
+    {
         return <MiniCartSkeleton showSubtotals={showSubtotals} />
     }
 

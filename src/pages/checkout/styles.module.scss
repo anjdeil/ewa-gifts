@@ -1,0 +1,19 @@
+@import "@/styles/variables.module.scss";
+
+.checkoutLogin {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    &__form {
+        position: absolute;
+        top: 100px;
+        right: 50%;
+        transform: translateX(50%);
+        padding: 30px;
+        width: 500px;
+        border-radius: 10px;
+        background: #fff;
+    }
+}

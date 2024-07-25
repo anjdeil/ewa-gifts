@@ -1,27 +1,41 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CustomInput } from "../CustomInput";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
 import { useFetchUserRegistrationMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
-import { StyledBox } from "./StyleBox";
 import variables from '@/styles/variables.module.scss';
-import { RegistrationFormSchema, RegistrationFormType, WpWooError } from "@/types";
+import { RegistrationFormSchema, WpWooError } from "@/types";
+import { z } from "zod";
+import styles from './styles.module.scss';
 
-export const RegistrationForm: FC = () =>
+interface RegistrationFormProps
 {
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, reset } = useForm<RegistrationFormType>({
-        resolver: zodResolver(RegistrationFormSchema)
+    isCheckout?: boolean,
+}
+
+export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false }) =>
+{
+    const [isShipping, setShipping] = useState<boolean>(false);
+    const formSchema = RegistrationFormSchema(isCheckout, isShipping);
+    type RegistrationFormType = z.infer<typeof formSchema>;
+
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
+        resolver: zodResolver(formSchema)
     });
+
+    function onShippingChange()
+    {
+        setShipping(prev => prev ? false : true);
+    }
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
     const [fetchUserToken] = useFetchUserTokenMutation();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setCookie] = useCookies(['userToken']);
-    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const onSubmit = async (data: RegistrationFormType) =>
     {
@@ -71,65 +85,71 @@ export const RegistrationForm: FC = () =>
         }
     };
 
+    let aaa;
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Box
-                display={'flex'}
-                flexDirection={isMobile ? 'column' : 'row'}
-                gap={isMobile ? '15px' : '50px'}
-                maxWidth={'1100px'}
-                margin={'0 auto'}>
-                <StyledBox>
-                    <CustomInput fieldName="Name" name='name' register={register} errors={errors} />
-                    <CustomInput fieldName="Surname" name='lastName' register={register} errors={errors} key={'lastName'} />
-                    <CustomInput fieldName="Email" name='email' register={register} errors={errors} key={'email'} />
+            <Box className={styles.form__wrapper}>
+                <Box className={styles.form__column}>
                     <CustomInput
-                        fieldName="Password"
+                        fieldName="Imię"
+                        name='name'
+                        register={register}
+                        errors={errors}
+                        setValue={setValue}
+                        initialValue={aaa && aaa}
+                    />
+                    <CustomInput
+                        fieldName="Nazwisko"
+                        name='lastName'
+                        register={register}
+                        errors={errors}
+                        setValue={setValue}
+                        initialValue={aaa && aaa}
+                    />
+                    <CustomInput fieldName="Adres e-mail" name='email' register={register} errors={errors} />
+                    <CustomInput
+                        fieldName="Hasło"
                         name='password'
                         register={register}
                         errors={errors}
                         isPassword={true}
-                        key={'password'}
                     />
                     <CustomInput
-                        fieldName="Repeat password"
+                        fieldName="Powtórz hasło"
                         name='confirmPassword'
                         register={register}
                         errors={errors}
                         isPassword={true}
-                        key={'confirmPassword'}
                     />
-
-                </StyledBox>
-                <StyledBox>
                     <CustomInput
-                        fieldName="Phone Number"
+                        fieldName="Numer telefonu"
                         name='phoneNumber'
                         register={register}
                         errors={errors}
                         isNumeric={true}
-                        key={'phoneNumber'}
                     />
+                </Box>
+                <Box className={styles.form__column}>
                     <CustomInput
                         fieldName="NIP (optional)"
                         name='nip'
                         register={register}
                         errors={errors}
-                        isRequire={false}
+                        isRequire={true}
                         isNumeric={true}
-                        key={'nip'}
                     />
-                    <CustomInput fieldName="Company name" name='companyName' register={register} errors={errors} key={'companyName'} />
-                    <CustomInput fieldName="Address" name='address' register={register} errors={errors} key={'address'} />
+                    <CustomInput fieldName="Miasto" name='city' register={register} errors={errors} key={'city'} />
+                    <CustomInput fieldName="Kraj / region" name='country' register={register} errors={errors} key={'country'} />
+                    <CustomInput fieldName="Nazwa firmy" name='companyName' register={register} errors={errors} key={'companyName'} />
+                    <CustomInput fieldName="Ulica" name='address' register={register} errors={errors} key={'address'} />
                     <CustomInput
-                        fieldName="Post code"
+                        fieldName="Kod pocztowy"
                         name='postCode'
                         register={register}
                         errors={errors}
                         isNumeric={true}
-                        key={'postCode'}
                     />
-                    <CustomInput fieldName="City" name='city' register={register} errors={errors} key={'city'} />
                     <CustomInput
                         fieldName="Twoje dane osobowe będą wykorzystywane do wspierania korzystania z tej witryny, zarządzania dostępem do konta oraz do innych celów opisanych w naszej polityka prywatności "
                         name='terms'
@@ -137,7 +157,6 @@ export const RegistrationForm: FC = () =>
                         errors={errors}
                         isCheckbox={true}
                         isRequire={false}
-                        key={'terms'}
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</button>
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
@@ -145,8 +164,46 @@ export const RegistrationForm: FC = () =>
                     </p>}
                     {isError && <p style={{ color: variables.error }}
                         dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
-                </StyledBox>
+                </Box>
             </Box>
+            {isCheckout && <Box className={styles.form__content}>
+                <CustomInput
+                    fieldName=" Wysłać na inny adres?"
+                    errors={errors}
+                    isCheckbox={true}
+                    isRequire={false}
+                    onChange={onShippingChange}
+                />
+                {isShipping &&
+                    <Box className={styles.form__wrapper}>
+                        <Box className={styles.form__column}>
+                            <CustomInput fieldName="Imię" name='nameShipping' register={register} errors={errors} />
+                            <CustomInput fieldName="Nazwisko" name='lastNameShipping' register={register} errors={errors} />
+                            <CustomInput fieldName="Adres e-mail" name='emailShipping' register={register} errors={errors} />
+                            <CustomInput fieldName="Nazwa firmy" name='companyNameShipping' register={register} errors={errors} />
+                        </Box>
+                        <Box className={styles.form__column}>
+                            <CustomInput fieldName="Miasto" name='cityShipping' register={register} errors={errors} />
+                            <CustomInput fieldName="Kraj / region" name='countryShipping' register={register} errors={errors} />
+                            <CustomInput fieldName="Ulica" name='addressShipping' register={register} errors={errors} />
+                            <CustomInput
+                                fieldName="Kod pocztowy"
+                                name='postCodeShipping'
+                                register={register}
+                                errors={errors}
+                                isNumeric={true}
+                            />
+                        </Box>
+                    </Box>}
+                <CustomInput
+                    fieldName="Uwagi do zamówienia (opcjonalne)"
+                    name='textarea'
+                    register={register}
+                    errors={errors}
+                    isTextarea={true}
+                    placeholder="Wprowadź opis..."
+                />
+            </Box>}
         </form>
     )
 }

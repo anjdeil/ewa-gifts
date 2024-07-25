@@ -1,15 +1,14 @@
 @import "@/styles/variables.module.scss";
 
 .CartSummary {
-    padding-top: 30px;
+    padding: 30px;
     padding-bottom: 30px;
     border: 2px solid $white-lilac;
     border-radius: 10px;
     height: fit-content;
 
     &__title {
-        padding: 0.6em 1.5em;
-        padding-top: 0;
+        padding-bottom: 15px;
         font-size: 20px;
         text-transform: uppercase;
     }

@@ -24,6 +24,7 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
                 ...(product.variation_id && { variationId: product.variation_id })
             }));
         }
+        console.log('sdsd')
     };
 
     const onProductDelete = (product: lineOrderItems): void =>
@@ -53,7 +54,7 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
             </Box >
             <Box className={styles.CartTable__tableBody}>
                 {/* <Skeleton width={'100%'} height={'400px'} animation="wave" sx={{ display: 'inline-block' }} /> */}
-                {products.map((product) => (
+                {products && products.map((product) => (
                     <MemoizedCartTableRow
                         key={product.id}
                         product={product}

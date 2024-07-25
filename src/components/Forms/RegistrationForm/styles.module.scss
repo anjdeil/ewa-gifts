@@ -1,0 +1,25 @@
+.form {
+    &__content {
+        margin: 0 auto;
+        max-width: 1100px;
+    }
+
+    &__wrapper {
+        @extend .form__content;
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        flex-basis: 50%;
+    }
+}

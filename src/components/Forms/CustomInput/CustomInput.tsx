@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './styles.module.scss';
 import { CustomInputProps } from '@/types/Forms';
 import Image from 'next/image';
@@ -14,7 +14,10 @@ export const CustomInput: FC<CustomInputProps> = ({
     isNumeric = false,
     placeholder,
     onChange,
-    value
+    value,
+    isTextarea,
+    setValue,
+    initialValue
 }) =>
 {
     let type;
@@ -35,6 +38,14 @@ export const CustomInput: FC<CustomInputProps> = ({
         inputClass = styles.customInput__checkbox;
     }
 
+    useEffect(() =>
+    {
+        if (setValue && name && initialValue !== undefined)
+        {
+            setValue(name, initialValue, { shouldValidate: true });
+        }
+    }, [initialValue, name, setValue]);
+
     const registerProps = register ? register(name) : {};
     const isError = errors && name ? name in errors : false;
 
@@ -51,7 +62,10 @@ export const CustomInput: FC<CustomInputProps> = ({
                         {...registerProps}
                         style={{ color: 'black' }}
                         type={type && type}
-                        className={`${inputClass} ${isError && styles.customInput__input_error}`}
+                        className={`${inputClass}
+                         ${isError && styles.customInput__input_error}
+                         ${isTextarea && styles.customInput__input_textarea}
+                         `}
                         inputMode={isNumeric ? "numeric" : undefined}
                         pattern={isNumeric ? "[0-9]*" : undefined}
                         onInput={isNumeric ? (e) =>
@@ -59,7 +73,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                             e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
                         } : undefined}
                         onChange={onChange && onChange}
-                        value={value && value}
+                        value={value}
                     />
                     {
                         isPassword &&
