@@ -1,0 +1,17 @@
+@import "@/styles/variables.module.scss";
+
+.product-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+    gap: 20px;
+
+    &__secondary-button {
+        font-size: 0.9rem;
+        padding: 0.9em 1.5em;
+        color: $black-color;
+        cursor: pointer;
+    }
+}

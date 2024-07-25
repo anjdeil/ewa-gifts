@@ -23,10 +23,10 @@ const MiniCartPopup = () => {
                 </span>
             </div>
             <div className={styles["mini-cart-popup__buttons"]}>
-                <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/'}>
+                <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/checkout'}>
                     Checkout
                 </Link>
-                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/'}>
+                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/cart'}>
                     View cart
                 </Link>
             </div>
