@@ -16,12 +16,19 @@ export const CartTableRowProps = z.object({
     onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
     onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
     lineItems: z.array(CartItemSchema).nullable(),
-    isLoading: z.boolean()
+    isLoading: z.boolean(),
+    total: z.string()
 });
 
 export type CartTableRowType = z.infer<typeof CartTableRowProps>;
 
-export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, onProductDelete, lineItems, isLoading }) =>
+export const CartTableRow: FC<CartTableRowType> = ({
+    product,
+    onProductChange,
+    onProductDelete,
+    lineItems,
+    isLoading,
+    total }) =>
 {
     const [count, setCount] = useState<number | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -103,7 +110,7 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
                 {isLoading ? (
                     <Skeleton width={'100px'} height={'50px'} animation="wave" />
                 ) : (
-                    productPrice
+                    total
                 )}
             </Box>
         </Box>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const BreadcrumbSchema = z.object({
+export const BreadcrumbSchema = z.object({
     name: z.string(),
     url: z.string()
 });

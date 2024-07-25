@@ -109,11 +109,18 @@ input[type=number]::-webkit-outer-spin-button {
     color: $text-gray;
 }
 
-.sub-title {
+.main-title {
     margin: 0;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 30px;
     color: $black-color;
+    text-transform: uppercase;
+}
+
+.sub-title {
+    @extend .main-title;
+    font-size: 20px;
+    text-transform: none;
 }
 
 .list-reset {
@@ -216,12 +223,6 @@ input[type=number]::-webkit-outer-spin-button {
         margin-top: 40px;
         display: flex;
         align-items: flex-start;
-    }
-
-    &__title {
-        font-size: 1.15em;
-        text-transform: uppercase;
-        margin: 0;
     }
 
     &__count {

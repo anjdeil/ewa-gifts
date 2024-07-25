@@ -1,74 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import axios from "axios";
 import { CartItem } from "@/types/Cart";
-import { lineOrderItems } from "@/types";
-import { removeObjectDuplicates } from "@/Utils/removeObjectDuplicates";
 
 export const useUpdateOrderWoo = () =>
 {
     const [fetchUpdateOrder, { data }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isUpdating, setIsUpdating] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [items, setItems] = useState<lineOrderItems[] | null>(null);
     const updatedOrder = data;
-
-    useEffect(() =>
-    {
-        if (data)
-        {
-            setItems(removeObjectDuplicates(data.line_items, 'name'));
-        }
-    }, [data])
-
-    const localDeleteOrder = useCallback(async (orderId: number) =>
-    {
-        setIsUpdating(true);
-        try
-        {
-            await axios({
-                url: `/api/woo/delete-order-items/${orderId}`,
-                method: 'DELETE',
-            });
-        } catch (error)
-        {
-            console.error("Error deleting order items:", error);
-            throw error;
-        } finally
-        {
-            setIsUpdating(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [updatedOrder]);
-
-    const localUpdateOrder = useCallback(async (items: CartItem[], orderId: number) =>
-    {
-        await fetchUpdateOrder({
-            credentials: {
-                line_items: [
-                    ...items
-                ]
-            },
-            id: orderId
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [updatedOrder]);
 
     const updateOrder = async (items: CartItem[], orderId: number) =>
     {
         setIsLoading(true);
         setError(null);
-
         try
         {
-            if (!isUpdating)
-            {
-                await localDeleteOrder(orderId);
-                await localUpdateOrder(items, orderId);
-                setIsUpdating(false);
-            }
+            await fetchUpdateOrder({
+                credentials: {
+                    line_items: [
+                        ...items
+                    ]
+                },
+                id: orderId
+            });
 
         } catch (err)
         {
@@ -86,5 +41,5 @@ export const useUpdateOrderWoo = () =>
         }
     };
 
-    return { updateOrder, isLoading, error, updatedOrder, items };
+    return { updateOrder, isLoading, error, updatedOrder };
 };

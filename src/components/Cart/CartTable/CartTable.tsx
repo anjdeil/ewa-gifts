@@ -8,7 +8,7 @@ import { lineOrderItems } from '@/types';
 import { CartTableRow } from './CartTableRow';
 import React from 'react';
 
-export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
+export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
 {
     const dispatch = useAppDispatch();
     const lineItems = useAppSelector(state => state.Cart.items);
@@ -52,6 +52,7 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                 </Box>
             </Box >
             <Box className={styles.CartTable__tableBody}>
+                {/* <Skeleton width={'100%'} height={'400px'} animation="wave" sx={{ display: 'inline-block' }} /> */}
                 {products.map((product) => (
                     <MemoizedCartTableRow
                         key={product.id}
@@ -60,6 +61,7 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                         onProductDelete={onProductDelete}
                         lineItems={lineItems}
                         isLoading={isLoading}
+                        total={total}
                     />
                 ))}
             </Box>
