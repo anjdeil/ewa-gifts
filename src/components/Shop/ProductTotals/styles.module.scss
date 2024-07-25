@@ -1,5 +1,5 @@
 .product-totals {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     &__total {
         display: flex;
@@ -10,10 +10,5 @@
             margin-top: 0.5em;
             font-size: 0.9em;
         }
-    }
-
-    &__button {
-        display: flex;
-        justify-content: flex-end;
     }
 }
