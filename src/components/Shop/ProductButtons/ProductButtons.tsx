@@ -1,8 +1,7 @@
 import React, { FC } from "react";
 import { EwaButton } from "@/components/EwaComponents/EwaButton";
 import styles from "./styles.module.scss";
-import { useAppDispatch } from "@/hooks/redux";
-import { toggleMiniCart } from "@/store/reducers/CartSlice";
+import Link from "next/link";
 
 interface ProductButtonsPropsType {
     hasAdded?: boolean,
@@ -11,7 +10,6 @@ interface ProductButtonsPropsType {
 }
 
 const ProductButtons: FC<ProductButtonsPropsType> = ({ hasAdded = false, quantitiesMatch = true, onAdd }) => {
-    const dispatch = useAppDispatch();
 
     return (
         <div className={styles['product-buttons']}>
@@ -19,12 +17,12 @@ const ProductButtons: FC<ProductButtonsPropsType> = ({ hasAdded = false, quantit
                 (hasAdded && quantitiesMatch) ?
                     <>
                         <p className="text-gray">Produkt został dodany do koszyka</p>
-                        <button
-                            onClick={() => { dispatch(toggleMiniCart()) }}
+                        <Link
+                            href="/cart"
                             className={`desc link btn-secondary ${styles['product-buttons__secondary-button']}`}
                         >
                             Zobacz koszyk
-                        </button>
+                        </Link>
                     </> :
                     <EwaButton onClick={() => onAdd()}>
                         {(hasAdded && !quantitiesMatch) ?
