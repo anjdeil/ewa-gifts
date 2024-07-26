@@ -16,4 +16,28 @@
         border-radius: 10px;
         background: #fff;
     }
+
+    &__next {
+        color: $text-gray;
+        font-size: 16px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.checkout {
+    &__content {
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: 65% 30%;
+    }
+
+    &__title {
+        margin-bottom: 15px;
+        font-size: 22px;
+    }
+
+    &__button {
+        width: 100%;
+    }
 }

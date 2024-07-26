@@ -5,6 +5,7 @@ import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi"
 import { CartItem } from "@/types/Cart";
 import { useCookies } from "react-cookie";
 
+type OrderStatus = "processing" | "pending payment";
 
 export const useCreateOrderWoo = () =>
 {
@@ -15,10 +16,15 @@ export const useCreateOrderWoo = () =>
     const [_, setCookie] = useCookies(['orderId']);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-    const createOrder = useCallback(async (items: CartItem[]) =>
+    const createOrder = useCallback(async (items: CartItem[], customerId: number = 0, status: OrderStatus) =>
     {
         setError(null);
-        const fetchCreateOrderBody = { line_items: items };
+        const fetchCreateOrderBody = {
+            line_items: items,
+            payment_method: "bacs",
+            status: status,
+            customer_id: customerId,
+        };
 
         try
         {

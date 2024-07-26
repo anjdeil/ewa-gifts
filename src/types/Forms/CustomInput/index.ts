@@ -1,25 +1,8 @@
 import { z } from "zod";
 
-const registrationFormKeys = [
-    'name',
-    'lastName',
-    'email',
-    'companyName',
-    'address',
-    'postCode',
-    'city',
-    'country',
-    'confirmPassword',
-    'phoneNumber',
-    'nip',
-    'terms',
-    'password',
-    'textarea',
-] as const;
-
 export const CustomInputPropsSchema = z.object({
     fieldName: z.string().optional(),
-    name: z.enum(registrationFormKeys).optional(),
+    name: z.string().optional(),
     register: z.any().optional(),
     errors: z.any().optional(),
     className: z.string().optional(),
@@ -32,7 +15,7 @@ export const CustomInputPropsSchema = z.object({
     value: z.string().optional(),
     isTextarea: z.boolean().optional(),
     setValue: z.function().args(
-        z.enum(registrationFormKeys),
+        z.any(),
         z.any(),
         z.object({
             shouldValidate: z.boolean().optional(),

@@ -1,18 +1,27 @@
-import { LoginForm } from "@/components/Forms/LoginForm";
-import { RegistrationForm } from "@/components/Forms/RegistrationForm";
+// import { RegistrationForm } from "@/components/Forms/RegistrationForm";
+import RegistrationForm, { FormHandle } from "@/components/Forms/RegistrationForm/RegistrationForm";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { Section } from "@/components/Layouts/Section";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { OrderTypeSchema } from "@/types/Services/woocommerce/OrderType";
 import { checkCurrentOrderServerSide } from "@/Utils/checkCurrentOrderServerSide";
 import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { FC, useEffect, useState } from "react";
 import { z } from "zod";
 import { CheckoutLogin } from "./CheckoutLogin";
 import { useCookies } from "react-cookie";
+import { useLazyFetchUserDataQuery } from "@/store/wordpress";
+import { useLazyFetchCustomerDataQuery } from "@/store/wooCommerce/wooCommerceApi";
+import MiniCart from "@/components/Cart/MiniCart";
+import styles from './styles.module.scss';
+import OrderTotals from "@/components/MyAccount/OrderTotals";
+import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { useAppSelector } from "@/hooks/redux";
+import React, { useRef } from 'react';
+
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
 const userDetailsSchema = z.object({
@@ -30,7 +39,7 @@ const userDetailsSchema = z.object({
 })
 
 const userDataSchema = z.object({
-    id: z.string(),
+    id: z.number(),
     date_created: z.string(),
     date_created_gmt: z.string(),
     date_modified: z.string(),
@@ -51,36 +60,62 @@ const CheckoutPropsSchema = z.object({
     orderData: OrderTypeSchema.nullable(),
 })
 
+type userFieldsType = z.infer<typeof userDataSchema>;
 type CheckoutProps = z.infer<typeof CheckoutPropsSchema>;
 
 const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 {
-    const pageTitle = 'Składania zamowienia';
+    const childRef = useRef<FormHandle>(null);
+    const [isCreating, setCreating] = useState<boolean>(false);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [userFields, setUserFields] = useState<userFieldsType | null>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const [cookie] = useCookies(['userToken']);
+    const { items } = useAppSelector(state => state.Cart);
+    const [fetchCheckUser, { data: jwtUser, error: jwtError }] = useLazyFetchUserDataQuery();
+    const [fetchCustomerData, { data: customerData, error: customerError }] = useLazyFetchCustomerDataQuery();
+    const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
+    const pageTitle = 'Składania zamowienia';
 
     useEffect(() =>
     {
         if (userData)
         {
-            console.dir(userData);
+            setUserFields(userData);
             setModalOpen(false);
             setLoggedIn(true);
         } else
         {
             setModalOpen(true);
         }
-    }, [userData])
-
+    }, [userData]);
 
     useEffect(() =>
     {
-        if ('userToken' in cookie)
+        if ("userToken" in cookie)
         {
-            onContinueClick();
+            fetchCheckUser(cookie.userToken);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie])
+
+    useEffect(() =>
+    {
+        if (jwtUser && "id" in jwtUser)
+        {
+            fetchCustomerData(jwtUser.id);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [jwtUser])
+
+    useEffect(() =>
+    {
+        if (customerData)
+        {
+            setUserFields(customerData);
+        }
+    }, [customerData])
 
     function onContinueClick()
     {
@@ -102,10 +137,19 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
         };
     }, [isModalOpen]);
 
-    // if (orderData)
-    // {
-    //     console.dir(orderData);
-    // }
+    function onSubmitClick()
+    {
+        if (userFields && items)
+        {
+            setCreating(true);
+            createOrder(items, userFields.id, 'processing');
+        }
+    }
+
+    const handleFormSubmit = () =>
+    {
+        if (childRef.current) childRef.current.submit();
+    };
 
     return (
         <>
@@ -116,8 +160,24 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
             <main>
                 <Section className={""} isBreadcrumbs={true} isContainer={true}>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
-                    <Box>
-                        <RegistrationForm isCheckout={true} />
+                    <Box className={styles.checkout__content}>
+                        <Box>
+                            <RegistrationForm isCheckout={true} ref={childRef} />
+                        </Box>
+                        <Box>
+                            <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>
+                                Twoje zamówienie
+                            </Typography>
+                            <MiniCart lineItems={orderData?.line_items} showSubtotals={true} />
+                            {orderData && <OrderTotals order={orderData} includeBorders={false} />}
+                            {/* disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'} */}
+                            <button
+                                onClick={handleFormSubmit}
+                                className={`btn-primary btn ${styles.checkout__button}`}
+                                type="submit">
+                                Kupuję i płacę
+                            </button>
+                        </Box>
                     </Box>
                     {isModalOpen && <CheckoutLogin onContinueClick={onContinueClick} />}
                 </Section>
@@ -130,6 +190,16 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => 
 {
     const orderData = await checkCurrentOrderServerSide('/cart', context, 'orderId');
+
+    if ('redirect' in orderData)
+    {
+        return {
+            redirect: {
+                ...orderData.redirect
+            },
+        }
+    }
+
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
     let userData = null;
     if ('id' in result && orderData)
@@ -152,14 +222,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         }
     }
 
-    // if ('redirect' in result)
-    // {
-    //     return {
-    //         redirect: {
-    //             ...result.redirect
-    //         },
-    //     }
-    // }
     if ('redirect' in result) return { props: { userData: userData, orderData: orderData } };
     if (result.notFound) return { notFound: true };
 

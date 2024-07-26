@@ -26,22 +26,11 @@ const addressSchema = z.object({
     country: z.string().min(1, 'Required field')
 });
 
-const shippingSchema = z.object({
-    nameShipping: z.string().min(3, 'Required field'),
-    lastNameShipping: z.string().min(3, 'Required field'),
-    emailShipping: z.string().email('Please, type valid email'),
-    companyNameShipping: z.string().min(1, 'Required field'),
-    addressShipping: z.string().min(4, 'Required field'),
-    postCodeShipping: z.string().min(5, 'The post code must contain 5 characters'),
-    cityShipping: z.string().min(1, 'Required field'),
-    countryShipping: z.string().min(1, 'Required field')
-});
-
 export const RegistrationFormSchema = (isCheckout: boolean, isShipping: boolean) =>
 {
     let schema = addressSchema.extend({
         password: !isCheckout ? passwordSchema : z.string().optional(),
-        confirmPassword: z.string(),
+        confirmPassword: !isCheckout ? z.string() : z.string().optional(),
         phoneNumber: z.string().min(9, 'Phone number must be at least 9 characters long')
             .max(15, 'Phone number cannot exceed 15 characters'),
         nip: z.string().min(10, 'The NIP must contain 10 characters')
@@ -49,12 +38,20 @@ export const RegistrationFormSchema = (isCheckout: boolean, isShipping: boolean)
         terms: z.boolean().refine(value => value === true, {
             message: "You must agree to the terms",
         }),
-        textarea: z.string().optional()
     });
 
     if (isShipping)
     {
-        schema = schema.merge(shippingSchema);
+        schema = schema.extend({
+            nameShipping: z.string().min(3, 'Required field'),
+            lastNameShipping: z.string().min(3, 'Required field'),
+            emailShipping: z.string().email('Please, type valid email'),
+            companyNameShipping: z.string().min(1, 'Required field'),
+            addressShipping: z.string().min(4, 'Required field'),
+            postCodeShipping: z.string().min(5, 'The post code must contain 5 characters'),
+            cityShipping: z.string().min(1, 'Required field'),
+            countryShipping: z.string().min(1, 'Required field')
+        });
     } else
     {
         schema = schema.extend({
@@ -69,8 +66,15 @@ export const RegistrationFormSchema = (isCheckout: boolean, isShipping: boolean)
         });
     }
 
-    return schema.refine((data) => data.password === data.confirmPassword, {
-        message: 'Password does not match.',
+    return schema.refine((data) =>
+    {
+        if (!isCheckout)
+        {
+            return data.password === data.confirmPassword;
+        }
+        return true;
+    }, {
+        message: 'Passwords do not match.',
         path: ['confirmPassword']
     });
 };

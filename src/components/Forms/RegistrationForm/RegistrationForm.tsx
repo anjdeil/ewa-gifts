@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
@@ -17,8 +17,17 @@ interface RegistrationFormProps
     isCheckout?: boolean,
 }
 
-export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false }) =>
+export interface FormHandle
 {
+    submit: () => void;
+}
+
+const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false }, ref) =>
+{
+    useImperativeHandle(ref, () => ({
+        submit: () => handleSubmit(onSubmit)()
+    }));
+
     const [isShipping, setShipping] = useState<boolean>(false);
     const formSchema = RegistrationFormSchema(isCheckout, isShipping);
     type RegistrationFormType = z.infer<typeof formSchema>;
@@ -29,7 +38,7 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
 
     function onShippingChange()
     {
-        setShipping(prev => prev ? false : true);
+        setShipping(prev => !prev);
     }
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
@@ -85,8 +94,6 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
         }
     };
 
-    let aaa;
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Box className={styles.form__wrapper}>
@@ -97,7 +104,6 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
                         register={register}
                         errors={errors}
                         setValue={setValue}
-                        initialValue={aaa && aaa}
                     />
                     <CustomInput
                         fieldName="Nazwisko"
@@ -105,7 +111,6 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
                         register={register}
                         errors={errors}
                         setValue={setValue}
-                        initialValue={aaa && aaa}
                     />
                     <CustomInput fieldName="Adres e-mail" name='email' register={register} errors={errors} />
                     <CustomInput
@@ -136,13 +141,12 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
                         name='nip'
                         register={register}
                         errors={errors}
-                        isRequire={true}
                         isNumeric={true}
                     />
-                    <CustomInput fieldName="Miasto" name='city' register={register} errors={errors} key={'city'} />
-                    <CustomInput fieldName="Kraj / region" name='country' register={register} errors={errors} key={'country'} />
-                    <CustomInput fieldName="Nazwa firmy" name='companyName' register={register} errors={errors} key={'companyName'} />
-                    <CustomInput fieldName="Ulica" name='address' register={register} errors={errors} key={'address'} />
+                    <CustomInput fieldName="Miasto" name='city' register={register} errors={errors} />
+                    <CustomInput fieldName="Kraj / region" name='country' register={register} errors={errors} />
+                    <CustomInput fieldName="Nazwa firmy" name='companyName' register={register} errors={errors} />
+                    <CustomInput fieldName="Ulica" name='address' register={register} errors={errors} />
                     <CustomInput
                         fieldName="Kod pocztowy"
                         name='postCode'
@@ -151,12 +155,11 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
                         isNumeric={true}
                     />
                     <CustomInput
-                        fieldName="Twoje dane osobowe będą wykorzystywane do wspierania korzystania z tej witryny, zarządzania dostępem do konta oraz do innych celów opisanych w naszej polityka prywatności "
+                        fieldName="Twoje dane osobowe będą wykorzystywane do wspierania korzystania z tej witryny, zarządzania dostępem до konta oraz do других celów opisanych в naszej polityka prywatności"
                         name='terms'
                         register={register}
                         errors={errors}
                         isCheckbox={true}
-                        isRequire={false}
                     />
                     <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</button>
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
@@ -168,10 +171,9 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
             </Box>
             {isCheckout && <Box className={styles.form__content}>
                 <CustomInput
-                    fieldName=" Wysłać na inny adres?"
+                    fieldName="Wysłać na inny adres?"
                     errors={errors}
                     isCheckbox={true}
-                    isRequire={false}
                     onChange={onShippingChange}
                 />
                 {isShipping &&
@@ -206,4 +208,8 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ isCheckout = false
             </Box>}
         </form>
     )
-}
+});
+
+RegistrationForm.displayName = 'RegistrationForm';
+
+export default RegistrationForm;
