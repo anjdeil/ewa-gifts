@@ -15,63 +15,45 @@ const passwordSchema = z.string()
         message: 'The password must contain at least one special character'
     });
 
-const addressSchema = z.object({
-    name: z.string().min(3, 'Required field'),
-    lastName: z.string().min(3, 'Required field'),
-    email: z.string().email('Please, type valid email'),
-    companyName: z.string().min(1, 'Required field'),
-    address: z.string().min(4, 'Required field'),
-    postCode: z.string().min(5, 'The post code must contain 5 characters'),
-    city: z.string().min(1, 'Required field'),
-    country: z.string().min(1, 'Required field')
+const nipSchema = z.string().min(10, 'Nip number must be 10 characters long')
+    .max(10, 'Nip number must be 10 characters long');
+
+const termsSchema = z.boolean().refine(value => value === true, {
+    message: "You must agree to the terms",
 });
 
-export const RegistrationFormSchema = (isCheckout: boolean, isShipping: boolean) =>
-{
-    let schema = addressSchema.extend({
-        password: !isCheckout ? passwordSchema : z.string().optional(),
-        confirmPassword: !isCheckout ? z.string() : z.string().optional(),
-        phoneNumber: z.string().min(9, 'Phone number must be at least 9 characters long')
-            .max(15, 'Phone number cannot exceed 15 characters'),
-        nip: z.string().min(10, 'The NIP must contain 10 characters')
-            .max(10, 'The NIP must contain 10 characters'),
-        terms: z.boolean().refine(value => value === true, {
-            message: "You must agree to the terms",
-        }),
-    });
+const phoneSchema = z.string().min(9, 'Phone number must be at least 9 characters long')
+    .max(15, 'Phone number cannot exceed 15 characters');
 
-    if (isShipping)
-    {
-        schema = schema.extend({
-            nameShipping: z.string().min(3, 'Required field'),
-            lastNameShipping: z.string().min(3, 'Required field'),
-            emailShipping: z.string().email('Please, type valid email'),
-            companyNameShipping: z.string().min(1, 'Required field'),
-            addressShipping: z.string().min(4, 'Required field'),
-            postCodeShipping: z.string().min(5, 'The post code must contain 5 characters'),
-            cityShipping: z.string().min(1, 'Required field'),
-            countryShipping: z.string().min(1, 'Required field')
-        });
-    } else
-    {
-        schema = schema.extend({
-            nameShipping: z.string().optional(),
-            lastNameShipping: z.string().optional(),
-            emailShipping: z.string().optional(),
-            companyNameShipping: z.string().optional(),
-            addressShipping: z.string().optional(),
-            postCodeShipping: z.string().optional(),
-            cityShipping: z.string().optional(),
-            countryShipping: z.string().optional(),
-        });
-    }
+export const RegistrationFormSchema = (isLoggedIn: boolean, isCheckout: boolean, isShipping: boolean) =>
+{
+    const schema = z.object({
+        name: z.string().min(3, 'Required field'),
+        lastName: z.string().min(3, 'Required field'),
+        email: z.string().email('Please, type valid email'),
+        companyName: z.string().min(1, 'Required field'),
+        address: z.string().min(4, 'Required field'),
+        postCode: z.string().min(5, 'The post code must contain 5 characters'),
+        city: z.string().min(1, 'Required field'),
+        country: z.string().min(1, 'Required field'),
+        password: !isLoggedIn ? passwordSchema : z.string().optional(),
+        confirmPassword: !isLoggedIn ? z.string() : z.string().optional(),
+        phoneNumber: phoneSchema,
+        nip: nipSchema,
+        terms: !isCheckout ? termsSchema : z.string().optional(),
+        nameShipping: isShipping ? z.string().min(3, 'Required field') : z.string().optional(),
+        lastNameShipping: isShipping ? z.string().min(3, 'Required field') : z.string().optional(),
+        companyNameShipping: isShipping ? z.string().min(1, 'Required field') : z.string().optional(),
+        addressShipping: isShipping ? z.string().min(4, 'Required field') : z.string().optional(),
+        postCodeShipping: isShipping ? z.string().min(5, 'The post code must contain 5 characters') : z.string().optional(),
+        cityShipping: isShipping ? z.string().min(1, 'Required field') : z.string().optional(),
+        countryShipping: isShipping ? z.string().min(1, 'Required field') : z.string().optional(),
+        phoneNumberShipping: isShipping ? phoneSchema : z.string().optional(),
+    });
 
     return schema.refine((data) =>
     {
-        if (!isCheckout)
-        {
-            return data.password === data.confirmPassword;
-        }
+        if (!isCheckout) return data.password === data.confirmPassword;
         return true;
     }, {
         message: 'Passwords do not match.',

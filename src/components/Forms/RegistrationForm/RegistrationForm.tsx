@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
@@ -8,13 +8,16 @@ import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
 import variables from '@/styles/variables.module.scss';
-import { RegistrationFormSchema, WpWooError } from "@/types";
+import { CartItem, RegistrationFormSchema, WpWooError } from "@/types";
 import { z } from "zod";
 import styles from './styles.module.scss';
+import { userFieldsType } from "@/types/Pages/checkout";
 
 interface RegistrationFormProps
 {
     isCheckout?: boolean,
+    userFields?: userFieldsType | null,
+    lineItems?: CartItem[] | [],
 }
 
 export interface FormHandle
@@ -22,29 +25,39 @@ export interface FormHandle
     submit: () => void;
 }
 
-const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false }, ref) =>
+const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields }, ref) =>
 {
     useImperativeHandle(ref, () => ({
         submit: () => handleSubmit(onSubmit)()
     }));
 
+    const [cookie, setCookie] = useCookies(['userToken']);
+    // const [isLoggedIn, setLoggedIn] = useState<boolean>("userToken" in cookie);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isShipping, setShipping] = useState<boolean>(false);
-    const formSchema = RegistrationFormSchema(isCheckout, isShipping);
+    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
     type RegistrationFormType = z.infer<typeof formSchema>;
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
         resolver: zodResolver(formSchema)
     });
 
-    function onShippingChange()
-    {
-        setShipping(prev => !prev);
-    }
+    function onShippingChange() { setShipping(prev => !prev); }
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
     const [fetchUserToken] = useFetchUserTokenMutation();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, setCookie] = useCookies(['userToken']);
+
+    useEffect(() =>
+    {
+        if ("userToken" in cookie)
+        {
+            setLoggedIn(true);
+        } else
+        {
+            setLoggedIn(false);
+        }
+    }, [cookie])
 
     const onSubmit = async (data: RegistrationFormType) =>
     {
@@ -52,24 +65,29 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
             email: data.email,
             first_name: data.name,
             last_name: data.lastName,
-            username: data.email,
+            username: data.name,
             password: data.password,
             billing: {
+                first_name: data.name,
+                last_name: data.lastName,
                 company: data.companyName,
                 address_1: data.address,
                 address_2: data.nip,
+                country: data.country,
+                email: data.email,
                 city: data.city,
                 postcode: data.postCode,
                 phone: data.phoneNumber,
             },
             shipping: {
-                first_name: '',
-                last_name: '',
-                company: '',
-                address_1: '',
-                city: '',
-                postcode: '',
-                country: 'Poland'
+                first_name: isShipping ? data.nameShipping : '',
+                last_name: isShipping ? data.lastNameShipping : '',
+                company: isShipping ? data.companyNameShipping : '',
+                address_1: isShipping ? data.addressShipping : '',
+                country: isShipping ? data.countryShipping : '',
+                city: isShipping ? data.cityShipping : '',
+                postcode: isShipping ? data.postCodeShipping : '',
+                phone: isShipping ? data.phoneNumberShipping : '',
             }
         }
 
@@ -97,65 +115,107 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Box className={styles.form__wrapper}>
-                <Box className={styles.form__column}>
+                <CustomInput
+                    fieldName="Imię"
+                    name='name'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.first_name}
+                />
+                <CustomInput
+                    fieldName="Nazwisko"
+                    name='lastName'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.last_name}
+                />
+                <CustomInput
+                    fieldName="Adres e-mail"
+                    name='email'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.email}
+                />
+                {!isLoggedIn && <CustomInput
+                    fieldName="Hasło"
+                    name='password'
+                    register={register}
+                    errors={errors}
+                    isPassword={true}
+                />}
+                {!isLoggedIn && <CustomInput
+                    fieldName="Powtórz hasło"
+                    name='confirmPassword'
+                    register={register}
+                    errors={errors}
+                    isPassword={true}
+                />}
+                <CustomInput
+                    fieldName="Numer telefonu"
+                    name='phoneNumber'
+                    register={register}
+                    errors={errors}
+                    isNumeric={true}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.phone}
+                />
+                <CustomInput
+                    fieldName="NIP (optional)"
+                    name='nip'
+                    register={register}
+                    errors={errors}
+                    isNumeric={true}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.address_2}
+                />
+                <CustomInput
+                    fieldName="Nazwa firmy"
+                    name='companyName'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.company}
+                />
+                <CustomInput
+                    fieldName="Kraj / region"
+                    name='country'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.country}
+                />
+                <CustomInput
+                    fieldName="Miasto"
+                    name='city'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.city}
+                />
+                <CustomInput
+                    fieldName="Ulica"
+                    name='address'
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.address_1}
+                />
+                <CustomInput
+                    fieldName="Kod pocztowy"
+                    name='postCode'
+                    register={register}
+                    errors={errors}
+                    isNumeric={true}
+                    isPost={true}
+                    setValue={setValue}
+                    initialValue={userFields && userFields.billing.postcode}
+                />
+                {!isCheckout && <Box className={styles.form__bottom}>
                     <CustomInput
-                        fieldName="Imię"
-                        name='name'
-                        register={register}
-                        errors={errors}
-                        setValue={setValue}
-                    />
-                    <CustomInput
-                        fieldName="Nazwisko"
-                        name='lastName'
-                        register={register}
-                        errors={errors}
-                        setValue={setValue}
-                    />
-                    <CustomInput fieldName="Adres e-mail" name='email' register={register} errors={errors} />
-                    <CustomInput
-                        fieldName="Hasło"
-                        name='password'
-                        register={register}
-                        errors={errors}
-                        isPassword={true}
-                    />
-                    <CustomInput
-                        fieldName="Powtórz hasło"
-                        name='confirmPassword'
-                        register={register}
-                        errors={errors}
-                        isPassword={true}
-                    />
-                    <CustomInput
-                        fieldName="Numer telefonu"
-                        name='phoneNumber'
-                        register={register}
-                        errors={errors}
-                        isNumeric={true}
-                    />
-                </Box>
-                <Box className={styles.form__column}>
-                    <CustomInput
-                        fieldName="NIP (optional)"
-                        name='nip'
-                        register={register}
-                        errors={errors}
-                        isNumeric={true}
-                    />
-                    <CustomInput fieldName="Miasto" name='city' register={register} errors={errors} />
-                    <CustomInput fieldName="Kraj / region" name='country' register={register} errors={errors} />
-                    <CustomInput fieldName="Nazwa firmy" name='companyName' register={register} errors={errors} />
-                    <CustomInput fieldName="Ulica" name='address' register={register} errors={errors} />
-                    <CustomInput
-                        fieldName="Kod pocztowy"
-                        name='postCode'
-                        register={register}
-                        errors={errors}
-                        isNumeric={true}
-                    />
-                    <CustomInput
-                        fieldName="Twoje dane osobowe będą wykorzystywane do wspierania korzystania z tej witryny, zarządzania dostępem до konta oraz do других celów opisanych в naszej polityka prywatności"
+                        fieldName="Wyrażam zgodę na przetwarzanie danych osobowych."
                         name='terms'
                         register={register}
                         errors={errors}
@@ -165,9 +225,9 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
                         The account was created successfully
                     </p>}
-                    {isError && <p style={{ color: variables.error }}
-                        dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
-                </Box>
+                </Box>}
+                {isError && <p style={{ color: variables.error }}
+                    dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
             </Box>
             {isCheckout && <Box className={styles.form__content}>
                 <CustomInput
@@ -178,24 +238,27 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
                 />
                 {isShipping &&
                     <Box className={styles.form__wrapper}>
-                        <Box className={styles.form__column}>
-                            <CustomInput fieldName="Imię" name='nameShipping' register={register} errors={errors} />
-                            <CustomInput fieldName="Nazwisko" name='lastNameShipping' register={register} errors={errors} />
-                            <CustomInput fieldName="Adres e-mail" name='emailShipping' register={register} errors={errors} />
-                            <CustomInput fieldName="Nazwa firmy" name='companyNameShipping' register={register} errors={errors} />
-                        </Box>
-                        <Box className={styles.form__column}>
-                            <CustomInput fieldName="Miasto" name='cityShipping' register={register} errors={errors} />
-                            <CustomInput fieldName="Kraj / region" name='countryShipping' register={register} errors={errors} />
-                            <CustomInput fieldName="Ulica" name='addressShipping' register={register} errors={errors} />
-                            <CustomInput
-                                fieldName="Kod pocztowy"
-                                name='postCodeShipping'
-                                register={register}
-                                errors={errors}
-                                isNumeric={true}
-                            />
-                        </Box>
+                        <CustomInput fieldName="Imię" name='nameShipping' register={register} errors={errors} />
+                        <CustomInput fieldName="Nazwisko" name='lastNameShipping' register={register} errors={errors} />
+                        <CustomInput fieldName="Nazwa firmy" name='companyNameShipping' register={register} errors={errors} />
+                        <CustomInput
+                            fieldName="Numer telefonu"
+                            name='phoneNumberShipping'
+                            register={register}
+                            errors={errors}
+                            isNumeric={true}
+                        />
+                        <CustomInput fieldName="Kraj / region" name='countryShipping' register={register} errors={errors} />
+                        <CustomInput fieldName="Miasto" name='cityShipping' register={register} errors={errors} />
+                        <CustomInput fieldName="Ulica" name='addressShipping' register={register} errors={errors} />
+                        <CustomInput
+                            fieldName="Kod pocztowy"
+                            name='postCodeShipping'
+                            register={register}
+                            errors={errors}
+                            isNumeric={true}
+                            isPost={true}
+                        />
                     </Box>}
                 <CustomInput
                     fieldName="Uwagi do zamówienia (opcjonalne)"

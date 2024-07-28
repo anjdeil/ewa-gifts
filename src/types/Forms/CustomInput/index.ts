@@ -10,6 +10,7 @@ export const CustomInputPropsSchema = z.object({
     isPassword: z.boolean().optional(),
     isCheckbox: z.boolean().optional(),
     isNumeric: z.boolean().optional(),
+    isPost: z.boolean().optional(),
     placeholder: z.string().optional(),
     onChange: z.function().args(z.unknown() as z.ZodType<React.ChangeEvent<HTMLInputElement>>).returns(z.void()).optional(),
     value: z.string().optional(),
@@ -23,7 +24,7 @@ export const CustomInputPropsSchema = z.object({
             shouldTouch: z.boolean().optional(),
         }).optional()
     ).returns(z.void()).optional(),
-    initialValue: z.string().optional()
+    initialValue: z.string().nullable().optional()
 });
 
 export type CustomInputProps = z.infer<typeof CustomInputPropsSchema>;

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import styles from './styles.module.scss';
 import { CustomInputProps } from '@/types/Forms';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ export const CustomInput: FC<CustomInputProps> = ({
     isPassword = false,
     isCheckbox = false,
     isNumeric = false,
+    isPost = false,
     placeholder,
     onChange,
     value,
@@ -40,7 +41,7 @@ export const CustomInput: FC<CustomInputProps> = ({
 
     useEffect(() =>
     {
-        if (setValue && name && initialValue !== undefined)
+        if (setValue && name && initialValue !== null && initialValue !== '')
         {
             setValue(name, initialValue, { shouldValidate: true });
         }
@@ -48,6 +49,12 @@ export const CustomInput: FC<CustomInputProps> = ({
 
     const registerProps = register ? register(name) : {};
     const isError = errors && name ? name in errors : false;
+
+    function numericValidate(e: FormEvent<HTMLInputElement>)
+    {
+        const regex = isPost ? /[^0-9-]/g : /[^0-9]/g;
+        e.currentTarget.value = e.currentTarget.value.replace(regex, '');
+    }
 
     return (
         <div>
@@ -66,12 +73,9 @@ export const CustomInput: FC<CustomInputProps> = ({
                          ${isError && styles.customInput__input_error}
                          ${isTextarea && styles.customInput__input_textarea}
                          `}
-                        inputMode={isNumeric ? "numeric" : undefined}
-                        pattern={isNumeric ? "[0-9]*" : undefined}
-                        onInput={isNumeric ? (e) =>
-                        {
-                            e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                        } : undefined}
+                        inputMode={isNumeric && "numeric"}
+                        pattern={isNumeric && (isPost ? "[0-9-]*" : "[0-9]*")}
+                        onInput={isNumeric ? numericValidate : undefined}
                         onChange={onChange && onChange}
                         value={value}
                     />

@@ -10,7 +10,6 @@ import { Box, Typography } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { FC, useEffect, useState } from "react";
-import { z } from "zod";
 import { CheckoutLogin } from "./CheckoutLogin";
 import { useCookies } from "react-cookie";
 import { useLazyFetchUserDataQuery } from "@/store/wordpress";
@@ -21,47 +20,9 @@ import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useRef } from 'react';
+import { userFieldsType } from "@/types/Pages/checkout";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
-
-const userDetailsSchema = z.object({
-    first_name: z.string(),
-    last_name: z.string(),
-    company: z.string(),
-    address_1: z.string(),
-    address_2: z.string(),
-    city: z.string(),
-    postcode: z.string(),
-    country: z.string(),
-    state: z.string(),
-    email: z.string().optional(),
-    phone: z.string(),
-})
-
-const userDataSchema = z.object({
-    id: z.number(),
-    date_created: z.string(),
-    date_created_gmt: z.string(),
-    date_modified: z.string(),
-    date_modified_gmt: z.string(),
-    email: z.string(),
-    first_name: z.string(),
-    last_name: z.string(),
-    role: z.string(),
-    username: z.string(),
-    billing: userDetailsSchema,
-    shipping: userDetailsSchema,
-    is_paying_customer: z.boolean(),
-    avatar_url: z.string(),
-})
-
-const CheckoutPropsSchema = z.object({
-    userData: userDataSchema.nullable(),
-    orderData: OrderTypeSchema.nullable(),
-})
-
-type userFieldsType = z.infer<typeof userDataSchema>;
-type CheckoutProps = z.infer<typeof CheckoutPropsSchema>;
 
 const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 {
@@ -70,7 +31,6 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [userFields, setUserFields] = useState<userFieldsType | null>(null);
-    const formRef = useRef<HTMLFormElement>(null);
     const [cookie] = useCookies(['userToken']);
     const { items } = useAppSelector(state => state.Cart);
     const [fetchCheckUser, { data: jwtUser, error: jwtError }] = useLazyFetchUserDataQuery();
@@ -96,16 +56,17 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
         if ("userToken" in cookie)
         {
             fetchCheckUser(cookie.userToken);
+            setLoggedIn(true);
+        } else
+        {
+            setLoggedIn(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie])
 
     useEffect(() =>
     {
-        if (jwtUser && "id" in jwtUser)
-        {
-            fetchCustomerData(jwtUser.id);
-        }
+        if (jwtUser && "id" in jwtUser) { fetchCustomerData(jwtUser.id); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [jwtUser])
 
@@ -139,17 +100,20 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 
     function onSubmitClick()
     {
-        if (userFields && items)
+        // userFields && items &&
+        if (childRef.current)
         {
+
             setCreating(true);
-            createOrder(items, userFields.id, 'processing');
+            childRef.current.submit();
+            // createOrder(items, userFields.id, 'processing');
         }
     }
 
-    const handleFormSubmit = () =>
+    useEffect(() =>
     {
-        if (childRef.current) childRef.current.submit();
-    };
+        if (userFields) console.log(userFields);
+    }, [userFields])
 
     return (
         <>
@@ -162,7 +126,12 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
                     <Box className={styles.checkout__content}>
                         <Box>
-                            <RegistrationForm isCheckout={true} ref={childRef} />
+                            <RegistrationForm
+                                isCheckout={true}
+                                ref={childRef}
+                                userFields={userFields}
+                                lineItems={items}
+                            />
                         </Box>
                         <Box>
                             <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>
@@ -172,7 +141,7 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
                             {orderData && <OrderTotals order={orderData} includeBorders={false} />}
                             {/* disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'} */}
                             <button
-                                onClick={handleFormSubmit}
+                                onClick={onSubmitClick}
                                 className={`btn-primary btn ${styles.checkout__button}`}
                                 type="submit">
                                 Kupuję i płacę
