@@ -16,21 +16,18 @@ import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
 
-interface RegistrationFormProps
-{
+interface RegistrationFormProps {
     isCheckout?: boolean,
     userFields?: userFieldsType | null,
     lineItems?: CartItem[] | [],
     shippingLines?: ShippingLine[]
 }
 
-export interface FormHandle
-{
+export interface FormHandle {
     submit: () => void;
 }
 
-const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems, shippingLines }, ref) =>
-{
+export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems, shippingLines }, ref) => {
     useImperativeHandle(ref, () => ({
         submit: () => handleSubmit(onSubmit)()
     }));
@@ -53,31 +50,24 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-    useEffect(() =>
-    {
-        if (createError)
-        {
+    useEffect(() => {
+        if (createError) {
             alert("Server Error, please try again")
-        } else if (createdOrder)
-        {
+        } else if (createdOrder) {
             router.push(`/my-account/orders/${createdOrder.id}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])
 
-    useEffect(() =>
-    {
-        if ("userToken" in cookie)
-        {
+    useEffect(() => {
+        if ("userToken" in cookie) {
             setLoggedIn(true);
-        } else
-        {
+        } else {
             setLoggedIn(false);
         }
     }, [cookie])
 
-    const onSubmit = async (data: RegistrationFormType) =>
-    {
+    const onSubmit = async (data: RegistrationFormType) => {
         const body: registrationUserDataType = {
             id: userFields && userFields.id || '',
             email: data.email,
@@ -110,16 +100,12 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
             }
         }
 
-        try
-        {
-            if (body && isCheckout && lineItems)
-            {
-                if (isLoggedIn)
-                {
+        try {
+            if (body && isCheckout && lineItems) {
+                if (isLoggedIn) {
                     createOrder(lineItems, 'processing', shippingLines, body);
                     return;
-                } else
-                {
+                } else {
                     const response = await fetchUserRegistration(body);
                     if (!response) return;
                     createOrder(lineItems, 'processing', shippingLines, body);
@@ -129,11 +115,9 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
                         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8)
                     });
                 }
-            } else
-            {
+            } else {
                 const response = await fetchUserRegistration(body);
-                if (response && 'data' in response)
-                {
+                if (response && 'data' in response) {
                     const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
                     setCookie('userToken', userToken.token, {
                         path: '/',
@@ -141,11 +125,9 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
                     });
                 }
             }
-        } catch (error)
-        {
+        } catch (error) {
             return { error: (error as Error).message };
-        } finally
-        {
+        } finally {
             reset();
         }
     };
@@ -312,5 +294,3 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
 });
 
 RegistrationForm.displayName = 'RegistrationForm';
-
-export default RegistrationForm;
