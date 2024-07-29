@@ -57,7 +57,7 @@ export const BlogPost = ({ post }) => {
                 </time>
             </header>
             <div className={styles.article__img}>
-                <Image src={image_src} alt={title.rendered} sx={{ position: 'static' }} width={1135} height={518} priority />
+                <Image src={image_src} alt={title.rendered} sx={{ position: 'static' }} width={1135} height={518} priority unoptimized={true} />
             </div>
             <div className={styles.article__text_wrapper}>
                 <CustomBox dangerouslySetInnerHTML={{ __html: content.rendered }} className={styles.article__text} />

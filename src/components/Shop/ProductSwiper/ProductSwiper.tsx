@@ -54,8 +54,7 @@ const CustomSwiperNav = styled(Swiper)`
 	}
 `;
 
-const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
-{
+const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [activeSlide, setActiveSlide] = useState(0);
     const dispatch = useAppDispatch();
@@ -64,20 +63,17 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
 
-    const updateSwiperState = (images, slideNumber) =>
-    {
+    const updateSwiperState = (images, slideNumber) => {
         dispatch(setData(images));
         dispatch(setCurrentSlide(slideNumber));
     };
 
-    const handlerOpen = () =>
-    {
+    const handlerOpen = () => {
         updateSwiperState(data, activeSlide);
         dispatch(popupSet('swiper-popup'));
     };
 
-    const handleSlideChange = (swiper) =>
-    {
+    const handleSlideChange = (swiper) => {
         setActiveSlide(swiper.activeIndex);
     };
 
@@ -104,7 +100,7 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
                     data.map((item, index) => (
                         <SwiperSlide key={item.id} className={styles.slide}>
                             <button type='button' className={styles.slide__btn} onClick={handlerOpen}>
-                                <Image src={item.src} alt={`Product image ${index + 1}`} width={600} height={600}
+                                <Image unoptimized={true} src={item.src} alt={`Product image ${index + 1}`} width={600} height={600}
                                     className={styles.slide__img} />
                             </button>
                         </SwiperSlide>
@@ -142,10 +138,8 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
                         spaceBetween: 0,
                     },
                 }}
-                onSwiper={(swiper) =>
-                {
-                    if (!swiper.destroyed)
-                    {
+                onSwiper={(swiper) => {
+                    if (!swiper.destroyed) {
                         setThumbsSwiper(swiper);
                     }
                 }}
@@ -160,7 +154,7 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) =>
                     data.map((item, index) => (
                         <SwiperSlide key={item.id} className={styles.navSlide}>
                             <Box className='img-wrapper'>
-                                <Image src={item.src} alt={`Thumbnail image ${index + 1}`} width={116} height={116}
+                                <Image unoptimized={true} src={item.src} alt={`Thumbnail image ${index + 1}`} width={116} height={116}
                                     className={styles.navSlide__img} />
                             </Box>
                         </SwiperSlide>

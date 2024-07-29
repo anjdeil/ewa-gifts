@@ -40,6 +40,7 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartIte
                     objectFit="contain"
                     objectPosition="center"
                     src={cartItem?.image?.src}
+                    unoptimized={true}
                 />
             </div>
             <div className={styles["mini-cart__item-info"]}>

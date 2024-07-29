@@ -15,7 +15,7 @@ const MobileHeader: React.FC = () => {
             <AppBar position="static" className={styles.header}>
                 <Toolbar sx={{ gap: '30px', justifyContent: 'space-between', minHeight: '100%!important' }}>
                     <Link href={'/'} passHref>
-                        <Image src="/logo.svg" alt="Logo" width={70} height={20} />
+                        <Image src="/logo.svg" alt="Logo" width={70} height={20} unoptimized={true} />
                     </Link>
                     <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
                         <MobileSearchButton />

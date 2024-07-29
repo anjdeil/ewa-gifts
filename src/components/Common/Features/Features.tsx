@@ -11,8 +11,7 @@ import { useMediaQuery } from "@mui/material";
 
 const Item: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
 
-export const Features: React.FC<FeaturesProps> = ({ features }) =>
-{
+export const Features: React.FC<FeaturesProps> = ({ features }) => {
     const isMobile = useMediaQuery('(max-width: 1024px)');
     return (
         <Swiper
@@ -40,6 +39,7 @@ export const Features: React.FC<FeaturesProps> = ({ features }) =>
                             alt={feature.text}
                             width={isMobile ? 24 : 48}
                             height={isMobile ? 24 : 48}
+                            unoptimized={true}
                         />
                         {feature.text}
                     </Item>
