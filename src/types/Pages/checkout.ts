@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { OrderTypeSchema } from "../Services/woocommerce/OrderType";
 
 const userDetailsSchema = z.object({
     first_name: z.string(),
@@ -34,7 +33,6 @@ const userDataSchema = z.object({
 
 const CheckoutPropsSchema = z.object({
     userData: userDataSchema.nullable(),
-    orderData: OrderTypeSchema.nullable(),
 })
 
 const registrationUserDetailsSchema = userDetailsSchema.extend({

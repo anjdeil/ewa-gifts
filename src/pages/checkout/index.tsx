@@ -3,8 +3,6 @@ import RegistrationForm, { FormHandle } from "@/components/Forms/RegistrationFor
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { Section } from "@/components/Layouts/Section";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
-import { OrderTypeSchema } from "@/types/Services/woocommerce/OrderType";
-import { checkCurrentOrderServerSide } from "@/Utils/checkCurrentOrderServerSide";
 import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
 import { Box, Typography } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -17,18 +15,19 @@ import { useLazyFetchCustomerDataQuery } from "@/store/wooCommerce/wooCommerceAp
 import MiniCart from "@/components/Cart/MiniCart";
 import styles from './styles.module.scss';
 import OrderTotals from "@/components/MyAccount/OrderTotals";
-import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useRef } from 'react';
-import { userFieldsType } from "@/types/Pages/checkout";
+import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
+import { useRouter } from "next/router";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
-const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
+const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
+    const router = useRouter();
     const childRef = useRef<FormHandle>(null);
-    const [isCreating, setCreating] = useState<boolean>(false);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
+    // const [isCreating, setCreating] = useState<boolean>(false);
+    // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(userData ? false : true);
     const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
     const [cookie] = useCookies(['userToken']);
@@ -39,13 +38,19 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 
     useEffect(() =>
     {
+        if (items.length < 0) router.push('/cart');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [items])
+
+    useEffect(() =>
+    {
         if ("userToken" in cookie)
         {
             fetchCheckUser(cookie.userToken);
-            setLoggedIn(false);
+            setModalOpen(false);
         } else
         {
-            setLoggedIn(true);
+            setModalOpen(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie])
@@ -58,16 +63,23 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 
     useEffect(() =>
     {
+        if (jwtError) alert('Server Error');
+    }, [jwtError])
+
+    useEffect(() =>
+    {
         if (customerData)
         {
             setUserFields(customerData);
         }
     }, [customerData])
 
-    function onContinueClick()
+    useEffect(() =>
     {
-        setModalOpen(false);
-    }
+        if (customerError) alert('Server Error');
+    }, [customerError])
+
+    function onContinueClick() { setModalOpen(false); }
 
     useEffect(() =>
     {
@@ -86,20 +98,11 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 
     function onSubmitClick()
     {
-        // userFields && items &&
         if (childRef.current)
         {
-
-            setCreating(true);
             childRef.current.submit();
-            // createOrder(items, userFields.id, 'processing');
         }
     }
-
-    useEffect(() =>
-    {
-        if (userFields) console.log(userFields);
-    }, [userFields])
 
     return (
         <>
@@ -123,8 +126,8 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
                             <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>
                                 Twoje zamówienie
                             </Typography>
-                            <MiniCart lineItems={orderData?.line_items} showSubtotals={true} />
-                            {orderData && <OrderTotals order={orderData} includeBorders={false} />}
+                            {/* <MiniCart lineItems={items && items} showSubtotals={true} /> */}
+                            {/* {items && <OrderTotals order={orderData} includeBorders={false} />} */}
                             {/* disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'} */}
                             <button
                                 onClick={onSubmitClick}
