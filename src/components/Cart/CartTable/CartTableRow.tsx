@@ -40,6 +40,7 @@ export const CartTableRow: FC<CartTableRowType> = ({
             const hasItemQuantity = getLineItemQuantity(product.product_id, lineItems);
             if (hasItemQuantity) setCount(hasItemQuantity);
         }
+        return () => { if (timerRef.current) clearTimeout(timerRef.current); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

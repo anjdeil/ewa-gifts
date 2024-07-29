@@ -9,7 +9,7 @@ import { GetServerSidePropsContext } from 'next';
 const Home: FC<HomeProps> = ({ response }) => {
   let sections;
   // const pageTitle = response[0].title.rendered;
-  const pageTitle = 'Home';
+  const pageTitle = 'Główna';
 
   if ('sections' in response[0]) {
     sections = response[0].sections;
@@ -23,7 +23,6 @@ const Home: FC<HomeProps> = ({ response }) => {
       </Head>
       <main>
         <PageBuilder sections={sections} />
-
       </main >
     </>
   );

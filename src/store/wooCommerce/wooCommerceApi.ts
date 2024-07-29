@@ -30,20 +30,15 @@ export const wooCommerceApi = createApi({
                 }
             })
         }),
+        fetchCustomerData: build.query({
+            query: (id) => ({
+                url: `/customers/${id}`
+            })
+        }),
         fetchCreateOrder: build.mutation({
             query: (credentials) => ({
                 url: `/orders`,
                 method: 'POST',
-                body: credentials,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-        }),
-        fetchUpdateOrder: build.mutation({
-            query: ({ credentials, id }) => ({
-                url: `/orders/${id}`,
-                method: 'PUT',
                 body: credentials,
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,5 +65,5 @@ export const {
     useFetchOrderQuery,
     useFetchUserRegistrationMutation,
     useFetchCreateOrderMutation,
-    useFetchUpdateOrderMutation,
+    useLazyFetchCustomerDataQuery
 } = wooCommerceApi;

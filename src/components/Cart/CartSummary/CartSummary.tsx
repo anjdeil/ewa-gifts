@@ -10,7 +10,7 @@ export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
     return (
         <Box className={styles.CartSummary}>
             <h2 className={`${styles.CartSummary__title}`}>Podsumowanie koszyka</h2>
-            {<OrderTotals order={order} includeBorders={false} />}
+            <OrderTotals order={order} includeBorders={false} isLoading={isLoading} />
             <Box className={`${styles.CartSummary__btnWrapper}`}>
                 <Link className={`link btn btn-primary ${styles.CartSummary__btn}`} href={""}>
                     Przejdz Do Platnosci
