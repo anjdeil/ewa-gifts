@@ -89,7 +89,7 @@ const SwiperPopup: React.FC<SwiperPopupProps> = ({ onClose }) => {
                         {data &&
                             data.map((item: { id: React.Key | null | undefined; src: string | StaticImport; }, index: number) => (
                                 <SwiperSlide key={item.id} className={styles.slide}>
-                                    <Image src={item.src} alt={`Product image ${index + 1}`} width={600} height={590}
+                                    <Image unoptimized={true} src={item.src} alt={`Product image ${index + 1}`} width={600} height={590}
                                         className={styles.slide__img} />
                                 </SwiperSlide>
                             ))}

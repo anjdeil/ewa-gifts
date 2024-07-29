@@ -15,22 +15,18 @@ export const CustomInput: FC<CustomInputProps> = ({
     placeholder,
     onChange,
     value
-}) =>
-{
+}) => {
     let type;
     let inputClass = styles.customInput__input;
     const [showPassword, setShowPassword] = useState(false);
 
-    const toggleShowPassword = () =>
-    {
+    const toggleShowPassword = () => {
         setShowPassword(prevState => !prevState);
     };
 
-    if (isPassword)
-    {
+    if (isPassword) {
         type = showPassword ? 'text' : 'password';
-    } else if (isCheckbox)
-    {
+    } else if (isCheckbox) {
         type = 'checkbox';
         inputClass = styles.customInput__checkbox;
     }
@@ -54,8 +50,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                         className={`${inputClass} ${isError && styles.customInput__input_error}`}
                         inputMode={isNumeric ? "numeric" : undefined}
                         pattern={isNumeric ? "[0-9]*" : undefined}
-                        onInput={isNumeric ? (e) =>
-                        {
+                        onInput={isNumeric ? (e) => {
                             e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
                         } : undefined}
                         onChange={onChange && onChange}
@@ -70,6 +65,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                             width={24}
                             height={24}
                             onClick={toggleShowPassword}
+                            unoptimized={true}
                         />
                     }
                 </div>
