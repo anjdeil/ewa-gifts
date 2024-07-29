@@ -4,7 +4,7 @@ const getSubtotalByLineItems = (lineItems: lineOrderItems[]): number => {
     let subtotal = 0;
 
     lineItems.forEach(item => {
-        const itemSubtotal = +item.subtotal * item.quantity;
+        const itemSubtotal = +item.subtotal;
         if (!Number.isNaN(itemSubtotal)) subtotal += itemSubtotal;
     });
 

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from "react";
-import getCirculatedPrices from "@/Utils/getCirculatedPrices";
+import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
 import { typeProductType, variationsProductType } from "@/types";
@@ -8,6 +8,7 @@ import { CartItem } from "@/types/Cart";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import ProductButtons from "../ProductButtons";
 import { updateCart } from "@/store/reducers/CartSlice";
+import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 
 interface ProductCalculations {
     product: typeProductType,
@@ -20,6 +21,12 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
     const dispatch = useAppDispatch();
     const { items: cartItems } = useAppSelector(state => state.Cart);
+    const supplier = product?.attributes?.find(({ name }) => name === 'supplier')?.options[0].slug;
+
+    const [total, setTotal] = useState<number | undefined>()
+    const [productStock, setProductStock] = useState<number>(0);
+    const [circulatedPrices, setCirculatedPrices] = useState<CirculatedPriceType[] | undefined>();
+    const [circulatedPrice, setCirculatedPrice] = useState<number | undefined>()
 
     /* Set product object for circulations */
     useEffect(() => {
@@ -28,12 +35,32 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         } else {
             setTargetProductObject(product);
         }
-
     }, [variation]);
+
+    useEffect(() => {
+        /* Set product circulations */
+        const productPrice = targetProductObject?.price as number || 0;
+        const productCirculations = targetProductObject?.price_circulations;
+
+        if (productCirculations) {
+            setCirculatedPrices(
+                getCirculatedPrices(productPrice, productCirculations)
+            );
+        }
+
+        /* Set product stock */
+        setProductStock(targetProductObject?.stock_quantity as number || 0);
+    }, [targetProductObject]);
+
+    useEffect(() => {
+        if (circulatedPrices) {
+            setCirculatedPrice(getCirculatedPrice(currentQuantity, circulatedPrices) || 0);
+        }
+    }, [currentQuantity, circulatedPrices]);
 
     /* Find and set matched cartItem */
     useEffect(() => {
-        setCartMatch(cartItems.find(cartItem => {
+        const cartMatch = cartItems.find(cartItem => {
             if (cartItem.product_id === product.id) {
                 if (variation) {
                     if (variation.id === cartItem.variation_id) return true;
@@ -41,23 +68,24 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
                     return true;
                 }
             }
-        }));
-    }, [variation, cartItems])
+        });
 
-    useEffect(() => {
         if (cartMatch) {
             setCurrentQuantity(cartMatch.quantity);
         } else {
             setCurrentQuantity(1);
         }
-    }, [cartMatch]);
 
-    const productPrice = targetProductObject?.price as number || 0;
-    const productStock = targetProductObject?.stock_quantity as number || 0;
-    const productCirculations = targetProductObject?.price_circulations;
+        setCartMatch(cartMatch);
+    }, [variation, cartItems]);
 
-    if (!productCirculations) return;
-    const circulatedPrices = getCirculatedPrices(productPrice, productCirculations);
+    useEffect(() => {
+        if (circulatedPrice) {
+            setTotal(circulatedPrice * currentQuantity);
+        }
+    }, [circulatedPrice, currentQuantity]);
+
+    if (!circulatedPrices) return;
 
     const onChangeQuantity = (inputValue: number) => {
         if (inputValue < 1) setCurrentQuantity(1);
@@ -69,7 +97,9 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         dispatch(updateCart({
             id: product.id,
             ...(variation && { variationId: variation.id }),
-            quantity: currentQuantity
+            ...(supplier && { supplier }),
+            ...(total && { total: String(total) }),
+            quantity: currentQuantity,
         }));
     }
 
@@ -87,11 +117,16 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
                 currentQuantity={currentQuantity}
                 circulatedPrices={circulatedPrices}
             />
-            <ProductTotals
-                currentQuantity={currentQuantity}
-                circulatedPrices={circulatedPrices}
-            />
-            <ProductButtons hasAdded={Boolean(cartMatch)} quantitiesMatch={isQuantitiesMatch()} onAdd={handleAddToCart} />
+            {(Boolean(productStock) && circulatedPrice !== undefined && total !== undefined) &&
+                <>
+                    <ProductTotals
+                        currentQuantity={currentQuantity}
+                        circulatedPrice={circulatedPrice}
+                        total={total}
+                    />
+                    <ProductButtons hasAdded={Boolean(cartMatch)} quantitiesMatch={isQuantitiesMatch()} onAdd={handleAddToCart} />
+                </>
+            }
         </>
     )
 }

@@ -8,10 +8,11 @@ import Notification from "@/components/Layouts/Notification";
 interface MiniCartPropsType {
     lineItems: lineOrderItems[] | undefined,
     showSubtotals?: boolean,
-    isLoading?: boolean
+    isLoading?: boolean,
+    isEmpty?: boolean
 }
 
-const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isLoading = false }) => {
+const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isLoading = false, isEmpty = false }) => {
 
     if (isLoading) {
         return <MiniCartSkeleton showSubtotals={showSubtotals} />
@@ -19,7 +20,7 @@ const MiniCart: FC<MiniCartPropsType> = ({ lineItems, showSubtotals = false, isL
 
     return (
         <ul className={styles["mini-cart"]}>
-            {lineItems?.length ?
+            {(lineItems?.length && !isEmpty) ?
                 lineItems.map((cartItem) => (
                     <MiniCartItem showSubtotal={showSubtotals} key={cartItem.product_id} cartItem={cartItem} />
                 )) :

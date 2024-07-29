@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import SearchBar from '@/components/Layouts/SearchBar';
@@ -9,9 +9,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import { CategoriesMenu } from '../CategoriesMenu';
 import Badge from '@mui/material/Badge';
-import { refreshItemsCount, toggleMiniCart } from '@/store/reducers/CartSlice';
+import { refreshItemsCount } from '@/store/reducers/CartSlice';
 import Link from 'next/link'
 import MiniCartPopup from '@/components/Popups/MiniCartPopup';
+import { popupClosed, popupSet } from '@/store/reducers/PopupSlice';
 
 const CustomBadge = styled(Badge)`
     .css-1abqjyq-MuiBadge-badge {
@@ -25,7 +26,13 @@ const Header: React.FC = () => {
     const dispatch = useAppDispatch();
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { isOpen } = useAppSelector(state => state.MenuCategoriesSlice);
-    const { miniCartOpen, itemsCount } = useAppSelector(state => state.Cart);
+    const { items: cartItems } = useAppSelector(state => state.Cart);
+    const popup = useAppSelector(state => state.Popup);
+    const [cartItemsCount, setCartItemsCount] = useState(0);
+
+    useEffect(() => {
+        setCartItemsCount(cartItems.length);
+    }, [cartItems]);
 
     useEffect(() => {
         dispatch(refreshItemsCount());
@@ -37,6 +44,14 @@ const Header: React.FC = () => {
         } else {
             dispatch(setMenuOpen(false))
             dispatch(setCategory(null));
+        }
+    }
+
+    const toggleMiniCart = () => {
+        if (popup === 'mini-cart') {
+            dispatch(popupClosed());
+        } else {
+            dispatch(popupSet('mini-cart'));
         }
     }
 
@@ -88,8 +103,8 @@ const Header: React.FC = () => {
                             />
                         </IconButton>
 
-                        <IconButton onClick={() => dispatch(toggleMiniCart())}>
-                            <CustomBadge badgeContent={itemsCount} color="secondary">
+                        <IconButton onClick={() => toggleMiniCart()}>
+                            <CustomBadge badgeContent={cartItemsCount} color="secondary">
                                 <Image
                                     src={'/images/shop.svg'}
                                     alt={'Shop button-icon'}
@@ -98,7 +113,7 @@ const Header: React.FC = () => {
                                 />
                             </CustomBadge>
                         </IconButton>
-                        {miniCartOpen && (<MiniCartPopup />)}
+                        {popup === 'mini-cart' && (<MiniCartPopup />)}
                     </Box>
                 </Toolbar>
             </AppBar>
