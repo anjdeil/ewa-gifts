@@ -11,13 +11,15 @@ import { CartTable } from "@/components/Cart/CartTable";
 import Notification from "@/components/Layouts/Notification";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import Link from "next/link";
-import { CartItem } from "@/types";
+import { lineOrderItems } from "@/types";
+import { OrderType } from "@/types/Services/woocommerce/OrderType";
 
 const Cart = () =>
 {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
-    const [lineItems, setLineItems] = useState<CartItem[]>()
+    const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
+    const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
@@ -26,10 +28,10 @@ const Cart = () =>
     {
         if (items.length === 0)
         {
+            setCurrentOrder(null);
             setIsUpdating(false);
             return;
         }
-        setLineItems(items);
         createOrder(items, 'pending', shippingLines);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items])
@@ -38,6 +40,8 @@ const Cart = () =>
     {
         if (createdOrder && createdOrder.line_items)
         {
+            setCurrentOrder(createdOrder);
+            setLineItems(createdOrder.line_items);
             setIsUpdating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,7 +68,7 @@ const Cart = () =>
                     <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
                     <Box className={styles.Cart__content}>
                         <Box>
-                            {items.length === 0 && <Notification>
+                            {(items.length === 0 && !isUpdating) && <Notification>
                                 <Box className={styles.Cart__notification}>
                                     <Typography>
                                         Twój koszyk aktualnie jest pusty.
@@ -74,16 +78,16 @@ const Cart = () =>
                                     </Typography>
                                 </Box>
                             </Notification>}
-                            {items.length > 0 && (
+                            {items.length > 0 && lineItems.length > 0 && (
                                 <CartTable
-                                    products={items}
+                                    products={lineItems}
                                     isLoading={isUpdating}
                                     total={createdOrder?.total}
                                 />
                             )}
                             {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
-                        <CartSummary order={createdOrder} isLoading={isUpdating} />
+                        {currentOrder && <CartSummary order={currentOrder} isLoading={isUpdating} />}
                     </Box>
                 </Section>
             </main>

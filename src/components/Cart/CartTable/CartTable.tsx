@@ -11,9 +11,8 @@ import React from 'react';
 export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
 {
     const dispatch = useAppDispatch();
-    const lineItems = useAppSelector(state => state.Cart.items);
     const MemoizedCartTableRow = React.memo(CartTableRow);
-
+    const { items } = useAppSelector(state => state.Cart);
     // const onProductChange = (product: lineOrderItems, count: number): void =>
     // {
     //     if (count >= 0)
@@ -59,7 +58,7 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
                         product={product}
                         onProductChange={() => { }}
                         onProductDelete={onProductDelete}
-                        lineItems={lineItems}
+                        lineItems={items}
                         isLoading={isLoading}
                         total={total}
                     />
