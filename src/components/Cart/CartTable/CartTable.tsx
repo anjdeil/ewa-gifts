@@ -14,18 +14,17 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
     const lineItems = useAppSelector(state => state.Cart.items);
     const MemoizedCartTableRow = React.memo(CartTableRow);
 
-    const onProductChange = (product: lineOrderItems, count: number): void =>
-    {
-        if (count >= 0)
-        {
-            dispatch(updateCart({
-                id: product.product_id,
-                quantity: count,
-                ...(product.variation_id && { variationId: product.variation_id })
-            }));
-        }
-        console.log('sdsd')
-    };
+    // const onProductChange = (product: lineOrderItems, count: number): void =>
+    // {
+    //     if (count >= 0)
+    //     {
+    //         dispatch(updateCart({
+    //             id: product.product_id,
+    //             quantity: count,
+    //             ...(product.variation_id && { variationId: product.variation_id })
+    //         }));
+    //     }
+    // };
 
     const onProductDelete = (product: lineOrderItems): void =>
     {
@@ -58,7 +57,7 @@ export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
                     <MemoizedCartTableRow
                         key={product.id}
                         product={product}
-                        onProductChange={onProductChange}
+                        onProductChange={() => { }}
                         onProductDelete={onProductDelete}
                         lineItems={lineItems}
                         isLoading={isLoading}

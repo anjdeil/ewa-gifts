@@ -18,7 +18,8 @@ export const CustomInput: FC<CustomInputProps> = ({
     value,
     isTextarea,
     setValue,
-    initialValue
+    initialValue,
+    checked
 }) =>
 {
     let type;
@@ -78,6 +79,8 @@ export const CustomInput: FC<CustomInputProps> = ({
                         onInput={isNumeric ? numericValidate : undefined}
                         onChange={onChange && onChange}
                         value={value}
+                        checked={isCheckbox && checked}
+                        name={name}
                     />
                     {
                         isPassword &&
@@ -92,7 +95,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                     }
                 </div>
             </label>
-            {isError && name && <p className={styles.customInput__error}>{errors[name]?.message}</p>}
+            {isError && name && <p className={`error ${styles.customInput__error}`}>{errors[name]?.message}</p>}
         </div>
     )
 };

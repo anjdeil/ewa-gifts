@@ -100,12 +100,13 @@ export const CartTableRow: FC<CartTableRowType> = ({
                 </Typography>
             </Box>
             <Box className={styles.CartTable__cell}>
-                {count && <MemoizedCounter
+                {/* {count && <MemoizedCounter
                     count={count}
                     onCountChange={onCountChange}
                     isLoading={isLoading}
                     currentProduct={product.id}
-                />}
+                />} */}
+                {count}
             </Box>
             <Box className={styles.CartTable__cell}>
                 {isLoading ? (
