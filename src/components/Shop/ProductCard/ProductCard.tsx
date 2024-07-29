@@ -16,6 +16,8 @@ import { transformColorByName } from "@/services/transformers/woocommerce/transf
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
+import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
+import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 
 interface ProductCardPropsType {
     product: typeProductType
@@ -24,7 +26,13 @@ interface ProductCardPropsType {
 type ProductInfoType = {
     image: string,
     stock: number,
-    price?: number
+    price?: number,
+    priceСirculations?: {
+        type: string,
+        circulations: {
+            [key: number]: number;
+        }
+    }
 };
 
 export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
@@ -45,6 +53,16 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const [choosenVariation, setVariation] = useState<variationsProductType | undefined>();
     const [productInfo, setProductInfo] = useState<ProductInfoType | undefined>();
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
+    const supplier = product?.attributes?.find(({ name }) => name === 'supplier')?.options[0].slug;
+    const [circulatedPrices, setCirculatedPrices] = useState<CirculatedPriceType[] | undefined>();
+
+    useEffect(() => {
+        if (productInfo?.priceСirculations && productInfo?.price) {
+            setCirculatedPrices(
+                getCirculatedPrices(productInfo.price, productInfo.priceСirculations)
+            );
+        }
+    }, [productInfo]);
 
     /* Finding relevant product and variation from CartItems */
     useEffect(() => {
@@ -91,13 +109,15 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             setProductInfo({
                 image: choosenVariation.images.length > 0 ? choosenVariation.images[0].src : "",
                 stock: (typeof choosenVariation.stock_quantity === 'number') ? choosenVariation.stock_quantity : 0,
-                ...((typeof choosenVariation.price === 'number') && { price: Number(choosenVariation.price) })
+                ...((typeof choosenVariation.price === 'number') && { price: Number(choosenVariation.price) }),
+                ...(choosenVariation?.price_circulations && { priceСirculations: choosenVariation.price_circulations })
             });
         } else {
             setProductInfo({
                 image: product.images.length > 0 ? product.images[0].src : "",
                 stock: (typeof product.stock_quantity === 'number') ? product.stock_quantity : 0,
-                ...((typeof product.price === 'number') && { price: Number(product.price) })
+                ...((typeof product.price === 'number') && { price: Number(product.price) }),
+                ...(product?.price_circulations && { priceСirculations: product.price_circulations })
             });
         }
     }, [choosenVariation])
@@ -157,10 +177,16 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     const handleAddToCart = () => {
         if (!productInfo?.stock) return;
+
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(1, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * 1;
+
         dispatch(updateCart({
             id: product.id,
             quantity: 1,
+            ...(supplier && { supplier }),
             ...(choosenVariation && { variationId: choosenVariation.id }),
+            ...(total && { total: String(total) })
         }));
     }
 
@@ -170,10 +196,15 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         let newQuantity = +evt.target.value;
         if (productInfo.stock < newQuantity) newQuantity = productInfo.stock;
 
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * newQuantity;
+
         dispatch(updateCart({
             id: product.id,
             quantity: newQuantity,
+            ...(supplier && { supplier }),
             ...(choosenVariation && { variationId: choosenVariation.id }),
+            ...(total && { total: String(total) })
         }));
     }
 
@@ -183,21 +214,31 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         let newQuantity = cartMatch.quantity + 1;
         if (productInfo.stock < newQuantity) newQuantity = productInfo.stock;
 
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * newQuantity;
+
         dispatch(updateCart({
             id: product.id,
             quantity: newQuantity,
+            ...(supplier && { supplier }),
             ...(choosenVariation && { variationId: choosenVariation.id }),
+            ...(total && { total: String(total) })
         }));
     }
 
     const handleDecrement = () => {
         if (cartMatch === undefined) return;
+        const newQuantity = cartMatch.quantity - 1;
 
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * newQuantity;
 
         dispatch(updateCart({
             id: product.id,
-            quantity: cartMatch.quantity - 1,
+            quantity: newQuantity,
+            ...(supplier && { supplier }),
             ...(choosenVariation && { variationId: choosenVariation.id }),
+            ...(total && { total: String(total) })
         }));
     }
 
@@ -229,6 +270,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                         width={isTablet ? 100 : 220}
                         height={isTablet ? 100 : 220}
                         alt={product.name}
+                        unoptimized={true}
                     />}
                 <p className={styles["product-card__title"]}>
                     {product.name}

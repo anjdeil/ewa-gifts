@@ -2,15 +2,17 @@ import React, { FC } from "react";
 import styles from "./styles.module.scss"
 import { Skeleton } from "@mui/material";
 import variables from "@/styles/variables.module.scss";
+import { useAppSelector } from "@/hooks/redux";
 
 interface MiniCartSkeletonPropsType {
     showSubtotals?: boolean,
 }
 
 const MiniCartSkeleton: FC<MiniCartSkeletonPropsType> = ({ showSubtotals = false }) => {
-
+    const { items: cartItems } = useAppSelector(state => state.Cart);
+    const itemsCount = cartItems.length || 3
     const items = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < itemsCount; i++) {
         items.push(
             <li key={i} className={`${styles["mini-cart__item"]} ${showSubtotals && styles["mini-cart__item_subtotal"]}`}>
                 <Skeleton
