@@ -29,37 +29,23 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
     const childRef = useRef<FormHandle>(null);
     const [isCreating, setCreating] = useState<boolean>(false);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
-    const [isModalOpen, setModalOpen] = useState<boolean>(false);
-    const [userFields, setUserFields] = useState<userFieldsType | null>(null);
+    const [isModalOpen, setModalOpen] = useState<boolean>(userData ? false : true);
+    const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
     const [cookie] = useCookies(['userToken']);
     const { items } = useAppSelector(state => state.Cart);
     const [fetchCheckUser, { data: jwtUser, error: jwtError }] = useLazyFetchUserDataQuery();
     const [fetchCustomerData, { data: customerData, error: customerError }] = useLazyFetchCustomerDataQuery();
-    const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const pageTitle = 'Składania zamowienia';
-
-    useEffect(() =>
-    {
-        if (userData)
-        {
-            setUserFields(userData);
-            setModalOpen(false);
-            setLoggedIn(true);
-        } else
-        {
-            setModalOpen(true);
-        }
-    }, [userData]);
 
     useEffect(() =>
     {
         if ("userToken" in cookie)
         {
             fetchCheckUser(cookie.userToken);
-            setLoggedIn(true);
+            setLoggedIn(false);
         } else
         {
-            setLoggedIn(false);
+            setLoggedIn(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie])
@@ -158,20 +144,9 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 // eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => 
 {
-    const orderData = await checkCurrentOrderServerSide('/cart', context, 'orderId');
-
-    if ('redirect' in orderData)
-    {
-        return {
-            redirect: {
-                ...orderData.redirect
-            },
-        }
-    }
-
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
     let userData = null;
-    if ('id' in result && orderData)
+    if ('id' in result)
     {
         try
         {
@@ -191,10 +166,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         }
     }
 
-    if ('redirect' in result) return { props: { userData: userData, orderData: orderData } };
+    if ('redirect' in result) return { props: { userData: userData } };
     if (result.notFound) return { notFound: true };
 
-    return { props: { userData: userData, orderData: orderData } };
+    return { props: { userData: userData } };
 }
 
 export default Checkout;
