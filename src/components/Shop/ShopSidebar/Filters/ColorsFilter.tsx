@@ -21,7 +21,6 @@ const ColorsFilter: FC<ColorsFilter> = ({ colors, currentColor, onChangeColor, o
         if (color.name.split(', ').length === 1) return true;
     });
 
-    console.log(filteredColors);
     return (
         <div className={styles['sidebar-filter']}>
             <div className={styles['sidebar-filter__content']}>

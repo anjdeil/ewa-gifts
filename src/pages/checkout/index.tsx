@@ -126,7 +126,8 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                             <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>
                                 Twoje zamówienie
                             </Typography>
-                            {/* <MiniCart lineItems={items && items} showSubtotals={true} /> */}
+                            {/* Create order */}
+                            {/* <MiniCart lineItems={items} showSubtotals={true} isLoading={false} /> */}
                             {/* {items && <OrderTotals order={orderData} includeBorders={false} />} */}
                             {/* disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'} */}
                             <button

@@ -226,6 +226,13 @@ input[type=number]::-webkit-outer-spin-button {
         align-items: flex-start;
     }
 
+    &__title {
+        font-size: 1.15em;
+        text-transform: uppercase;
+        margin: 0;
+        font-weight: 600;
+    }
+
     &__count {
         margin-top: -1px;
         margin-left: 0.6em;

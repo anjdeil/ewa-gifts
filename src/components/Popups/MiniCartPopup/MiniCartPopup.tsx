@@ -1,33 +1,68 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import variables from "@/styles/variables.module.scss";
+import React, { useEffect } from "react";
 import styles from "./styles.module.scss"
 import Link from "next/link";
-import { useFetchOrderQuery } from "@/store/wooCommerce/wooCommerceApi";
+import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import MiniCart from "@/components/Cart/MiniCart";
+import { useAppSelector } from "@/hooks/redux";
+import { Skeleton } from "@mui/material";
+import formatPrice from "@/Utils/formatPrice";
+import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 
 const MiniCartPopup = () => {
-    const testOrderId = 83866;
-    const totals = { total: 0 };
-    const { data: orderData, isLoading = false } = useFetchOrderQuery(testOrderId);
+    const [fetchCreateOrder, { data: orderData, isLoading }] = useFetchCreateOrderMutation();
+    const { items: cartItems, shippingLines } = useAppSelector(state => state.Cart);
+
+    useEffect(() => {
+        if (cartItems.length === 0) return;
+
+        const createOrderRequestBody = {
+            line_items: cartItems,
+            shipping_lines: shippingLines
+        };
+
+        fetchCreateOrder(createOrderRequestBody);
+
+    }, [cartItems]);
+
+    const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items)
 
     return (
         <div className={styles["mini-cart-popup"]}>
             <div className={styles["mini-cart-popup__content"]}>
-                <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} />
+                <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
             </div>
             <div className={styles["mini-cart-popup__subtotal"]}>
                 <span className={styles["mini-cart-popup__subtotal-title"]}>
-                    Subtotal
+                    Kwota
                 </span>
                 <span className={styles["mini-cart-popup__subtotal-price"]}>
-                    {totals.total} zł.
+                    {isLoading ?
+                        <Skeleton
+                            sx={{
+                                backgroundColor: variables.inputDarker,
+                                borderRadius: '5px',
+                                marginBottom: '10px'
+                            }}
+                            width={"70px"}
+                            height={"1em"}
+                            variant="rectangular"
+                        >
+                        </Skeleton> :
+                        (subtotal) ?
+                            <>{formatPrice(subtotal)}</> :
+                            <>—</>
+
+                    }
                 </span>
             </div>
             <div className={styles["mini-cart-popup__buttons"]}>
-                <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/'}>
-                    Checkout
+                <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/checkout'}>
+                    Zamówienie
                 </Link>
-                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/'}>
-                    View cart
+                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/cart'}>
+                    Zobacz koszyk
                 </Link>
             </div>
         </div >

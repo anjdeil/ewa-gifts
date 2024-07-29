@@ -21,6 +21,11 @@
             border-radius: 5px;
         }
 
+        &-image {
+            object-fit: contain;
+            object-position: center;
+        }
+
         &-name {
             color: $text-gray;
             margin-bottom: 6px;

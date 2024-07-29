@@ -7,7 +7,13 @@ interface circulationsMeta {
     }
 }
 
-const getCirculatedPrices = (price: number, { type, circulations }: circulationsMeta) => {
+export type CirculatedPriceType = {
+    from: number,
+    label: string,
+    price: number
+};
+
+const getCirculatedPrices = (price: number, { type, circulations }: circulationsMeta): CirculatedPriceType[] => {
 
     const circulatedPrices: circulatedPriceType[] = [];
     const alreadyUsedCirculation = Object.values(circulations).at(-1) || 0;

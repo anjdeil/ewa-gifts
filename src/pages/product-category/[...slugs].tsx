@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { ProductCardList } from "@/components/Shop";
-import { Chip, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import PagesNavigation from "@/components/Layouts/PagesNavigation";
 import { customRestApi } from "@/services/CustomRestApi";
 import { ResponseCategoryListType } from "@/types/Services/customApi/Category/ResponseCategoryListType";
@@ -11,7 +11,6 @@ import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { typeProductType } from "@/types";
 import { ResponseProductListType } from "@/types/Services/customApi/Product/ResponseProductListType";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import ShopSidebar from "@/components/Shop/ShopSidebar";
 import ShopToolbar from "@/components/Shop/ShopToolbar";
 import styles from "./styles.module.scss";
@@ -19,6 +18,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useAppSelector } from "@/hooks/redux";
 import MobileSidebar from "@/components/Shop/ShopSidebar/MobileSidebar";
 import Notification from "@/components/Layouts/Notification";
+import { PageHeader } from "@/components/Layouts/PageHeader";
 
 /* eslint-disable-next-line react-refresh/only-export-components */
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -178,17 +178,12 @@ const CategoryPage: FC<CategoryPagePropsType> = ({ products, categories, page, p
             </Head>
             <main className={styles['product-category']}>
                 <div className="container">
-                    <div className="page-top">
-                        <Breadcrumbs links={links} />
-                        <div className="page-top__titling">
-                            <h1 className="page-top__title">{name}</h1>
-                            <Chip
-                                className="page-top__count"
-                                label={count}
-                                size="small"
-                            />
-                        </div>
-                    </div>
+                    <PageHeader
+                        breadLinks={links}
+                        title={name}
+                        isCentered={false}
+                        count={count}
+                    />
                     <div className={styles['product-category__container']}>
                         <aside className={styles['product-category__sidebar']}>
                             {!isMobile && <ShopSidebar priceRange={priceRange} />}

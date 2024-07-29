@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { lineOrderItems } from "@/types";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { useAppDispatch } from "@/hooks/redux";
@@ -17,19 +17,6 @@ interface MiniCartItemPropsType
 const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartItem }) =>
 {
     const dispatch = useAppDispatch();
-    const [quantity, setQuantity] = useState(cartItem.quantity);
-
-    // useEffect(() => {
-    //     setQuantity(cartItem.quantity);
-    // }, [cartItem.quantity])
-
-    // useEffect(() => {
-    //     dispatch(updateCart({
-    //         id: cartItem.product_id,
-    //         ...(cartItem.variation_id && { variationId: cartItem.variation_id }),
-    //         quantity
-    //     }));
-    // }, [quantity])
 
     const deleteCartItem = () =>
     {
@@ -42,13 +29,11 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartIte
 
     const cartItemName = transformCartItemName(cartItem);
 
-    const subtotal = cartItem.price * cartItem.quantity;
-
     return (
         <li className={styles["mini-cart__item"]} key={cartItem.id}>
             <div className={styles["mini-cart__item-image-wrap"]}>
                 <Image
-                    alt={cartItem.name}
+                    alt={cartItemName}
                     className={styles["mini-cart__item-image"]}
                     width={55}
                     height={55}
@@ -68,10 +53,9 @@ const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartIte
                     </svg>
                     <span className="cart-item-quty__price">{formatPrice(cartItem.price)}</span>
                 </div>
-                {/* <input type="number" value={quantity} onChange={(evt) => setQuantity(+evt.target.value)} /> */}
             </div>
             {showSubtotal ?
-                <p>{formatPrice(subtotal)}</p> :
+                <p>{formatPrice(+cartItem.subtotal)}</p> :
                 <div className={styles["mini-cart__item-delete-wrap"]}>
                     <button
                         className={styles["mini-cart__item-delete"]}

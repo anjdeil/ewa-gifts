@@ -5,8 +5,9 @@ import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi"
 import { CartItem } from "@/types/Cart";
 import { useCookies } from "react-cookie";
 import { registrationUserDataType } from "@/types/Pages/checkout";
+import { ShippingLine } from "@/store/reducers/CartSlice";
 
-type OrderStatus = "processing" | "pending payment";
+type OrderStatus = "pending" | "processing" | "on-hold" | "completed" | "cancelled" | "refunded" | "failed";
 
 export const useCreateOrderWoo = () =>
 {
@@ -17,7 +18,7 @@ export const useCreateOrderWoo = () =>
     const [_, setCookie] = useCookies(['orderId']);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-    const createOrder = useCallback(async (items: CartItem[], status: OrderStatus, userFields?: registrationUserDataType | null) =>
+    const createOrder = useCallback(async (items: CartItem[], status: OrderStatus, shipping_lines: ShippingLine[] = [], userFields?: registrationUserDataType | null,) =>
     {
         setError(null);
         const fetchCreateOrderBody = {
@@ -30,7 +31,8 @@ export const useCreateOrderWoo = () =>
             },
             shipping: {
                 ...userFields?.shipping,
-            }
+            },
+            shipping_lines: shipping_lines
         };
 
         try
