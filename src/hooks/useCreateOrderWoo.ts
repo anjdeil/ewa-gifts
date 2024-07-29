@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { CartItem } from "@/types/Cart";
 import { useCookies } from "react-cookie";
+import { registrationUserDataType } from "@/types/Pages/checkout";
 
 type OrderStatus = "processing" | "pending payment";
 
@@ -16,14 +17,20 @@ export const useCreateOrderWoo = () =>
     const [_, setCookie] = useCookies(['orderId']);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-    const createOrder = useCallback(async (items: CartItem[], customerId: number = 0, status: OrderStatus) =>
+    const createOrder = useCallback(async (items: CartItem[], status: OrderStatus, userFields?: registrationUserDataType | null) =>
     {
         setError(null);
         const fetchCreateOrderBody = {
             line_items: items,
             payment_method: "bacs",
             status: status,
-            customer_id: customerId,
+            customer_id: userFields && userFields.id ? userFields.id : 0,
+            billing: {
+                ...userFields?.billing,
+            },
+            shipping: {
+                ...userFields?.shipping,
+            }
         };
 
         try

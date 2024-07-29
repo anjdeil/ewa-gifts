@@ -28,7 +28,7 @@ const Checkout: FC<CheckoutProps> = ({ userData, orderData }) =>
 {
     const childRef = useRef<FormHandle>(null);
     const [isCreating, setCreating] = useState<boolean>(false);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [userFields, setUserFields] = useState<userFieldsType | null>(null);
     const [cookie] = useCookies(['userToken']);

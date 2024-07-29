@@ -74,7 +74,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                          ${isTextarea && styles.customInput__input_textarea}
                          `}
                         inputMode={isNumeric && "numeric"}
-                        pattern={isNumeric && (isPost ? "[0-9-]*" : "[0-9]*")}
+                        pattern={isNumeric && (isPost ? "[0-9\\-]*" : "[0-9]*")}
                         onInput={isNumeric ? numericValidate : undefined}
                         onChange={onChange && onChange}
                         value={value}

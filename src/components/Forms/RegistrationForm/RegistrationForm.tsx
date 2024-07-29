@@ -11,7 +11,8 @@ import variables from '@/styles/variables.module.scss';
 import { CartItem, RegistrationFormSchema, WpWooError } from "@/types";
 import { z } from "zod";
 import styles from './styles.module.scss';
-import { userFieldsType } from "@/types/Pages/checkout";
+import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
+import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 
 interface RegistrationFormProps
 {
@@ -25,14 +26,13 @@ export interface FormHandle
     submit: () => void;
 }
 
-const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields }, ref) =>
+const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems }, ref) =>
 {
     useImperativeHandle(ref, () => ({
         submit: () => handleSubmit(onSubmit)()
     }));
 
     const [cookie, setCookie] = useCookies(['userToken']);
-    // const [isLoggedIn, setLoggedIn] = useState<boolean>("userToken" in cookie);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isShipping, setShipping] = useState<boolean>(false);
     const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
@@ -46,6 +46,7 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
     const [fetchUserToken] = useFetchUserTokenMutation();
+    const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
     useEffect(() =>
@@ -61,7 +62,8 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
 
     const onSubmit = async (data: RegistrationFormType) =>
     {
-        const body = {
+        const body: registrationUserDataType = {
+            id: userFields && userFields.id || '',
             email: data.email,
             first_name: data.name,
             last_name: data.lastName,
@@ -73,35 +75,55 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
                 company: data.companyName,
                 address_1: data.address,
                 address_2: data.nip,
-                country: data.country,
-                email: data.email,
                 city: data.city,
                 postcode: data.postCode,
+                country: data.country,
+                email: data.email,
                 phone: data.phoneNumber,
             },
             shipping: {
-                first_name: isShipping ? data.nameShipping : '',
-                last_name: isShipping ? data.lastNameShipping : '',
-                company: isShipping ? data.companyNameShipping : '',
-                address_1: isShipping ? data.addressShipping : '',
-                country: isShipping ? data.countryShipping : '',
-                city: isShipping ? data.cityShipping : '',
-                postcode: isShipping ? data.postCodeShipping : '',
-                phone: isShipping ? data.phoneNumberShipping : '',
+                first_name: isShipping && data.nameShipping || '',
+                last_name: isShipping && data.lastNameShipping || '',
+                company: isShipping && data.companyNameShipping || '',
+                address_1: isShipping && data.addressShipping || '',
+                city: isShipping && data.cityShipping || '',
+                postcode: isShipping && data.postCodeShipping || '',
+                country: isShipping && data.countryShipping || '',
+                email: data.email,
+                phone: isShipping && data.phoneNumberShipping || '',
             }
         }
 
         try
         {
-            const response = await fetchUserRegistration(body);
-            if (response && 'data' in response)
+            if (body && isCheckout && lineItems)
             {
-                const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
-                setCookie('userToken', userToken.token,
-                    {
+                if (isLoggedIn)
+                {
+                    createOrder(lineItems, 'processing', body);
+                    return;
+                } else
+                {
+                    const response = await fetchUserRegistration(body);
+                    if (!response) return;
+                    createOrder(lineItems, 'processing', body);
+                    const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
+                    setCookie('userToken', userToken.token, {
                         path: '/',
                         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8)
                     });
+                }
+            } else
+            {
+                const response = await fetchUserRegistration(body);
+                if (response && 'data' in response)
+                {
+                    const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
+                    setCookie('userToken', userToken.token, {
+                        path: '/',
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8)
+                    });
+                }
             }
         } catch (error)
         {
