@@ -91,6 +91,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                             width={24}
                             height={24}
                             onClick={toggleShowPassword}
+                            unoptimized={true}
                         />
                     }
                 </div>

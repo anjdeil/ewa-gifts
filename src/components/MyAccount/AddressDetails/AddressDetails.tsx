@@ -15,7 +15,7 @@ const AddressDetails: FC<AddressDetailsPropsType> = ({ order }) => {
         <div className={styles['address-details']}>
             <div className={styles['address-details__island']}>
                 <div className={styles['address-details__header']}>
-                    <Image className={styles['address-details__header-icon']} src={"/images/edit.svg"} height={24} width={24} alt="Adres płatności" />
+                    <Image className={styles['address-details__header-icon']} src={"/images/edit.svg"} height={24} width={24} unoptimized={true} alt="Adres płatności" />
                     Adres płatności
                 </div>
                 <div className={styles['address-details__content']}>
@@ -89,7 +89,7 @@ const AddressDetails: FC<AddressDetailsPropsType> = ({ order }) => {
 
             <div className={styles['address-details__island']}>
                 <div className={styles['address-details__header']}>
-                    <Image className={styles['address-details__header-icon']} src={"/images/edit.svg"} height={24} width={24} alt="Adres do wysyłki" />
+                    <Image className={styles['address-details__header-icon']} src={"/images/edit.svg"} height={24} width={24} unoptimized={true} alt="Adres do wysyłki" />
                     Adres do wysyłki
                 </div>
                 <div className={styles['address-details__content']}>

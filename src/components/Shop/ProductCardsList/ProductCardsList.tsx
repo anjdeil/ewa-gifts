@@ -24,8 +24,8 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
                 gridTemplateColumns: `repeat(${column}, 1fr)`,
             }}
         >
-            {products && products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            {products && products.map((product, i) => (
+                <ProductCard key={`${product.id}-${i}`} product={product} />
             ))}
         </div>
     );

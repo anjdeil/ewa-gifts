@@ -74,6 +74,7 @@ const Header: React.FC = () => {
                                 alt={'Menu hamburger for categories'}
                                 width={30}
                                 height={30}
+                                unoptimized={true}
                             />
                         </IconButton>
                         <h3 className={'desc'} style={{ margin: '0' }}>
@@ -91,6 +92,7 @@ const Header: React.FC = () => {
                                     alt={'Account of current user'}
                                     width={24}
                                     height={24}
+                                    unoptimized={true}
                                 />
                             </IconButton>
                         </Link>
@@ -100,6 +102,7 @@ const Header: React.FC = () => {
                                 alt={'My Favorites products button-icon'}
                                 width={24}
                                 height={24}
+                                unoptimized={true}
                             />
                         </IconButton>
 
@@ -110,6 +113,7 @@ const Header: React.FC = () => {
                                     alt={'Shop button-icon'}
                                     width={24}
                                     height={24}
+                                    unoptimized={true}
                                 />
                             </CustomBadge>
                         </IconButton>

@@ -47,6 +47,7 @@ export const CategoryBars = () => {
                                 width={60}
                                 height={60}
                                 alt={name}
+                                unoptimized={true}
                             />
                             <div className={styles["categories-list__name"]}>{name}</div>
                         </Link>

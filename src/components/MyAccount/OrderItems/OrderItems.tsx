@@ -28,7 +28,7 @@ const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
                         <div className={`${styles["order-items__cell"]} ${styles["order-items__cell_product"]}`}>
                             <div className={styles["order-items__product"]}>
                                 <div className={styles["order-items__product-image"]}>
-                                    <Image className={styles["order-items__cell-image"]} src={item?.image?.src} width={60} height={60} alt={item.name} />
+                                    <Image className={styles["order-items__cell-image"]} unoptimized={true} src={item?.image?.src} width={60} height={60} alt={item.name} />
                                 </div>
                                 <div className={styles["order-items__product-name"]}>
                                     {cartItemName}
