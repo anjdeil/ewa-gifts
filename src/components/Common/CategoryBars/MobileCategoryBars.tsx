@@ -36,6 +36,7 @@ const MobileCategoryBars: FC<MobileCategoryBarsProps> = ({ categories }) => {
                                     width={60}
                                     height={60}
                                     alt={name}
+                                    unoptimized={true}
                                 />
                             </div>
                             <div className={styles["mobile-category-bars__name"]}>{name}</div>

@@ -8,23 +8,22 @@ import { lineOrderItems } from '@/types';
 import { CartTableRow } from './CartTableRow';
 import React from 'react';
 
-export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
+export const CartTable: FC<CartTableProps> = ({ products, total, isLoading }) =>
 {
     const dispatch = useAppDispatch();
-    const lineItems = useAppSelector(state => state.Cart.items);
     const MemoizedCartTableRow = React.memo(CartTableRow);
-
-    const onProductChange = (product: lineOrderItems, count: number): void =>
-    {
-        if (count >= 0)
-        {
-            dispatch(updateCart({
-                id: product.product_id,
-                quantity: count,
-                ...(product.variation_id && { variationId: product.variation_id })
-            }));
-        }
-    };
+    const { items } = useAppSelector(state => state.Cart);
+    // const onProductChange = (product: lineOrderItems, count: number): void =>
+    // {
+    //     if (count >= 0)
+    //     {
+    //         dispatch(updateCart({
+    //             id: product.product_id,
+    //             quantity: count,
+    //             ...(product.variation_id && { variationId: product.variation_id })
+    //         }));
+    //     }
+    // };
 
     const onProductDelete = (product: lineOrderItems): void =>
     {
@@ -52,14 +51,16 @@ export const CartTable: FC<CartTableProps> = ({ products, isLoading }) =>
                 </Box>
             </Box >
             <Box className={styles.CartTable__tableBody}>
-                {products.map((product) => (
+                {/* <Skeleton width={'100%'} height={'400px'} animation="wave" sx={{ display: 'inline-block' }} /> */}
+                {products && products.map((product) => (
                     <MemoizedCartTableRow
                         key={product.id}
                         product={product}
-                        onProductChange={onProductChange}
+                        onProductChange={() => { }}
                         onProductDelete={onProductDelete}
-                        lineItems={lineItems}
+                        lineItems={items}
                         isLoading={isLoading}
+                        total={total}
                     />
                 ))}
             </Box>

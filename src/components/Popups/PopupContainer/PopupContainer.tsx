@@ -6,13 +6,15 @@ import HamburgerMenu from "@/components/Popups/HamburgerMenu";
 import SwiperPopup from "@/components/Popups/SwiperPopup/SwiperPopup";
 import { useAppSelector } from "@/hooks/redux";
 
+const unscrollablePopups = ['mobile-search', 'hamburger-menu', 'swiper-popup'];
+
 const PopupContainer = () => {
     const dispatch = useDispatch();
 
     const popup = useAppSelector(state => state.Popup);
 
     useEffect(() => {
-        if (popup) {
+        if (unscrollablePopups.some(popupName => popup === popupName)) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "auto";

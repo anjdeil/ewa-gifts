@@ -62,6 +62,15 @@ input[type=number]::-webkit-outer-spin-button {
     }
 }
 
+.error {
+    font-size: 14px;
+    color: $error;
+
+    @media screen and (max-width: 768px) {
+        font-size: 12px;
+    }
+}
+
 .desc {
     font-weight: 400;
     font-size: 18px;
@@ -109,11 +118,19 @@ input[type=number]::-webkit-outer-spin-button {
     color: $text-gray;
 }
 
-.sub-title {
+.main-title {
     margin: 0;
+    font-family: "Inter", sans-serif;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 30px;
     color: $black-color;
+    text-transform: uppercase;
+}
+
+.sub-title {
+    @extend .main-title;
+    font-size: 20px;
+    text-transform: none;
 }
 
 .list-reset {
@@ -222,6 +239,7 @@ input[type=number]::-webkit-outer-spin-button {
         font-size: 1.15em;
         text-transform: uppercase;
         margin: 0;
+        font-weight: 600;
     }
 
     &__count {
@@ -229,6 +247,14 @@ input[type=number]::-webkit-outer-spin-button {
         margin-left: 0.6em;
         background-color: $input-light;
     }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-gray {
+    color: $text-gray;
 }
 
 @media(max-width: 1024px) {

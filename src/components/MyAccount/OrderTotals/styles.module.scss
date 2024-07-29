@@ -8,16 +8,23 @@
         padding: 0.5em 0;
         border-radius: 10px;
         border: 2px solid $white-lilac;
+
+        .totals-table__row {
+            padding-left: 1.5em;
+            padding-right: 1.5em;
+        }
     }
 
     &__row {
         display: flex;
         justify-content: space-between;
-        padding: 0.6em 1.5em;
+        padding-top: 0.6em;
+        padding-top: 0.6em;
 
         &:last-child {
             margin-top: 0.6em;
             padding-top: 1em;
+            padding-bottom: 0.6em;
             border-top: 2px solid $white-lilac;
             margin-bottom: 0;
             font-weight: 500;
@@ -45,11 +52,21 @@
 
 @media(max-width: 1024px) {
     .totals-table {
+        &_borders {
+
+            .totals-table__row {
+                padding-left: 1em;
+                padding-right: 1em;
+            }
+        }
+
         &__row {
-            padding: 0.5em 1em;
+            padding-top: 0.5em;
+            padding-top: 0.5em;
 
             &:last-child {
                 margin-top: 0.5em;
+                padding-bottom: 0.5em;
             }
         }
     }

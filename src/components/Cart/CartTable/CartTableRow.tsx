@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import styles from './styles.module.scss';
-import { Counter } from "@/components/Buttons";
+// import { Counter } from "@/components/Buttons";
 import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
 import { CartItemSchema } from "@/types/Cart";
 import formatPrice from "@/Utils/formatPrice";
@@ -16,35 +16,38 @@ export const CartTableRowProps = z.object({
     onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
     onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
     lineItems: z.array(CartItemSchema).nullable(),
-    isLoading: z.boolean()
+    isLoading: z.boolean(),
+    total: z.string()
 });
 
 export type CartTableRowType = z.infer<typeof CartTableRowProps>;
 
-export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, onProductDelete, lineItems, isLoading }) =>
-{
+export const CartTableRow: FC<CartTableRowType> = ({
+    product,
+    onProductChange,
+    onProductDelete,
+    lineItems,
+    isLoading,
+    total }) => {
     const [count, setCount] = useState<number | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const productName = transformCartItemName(product);
     const productPrice = formatPrice(product.price);
-    const MemoizedCounter = React.memo(Counter);
+    // const MemoizedCounter = React.memo(Counter);
 
-    useEffect(() =>
-    {
-        if (product && lineItems)
-        {
+    useEffect(() => {
+        if (product && lineItems) {
             const hasItemQuantity = getLineItemQuantity(product.product_id, lineItems);
             if (hasItemQuantity) setCount(hasItemQuantity);
         }
+        return () => { if (timerRef.current) clearTimeout(timerRef.current); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (isLoading) return;
         if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() =>
-        {
+        timerRef.current = setTimeout(() => {
             onProductChange(product, Number(count));
         }, 1000)
 
@@ -53,8 +56,7 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onCountChange])
 
-    function onCountChange(count: number)
-    {
+    function onCountChange(count: number) {
         if (count >= 0) setCount(count);
     }
 
@@ -74,6 +76,7 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
                         width={75}
                         height={75}
                         alt={product.name}
+                        unoptimized={true}
                     />
                 </Box>
                 <Box className={`${styles.cartItem__title}`}>
@@ -92,18 +95,19 @@ export const CartTableRow: FC<CartTableRowType> = ({ product, onProductChange, o
                 </Typography>
             </Box>
             <Box className={styles.CartTable__cell}>
-                {count && <MemoizedCounter
+                {/* {count && <MemoizedCounter
                     count={count}
                     onCountChange={onCountChange}
                     isLoading={isLoading}
                     currentProduct={product.id}
-                />}
+                />} */}
+                {count}
             </Box>
             <Box className={styles.CartTable__cell}>
                 {isLoading ? (
                     <Skeleton width={'100px'} height={'50px'} animation="wave" />
                 ) : (
-                    productPrice
+                    total
                 )}
             </Box>
         </Box>

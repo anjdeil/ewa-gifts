@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import styles from './styles.module.scss';
 import { CustomInputProps } from '@/types/Forms';
 import Image from 'next/image';
@@ -12,9 +12,14 @@ export const CustomInput: FC<CustomInputProps> = ({
     isPassword = false,
     isCheckbox = false,
     isNumeric = false,
+    isPost = false,
     placeholder,
     onChange,
-    value
+    value,
+    isTextarea,
+    setValue,
+    initialValue,
+    checked
 }) =>
 {
     let type;
@@ -35,8 +40,22 @@ export const CustomInput: FC<CustomInputProps> = ({
         inputClass = styles.customInput__checkbox;
     }
 
+    useEffect(() =>
+    {
+        if (setValue && name && initialValue !== null && initialValue !== '')
+        {
+            setValue(name, initialValue, { shouldValidate: true });
+        }
+    }, [initialValue, name, setValue]);
+
     const registerProps = register ? register(name) : {};
     const isError = errors && name ? name in errors : false;
+
+    function numericValidate(e: FormEvent<HTMLInputElement>)
+    {
+        const regex = isPost ? /[^0-9-]/g : /[^0-9]/g;
+        e.currentTarget.value = e.currentTarget.value.replace(regex, '');
+    }
 
     return (
         <div>
@@ -51,15 +70,17 @@ export const CustomInput: FC<CustomInputProps> = ({
                         {...registerProps}
                         style={{ color: 'black' }}
                         type={type && type}
-                        className={`${inputClass} ${isError && styles.customInput__input_error}`}
-                        inputMode={isNumeric ? "numeric" : undefined}
-                        pattern={isNumeric ? "[0-9]*" : undefined}
-                        onInput={isNumeric ? (e) =>
-                        {
-                            e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                        } : undefined}
+                        className={`${inputClass}
+                         ${isError && styles.customInput__input_error}
+                         ${isTextarea && styles.customInput__input_textarea}
+                         `}
+                        inputMode={isNumeric && "numeric"}
+                        pattern={isNumeric && (isPost ? "[0-9\\-]*" : "[0-9]*")}
+                        onInput={isNumeric ? numericValidate : undefined}
                         onChange={onChange && onChange}
-                        value={value && value}
+                        value={value}
+                        checked={isCheckbox && checked}
+                        name={name}
                     />
                     {
                         isPassword &&
@@ -70,11 +91,12 @@ export const CustomInput: FC<CustomInputProps> = ({
                             width={24}
                             height={24}
                             onClick={toggleShowPassword}
+                            unoptimized={true}
                         />
                     }
                 </div>
             </label>
-            {isError && name && <p className={styles.customInput__error}>{errors[name]?.message}</p>}
+            {isError && name && <p className={`error ${styles.customInput__error}`}>{errors[name]?.message}</p>}
         </div>
     )
 };

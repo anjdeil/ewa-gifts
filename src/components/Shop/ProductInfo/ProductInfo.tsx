@@ -4,7 +4,7 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions } from "@/types";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types";
 import { ColorOptions } from "../ColorOptions";
 import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
@@ -17,9 +17,7 @@ import { filterByColor } from "@/Utils/filterByColor";
 import { useRouter } from "next/router";
 import formatPrice from "@/Utils/formatPrice";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
-const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
-{
-    // console.log(product);
+const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const router = useRouter();
     const { name, description, price, sku, images, attributes, default_attributes, type } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
@@ -27,6 +25,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const [currentPrice, setCurrentPrice] = useState<number | null>(Number(price) || null);
     const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
+    const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
     const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
@@ -35,71 +34,59 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const isSized = Boolean(allSizes && allSizes.length > 0);
     const { color, size } = router.query;
 
-    useEffect(() =>
-    {
-        if (allColors && attributes && default_attributes)
-        {
+    useEffect(() => {
+        if (allColors && attributes && default_attributes) {
             const baseColor = getDefaultVariation("color", attributes, default_attributes);
             if (baseColor) setCurrentColor(baseColor);
         }
 
-        if (isSized)
-        {
+        if (isSized) {
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
             if (baseSize) setCurrentSize(baseSize);
         }
     }, [allColors, attributes, default_attributes, isSized]);
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (color) setCurrentColor(color as string);
         if (size) setCurrentSize(size as string);
     }, [color, size]);
 
 
-    const onColorChange = (checkedColor: string): void =>
-    {
+    const onColorChange = (checkedColor: string): void => {
         setCurrentColor(checkedColor);
         if (sizes) setCurrentSize(sizes[0].option);
     };
 
-    const onSizeChange = (checkedSize: string): void =>
-    {
+    const onSizeChange = (checkedSize: string): void => {
         setCurrentSize(checkedSize);
     };
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (!currentColor) return;
 
-        if (product.variations)
-        {
+        if (product.variations) {
             const availableVariations = filterOptionsByColorName(product.variations, currentColor);
             if (availableVariations) if (isSized) setSizes(transformProductSizes(availableVariations));
         }
     }, [currentColor, product.variations, isSized]);
 
-    const getCurrentVariation = useCallback(() =>
-    {
-        if (currentSize && isSized)
-        {
+    const getCurrentVariation = useCallback(() => {
+        if (currentSize && isSized) {
             return filterByColorAndSize(product.variations, currentColor as string, currentSize);
-        } else
-        {
+        } else {
             return filterByColor(product.variations, currentColor as string);
         }
     }, [currentColor, currentSize, isSized, product.variations]);
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (!product.variations || isSimple || !currentColor) return;
 
         const currentVariation = getCurrentVariation();
-        if (currentVariation && currentVariation.length > 0)
-        {
+        if (currentVariation && currentVariation.length > 0) {
             setCurrentImages(currentVariation[0].images);
             setCurrentPrice(Number(currentVariation[0].price));
             setCurrentSku(currentVariation[0].sku);
+            setCurrentVariation(currentVariation[0]);
         }
     }, [currentColor, currentSize, getCurrentVariation, isSimple, product.variations]);
 
@@ -108,7 +95,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             {currentImages &&
                 <Box className={styles.product__slider}>
                     <ProductSwiper data={currentImages} />
-                </Box>}
+                </Box>
+            }
             <Box className={styles.product__info}>
                 {name && <Typography variant='h1' className={styles['product-info__title']} title={name}>
                     {name}
@@ -141,7 +129,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                             availableSizes={sizes}
                         />}
                 </Box>}
-                <ProductCalculations product={product} />
+                <ProductCalculations product={product} variation={currentVariation} />
                 <Box className={styles['product-info__accordionWrapper']}>
                     <AccordionProduct title={'OPIS PRODUKTU'} text={description} />
                     <AccordionProduct data={attributes} title={'Informacje dodatkowe'} />

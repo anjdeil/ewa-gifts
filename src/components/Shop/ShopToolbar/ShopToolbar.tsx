@@ -65,12 +65,12 @@ const ShopToolbar: FC<ShopToolbarPropsType> = ({ renderPagination }) => {
      */
     const sorts = [
         {
-            name: 'new',
-            label: 'Sortuj od najnowszych'
-        },
-        {
             name: 'stocks',
             label: 'Sortuj według stanów magazynowych'
+        },
+        {
+            name: 'new',
+            label: 'Sortuj od najnowszych'
         },
         {
             name: 'cheapest',
@@ -89,8 +89,8 @@ const ShopToolbar: FC<ShopToolbarPropsType> = ({ renderPagination }) => {
         if (orderBy === 'price')
             if (order === 'asc') return "cheapest";
             else return "expensive";
-        else if (orderBy === 'quantity') return "stocks";
-        else return "new";
+        else if (orderBy === 'date') return "new";
+        else return "stocks";
     }
 
     const [currentSort, changeSort] = useState(determineSortingBySearchParams);
@@ -117,9 +117,9 @@ const ShopToolbar: FC<ShopToolbarPropsType> = ({ renderPagination }) => {
         const newSortParams: SortParams = {};
 
         switch (currentSort) {
-            case "stocks":
-                newSortParams.order_by = "quantity";
-                newSortParams.order = "desc";
+            case "new":
+                newSortParams.order_by = "date";
+                newSortParams.order = "asc";
                 break;
             case "cheapest":
                 newSortParams.order_by = "price";

@@ -130,3 +130,18 @@
 		}
 	}
 }
+
+@media(max-width: 1024px) {
+	.product {
+		padding-top: 50px;
+		grid-template-columns: 1fr;
+	}
+}
+
+@media(max-width: 768px) {
+	.product {
+		padding-top: 40px;
+		flex-direction: column;
+		grid-gap: 30px;
+	}
+}

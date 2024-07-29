@@ -26,11 +26,14 @@ const CartProductsSchema = z.object({
 export const CartItemSchema = z.object({
     product_id: z.number(),
     variation_id: z.number().optional(),
-    quantity: z.number()
+    quantity: z.number(),
+    total: z.string().optional(),
+    supplier: z.string().optional()
 });
 
 export const CartTablePropsSchema = z.object({
     products: z.array(lineOrderItemsSchema),
+    total: z.string(),
     isLoading: z.boolean()
 });
 

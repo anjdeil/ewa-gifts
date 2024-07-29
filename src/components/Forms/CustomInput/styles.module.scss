@@ -44,6 +44,8 @@
 
     &__inputWrapper {
         position: relative;
+        display: flex;
+        align-items: center;
     }
 
     &__input {
@@ -62,12 +64,19 @@
         &_error {
             outline-color: $error !important;
         }
+
+        &_textarea {
+            min-height: 150px;
+
+            &::placeholder {
+                text-align: top;
+            }
+        }
     }
 
     &__error {
+        padding-left: 10px;
         margin-top: 10px;
-        font-size: 14px;
-        color: $error;
     }
 
     &__showPassword {
@@ -95,7 +104,6 @@
 
         &__error {
             margin-top: 5px;
-            font-size: 12px;
         }
     }
 }
