@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import styles from './styles.module.scss';
-import { Counter } from "@/components/Buttons";
+// import { Counter } from "@/components/Buttons";
 import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
 import { CartItemSchema } from "@/types/Cart";
 import formatPrice from "@/Utils/formatPrice";
@@ -33,7 +33,7 @@ export const CartTableRow: FC<CartTableRowType> = ({
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const productName = transformCartItemName(product);
     const productPrice = formatPrice(product.price);
-    const MemoizedCounter = React.memo(Counter);
+    // const MemoizedCounter = React.memo(Counter);
 
     useEffect(() => {
         if (product && lineItems) {
@@ -95,12 +95,13 @@ export const CartTableRow: FC<CartTableRowType> = ({
                 </Typography>
             </Box>
             <Box className={styles.CartTable__cell}>
-                {count && <MemoizedCounter
+                {/* {count && <MemoizedCounter
                     count={count}
                     onCountChange={onCountChange}
                     isLoading={isLoading}
                     currentProduct={product.id}
-                />}
+                />} */}
+                {count}
             </Box>
             <Box className={styles.CartTable__cell}>
                 {isLoading ? (

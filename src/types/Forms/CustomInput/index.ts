@@ -24,7 +24,8 @@ export const CustomInputPropsSchema = z.object({
             shouldTouch: z.boolean().optional(),
         }).optional()
     ).returns(z.void()).optional(),
-    initialValue: z.string().nullable().optional()
+    initialValue: z.string().nullable().optional(),
+    checked: z.boolean().optional()
 });
 
 export type CustomInputProps = z.infer<typeof CustomInputPropsSchema>;

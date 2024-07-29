@@ -25,18 +25,28 @@ export async function checkUserTokenInServerSide(destination: string, context: G
 
         const userData = userResponse.data;
 
-        if ('id' in userData) return userData;
-        else return { redirect: redirect };
-
+        if (userData && userData.id)
+        {
+            return userData;
+        }
+        else
+        {
+            context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+            return { redirect: redirect };
+        }
 
     } catch (err)
     {
         if (axios.isAxiosError(err))
         {
             const response = err.response as AxiosResponse;
-            if (response?.data?.code === 'jwt_auth_invalid_token') return { redirect: redirect };
+            if (response?.data?.code === 'jwt_auth_invalid_token')
+            {
+                context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+                return { redirect: redirect }
+            }
         }
-
-        return { notFound: true };
+        context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+        return { redirect: redirect }
     }
 }

@@ -18,25 +18,32 @@ export const CustomInput: FC<CustomInputProps> = ({
     value,
     isTextarea,
     setValue,
-    initialValue
-}) => {
+    initialValue,
+    checked
+}) =>
+{
     let type;
     let inputClass = styles.customInput__input;
     const [showPassword, setShowPassword] = useState(false);
 
-    const toggleShowPassword = () => {
+    const toggleShowPassword = () =>
+    {
         setShowPassword(prevState => !prevState);
     };
 
-    if (isPassword) {
+    if (isPassword)
+    {
         type = showPassword ? 'text' : 'password';
-    } else if (isCheckbox) {
+    } else if (isCheckbox)
+    {
         type = 'checkbox';
         inputClass = styles.customInput__checkbox;
     }
 
-    useEffect(() => {
-        if (setValue && name && initialValue !== null && initialValue !== '') {
+    useEffect(() =>
+    {
+        if (setValue && name && initialValue !== null && initialValue !== '')
+        {
             setValue(name, initialValue, { shouldValidate: true });
         }
     }, [initialValue, name, setValue]);
@@ -44,7 +51,8 @@ export const CustomInput: FC<CustomInputProps> = ({
     const registerProps = register ? register(name) : {};
     const isError = errors && name ? name in errors : false;
 
-    function numericValidate(e: FormEvent<HTMLInputElement>) {
+    function numericValidate(e: FormEvent<HTMLInputElement>)
+    {
         const regex = isPost ? /[^0-9-]/g : /[^0-9]/g;
         e.currentTarget.value = e.currentTarget.value.replace(regex, '');
     }
@@ -71,6 +79,8 @@ export const CustomInput: FC<CustomInputProps> = ({
                         onInput={isNumeric ? numericValidate : undefined}
                         onChange={onChange && onChange}
                         value={value}
+                        checked={isCheckbox && checked}
+                        name={name}
                     />
                     {
                         isPassword &&
@@ -86,7 +96,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                     }
                 </div>
             </label>
-            {isError && name && <p className={styles.customInput__error}>{errors[name]?.message}</p>}
+            {isError && name && <p className={`error ${styles.customInput__error}`}>{errors[name]?.message}</p>}
         </div>
     )
 };

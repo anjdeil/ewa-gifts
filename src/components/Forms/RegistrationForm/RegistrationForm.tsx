@@ -13,12 +13,15 @@ import { z } from "zod";
 import styles from './styles.module.scss';
 import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { ShippingLine } from "@/store/reducers/CartSlice";
+import { useRouter } from "next/router";
 
 interface RegistrationFormProps
 {
     isCheckout?: boolean,
     userFields?: userFieldsType | null,
     lineItems?: CartItem[] | [],
+    shippingLines?: ShippingLine[]
 }
 
 export interface FormHandle
@@ -26,12 +29,13 @@ export interface FormHandle
     submit: () => void;
 }
 
-const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems }, ref) =>
+const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems, shippingLines }, ref) =>
 {
     useImperativeHandle(ref, () => ({
         submit: () => handleSubmit(onSubmit)()
     }));
 
+    const router = useRouter();
     const [cookie, setCookie] = useCookies(['userToken']);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isShipping, setShipping] = useState<boolean>(false);
@@ -48,6 +52,18 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
     const [fetchUserToken] = useFetchUserTokenMutation();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+    useEffect(() =>
+    {
+        if (createError)
+        {
+            alert("Server Error, please try again")
+        } else if (createdOrder)
+        {
+            router.push(`/my-account/orders/${createdOrder.id}`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createError, createdOrder])
 
     useEffect(() =>
     {
@@ -100,13 +116,13 @@ const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isChec
             {
                 if (isLoggedIn)
                 {
-                    createOrder(lineItems, 'processing', body);
+                    createOrder(lineItems, 'processing', shippingLines, body);
                     return;
                 } else
                 {
                     const response = await fetchUserRegistration(body);
                     if (!response) return;
-                    createOrder(lineItems, 'processing', body);
+                    createOrder(lineItems, 'processing', shippingLines, body);
                     const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
                     setCookie('userToken', userToken.token, {
                         path: '/',

@@ -12,12 +12,15 @@ export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
             <h2 className={`${styles.CartSummary__title}`}>Podsumowanie koszyka</h2>
             <OrderTotals order={order} includeBorders={false} isLoading={isLoading} />
             <Box className={`${styles.CartSummary__btnWrapper}`}>
-                <Link className={`link btn btn-primary ${styles.CartSummary__btn}`} href={""}>
+                <Link className={`link btn btn-primary ${styles.CartSummary__btn}`} href={"/checkout"}>
                     Przejdz Do Platnosci
                 </Link>
-                <button className={`link btn btn-transparent ${styles.CartSummary__btn}`}>
+                <Link
+                    href={`https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${order.id}`}
+                    target="_blank"
+                    className={`link btn btn-transparent ${styles.CartSummary__btn}`}>
                     Pobierz Oferte
-                </button>
+                </Link>
             </Box>
         </Box>
     )
