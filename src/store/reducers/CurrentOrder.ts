@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loadLocalStorageState } from '@/Utils/loadLocalStorageState';
 import { currentOrderReducerType } from '@/types';
+import { Cookies } from 'react-cookie';
 
-const storedOrderId = loadLocalStorageState('currentOrderId');
+const cookies = new Cookies();
+const storedOrderId = cookies.get('orderId');
 const initialOrderId = storedOrderId ? storedOrderId : null;
+
 
 const initialState: currentOrderReducerType = {
     currentOrder: {
@@ -18,8 +20,6 @@ const currentOrderSlice = createSlice({
         setCurrentOrder: (state, action) =>
         {
             state.currentOrder.orderId = action.payload;
-            localStorage.setItem('currentOrderId', action.payload);
-
         },
     },
 });

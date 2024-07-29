@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { CartItem } from "@/types/Cart";
+import axios from "axios";
+import { OrderType } from "@/types/Services/woocommerce/OrderType";
 
 export const useUpdateOrderWoo = () =>
 {
-    const [fetchUpdateOrder, { data }] = useFetchUpdateOrderMutation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [orderData, setOrderData] = useState<OrderType | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updatedOrder = data;
 
     const updateOrder = async (items: CartItem[], orderId: number) =>
     {
@@ -16,14 +16,15 @@ export const useUpdateOrderWoo = () =>
         setError(null);
         try
         {
-            await fetchUpdateOrder({
+            const response = await axios.put(`/api/woo/orders/${orderId}`, {
                 credentials: {
                     line_items: [
                         ...items
                     ]
-                },
-                id: orderId
+                }
             });
+
+            if ("data" in response) setOrderData(response.data);
 
         } catch (err)
         {
@@ -41,5 +42,5 @@ export const useUpdateOrderWoo = () =>
         }
     };
 
-    return { updateOrder, isLoading, error, updatedOrder };
+    return { updateOrder, isLoading, error, orderData };
 };

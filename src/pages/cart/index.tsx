@@ -1,136 +1,82 @@
 import Head from "next/head";
 import { useAppSelector } from "@/hooks/redux";
 import { useCallback, useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { useUpdateOrderWoo } from "@/hooks/useUpdateOrderWoo";
 // import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import styles from './styles.module.scss';
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
-import { CartItem, lineOrderItems } from "@/types";
+import { CartItem } from "@/types";
 import { CartSummary } from "@/components/Cart/CartSummary";
 import { CartTable } from "@/components/Cart/CartTable";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
-import { useFetchUpdateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import axios from "axios";
+import Notification from "@/components/Layouts/Notification";
+import { PageHeader } from "@/components/Layouts/PageHeader";
+import Link from "next/link";
 
 const Cart = () =>
 {
     const { items } = useAppSelector(state => state.Cart);
     const { currentOrder: { orderId } } = useAppSelector(state => state.currentOrder);
     const { createOrder, createdOrder, error: createError } = useCreateOrderWoo();
-    // const { updateOrder, updatedOrder, error: updateError } = useUpdateOrderWoo();
+    const { updateOrder, orderData, error: updateError } = useUpdateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [products, setProducts] = useState<lineOrderItems[]>([]);
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
-    const [currentTotal, setCurrentTotal] = useState<string>("");
-    const [isUpdating, setIsUpdating] = useState<boolean>(false);
+    const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
-    const [data, setData] = useState(null);
+
     useEffect(() =>
     {
-        if (orderId && items)
+        if (orderId || items)
         {
-            setIsUpdating(true);
             createUpdateOrder(orderId, items);
+        } else
+        {
+            setIsUpdating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items, orderId]);
 
-    async function createUpdateOrder(orderId: number, items: CartItem[])
+    async function createUpdateOrder(orderId: number | null, items: CartItem[])
     {
-        if (!items || items.length < 0) return;
+        if (items.length === 0) return;
         if (orderId)
         {
-            updateOrderWoo(orderId, items);
-            // updateOrder(items, orderId);
+            updateOrder(items, orderId);
             return;
         } else
         {
+            console.log('sds')
+            console.log(items);
             createOrder(items);
             return;
         }
     }
 
-    const updateOrderWoo = async (orderId, items) =>
+    useEffect(() =>
     {
-        try
-        {
-            const response = await axios.put(`/api/woo/orders/${orderId}`, {
-                credentials: {
-                    line_items: [
-                        ...items
-                    ]
-                }
-            });
-            setData(response.data);
-            console.log('Order updated successfully:', response.data);
-        } catch (error)
-        {
-            console.error('Error updating order:', error);
-        }
-    };
+        if (createdOrder) updateLocalState(createdOrder, false);
+        if (orderData) updateLocalState(orderData, false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, orderData])
 
-    // useEffect(() =>
-    // {
-    //     if (createdOrder)
-    //     {
-    //         updateLocalState(createdOrder.line_items, createdOrder, false);
-    //     }
-
-    //     if (updatedOrder)
-    //     {
-    //         console.log(updatedOrder);
-    //         updateLocalState(updatedOrder.line_items, updatedOrder, false);
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [createdOrder, updatedOrder])
+    const updateLocalState = useCallback((currentOrder: OrderType, isLoading: boolean): void =>
+    {
+        if (!currentOrder || !currentOrder.line_items || !currentOrder.total) return;
+        setCurrentOrder(currentOrder);
+        setIsUpdating(isLoading);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdOrder, orderData]);
 
     useEffect(() =>
     {
-        if (createdOrder)
+        if (createError || updateError)
         {
-            updateLocalState(createdOrder.line_items, createdOrder, false);
+            setIsUpdating(false);
+            alert('Sorry, but it was server error.');
         }
-
-        if (data)
-        {
-            console.log(data);
-            updateLocalState(data.line_items, data, false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder, data])
-
-
-    // useEffect(() =>
-    // {
-    //     if (createError || updateError)
-    //     {
-    //         setIsUpdating(false);
-    //         alert('Sorry, but it was server error.');
-    //     }
-    // }, [createError, updateError])
-
-    // const updateLocalState = useCallback((line_items: lineOrderItems[], currentOrder: OrderType, isLoading: boolean): void =>
-    // {
-    //     if (!line_items) return;
-    //     setProducts(line_items);
-    //     setIsUpdating(isLoading);
-    //     setCurrentOrder(currentOrder);
-    //     setCurrentTotal(currentOrder.total);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [createdOrder, updatedOrder]);
-
-    const updateLocalState = useCallback((line_items: lineOrderItems[], currentOrder: OrderType, isLoading: boolean): void =>
-    {
-        if (!line_items) return;
-        setProducts(line_items);
-        setIsUpdating(isLoading);
-        setCurrentOrder(currentOrder);
-        setCurrentTotal(currentOrder.total);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder, data]);
+    }, [createError, updateError])
 
     return (
         <>
@@ -140,16 +86,26 @@ const Cart = () =>
             </Head>
             <main>
                 <Section className="section" isContainer={true} isBreadcrumbs={true}>
-                    <Box className={styles.Cart__top}>
-                        <Breadcrumbs links={breadLinks} />
-                        <h1 className="sub-title">Koszyk</h1>
-                    </Box>
+                    <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
+                    {(!currentOrder && !isUpdating) && <Notification>
+                        <Box className={styles.Cart__notification}>
+                            <Typography>
+                                Twój koszyk aktualnie jest pusty.
+                            </Typography>
+                            <Typography>
+                                <Link href={""}>Powrót do sklepu</Link>
+                            </Typography>
+                        </Box>
+                    </Notification>}
                     <Box className={styles.Cart__content}>
                         <Box>
-                            {products && <CartTable products={products} isLoading={isUpdating} total={currentTotal} />}
+                            {currentOrder && <CartTable
+                                products={currentOrder.line_items}
+                                isLoading={isUpdating}
+                                total={currentOrder.total} />}
                             {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
-                        {currentOrder && <CartSummary order={currentOrder as OrderType} isLoading={isUpdating} />}
+                        <CartSummary order={currentOrder as OrderType} isLoading={isUpdating} />
                     </Box>
                 </Section>
             </main>

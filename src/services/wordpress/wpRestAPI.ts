@@ -5,6 +5,9 @@ const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
     password: process.env.USER_PASSWORD || ''
 };
+
+type paramsType = Record<string, string[] | string | number | undefined>;
+
 export class WpRestApi
 {
     private readonly _apiBase: string;
@@ -23,12 +26,12 @@ export class WpRestApi
         return `Basic ${encodedAuth}`;
     }
 
-    async getResource(url: string, params?: Record<string, string[] | string | number | undefined>): Promise<AxiosResponse<unknown>>
+    async getResource(url: string, params?: paramsType, authorization?: string | null): Promise<AxiosResponse<unknown>>
     {
         const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
             params: params,
             headers: {
-                Authorization: this.getBasicAuth()
+                Authorization: authorization ? authorization : this.getBasicAuth()
             }
         })
 
@@ -40,9 +43,9 @@ export class WpRestApi
         return response;
     }
 
-    async get(url: string, params?: Record<string, string[] | string | number | undefined>)
+    async get(url: string, params?: paramsType, authorization?: string | null)
     {
-        const result = await this.getResource(url, params);
+        const result = await this.getResource(url, params, authorization);
         return result;
     }
 }
