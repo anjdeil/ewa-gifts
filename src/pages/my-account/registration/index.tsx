@@ -5,8 +5,8 @@ import { FC, useEffect } from "react";
 import { useFetchCheckLoggedInMutation } from "@/store/jwt/jwtApi";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { useRouter } from "next/router";
-import { RegistrationForm } from "@/components/Forms/RegistrationForm";
 import styles from "@/components/MyAccount/styles.module.scss";
+import { RegistrationForm } from "@/components/Forms/RegistrationForm";
 
 export const MyAccountPropsSchema = z.object({
     userToken: z.string(),
