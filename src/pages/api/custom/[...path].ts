@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const slug = typeof path === 'string' ? path : path.join('/');
+
     try
     {
         const response = await customRestApi.get(slug, params);
