@@ -16,18 +16,21 @@ import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
 
-interface RegistrationFormProps {
+interface RegistrationFormProps
+{
     isCheckout?: boolean,
     userFields?: userFieldsType | null,
     lineItems?: CartItem[] | [],
     shippingLines?: ShippingLine[]
 }
 
-export interface FormHandle {
+export interface FormHandle
+{
     submit: () => void;
 }
 
-export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems, shippingLines }, ref) => {
+export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({ isCheckout = false, userFields, lineItems, shippingLines }, ref) =>
+{
     useImperativeHandle(ref, () => ({
         submit: () => handleSubmit(onSubmit)()
     }));
@@ -50,24 +53,31 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-    useEffect(() => {
-        if (createError) {
+    useEffect(() =>
+    {
+        if (createError)
+        {
             alert("Server Error, please try again")
-        } else if (createdOrder) {
+        } else if (createdOrder)
+        {
             router.push(`/my-account/orders/${createdOrder.id}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])
 
-    useEffect(() => {
-        if ("userToken" in cookie) {
+    useEffect(() =>
+    {
+        if ("userToken" in cookie)
+        {
             setLoggedIn(true);
-        } else {
+        } else
+        {
             setLoggedIn(false);
         }
     }, [cookie])
 
-    const onSubmit = async (data: RegistrationFormType) => {
+    const onSubmit = async (data: RegistrationFormType) =>
+    {
         const body: registrationUserDataType = {
             id: userFields && userFields.id || '',
             email: data.email,
@@ -100,12 +110,16 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
             }
         }
 
-        try {
-            if (body && isCheckout && lineItems) {
-                if (isLoggedIn) {
+        try
+        {
+            if (body && isCheckout && lineItems)
+            {
+                if (isLoggedIn)
+                {
                     createOrder(lineItems, 'processing', shippingLines, body);
                     return;
-                } else {
+                } else
+                {
                     const response = await fetchUserRegistration(body);
                     if (!response) return;
                     createOrder(lineItems, 'processing', shippingLines, body);
@@ -115,9 +129,11 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8)
                     });
                 }
-            } else {
+            } else
+            {
                 const response = await fetchUserRegistration(body);
-                if (response && 'data' in response) {
+                if (response && 'data' in response)
+                {
                     const userToken = await fetchUserToken({ username: data.email, password: data.password }).unwrap();
                     setCookie('userToken', userToken.token, {
                         path: '/',
@@ -125,9 +141,11 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     });
                 }
             }
-        } catch (error) {
+        } catch (error)
+        {
             return { error: (error as Error).message };
-        } finally {
+        } finally
+        {
             reset();
         }
     };
@@ -141,7 +159,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.first_name}
+                    initialValue={userFields ? userFields.first_name : null}
                 />
                 <CustomInput
                     fieldName="Nazwisko"
@@ -149,7 +167,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.last_name}
+                    initialValue={userFields ? userFields.last_name : null}
                 />
                 <CustomInput
                     fieldName="Adres e-mail"
@@ -157,7 +175,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.email}
+                    initialValue={userFields ? userFields.email : null}
                 />
                 {!isLoggedIn && <CustomInput
                     fieldName="Hasło"
@@ -180,7 +198,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     errors={errors}
                     isNumeric={true}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.phone}
+                    initialValue={userFields ? userFields.billing.phone : null}
                 />
                 <CustomInput
                     fieldName="NIP (optional)"
@@ -189,7 +207,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     errors={errors}
                     isNumeric={true}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.address_2}
+                    initialValue={userFields ? userFields.billing.address_2 : null}
                 />
                 <CustomInput
                     fieldName="Nazwa firmy"
@@ -197,7 +215,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.company}
+                    initialValue={userFields ? userFields.billing.company : null}
                 />
                 <CustomInput
                     fieldName="Kraj / region"
@@ -205,7 +223,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.country}
+                    initialValue={userFields ? userFields.billing.country : null}
                 />
                 <CustomInput
                     fieldName="Miasto"
@@ -213,7 +231,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.city}
+                    initialValue={userFields ? userFields.billing.city : null}
                 />
                 <CustomInput
                     fieldName="Ulica"
@@ -221,7 +239,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.address_1}
+                    initialValue={userFields ? userFields.billing.address_1 : null}
                 />
                 <CustomInput
                     fieldName="Kod pocztowy"
@@ -231,7 +249,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isNumeric={true}
                     isPost={true}
                     setValue={setValue}
-                    initialValue={userFields && userFields.billing.postcode}
+                    initialValue={userFields ? userFields.billing.postcode : null}
                 />
                 {!isCheckout && <Box className={styles.form__bottom}>
                     <CustomInput
