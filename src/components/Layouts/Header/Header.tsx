@@ -31,9 +31,6 @@ const Header: React.FC = () => {
                 <div className={styles.header__search}>
                     <SearchBar />
                 </div>
-
-                {/* <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}> */}
-                {/* </Box> */}
                 <div className={styles.header__icons}>
                     <HeaderIconButtons />
                 </div>
