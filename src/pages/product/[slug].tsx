@@ -58,7 +58,7 @@ const Product: FC<ProductPropsType> = ({ product }) => {
     /* Get related products */
     const { data: relatedProductsData, isLoading, isError } = useFetchProductListQuery(productListQueryParams);
     const relatedProducts = relatedProductsData?.data && relatedProductsData.data.items;
-    let filteredRelatedProducts = relatedProducts?.filter((related: typeProductType) => related.slug !== product.slug);
+    const filteredRelatedProducts = relatedProducts?.filter((related: typeProductType) => related.slug !== product.slug);
     if (filteredRelatedProducts && filteredRelatedProducts?.length > 4) filteredRelatedProducts.splice(-1);
 
     return (
