@@ -19,7 +19,7 @@ import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
-import { lineOrderItems } from "@/types";
+// import { lineOrderItems } from "@/types";
 
 const Cart = () => {
     const [fetchCreateOrder, { data: createdOrder, error: createError }] = useFetchCreateOrderMutation();
