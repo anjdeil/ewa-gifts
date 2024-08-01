@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CustomInput } from "../CustomInput";
+// import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
 import { useFetchUserRegistrationMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
@@ -61,6 +61,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
             console.log(isSubmitting);
             console.log(isSubmitSuccessful);
             setValue('name', 'string');
+            register('name');
+            console.log(errors);
             onShippingChange();
             alert("Server Error, please try again")
         } else if (createdOrder)
@@ -182,7 +184,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     setValue={setValue}
                     initialValue={userFields ? userFields.email : null}
                 /> */}
-                {!isLoggedIn && <CustomInput
+                {/* {!isLoggedIn && <CustomInput
                     fieldName="Hasło"
                     name='password'
                     register={register}
@@ -195,7 +197,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     isPassword={true}
-                />}
+                />} */}
                 {/* <CustomInput
                     fieldName="Numer telefonu"
                     name='phoneNumber'
