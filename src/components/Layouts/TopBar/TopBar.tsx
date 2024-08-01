@@ -17,7 +17,7 @@ const TopBar: React.FC = () => {
                     skeleton={
                         {
                             elements: 5,
-                            width: "200px",
+                            width: "90px",
                             height: "40px",
                             gap: '10px'
                         }
@@ -28,7 +28,7 @@ const TopBar: React.FC = () => {
                     skeleton={
                         {
                             elements: 2,
-                            width: "200px",
+                            width: "100px",
                             height: "40px",
                             gap: '20px'
                         }
