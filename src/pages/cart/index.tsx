@@ -24,7 +24,7 @@ import { lineOrderItems } from "@/types";
 const Cart = () => {
     const [fetchCreateOrder, { data: createdOrder, error: createError }] = useFetchCreateOrderMutation();
     const { items, shippingLines } = useAppSelector(state => state.Cart);
-    const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
+    // const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
     // // const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     // // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +53,7 @@ const Cart = () => {
     useEffect(() => {
         if (createdOrder && createdOrder.line_items) {
             setCurrentOrder(createdOrder);
-            setLineItems(createdOrder.line_items);
+            // setLineItems(createdOrder.line_items);
             setIsUpdating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
