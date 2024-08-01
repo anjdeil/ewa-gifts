@@ -46,7 +46,7 @@ export const CustomInput: FC<CustomInputProps> = ({
         {
             setValue(name, initialValue, { shouldValidate: true });
         }
-    }, [initialValue, name, setValue]);
+    }, [initialValue, name, setValue])
 
     const registerProps = register ? register(name) : {};
     const isError = errors && name ? name in errors : false;
