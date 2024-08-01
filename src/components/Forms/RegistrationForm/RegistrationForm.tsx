@@ -39,7 +39,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const [cookie, setCookie] = useCookies(['userToken']);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     // const [isShipping, setShipping] = useState<boolean>(false);
-    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
+    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, false);
+    // isShipping
     type RegistrationFormType = z.infer<typeof formSchema>;
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
@@ -99,15 +100,15 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                 phone: data.phoneNumber,
             },
             shipping: {
-                first_name: isShipping && data.nameShipping || '',
-                last_name: isShipping && data.lastNameShipping || '',
-                company: isShipping && data.companyNameShipping || '',
-                address_1: isShipping && data.addressShipping || '',
-                city: isShipping && data.cityShipping || '',
-                postcode: isShipping && data.postCodeShipping || '',
-                country: isShipping && data.countryShipping || '',
+                first_name: false && data.nameShipping || '',
+                last_name: false && data.lastNameShipping || '',
+                company: false && data.companyNameShipping || '',
+                address_1: false && data.addressShipping || '',
+                city: false && data.cityShipping || '',
+                postcode: false && data.postCodeShipping || '',
+                country: false && data.countryShipping || '',
                 email: data.email,
-                phone: isShipping && data.phoneNumberShipping || '',
+                phone: false && data.phoneNumberShipping || '',
             }
         }
 
