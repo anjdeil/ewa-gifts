@@ -2,22 +2,27 @@
 
 
 .product {
-	padding: 48px 0 80px;
-	@media screen and (max-width: 1024px) {
-		padding: 35px 0 79px;
-	}
-	@media screen and (max-width: 768px) {
-		padding: 18px 0 88px;
-	}
-	&_podobny{
-		margin-top: 117px;
-		&__title {
-			font-weight: 600;
-			font-size: 20px;
-			line-height: 120%;
-			text-transform: uppercase;
-			color: $black-color;
-			margin-bottom: 30px;
+	padding-top: 50px;
+	margin-bottom: 50px;
+
+	&__relative-products {
+
+		&-title {
+			margin-bottom: 1.5em;
 		}
+	}
+}
+
+@media (max-width: 1024px) {
+	.product {
+		padding-top: 40px;
+		margin-bottom: 40px;
+	}
+}
+
+@media (max-width: 768px) {
+	.product {
+		padding-top: 20px;
+		margin-bottom: 30px;
 	}
 }

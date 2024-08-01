@@ -1,25 +1,23 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+import React, { FC } from 'react';
 import { MobileSearchButton } from '@/components/Layouts/SearchBar';
 import Image from 'next/image';
 import styles from './styles.module.scss';
-import { IconButton, Box } from '@mui/material';
-import { CategoriesMenu } from '../CategoriesMenu';
+import { IconButton } from '@mui/material';
 import Link from 'next/link';
 
-const MobileHeader: React.FC = () => {
+const MobileHeader: FC = () => {
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <CategoriesMenu />
-            <AppBar position="static" className={styles.header}>
-                <Toolbar sx={{ gap: '30px', justifyContent: 'space-between', minHeight: '100%!important' }}>
+        <div className={styles.headerWrapper}>
+            <div className={`${styles.header} container`}>
+                <div className={styles.header__logo}>
                     <Link href={'/'} passHref>
-                        <Image src="/logo.svg" alt="Logo" width={70} height={20} unoptimized={true} />
+                        <Image src="/logo.svg" alt="Logo" width={70} height={30} unoptimized={true} />
                     </Link>
-                    <Box className={styles['header__search-wrapper']} sx={{ flexGrow: 1 }}>
-                        <MobileSearchButton />
-                    </Box>
+                </div>
+                <div className={styles.header__searchWrapper}>
+                    <MobileSearchButton />
+                </div>
+                <div className={styles.header__iconButton}>
                     <IconButton>
                         <Link href={'tel:+48459568017'}>
                             <Image
@@ -30,9 +28,9 @@ const MobileHeader: React.FC = () => {
                             />
                         </Link>
                     </IconButton>
-                </Toolbar>
-            </AppBar>
-        </Box >
+                </div>
+            </div>
+        </div>
     );
 }
 

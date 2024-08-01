@@ -1,11 +1,18 @@
 @import '@/styles/variables.module.scss';
 
 .header {
-    padding: 10px 20px;
-    background-color: $white-lilac;
-    box-shadow: none;
-
-    &__search-wrapper {
-        max-width: 80%;
+    &Wrapper {
+        background-color: $white-lilac;
     }
+
+    display: grid;
+    grid-template-columns: 70px 1fr 40px;
+    align-items: center;
+    gap: 20px;
+    height: 60px;
+
+    &__iconButton {
+        justify-self: end;
+    }
+
 }

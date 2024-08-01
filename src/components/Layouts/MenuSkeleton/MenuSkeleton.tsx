@@ -15,7 +15,6 @@ export const MenuSkeleton: FC<MenuSkeletonProps> = ({ elements, isColumn, width,
 
     return (
         <Box sx={{
-            width: 300,
             display: 'flex',
             flexDirection: isColumn ? 'column' : 'row',
             gap: gap

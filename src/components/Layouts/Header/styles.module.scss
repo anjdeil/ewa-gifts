@@ -1,11 +1,24 @@
 @import '@/styles/variables.module.scss';
 
 .header {
-    padding: 10px 15px;
-    background-color: $white-lilac;
-    box-shadow: none;
+    height: 65px;
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    gap: 30px;
+    align-items: center;
+    justify-items: auto;
 
-    &__search-wrapper {
-        max-width: 60%;
+    &Wrapper {
+        background-color: $white-lilac;
+    }
+
+    &__icons {
+        justify-self: end;
+    }
+}
+
+@media (max-width: 1024px) {
+    .header {
+        grid-template-columns: 150px 1fr 150px;
     }
 }
