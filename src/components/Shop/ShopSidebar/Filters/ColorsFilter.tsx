@@ -1,17 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import React, { FC } from "react";
 import { Radio } from '@mui/material';
 import { EwaColorPickIcon, EwaColorPickCheckedIcon } from '@/components/EwaComponents/EwaColorPickIcons';
 import styles from "../styles.module.scss";
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
+import { AttributeTermType } from "@/types/Services/customApi/Attribute/AttributeTermType";
 
 interface ColorsFilter {
-    colors: any,
-    currentColor: string,
-    onChangeColor: any,
+    colors: AttributeTermType[],
+    currentColor: string | null,
+    onChangeColor: (event: React.ChangeEvent<HTMLInputElement>) => void,
     onReset: () => void
 }
 

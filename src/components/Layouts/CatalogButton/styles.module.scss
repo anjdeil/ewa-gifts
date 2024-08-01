@@ -1,0 +1,23 @@
+@import '@/styles/variables.module.scss';
+
+.catalog-button {
+    color: $black-color;
+    background-color: $accent-light;
+    border: none;
+    padding: 0.65em 1em;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: .2s ease;
+
+    &:hover,
+    &:focus-visible {
+        background-color: $accent;
+    }
+
+
+    &__icon {
+        margin-right: 0.5em;
+    }
+}

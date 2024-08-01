@@ -16,9 +16,9 @@ const MobileSearchButton = () => {
                 textTransform: "none",
                 fontSize: "1rem",
                 justifyContent: "flex-start",
-                color: variables.textGrey,
                 borderRadius: "10px",
                 padding: "8px",
+                color: variables.textGray,
                 '&:hover': {
                     backgroundColor: variables.inputDarker,
 
@@ -26,7 +26,7 @@ const MobileSearchButton = () => {
             }}
             onClick={() => dispatch(popupSet('mobile-search'))}
         >
-            Search
+            Szukaj
         </Button>
     )
 }

@@ -32,7 +32,7 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
             <Link href={'/'} passHref className={styles.form__logo}>
                 <Image src="/logo.svg" alt="Logo" width={150} height={40} />
             </Link>
-            <h3 className={styles.form__title}>
+            <h3 className={`secondary-title ${styles.form__title}`}>
                 Zapisz się do naszego newslettera
             </h3>
             <form onSubmit={handleSubmit(async ({ email }) => {
@@ -50,7 +50,7 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
 
             })}>
                 <input
-                    placeholder="Test Email"
+                    placeholder="Twój Email"
                     {...register("email")}
                     className={styles.form__input}
                 />
@@ -60,15 +60,15 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
                         type="checkbox"
                         {...register("consent")}
                     />
-                    Wyrażam zgodę na przesyłanie informacji handlowych.
+                    Wyrażam zgodę na przesyłanie informacji handlowej.
                 </label>
                 {errors.consent && <p className={styles.form__error}>{errors.consent?.message}</p>}
-                <button className={`btn btn-primary ${styles.form__btn}`} type="submit">Call</button>
+                <button className={`btn btn-primary ${styles.form__btn}`} type="submit">Wyślij</button>
                 {data && <p className={styles.form__success}>{data.message}</p>}
                 {isError && <p className={styles.form__error}>{error.data}</p>}
             </form>
-            <p className={styles.form__rules}>
-                Sprawdź naszą Politykę Prywatności i dowiedz się, w jaki sposób przetwarzamy dane. W każdej chwili możesz przerwać subskrybcję newslettera za darmo.
+            <p className={`${styles.form__rules} desc`}>
+                Sprawdź naszą <Link href={'/privacy-policy'}>Politykę Prywatności</Link> i dowiedz się, w jaki sposób przetwarzamy dane. W każdej chwili możesz przerwać subskrybcję newslettera za darmo.
             </p>
 
         </div>

@@ -1,7 +1,19 @@
-@media(max-width: 1200px) {
-    .TopBar {
-        &__nav ul {
-            gap: 30px;
+.topBar {
+    &__stack {
+        height: 80px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .topBar {
+        &__stack {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            height: auto;
         }
     }
 }

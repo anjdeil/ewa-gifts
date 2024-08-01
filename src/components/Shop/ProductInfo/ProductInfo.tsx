@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import styles from './styles.module.scss';
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types";
@@ -17,8 +17,11 @@ import { filterByColor } from "@/Utils/filterByColor";
 import { useRouter } from "next/router";
 import formatPrice from "@/Utils/formatPrice";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
+import ProductTitling from "../ProductTitling";
+
 const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const router = useRouter();
+    const isTablet = useMediaQuery('(max-width: 1024px)');
     const { name, description, price, sku, images, attributes, default_attributes, type } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
@@ -27,6 +30,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
+
 
     const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
     const allSizes = useMemo(() => transformProductSizes(attributes), [attributes]);
@@ -92,18 +96,15 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
 
     return (
         <Box className={styles.product}>
+            {isTablet && <ProductTitling title={name} sku={currentSku} />}
+
             {currentImages &&
                 <Box className={styles.product__slider}>
                     <ProductSwiper data={currentImages} />
                 </Box>
             }
             <Box className={styles.product__info}>
-                {name && <Typography variant='h1' className={styles['product-info__title']} title={name}>
-                    {name}
-                </Typography>}
-                {currentSku && <Typography variant='caption' className={styles['product-info__sku']}>
-                    {currentSku}
-                </Typography>}
+                {!isTablet && <ProductTitling title={name} sku={currentSku} />}
                 {currentPrice && <Box className={styles['price-wrapper']}>
                     <Typography variant='body2' className={styles['product-info__price']}>
                         Od {formatPrice(currentPrice)}
