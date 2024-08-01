@@ -5,7 +5,7 @@ import { FC, useEffect } from "react";
 import { useFetchCheckLoggedInMutation } from "@/store/jwt/jwtApi";
 import { useRouter } from "next/router";
 import styles from "@/components/MyAccount/styles.module.scss";
-import { RegistrationForm } from "@/components/Forms/RegistrationForm";
+// import { RegistrationForm } from "@/components/Forms/RegistrationForm";
 import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
 // import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -58,7 +58,7 @@ const MyAccount: FC<MyAccountProps> = () =>
             <main className={styles['my-account']}>
                 <Section className={""} isBreadcrumbs={true} isContainer={true}>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
-                    <RegistrationForm />
+                    {/* <RegistrationForm /> */}
                 </Section>
             </main>
         </>
