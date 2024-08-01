@@ -22,13 +22,15 @@ import { useEffect, useState } from "react";
 // import { AddCoupon } from "@/components/Shop/AddCoupon";
 import Link from "next/link";
 import Notification from "@/components/Layouts/Notification";
+import { lineOrderItems } from "@/types";
+import { CartTable } from "@/components/Cart/CartTable";
 // import { CartTable } from "@/components/Cart/CartTable";
 // import { lineOrderItems } from "@/types";
 
 const Cart = () => {
     const [fetchCreateOrder, { data: createdOrder, error: createError }] = useFetchCreateOrderMutation();
     const { items, shippingLines } = useAppSelector(state => state.Cart);
-    // const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
+    const [lineItems, setLineItems] = useState<lineOrderItems[]>([]);
     // // const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     // // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,7 +59,7 @@ const Cart = () => {
     useEffect(() => {
         if (createdOrder && createdOrder.line_items) {
             setCurrentOrder(createdOrder);
-            // setLineItems(createdOrder.line_items);
+            setLineItems(createdOrder.line_items);
             setIsUpdating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,13 +93,14 @@ const Cart = () => {
                                     </Typography>
                                 </Box>
                             </Notification>}
-                            {/* {items.length > 0 && lineItems.length > 0 && (
+                            {
+                                items?.length > 0 && lineItems?.length > 0 &&
                                 <CartTable
                                     products={lineItems}
                                     isLoading={isUpdating}
                                     total={createdOrder?.total}
                                 />
-                            )} */}
+                            }
                         </Box>
                         {currentOrder && <CartSummary order={currentOrder} isLoading={isUpdating} />}
                     </Box>
