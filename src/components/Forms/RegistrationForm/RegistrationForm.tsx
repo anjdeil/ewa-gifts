@@ -1,17 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-// import { CustomInput } from "../CustomInput";
+import { CustomInput } from "../CustomInput";
 import { Box } from "@mui/material";
 import { useFetchUserRegistrationMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
 import variables from '@/styles/variables.module.scss';
-import { CartItem, RegistrationFormSchema, WpWooError } from "@/types";
+import { CartItem, WpWooError } from "@/types";
 import { z } from "zod";
 import styles from './styles.module.scss';
-// import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
+import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
@@ -19,12 +19,36 @@ import { useRouter } from "next/router";
 interface RegistrationFormProps
 {
     isCheckout?: boolean,
-    // userFields?: userFieldsType | null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    userFields?: any,
+    userFields?: userFieldsType | null,
     lineItems?: CartItem[] | [],
     shippingLines?: ShippingLine[]
 }
+
+const formSchema = z.object({
+    name: z.string().min(3, 'Required field'),
+    lastName: z.string().min(3, 'Required field'),
+    email: z.string().email('Please, type valid email'),
+    companyName: z.string().min(1, 'Required field'),
+    address: z.string().min(4, 'Required field'),
+    postCode: z.string().min(5, 'The post code must contain 5 characters'),
+    city: z.string().min(1, 'Required field'),
+    country: z.string().min(1, 'Required field'),
+    password: z.string().optional(),
+    confirmPassword: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    nip: z.string().optional(),
+    terms: z.string().optional(),
+    nameShipping: z.string().optional(),
+    lastNameShipping: z.string().optional(),
+    companyNameShipping: z.string().optional(),
+    addressShipping: z.string().optional(),
+    postCodeShipping: z.string().optional(),
+    cityShipping: z.string().optional(),
+    countryShipping: z.string().optional(),
+    phoneNumberShipping: z.string().optional(),
+})
+
+type RegistrationFormType = z.infer<typeof formSchema>;
 
 export interface FormHandle
 {
@@ -41,8 +65,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const [cookie, setCookie] = useCookies(['userToken']);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isShipping, setShipping] = useState<boolean>(false);
-    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
-    type RegistrationFormType = z.infer<typeof formSchema>;
+    // const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
+    // type RegistrationFormType = z.infer<typeof formSchema>;
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
         resolver: zodResolver(formSchema)
@@ -60,12 +84,6 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     {
         if (createError)
         {
-            console.log(isSubmitting);
-            console.log(isSubmitSuccessful);
-            setValue('name', 'string');
-            register('name');
-            console.log(errors);
-            onShippingChange();
             alert("Server Error, please try again")
         } else if (createdOrder)
         {
@@ -87,8 +105,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
 
     const onSubmit = async (data: RegistrationFormType) =>
     {
-        // :registrationUserDataType
-        const body = {
+        const body: registrationUserDataType = {
             id: userFields && userFields.id || '',
             email: data.email,
             first_name: data.name,
@@ -105,7 +122,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                 postcode: data.postCode,
                 country: data.country,
                 email: data.email,
-                phone: data.phoneNumber,
+                phone: "data.phoneNumber",
             },
             shipping: {
                 first_name: isShipping && data.nameShipping || '',
@@ -163,7 +180,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Box className={styles.form__wrapper}>
-                {/* <CustomInput
+                <CustomInput
                     fieldName="Imię"
                     name='name'
                     register={register}
@@ -186,8 +203,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     errors={errors}
                     setValue={setValue}
                     initialValue={userFields ? userFields.email : null}
-                /> */}
-                {/* {!isLoggedIn && <CustomInput
+                />
+                {!isLoggedIn && <CustomInput
                     fieldName="Hasło"
                     name='password'
                     register={register}
@@ -200,8 +217,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     register={register}
                     errors={errors}
                     isPassword={true}
-                />} */}
-                {/* <CustomInput
+                />}
+                <CustomInput
                     fieldName="Numer telefonu"
                     name='phoneNumber'
                     register={register}
@@ -260,8 +277,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isPost={true}
                     setValue={setValue}
                     initialValue={userFields ? userFields.billing.postcode : null}
-                /> */}
-                {/* {!isCheckout && <Box className={styles.form__bottom}>
+                />
+                {!isCheckout && <Box className={styles.form__bottom}>
                     <CustomInput
                         fieldName="Wyrażam zgodę na przetwarzanie danych osobowych."
                         name='terms'
@@ -273,11 +290,11 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
                         The account was created successfully
                     </p>}
-                </Box>} */}
+                </Box>}
                 {isError && <p style={{ color: variables.error }}
                     dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
             </Box>
-            {/* {isCheckout && <Box className={styles.form__content}>
+            {isCheckout && <Box className={styles.form__content}>
                 <CustomInput
                     fieldName="Wysłać na inny adres?"
                     errors={errors}
@@ -316,7 +333,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isTextarea={true}
                     placeholder="Wprowadź opis..."
                 />
-            </Box>} */}
+            </Box>}
         </form>
     )
 });
