@@ -74,7 +74,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         } else if (createError)
         {
             setCreating(false);
-            router.push('/cart');
+            // router.push('/cart');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])
