@@ -1,5 +1,5 @@
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
-// import { RegistrationForm, FormHandle } from "@/components/Forms/RegistrationForm";
+import { RegistrationForm, FormHandle } from "@/components/Forms/RegistrationForm";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { Section } from "@/components/Layouts/Section";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
@@ -16,10 +16,8 @@ import MiniCart from "@/components/Cart/MiniCart";
 import styles from './styles.module.scss';
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useAppSelector } from "@/hooks/redux";
-import React from 'react';
-// { useRef }
-import { CheckoutProps } from "@/types/Pages/checkout";
-// userFieldsType
+import React, { useRef } from 'react';
+import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
 // import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
 
@@ -28,12 +26,12 @@ const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
     // const router = useRouter();
-    // const childRef = useRef<FormHandle>(null);
+    const childRef = useRef<FormHandle>(null);
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
     // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(userData ? false : true);
-    // const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
+    const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
     const [errMessage, setErrMessage] = useState<string | boolean>(false);
     const [checkboxes, setCheckboxes] = useState({
         checkbox1: false,
@@ -105,10 +103,10 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
     useEffect(() =>
     {
-        // if (customerData)
-        // {
-        //     setUserFields(customerData);
-        // }
+        if (customerData)
+        {
+            setUserFields(customerData);
+        }
     }, [customerData])
 
     useEffect(() =>
@@ -140,11 +138,11 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
             setErrMessage("Zaznacz wszystkie zgody.");
             return;
         }
-        // if (childRef.current)
-        // {
-        //     childRef.current.submit();
-        //     setErrMessage(false);
-        // }
+        if (childRef.current)
+        {
+            childRef.current.submit();
+            setErrMessage(false);
+        }
     }
 
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -195,13 +193,13 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
                     <Box className={styles.checkout__content}>
                         <Box>
-                            {/* <RegistrationForm
+                            <RegistrationForm
                                 isCheckout={true}
                                 ref={childRef}
                                 userFields={userFields}
                                 lineItems={items}
                                 shippingLines={shippingLines}
-                            /> */}
+                            />
                         </Box>
                         <Box>
                             <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>

@@ -74,7 +74,7 @@ const Cart = () =>
                                         Twój koszyk aktualnie jest pusty.
                                     </Typography>
                                     <Typography>
-                                        <Link href={""}>Powrót do sklepu</Link>
+                                        <Link href={"/"}>Powrót do sklepu</Link>
                                     </Typography>
                                 </Box>
                             </Notification>}
