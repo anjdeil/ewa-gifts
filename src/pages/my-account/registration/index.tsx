@@ -26,23 +26,29 @@ const breadLinks = [
 
 const MyAccount: FC<MyAccountProps> = () =>
 {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [cookie, _, removeCookie] = useCookies(['userToken']);
     const [fetchCheckLoggedIn, { data }] = useFetchCheckLoggedInMutation();
     const router = useRouter();
 
     useEffect(() =>
     {
-        if ("userToken" in cookie)
-        {
-            const data = fetchCheckLoggedIn(cookie.userToken);
-            if (data) console.log(data);
-            // if (data && data.data.status === 200)
-            //     router.push("/my-account");
-            // else
-            //     removeCookie('userToken');
-        }
+        if ("userToken" in cookie) { fetchCheckLoggedIn(cookie.userToken); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie]);
+
+    useEffect(() =>
+    {
+        if (data && data.data.status === 200)
+        {
+            router.push("/my-account");
+        } else
+        {
+            removeCookie('userToken');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
+
     return (
         <>
             <Head>
@@ -64,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 {
     const result = await checkUserTokenInServerSide('/my-account', context, 'userToken');
 
-    if (result && result.id) return { redirect: { ...result.redirect } };
+    if (result && result.id) return { redirect: { destination: "/my-account", permanent: false, } };
     return { props: { userData: result } };
 }
 
