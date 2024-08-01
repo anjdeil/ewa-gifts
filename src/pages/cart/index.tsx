@@ -12,13 +12,17 @@ import styles from './styles.module.scss';
 // import Notification from "@/components/Layouts/Notification";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { CartSummary } from "@/components/Cart/CartSummary";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 // import Link from "next/link";
 // import { lineOrderItems } from "@/types";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
+// import { AddCoupon } from "@/components/Shop/AddCoupon";
+import Link from "next/link";
+import Notification from "@/components/Layouts/Notification";
+// import { CartTable } from "@/components/Cart/CartTable";
 // import { lineOrderItems } from "@/types";
 
 const Cart = () => {
@@ -76,26 +80,25 @@ const Cart = () => {
                 <Section className="section" isContainer={true} isBreadcrumbs={true}>
                     <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
                     <Box className={styles.Cart__content}>
-                        {/* <Box>
+                        <Box>
                             {(items.length === 0 && !isUpdating) && <Notification>
                                 <Box className={styles.Cart__notification}>
                                     <Typography>
                                         Twój koszyk aktualnie jest pusty.
                                     </Typography>
                                     <Typography>
-                                        <Link href={""}>Powrót do sklepu</Link>
+                                        <Link href={"/"}>Powrót do sklepu</Link>
                                     </Typography>
                                 </Box>
                             </Notification>}
-                            {items.length > 0 && lineItems.length > 0 && (
+                            {/* {items.length > 0 && lineItems.length > 0 && (
                                 <CartTable
                                     products={lineItems}
                                     isLoading={isUpdating}
                                     total={createdOrder?.total}
                                 />
-                            )}
-                            <AddCoupon orderId={orderId && orderId} />
-                </Box> */}
+                            )} */}
+                        </Box>
                         {currentOrder && <CartSummary order={currentOrder} isLoading={isUpdating} />}
                     </Box>
                 </Section >
