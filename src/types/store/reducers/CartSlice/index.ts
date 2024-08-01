@@ -24,7 +24,14 @@ export const lineOrderItemsSchema = z.object({
 });
 
 const CartSliceInitialStateSchema = z.object({
-    items: z.array(CartItemSchema),
+    // items: z.array(CartItemSchema),
+    items: z.array(z.object({
+        product_id: z.number(),
+        variation_id: z.number().optional(),
+        quantity: z.number(),
+        total: z.string().optional(),
+        supplier: z.string().optional()
+    })),
     itemsCount: z.number(),
     miniCartOpen: z.boolean()
 });
