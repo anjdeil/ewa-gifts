@@ -1,5 +1,5 @@
 import { z } from "zod";
-// import { lineOrderItemsSchema } from "../store";
+import { lineOrderItemsSchema } from "../store";
 
 const CartProductsSchema = z.object({
     id: z.number(),
@@ -32,28 +32,7 @@ export const CartItemSchema = z.object({
 });
 
 export const CartTablePropsSchema = z.object({
-    // products: z.array(lineOrderItemsSchema),
-    products: z.array(z.object({
-        id: z.number(),
-        name: z.string(),
-        parent_name: z.string().nullable(),
-        product_id: z.number(),
-        variation_id: z.number(),
-        quantity: z.number(),
-        tax_class: z.string(),
-        subtotal: z.string(),
-        subtotal_tax: z.string(),
-        total: z.string(),
-        total_tax: z.string(),
-        taxes: z.array(z.any()),
-        meta_data: z.array(z.any()),
-        image: z.object({
-            id: z.number(),
-            src: z.string()
-        }),
-        sku: z.string(),
-        price: z.number()
-    })),
+    products: z.array(lineOrderItemsSchema),
     total: z.string(),
     isLoading: z.boolean()
 });

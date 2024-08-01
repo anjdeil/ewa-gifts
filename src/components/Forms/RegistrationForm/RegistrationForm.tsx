@@ -38,16 +38,15 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const router = useRouter();
     const [cookie, setCookie] = useCookies(['userToken']);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    // const [isShipping, setShipping] = useState<boolean>(false);
-    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, false);
-    // isShipping
+    const [isShipping, setShipping] = useState<boolean>(false);
+    const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
     type RegistrationFormType = z.infer<typeof formSchema>;
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
         resolver: zodResolver(formSchema)
     });
 
-    // function onShippingChange() { setShipping(prev => !prev); }
+    function onShippingChange() { setShipping(prev => !prev); }
 
     const [fetchUserRegistration, { isError, error }] = useFetchUserRegistrationMutation();
     const [fetchUserToken] = useFetchUserTokenMutation();
@@ -100,15 +99,15 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                 phone: data.phoneNumber,
             },
             shipping: {
-                first_name: false && data.nameShipping || '',
-                last_name: false && data.lastNameShipping || '',
-                company: false && data.companyNameShipping || '',
-                address_1: false && data.addressShipping || '',
-                city: false && data.cityShipping || '',
-                postcode: false && data.postCodeShipping || '',
-                country: false && data.countryShipping || '',
+                first_name: isShipping && data.nameShipping || '',
+                last_name: isShipping && data.lastNameShipping || '',
+                company: isShipping && data.companyNameShipping || '',
+                address_1: isShipping && data.addressShipping || '',
+                city: isShipping && data.cityShipping || '',
+                postcode: isShipping && data.postCodeShipping || '',
+                country: isShipping && data.countryShipping || '',
                 email: data.email,
-                phone: false && data.phoneNumberShipping || '',
+                phone: isShipping && data.phoneNumberShipping || '',
             }
         }
 
@@ -269,7 +268,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                 {isError && <p style={{ color: variables.error }}
                     dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
             </Box>
-            {/* {isCheckout && <Box className={styles.form__content}>
+            {isCheckout && <Box className={styles.form__content}>
                 <CustomInput
                     fieldName="Wysłać na inny adres?"
                     errors={errors}
@@ -308,7 +307,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isTextarea={true}
                     placeholder="Wprowadź opis..."
                 />
-            </Box>} */}
+            </Box>}
         </form>
     )
 });
