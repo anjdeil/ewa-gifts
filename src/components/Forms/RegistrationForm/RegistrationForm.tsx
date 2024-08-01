@@ -11,7 +11,7 @@ import variables from '@/styles/variables.module.scss';
 import { CartItem, RegistrationFormSchema, WpWooError } from "@/types";
 import { z } from "zod";
 import styles from './styles.module.scss';
-import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
+// import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
@@ -19,7 +19,9 @@ import { useRouter } from "next/router";
 interface RegistrationFormProps
 {
     isCheckout?: boolean,
-    userFields?: userFieldsType | null,
+    // userFields?: userFieldsType | null,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    userFields?: any,
     lineItems?: CartItem[] | [],
     shippingLines?: ShippingLine[]
 }
@@ -85,7 +87,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
 
     const onSubmit = async (data: RegistrationFormType) =>
     {
-        const body: registrationUserDataType = {
+        // :registrationUserDataType
+        const body = {
             id: userFields && userFields.id || '',
             email: data.email,
             first_name: data.name,
