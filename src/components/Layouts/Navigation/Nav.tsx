@@ -6,17 +6,14 @@ import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import { WpWooError, wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
 
-const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) =>
-{
+const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
 
-    if (isError)
-    {
+    if (isError) {
         return <p>{(error as WpWooError).data.message}</p>;
     }
 
-    if (isLoading && skeleton)
-    {
+    if (isLoading && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}

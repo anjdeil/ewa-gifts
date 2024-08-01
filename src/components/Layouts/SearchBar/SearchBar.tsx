@@ -116,7 +116,7 @@ const SearchBar = () => {
                                 {params.InputProps.endAdornment}
                             </>
                         ),
-                        placeholder: "Search",
+                        placeholder: "Szukaj",
                         type: 'search'
                     }}
                 />

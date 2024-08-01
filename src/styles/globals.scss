@@ -6,6 +6,8 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+
+
 .product-card-slider {
 
     .swiper-button-prev {
@@ -73,8 +75,17 @@ input[type=number]::-webkit-outer-spin-button {
 
 .desc {
     font-weight: 400;
-    font-size: 18px;
     color: $black-color;
+
+    a {
+        color: $text-gray;
+        text-decoration: none;
+        transition: .2s ease;
+
+        &:hover {
+            color: $accent;
+        }
+    }
 }
 
 .link {
@@ -119,12 +130,16 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .main-title {
-    margin: 0;
     font-family: "Inter", sans-serif;
-    font-weight: 600;
-    font-size: 30px;
-    color: $black-color;
     text-transform: uppercase;
+    font-weight: 600;
+    color: $black-color;
+    font-size: 1.6rem;
+}
+
+.secondary-title {
+    @extend .main-title;
+    font-size: 1.1rem;
 }
 
 .sub-title {

@@ -1,22 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { popupSet } from "@/store/reducers/PopupSlice";
 import { Badge } from "@mui/material";
 import variables from "@/styles/variables.module.scss";
-import { refreshItemsCount } from "@/store/reducers/CartSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
 const BottomMenu = () => {
 
     const dispatch = useAppDispatch();
     const popup = useAppSelector(state => state.Popup);
-    const { itemsCount } = useAppSelector(state => state.Cart);
-
+    const { items: cartItems } = useAppSelector(state => state.Cart);
+    const [cartItemsCount, setCartItemsCount] = useState(0);
 
     useEffect(() => {
-        dispatch(refreshItemsCount());
-    }, []);
+        setCartItemsCount(cartItems.length);
+    }, [cartItems]);
 
     return (
         <div className={styles['bottom-menu']}>
@@ -44,7 +43,7 @@ const BottomMenu = () => {
                 </button>
                 <button className={`${styles['bottom-menu__button']}`} aria-label="Open your cart">
                     <Badge
-                        badgeContent={itemsCount}
+                        badgeContent={cartItemsCount}
                         color="primary"
                         sx={{
                             ".MuiBadge-badge": {
