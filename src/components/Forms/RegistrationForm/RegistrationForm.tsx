@@ -58,6 +58,10 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     {
         if (createError)
         {
+            console.log(isSubmitting);
+            console.log(isSubmitSuccessful);
+            setValue('name', 'string');
+            onShippingChange();
             alert("Server Error, please try again")
         } else if (createdOrder)
         {
@@ -154,7 +158,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Box className={styles.form__wrapper}>
-                <CustomInput
+                {/* <CustomInput
                     fieldName="Imię"
                     name='name'
                     register={register}
@@ -177,7 +181,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     errors={errors}
                     setValue={setValue}
                     initialValue={userFields ? userFields.email : null}
-                />
+                /> */}
                 {!isLoggedIn && <CustomInput
                     fieldName="Hasło"
                     name='password'
@@ -192,7 +196,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     errors={errors}
                     isPassword={true}
                 />}
-                <CustomInput
+                {/* <CustomInput
                     fieldName="Numer telefonu"
                     name='phoneNumber'
                     register={register}
@@ -251,8 +255,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isPost={true}
                     setValue={setValue}
                     initialValue={userFields ? userFields.billing.postcode : null}
-                />
-                {!isCheckout && <Box className={styles.form__bottom}>
+                /> */}
+                {/* {!isCheckout && <Box className={styles.form__bottom}>
                     <CustomInput
                         fieldName="Wyrażam zgodę na przetwarzanie danych osobowych."
                         name='terms'
@@ -264,11 +268,11 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
                         The account was created successfully
                     </p>}
-                </Box>}
+                </Box>} */}
                 {isError && <p style={{ color: variables.error }}
                     dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
             </Box>
-            {isCheckout && <Box className={styles.form__content}>
+            {/* {isCheckout && <Box className={styles.form__content}>
                 <CustomInput
                     fieldName="Wysłać na inny adres?"
                     errors={errors}
@@ -307,7 +311,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     isTextarea={true}
                     placeholder="Wprowadź opis..."
                 />
-            </Box>}
+            </Box>} */}
         </form>
     )
 });
