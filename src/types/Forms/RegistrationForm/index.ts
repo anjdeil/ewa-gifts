@@ -25,7 +25,7 @@ const termsSchema = z.boolean().refine(value => value === true, {
 const phoneSchema = z.string().min(9, 'Phone number must be at least 9 characters long')
     .max(15, 'Phone number cannot exceed 15 characters');
 
-export const RegistrationFormSchema = (isLoggedIn: boolean, isCheckout: boolean, isShipping: boolean) =>
+export const RegistrationFormSchema = (isLoggedIn: boolean, isCheckout: boolean = false, isShipping: boolean = false) =>
 {
     const schema = z.object({
         name: z.string().min(3, 'Required field'),
