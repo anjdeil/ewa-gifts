@@ -53,6 +53,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
+
     useEffect(() =>
     {
         if (createError)
