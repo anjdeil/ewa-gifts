@@ -17,7 +17,7 @@ const FooterAccordion = styled(Accordion)`
     box-shadow: none;
     flex: 1;
 
-    .css-9l5vo-MuiCollapse-wrapperInner {
+    .MuiCollapse-wrapperInner {
         display: flex;
     }
 
@@ -25,11 +25,11 @@ const FooterAccordion = styled(Accordion)`
     display: none;
     }
 
-    .css-15v22id-MuiAccordionDetails-root {
-    padding: 0;
+    .MuiAccordionDetails-root {
+        padding: 0;
     }
 
-    .css-yw020d-MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+    .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
         display: none;
     }
 
@@ -39,7 +39,7 @@ const FooterAccordion = styled(Accordion)`
     
     @media (max-width: 992px) {
         flex: 100%;
-        .css-yw020d-MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+        .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
             display: flex;
         }
     }
@@ -50,7 +50,7 @@ const AccordionSummaryCustom = styled(AccordionSummary)`
     padding: 0;
     min-height: fit-content!important;
 
-  .css-eqpfi5-MuiAccordionSummary-content.Mui-expanded {
+  .MuiAccordionSummary-content.Mui-expanded {
     margin: 0;
   }
 
@@ -61,7 +61,7 @@ const AccordionSummaryCustom = styled(AccordionSummary)`
   @media (max-width: 992px) {
     margin-bottom: 10px;
 
-    .css-eqpfi5-MuiAccordionSummary-content {
+    .MuiAccordionSummary-content {
         margin: 0;        
     }
   }

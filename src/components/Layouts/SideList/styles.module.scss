@@ -14,8 +14,13 @@
         padding: 0.7em 0.6em;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         border-radius: 10px;
         transition: .2s ease;
+        border: none;
+        background-color: transparent;
+        width: 100%;
+        cursor: pointer;
 
         &:hover,
         &:focus {
@@ -29,8 +34,17 @@
 
         }
 
+        &-content {
+            display: flex;
+            align-items: center;
+        }
+
         &-icon {
             margin-right: 0.5em;
+        }
+
+        &-arrow {
+            justify-self: flex-end;
         }
     }
 }
