@@ -5,8 +5,7 @@ import Link from "next/link";
 import { CartSummaryProps } from "@/types";
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 
-export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
-{
+export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) => {
     return (
         <Box className={styles.CartSummary}>
             <h2 className={`${styles.CartSummary__title}`}>Podsumowanie koszyka</h2>
@@ -19,7 +18,7 @@ export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
                     href={`https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${order.id}`}
                     target="_blank"
                     className={`link btn btn-transparent ${styles.CartSummary__btn}`}>
-                    Pobierz Oferte
+                    Pobierz ofertę
                 </Link>
             </Box>
         </Box>

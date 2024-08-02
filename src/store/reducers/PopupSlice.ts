@@ -9,9 +9,12 @@ export const PopupSlice = createSlice({
         },
         popupClosed: () => {
             return "";
+        },
+        popupToggle: (state, action) => {
+            return (action.payload !== state) ? action.payload : "";
         }
     }
 });
 
-export const { popupSet, popupClosed } = PopupSlice.actions;
+export const { popupSet, popupClosed, popupToggle } = PopupSlice.actions;
 export default PopupSlice.reducer;
