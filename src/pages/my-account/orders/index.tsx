@@ -1,40 +1,22 @@
 import React, { FC } from "react";
 import AccountLayout from "@/components/MyAccount/AccountLayout";
 import OrderList from "@/components/MyAccount/OrderList";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import parseCookies from "@/Utils/parseCookies";
-import axios, { AxiosResponse } from "axios";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import Notification from "@/components/Layouts/Notification";
+import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
+import { GetServerSideProps, GetServerSidePropsContext } from "next"
 
-const redirectToLogin = {
-    redirect: {
-        destination: '/my-account/login',
-        permanent: false,
-    }
-};
+// eslint-disable-next-line react-refresh/only-export-components
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
+    const customer = await checkUserTokenInServerSide('/my-account', context, 'userToken');
+    if (!customer || !customer.id) return { redirect: { destination: "/my-account/login", permanent: false, } };
 
-/* eslint-disable-next-line react-refresh/only-export-components */
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    const cookies = context.req.headers.cookie;
-    if (!cookies) return redirectToLogin;
-
-    const cookieRows = parseCookies(cookies)
-    if (!cookieRows.userToken) return redirectToLogin;
-
-    try {
-        const userResponse = await axios.get(`${process.env.SITE_URL}/wp-json/wp/v2/users/me`, {
-            headers: {
-                'Authorization': `Bearer ${cookieRows.userToken}`
-            }
-        });
-
-        const userData = userResponse.data;
-        if (!userData?.id) return redirectToLogin;
-
+    try
+    {
         const userOrdersResponse = await wooCommerceRestApi.get('orders', {
-            customer: userData.id
+            customer: customer.id
         });
 
         return {
@@ -42,25 +24,21 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 orders: userOrdersResponse.data
             }
         }
-
-    } catch (error) {
-
-        if (axios.isAxiosError(error)) {
-            const response = error?.response as AxiosResponse;
-            if (response?.data?.code === 'jwt_auth_invalid_token') return redirectToLogin;
-        }
-
+    } catch (error)
+    {
         return {
             notFound: true
         }
     }
 }
 
-interface OrdersPropsType {
+interface OrdersPropsType
+{
     orders: OrderType[]
 }
 
-const Orders: FC<OrdersPropsType> = ({ orders }) => {
+const Orders: FC<OrdersPropsType> = ({ orders }) =>
+{
     return (
         <AccountLayout
             title="Zamówienia"
