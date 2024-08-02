@@ -1,14 +1,9 @@
 .footer {
-    padding: 45px 40px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
-
-    &__title {
-        font-weight: bold;
-        text-transform: uppercase;
-    }
+    padding-top: 60px;
+    padding-bottom: 60px;
+    display: grid;
+    grid-template-columns: 320px repeat(3, 1fr);
+    gap: 80px;
 
     &__socials {
         justify-content: flex-start;
@@ -29,13 +24,6 @@
         }
     }
 
-    &__form {
-        flex: 2;
-
-        &>div {
-            max-width: 80%;
-        }
-    }
 
     &__menuSlider {
         white-space: nowrap;
@@ -47,24 +35,31 @@
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1220px) {
     .footer {
-        padding: 30px 20px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 60px 30px;
 
-        &__form {
-            flex: 100%;
-
-            &>div {
-                margin: 0 auto;
-                max-width: 400px;
-                text-align: center;
-            }
-        }
     }
 }
 
-@media (max-width: 572px) {
+@media (max-width: 1024px) {
     .footer {
-        gap: 15px;
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding-top: 40px;
+        padding-bottom: 100px;
+    }
+}
+
+@media (max-width: 550px) {
+    .footer {
+        gap: 20px;
+        grid-template-columns: 1fr;
     }
 }

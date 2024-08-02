@@ -2,9 +2,13 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import variables from '../styles/variables.module.scss';
 
+export const getServerSideProps = async () => {
+  return {
+    notFound: true
+  };
+}
 
-const Page = () =>
-{
+const Page = () => {
   const router = useRouter();
   const { slug } = router.query;
 

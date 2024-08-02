@@ -9,12 +9,10 @@ import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
 
-export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
-{
+export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
     const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
 
-    if (isError)
-    {
+    if (isError) {
         return <p>{(error as WpWooError).data.message}</p>;
     }
 
@@ -22,8 +20,7 @@ export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
     const nextElId = `btn-next`;
     const prevElId = `btn-prev`;
 
-    if (isLoading && skeleton)
-    {
+    if (isLoading && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -60,6 +57,11 @@ export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
                         key={index}>{item.title}
                     </SwiperSlide>
                 ))}
+                <SwiperSlide
+                    className={`${styles.sliderMenu__slide} desc`}
+                >
+                    &nbsp;
+                </SwiperSlide>
             </Swiper>
             <div id={nextElId} className={`swiper-button-next ${styles.sliderMenu__navBtn}`}>
                 <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">

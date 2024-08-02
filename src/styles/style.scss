@@ -9,13 +9,20 @@ html,
 body {
     font-size: 18px;
     font-family: "Inter", sans-serif;
+    background-color: #fff;
     color: $black-color;
+    margin: 0;
+    padding: 0;
 }
 
 * {
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: $tech-bg $background-white;
+}
+
+h1 {
+    font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {

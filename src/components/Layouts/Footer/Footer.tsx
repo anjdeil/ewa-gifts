@@ -67,92 +67,96 @@ const AccordionSummaryCustom = styled(AccordionSummary)`
   }
 `;
 
-export const Footer: FC = () =>
-{
+export const Footer: FC = () => {
 
-    const isMobile = useMediaQuery('(max-width: 992px)');
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const [expanded, setExpanded] = useState<string | false>(!isMobile ? 'panel1' : false);
 
-    const handleChange = (panel: string) => (_: unknown, isExpanded: boolean) =>
-    {
+    const handleChange = (panel: string) => (_: unknown, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
 
     return (
-        <div className={styles.footer}>
-            <div className={styles.footer__form}>
+        <div className={`${styles.footer} container`}>
+            <div className={styles.footer__column}>
                 <SubscriptionForm formId={22199} />
             </div>
-            <FooterAccordion expanded={!isMobile || expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <AccordionSummaryCustom
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header"
-                >
-                    <h3 className={`${styles.footer__title} sub-title`}>Infomarmacja</h3>
-                </AccordionSummaryCustom>
-                <AccordionDetails>
-                    <Nav menuId={819}
-                        className={styles.footer__nav}
-                        skeleton={
-                            {
-                                elements: 7,
-                                isColumn: true,
-                                width: "100%",
-                                height: "30px",
-                                gap: '5px'
+            <div className={styles.footer__column}>
+                <FooterAccordion expanded={!isMobile || expanded === 'panel1'} onChange={handleChange('panel1')}>
+                    <AccordionSummaryCustom
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel2a-content"
+                        id="panel2a-header"
+                    >
+                        <h3 className={`${styles.footer__title} secondary-title`}>Infomarmacja</h3>
+                    </AccordionSummaryCustom>
+                    <AccordionDetails>
+                        <Nav menuId={819}
+                            className={styles.footer__nav}
+                            skeleton={
+                                {
+                                    elements: 7,
+                                    isColumn: true,
+                                    width: "200px",
+                                    height: "30px",
+                                    gap: '5px'
+                                }
                             }
-                        }
-                    />
-                </AccordionDetails>
-            </FooterAccordion>
-            <FooterAccordion expanded={!isMobile || expanded === 'panel2'} onChange={handleChange('panel2')}>
-                <AccordionSummaryCustom
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header"
-                >
-                    <h3 className={`${styles.footer__title} sub-title`}>NASZE LOKALIZACE</h3>
-                </AccordionSummaryCustom>
-                <AccordionDetails>
-                    <SliderMenu menuId={820}
-                        className={styles.footer__menuSlider}
-                        skeleton={
-                            {
-                                elements: 6,
-                                isColumn: true,
-                                width: "100%",
-                                height: '30px',
-                                gap: '5px'
+                        />
+                    </AccordionDetails>
+                </FooterAccordion>
+            </div>
+            <div className={styles.footer__column}>
+                <FooterAccordion expanded={!isMobile || expanded === 'panel2'} onChange={handleChange('panel2')}>
+                    <AccordionSummaryCustom
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel2a-content"
+                        id="panel2a-header"
+                    >
+                        <h3 className={`${styles.footer__title} secondary-title`}>NASZE LOKALIZACE</h3>
+                    </AccordionSummaryCustom>
+                    <AccordionDetails>
+                        <SliderMenu menuId={820}
+                            className={styles.footer__menuSlider}
+                            skeleton={
+                                {
+                                    elements: 6,
+                                    isColumn: true,
+                                    width: "200px",
+                                    height: '30px',
+                                    gap: '5px'
+                                }
                             }
-                        }
-                    />
-                </AccordionDetails>
-            </FooterAccordion>
-            <FooterAccordion expanded={!isMobile || expanded === 'panel3'} onChange={handleChange('panel3')}>
-                <AccordionSummaryCustom
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`"panel1a-content"`}
-                    id="panel1a-header"
-                >
-                    <h3 className={`${styles.footer__title} sub-title`}>Kontakt</h3>
-                </AccordionSummaryCustom>
-                <AccordionDetails>
-                    <Socials
-                        menuId={818}
-                        skeleton={
-                            {
-                                elements: 7,
-                                isColumn: true,
-                                width: "100%",
-                                height: "30px",
-                                gap: '5px'
+                        />
+                    </AccordionDetails>
+                </FooterAccordion>
+            </div>
+            <div className={styles.footer__column}>
+                <FooterAccordion expanded={!isMobile || expanded === 'panel3'} onChange={handleChange('panel3')}>
+                    <AccordionSummaryCustom
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={`"panel1a-content"`}
+                        id="panel1a-header"
+                    >
+                        <h3 className={`${styles.footer__title} secondary-title`}>Kontakt</h3>
+                    </AccordionSummaryCustom>
+                    <AccordionDetails>
+                        <Socials
+                            menuId={818}
+                            skeleton={
+                                {
+                                    elements: 7,
+                                    isColumn: true,
+                                    width: "200px",
+                                    height: "30px",
+                                    gap: '5px'
+                                }
                             }
-                        }
-                        className={`${styles.footer__socials}`}
-                    />
-                </AccordionDetails>
-            </FooterAccordion>
+                            className={`${styles.footer__socials}`}
+                        />
+                    </AccordionDetails>
+                </FooterAccordion>
+            </div>
         </div>
     )
 }
