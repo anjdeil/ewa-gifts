@@ -14,8 +14,7 @@ import { WpWooError } from "@/types";
 
 const LoginFormSchema = z.object({
     email: z.string().email('Please, type valid email'),
-    password: z.string()
-        .min(8, 'The password must contain at least 8 characters.'),
+    password: z.string().min(1, 'This field is required.'),
     rememberMe: z.boolean().optional(),
 });
 
