@@ -18,14 +18,14 @@ import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useRef } from 'react';
 import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
 const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
-    const router = useRouter();
+    // const router = useRouter();
     const childRef = useRef<FormHandle>(null);
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     {
         if (items.length === 0)
         {
-            router.push('/cart');
+            // router.push('/cart');
         } else
         {
             createOrder(items, 'pending', shippingLines);
@@ -72,7 +72,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         } else if (createError)
         {
             setCreating(false);
-            router.push('/cart');
+            // router.push('/cart');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])

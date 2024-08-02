@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateCart } from '@/store/reducers/CartSlice';
 import { CartTableProps } from '@/types/Cart';
 import { FC } from 'react';
-import { lineOrderItems } from '@/types';
+import { lineOrderItems } from '@/types/store/reducers/CartSlice';
 import { CartTableRow } from './CartTableRow';
 import React from 'react';
 

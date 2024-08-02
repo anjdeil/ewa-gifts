@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-// import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 // import { AddCoupon } from "@/components/Shop/AddCoupon";
 import { Section } from "@/components/Layouts/Section";
 import styles from './styles.module.scss';
@@ -11,40 +11,35 @@ import { CartTable } from "@/components/Cart/CartTable";
 import Notification from "@/components/Layouts/Notification";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import Link from "next/link";
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
-import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 
-const Cart = () => {
-    const [fetchCreateOrder, { data: createdOrder, error: createError }] = useFetchCreateOrderMutation();
+const Cart = () =>
+{
     const { items, shippingLines } = useAppSelector(state => state.Cart);
     const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
-    // const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
+    const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
-    useEffect(() => {
-        if (items.length === 0) {
+    useEffect(() =>
+    {
+        if (items.length === 0)
+        {
             setCurrentOrder(null);
             setIsUpdating(false);
             return;
         }
-        const createOrderRequestBody = {
-            line_items: items,
-            status: "pending",
-            payment_method: "bacs",
-            shipping_lines: shippingLines
-        };
-
-        fetchCreateOrder(createOrderRequestBody);
-        // createOrder(items, 'pending', shippingLines);
+        createOrder(items, 'pending', shippingLines);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items])
 
-    useEffect(() => {
-        if (createdOrder && createdOrder.line_items) {
+    useEffect(() =>
+    {
+        if (createdOrder && createdOrder.line_items)
+        {
             setCurrentOrder(createdOrder);
             setLineItems(createdOrder.line_items);
             setIsUpdating(false);
@@ -53,8 +48,10 @@ const Cart = () => {
     }, [createdOrder])
     // OrderType
 
-    useEffect(() => {
-        if (createError) {
+    useEffect(() =>
+    {
+        if (createError)
+        {
             setIsUpdating(false);
             alert('Sorry, but it was server error.');
         }
