@@ -11,7 +11,7 @@ import { CartTable } from "@/components/Cart/CartTable";
 import Notification from "@/components/Layouts/Notification";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import Link from "next/link";
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 
 const Cart = () =>
