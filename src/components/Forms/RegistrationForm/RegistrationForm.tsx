@@ -8,12 +8,46 @@ import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
 import variables from '@/styles/variables.module.scss';
-import { CartItem, RegistrationFormShippingSchema, RegistrationFormShippingType, WpWooError } from "@/types";
+import { CartItem, WpWooError } from "@/types";
 import styles from './styles.module.scss';
 import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
+import { z } from "zod";
+
+export const RegistrationFormShippingSchema = z.object({
+    name: z.string().min(3, 'Required field'),
+    lastName: z.string().min(3, 'Required field'),
+    email: z.string().email('Please, type valid email'),
+    companyName: z.string().min(1, 'Required field'),
+    address: z.string().min(4, 'Required field'),
+    postCode: z.string().min(5, 'The post code must contain 5 characters'),
+    city: z.string().min(1, 'Required field'),
+    country: z.string().min(1, 'Required field'),
+    // password: passwordSchema,
+    password: z.string().min(1, 'Required field'),
+    // confirmPassword: passwordSchema,
+    confirmPassword: z.string().min(1, 'Required field'),
+    // phoneNumber: phoneSchema,
+    phoneNumber: z.string().min(1, 'Required field'),
+    // nip: nipSchema,
+    nip: z.string().min(1, 'Required field'),
+    // terms: termsSchema,
+    terms: z.string().min(1, 'Required field'),
+    nameShipping: z.string().min(3, 'Required field'),
+    lastNameShipping: z.string().min(3, 'Required field'),
+    companyNameShipping: z.string().min(1, 'Required field'),
+    addressShipping: z.string().min(4, 'Required field'),
+    postCodeShipping: z.string().min(5, 'The post code must contain 5 characters'),
+    cityShipping: z.string().min(1, 'Required field'),
+    countryShipping: z.string().min(1, 'Required field'),
+    // phoneNumberShipping: phoneSchema,
+    phoneNumberShipping: z.string().min(1, 'Required field'),
+});
+
+export type RegistrationFormShippingType = z.infer<typeof RegistrationFormShippingSchema>;
+
 
 interface RegistrationFormProps
 {
