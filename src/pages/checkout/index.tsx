@@ -193,13 +193,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
                     <Box className={styles.checkout__content}>
                         <Box>
-                            {/* <RegistrationForm
-                                isCheckout={true}
-                                ref={childRef}
-                                userFields={userFields}
-                                lineItems={items}
-                                shippingLines={shippingLines}
-                            /> */}
                             <RegistrationForm
                                 isCheckout={true}
                                 ref={childRef}
