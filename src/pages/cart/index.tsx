@@ -14,8 +14,7 @@ import Link from "next/link";
 import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 
-const Cart = () =>
-{
+const Cart = () => {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
     const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
@@ -24,10 +23,8 @@ const Cart = () =>
     const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
-    useEffect(() =>
-    {
-        if (items.length === 0)
-        {
+    useEffect(() => {
+        if (items.length === 0) {
             setCurrentOrder(null);
             setIsUpdating(false);
             return;
@@ -36,10 +33,8 @@ const Cart = () =>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items])
 
-    useEffect(() =>
-    {
-        if (createdOrder && createdOrder.line_items)
-        {
+    useEffect(() => {
+        if (createdOrder && createdOrder.line_items) {
             setCurrentOrder(createdOrder);
             setLineItems(createdOrder.line_items);
             setIsUpdating(false);
@@ -48,10 +43,8 @@ const Cart = () =>
     }, [createdOrder])
     // OrderType
 
-    useEffect(() =>
-    {
-        if (createError)
-        {
+    useEffect(() => {
+        if (createError) {
             setIsUpdating(false);
             alert('Sorry, but it was server error.');
         }
