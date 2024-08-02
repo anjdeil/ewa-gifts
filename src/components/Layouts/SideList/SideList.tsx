@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, ReactNode } from "react";
+import React, { FC, ReactElement } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from "./styles.module.scss";

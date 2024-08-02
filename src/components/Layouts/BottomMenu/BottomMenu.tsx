@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import { popupClosed, popupSet, popupToggle } from "@/store/reducers/PopupSlice";
+import { popupToggle } from "@/store/reducers/PopupSlice";
 import { Badge } from "@mui/material";
 import variables from "@/styles/variables.module.scss";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
