@@ -24,6 +24,7 @@ export const useCreateOrderWoo = () =>
         const fetchCreateOrderBody = {
             line_items: items,
             payment_method: "bacs",
+            payment_method_title: "Przelew bandowy",
             status: status,
             customer_id: userFields && userFields.id ? userFields.id : 0,
             billing: {

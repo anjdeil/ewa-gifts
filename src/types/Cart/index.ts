@@ -37,6 +37,17 @@ export const CartTablePropsSchema = z.object({
     isLoading: z.boolean()
 });
 
+export const CartTableRowProps = z.object({
+    product: lineOrderItemsSchema,
+    onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
+    onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
+    lineItems: z.array(CartItemSchema).nullable(),
+    isLoading: z.boolean(),
+    total: z.string()
+});
+
+export type CartTableRowType = z.infer<typeof CartTableRowProps>;
+
 export type CartTableProps = z.infer<typeof CartTablePropsSchema>
 export type CartItem = z.infer<typeof CartItemSchema>;
 export type CartProduct = z.infer<typeof CartProductsSchema>;

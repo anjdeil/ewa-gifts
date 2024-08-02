@@ -1,26 +1,12 @@
-import { lineOrderItemsSchema } from "@/types";
 import { Box, IconButton, Skeleton, Typography } from "@mui/material";
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from "react";
-import { z } from "zod";
 import styles from './styles.module.scss';
-// import { Counter } from "@/components/Buttons";
 import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
-import { CartItemSchema } from "@/types/Cart";
 import formatPrice from "@/Utils/formatPrice";
 import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 import React from "react";
-
-export const CartTableRowProps = z.object({
-    product: lineOrderItemsSchema,
-    onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
-    onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
-    lineItems: z.array(CartItemSchema).nullable(),
-    isLoading: z.boolean(),
-    total: z.string()
-});
-
-export type CartTableRowType = z.infer<typeof CartTableRowProps>;
+import { CartTableRowType } from "@/types/Cart";
 
 export const CartTableRow: FC<CartTableRowType> = ({
     product,
@@ -28,15 +14,18 @@ export const CartTableRow: FC<CartTableRowType> = ({
     onProductDelete,
     lineItems,
     isLoading,
-    total }) => {
+    total }) =>
+{
     const [count, setCount] = useState<number | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const productName = transformCartItemName(product);
     const productPrice = formatPrice(product.price);
     // const MemoizedCounter = React.memo(Counter);
 
-    useEffect(() => {
-        if (product && lineItems) {
+    useEffect(() =>
+    {
+        if (product && lineItems)
+        {
             const hasItemQuantity = getLineItemQuantity(product.product_id, lineItems);
             if (hasItemQuantity) setCount(hasItemQuantity);
         }
@@ -44,10 +33,12 @@ export const CartTableRow: FC<CartTableRowType> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (isLoading) return;
         if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
+        timerRef.current = setTimeout(() =>
+        {
             onProductChange(product, Number(count));
         }, 1000)
 
@@ -56,7 +47,8 @@ export const CartTableRow: FC<CartTableRowType> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onCountChange])
 
-    function onCountChange(count: number) {
+    function onCountChange(count: number)
+    {
         if (count >= 0) setCount(count);
     }
 
