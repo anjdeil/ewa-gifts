@@ -50,7 +50,7 @@ const AccordionSummaryCustom = styled(AccordionSummary)`
     padding: 0;
     min-height: fit-content!important;
 
-  .css-eqpfi5-MuiAccordionSummary-content.Mui-expanded {
+  .MuiAccordionSummary-content.Mui-expanded {
     margin: 0;
   }
 
@@ -61,7 +61,7 @@ const AccordionSummaryCustom = styled(AccordionSummary)`
   @media (max-width: 992px) {
     margin-bottom: 10px;
 
-    .css-eqpfi5-MuiAccordionSummary-content {
+    .MuiAccordionSummary-content {
         margin: 0;        
     }
   }
