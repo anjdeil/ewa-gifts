@@ -7,6 +7,8 @@ import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import { useRouter } from "next/router";
 import { LoginForm } from "@/components/Forms/LoginForm";
 import styles from "@/components/MyAccount/styles.module.scss";
+import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 export const MyAccountPropsSchema = z.object({
     userToken: z.string(),
@@ -14,20 +16,27 @@ export const MyAccountPropsSchema = z.object({
 
 export type MyAccountProps = z.infer<typeof MyAccountPropsSchema>;
 
-const MyAccount: FC<MyAccountProps> = () => {
-    const [cookie] = useCookies(['userToken']);
+const MyAccount: FC<MyAccountProps> = () =>
+{
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [cookie, _, removeCookie] = useCookies(['userToken']);
     const [fetchCheckLoggedIn, { data }] = useFetchCheckLoggedInMutation();
     const router = useRouter();
 
-    useEffect(() => {
-        if ("userToken" in cookie) {
-            fetchCheckLoggedIn(cookie.userToken);
-            if (data && data.data.status === 200) {
-                router.push('/my-account');
-            }
-        }
+    useEffect(() =>
+    {
+        if ("userToken" in cookie) { fetchCheckLoggedIn(cookie.userToken); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie]);
+
+    useEffect(() =>
+    {
+        if (data && data.data.status === 200)
+            router.push("/my-account");
+        else
+            removeCookie('userToken');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
 
     return (
         <>
@@ -53,5 +62,14 @@ const MyAccount: FC<MyAccountProps> = () => {
         </>
     );
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
+    const result = await checkUserTokenInServerSide('/my-account', context, 'userToken');
+
+    if (result && result.id) return { redirect: { destination: "/my-account", permanent: false, } };
+    return { props: { userData: result } };
+}
 
 export default MyAccount;
