@@ -8,8 +8,7 @@ import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
 import variables from '@/styles/variables.module.scss';
-import { CartItem, WpWooError } from "@/types";
-import { z } from "zod";
+import { CartItem, RegistrationFormShippingSchema, RegistrationFormShippingType, WpWooError } from "@/types";
 import styles from './styles.module.scss';
 import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
@@ -23,32 +22,6 @@ interface RegistrationFormProps
     lineItems?: CartItem[] | [],
     shippingLines?: ShippingLine[]
 }
-
-const formSchema = z.object({
-    name: z.string().min(3, 'Required field'),
-    lastName: z.string().min(3, 'Required field'),
-    email: z.string().email('Please, type valid email'),
-    companyName: z.string().min(1, 'Required field'),
-    address: z.string().min(4, 'Required field'),
-    postCode: z.string().min(5, 'The post code must contain 5 characters'),
-    city: z.string().min(1, 'Required field'),
-    country: z.string().min(1, 'Required field'),
-    password: z.string().optional(),
-    confirmPassword: z.string().optional(),
-    phoneNumber: z.string().optional(),
-    nip: z.string().optional(),
-    terms: z.string().optional(),
-    nameShipping: z.string().optional(),
-    lastNameShipping: z.string().optional(),
-    companyNameShipping: z.string().optional(),
-    addressShipping: z.string().optional(),
-    postCodeShipping: z.string().optional(),
-    cityShipping: z.string().optional(),
-    countryShipping: z.string().optional(),
-    phoneNumberShipping: z.string().optional(),
-})
-
-type RegistrationFormType = z.infer<typeof formSchema>;
 
 export interface FormHandle
 {
@@ -68,8 +41,8 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     // const formSchema = RegistrationFormSchema(isLoggedIn, isCheckout, isShipping);
     // type RegistrationFormType = z.infer<typeof formSchema>;
 
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormType>({
-        resolver: zodResolver(formSchema)
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<RegistrationFormShippingType>({
+        resolver: zodResolver(RegistrationFormShippingSchema)
     });
 
     function onShippingChange() { setShipping(prev => !prev); }
@@ -103,7 +76,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
         }
     }, [cookie])
 
-    const onSubmit = async (data: RegistrationFormType) =>
+    const onSubmit = async (data: RegistrationFormShippingType) =>
     {
         const body: registrationUserDataType = {
             id: userFields && userFields.id || '',
