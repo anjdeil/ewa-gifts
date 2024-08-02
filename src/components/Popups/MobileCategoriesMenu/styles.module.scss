@@ -1,0 +1,15 @@
+.mobile-categories {
+    &__title-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    &__back {
+        border: none;
+        background-color: transparent;
+        padding: 10px;
+        padding-left: 0;
+    }
+
+    margin-bottom: 20px;
+}

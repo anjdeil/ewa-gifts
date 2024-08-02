@@ -26,7 +26,7 @@ const MiniCartPopup = () => {
 
     }, [cartItems]);
 
-    const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items)
+    const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items);
 
     return (
         <div className={styles["mini-cart-popup"]}>
