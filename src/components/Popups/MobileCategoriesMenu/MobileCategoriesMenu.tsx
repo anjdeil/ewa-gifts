@@ -53,8 +53,6 @@ const MobileCategoriesMenu: FC<MobileCategoriesMenuPropsType> = ({ onClose }) =>
         isActive: false
     }));
 
-
-
     return (
         <MobilePopup onClose={onClose} title={parent && renderTitle(parent.name)}>
             <div className={styles["mobile-categories"]}>
