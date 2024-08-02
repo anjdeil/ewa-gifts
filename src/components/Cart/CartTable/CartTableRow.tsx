@@ -1,26 +1,27 @@
-import { lineOrderItemsSchema } from "@/types/store/reducers/CartSlice";
+// import { lineOrderItemsSchema } from "@/types/store/reducers/CartSlice/index";
 import { Box, IconButton, Skeleton, Typography } from "@mui/material";
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from "react";
-import { z } from "zod";
+// import { z } from "zod";
 import styles from './styles.module.scss';
 // import { Counter } from "@/components/Buttons";
 import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
-import { CartItemSchema } from "@/types/Cart";
+// import { CartItemSchema } from "@/types/Cart";
 import formatPrice from "@/Utils/formatPrice";
 import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 import React from "react";
+import { CartTableRowType } from "@/types/Cart";
 
-export const CartTableRowProps = z.object({
-    product: lineOrderItemsSchema,
-    onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
-    onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
-    lineItems: z.array(CartItemSchema).nullable(),
-    isLoading: z.boolean(),
-    total: z.string()
-});
+// export const CartTableRowProps = z.object({
+//     product: lineOrderItemsSchema,
+//     onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
+//     onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
+//     lineItems: z.array(CartItemSchema).nullable(),
+//     isLoading: z.boolean(),
+//     total: z.string()
+// });
 
-export type CartTableRowType = z.infer<typeof CartTableRowProps>;
+// export type CartTableRowType = z.infer<typeof CartTableRowProps>;
 
 export const CartTableRow: FC<CartTableRowType> = ({
     product,
