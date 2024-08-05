@@ -6,8 +6,6 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-
-
 .product-card-slider {
 
     .swiper-button-prev {
@@ -272,7 +270,18 @@ input[type=number]::-webkit-outer-spin-button {
     color: $text-gray;
 }
 
+.summary-wrapper {
+    padding: 30px;
+    padding-bottom: 30px;
+    border: 2px solid $white-lilac;
+    border-radius: 10px;
+    height: fit-content;
+}
+
 @media(max-width: 1024px) {
+    .summary-wrapper {
+        padding: 30px 35px;
+    }
 
     .desc,
     .sub-title {
@@ -282,10 +291,23 @@ input[type=number]::-webkit-outer-spin-button {
     .more-link {
         font-size: 16px;
     }
+
+    .page-top {
+        padding: 10px 0;
+        padding-bottom: 20px;
+
+        &__titling {
+            margin-top: 15px;
+        }
+
+    }
 }
 
 
 @media(max-width: 768px) {
+    .summary-wrapper {
+        padding: 20px 15px;
+    }
 
     .desc,
     .sub-title {
@@ -297,12 +319,6 @@ input[type=number]::-webkit-outer-spin-button {
     }
 
     .page-top {
-        padding: 25px 0;
-
-        &__titling {
-            margin-top: 25px;
-        }
-
         &__count {
             margin-top: -4px;
         }
