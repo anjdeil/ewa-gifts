@@ -5,13 +5,15 @@ import formatPrice from "@/Utils/formatPrice";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import OrderTotalsRowsSkeleton from "./OrderTotalsRowsSkeleton";
 
-interface OrderTotalsPropsType {
-    order: OrderType | undefined,
+interface OrderTotalsPropsType
+{
+    order: OrderType | undefined | null,
     includeBorders?: boolean,
     isLoading?: boolean
 }
 
-const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, isLoading = false }) => {
+const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, isLoading = false }) =>
+{
     const subtotal = order ? getSubtotalByLineItems(order.line_items) : 0;
 
     return (
@@ -29,7 +31,8 @@ const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, i
                             <div className={styles['totals-table__value']}>{line.total} zł</div>
                         </div>
                     ))}
-                    {order?.coupon_lines.map(line => {
+                    {order?.coupon_lines.map(line =>
+                    {
                         const name = `Kod rabatowy ${line.discount_type === 'percent' ? `-${line.nominal_amount}% ` : ""}`;
                         return (
                             <div key={line.id} className={styles['totals-table__row']}>

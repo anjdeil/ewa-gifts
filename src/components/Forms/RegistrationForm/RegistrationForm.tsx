@@ -203,7 +203,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     initialValue={userFields ? userFields.billing.phone : null}
                 />
                 <CustomInput
-                    fieldName="NIP (optional)"
+                    fieldName="NIP"
                     name='nip'
                     register={register}
                     errors={errors}
@@ -269,12 +269,13 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                 {isError && <p style={{ color: variables.error }}
                     dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
             </Box>
-            {isCheckout && <Box className={styles.form__content}>
+            {isCheckout && <Box className={`${styles.form__content} ${styles.form__content_shipping}`}>
                 <CustomInput
                     fieldName="Wysłać na inny adres?"
                     errors={errors}
                     isCheckbox={true}
                     onChange={onShippingChange}
+                    className={styles.form__checkShipping}
                 />
                 {isShipping &&
                     <Box className={styles.form__wrapper}>
@@ -302,6 +303,7 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
                     </Box>}
                 <CustomInput
                     fieldName="Uwagi do zamówienia (opcjonalne)"
+                    isRequire={false}
                     name='textarea'
                     register={register}
                     errors={errors}
