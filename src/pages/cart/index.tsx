@@ -13,10 +13,12 @@ import { PageHeader } from "@/components/Layouts/PageHeader";
 import Link from "next/link";
 import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
+import { CartItem } from "@/types/Cart";
 
 const Cart = () => {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
-    const [lineItems, setLineItems] = useState<lineOrderItems[]>([])
+    const [cartItems, setCartItems] = useState<CartItem[]>([])
+    const [lineItems, setLineItems] = useState<lineOrderItems[]>([]);
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,6 +31,7 @@ const Cart = () => {
             setIsUpdating(false);
             return;
         }
+        setCartItems(items);
         createOrder(items, 'pending', shippingLines);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items])
@@ -46,7 +49,6 @@ const Cart = () => {
     useEffect(() => {
         if (createError) {
             setIsUpdating(false);
-            alert('Sorry, but it was server error.');
         }
     }, [createError])
 
@@ -71,16 +73,17 @@ const Cart = () => {
                                     </Typography>
                                 </Box>
                             </Notification>}
-                            {items.length > 0 && lineItems.length > 0 && (
+                            {items && (
                                 <CartTable
                                     products={lineItems}
                                     isLoading={isUpdating}
                                     total={createdOrder?.total}
+                                    items={cartItems}
                                 />
                             )}
                             {/* <AddCoupon orderId={orderId && orderId} /> */}
                         </Box>
-                        {currentOrder && <CartSummary order={currentOrder} isLoading={isUpdating} />}
+                        {<CartSummary order={currentOrder} isLoading={isUpdating} />}
                     </Box>
                 </Section>
             </main>

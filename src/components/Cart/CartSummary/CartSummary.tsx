@@ -1,21 +1,31 @@
 import { Box } from "@mui/material";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import { CartSummaryProps } from "@/types";
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 
-export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) => {
+export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
+{
+    const link = useMemo(() =>
+    {
+        return order
+            ? `https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${order.id}`
+            : '/';
+    }, [order]);
+
     return (
-        <Box className={styles.CartSummary}>
+        <Box className={`${styles.CartSummary} summary-wrapper`}>
             <h2 className={`${styles.CartSummary__title}`}>Podsumowanie koszyka</h2>
             <OrderTotals order={order} includeBorders={false} isLoading={isLoading} />
             <Box className={`${styles.CartSummary__btnWrapper}`}>
-                <Link className={`link btn btn-primary ${styles.CartSummary__btn}`} href={"/checkout"}>
+                <Link
+                    className={`link btn btn-primary ${styles.CartSummary__btn}`}
+                    href={order ? "/checkout" : "/cart"}>
                     Przejdz Do Platnosci
                 </Link>
                 <Link
-                    href={`https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${order.id}`}
+                    href={link}
                     target="_blank"
                     className={`link btn btn-transparent ${styles.CartSummary__btn}`}>
                     Pobierz ofertę

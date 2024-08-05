@@ -18,7 +18,7 @@ import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useRef } from 'react';
 import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
@@ -27,6 +27,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
     // const router = useRouter();
     const childRef = useRef<FormHandle>(null);
+    const router = useRouter();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
     // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
@@ -50,7 +51,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     {
         if (items.length === 0)
         {
-            // router.push('/cart');
+            router.push('/cart');
         } else
         {
             createOrder(items, 'pending', shippingLines);
@@ -61,18 +62,12 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
     useEffect(() =>
     {
-        if (createdOrder) console.log('Order', createdOrder);
-    }, [createdOrder])
-
-    useEffect(() =>
-    {
         if (createdOrder)
         {
             setCreating(false);
         } else if (createError)
         {
             setCreating(false);
-            // router.push('/cart');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])
@@ -103,32 +98,20 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
     useEffect(() =>
     {
-        if (customerData)
-        {
-            setUserFields(customerData);
-        }
-    }, [customerData])
-
-    useEffect(() =>
-    {
+        if (customerData) setUserFields(customerData);
         if (customerError) alert('Server Error');
-    }, [customerError])
+    }, [customerError, customerData])
 
     function onContinueClick() { setModalOpen(false); }
 
     useEffect(() =>
     {
         if (isModalOpen)
-        {
             document.body.style.overflow = 'hidden';
-        } else
-        {
+        else
             document.body.style.overflow = 'unset';
-        }
-        return () =>
-        {
-            document.body.style.overflow = 'unset';
-        };
+
+        return () => { document.body.style.overflow = 'unset'; }
     }, [isModalOpen]);
 
     function onSubmitClick()
@@ -201,12 +184,16 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                                 shippingLines={shippingLines}
                             />
                         </Box>
-                        <Box>
+                        <Box className={`summary-wrapper ${styles.checkout__summary}`}>
                             <Typography variant="h2" className={`main-title ${styles.checkout__title}`}>
                                 Twoje zamówienie
                             </Typography>
-                            <MiniCart lineItems={createdOrder && createdOrder.line_items} showSubtotals={true} isLoading={isCreating} />
-                            {items && <OrderTotals order={createdOrder && createdOrder} includeBorders={false} />}
+                            <Box className={styles.checkout__cart}>
+                                <MiniCart lineItems={createdOrder && createdOrder.line_items} showSubtotals={true} isLoading={isCreating} />
+                            </Box>
+                            {items && <Box className={styles.checkout__total}>
+                                <OrderTotals order={createdOrder && createdOrder} includeBorders={false} />
+                            </Box>}
                             <Box className={styles.checkout__checkboxes}>
                                 <CustomInput
                                     fieldName="Zaznaczam wszystkie zgody."
