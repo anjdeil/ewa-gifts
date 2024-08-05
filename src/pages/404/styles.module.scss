@@ -1,0 +1,53 @@
+@import "@/styles/variables.module.scss";
+
+.not-found {
+    padding-top: 30%;
+    box-sizing: border-box;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    position: relative;
+    background-image: url("/images/404.jpg");
+    background-size: cover;
+    background-color: $accent-light;
+    background-position: center;
+
+    &__content {
+        inset: 0;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 60px 20px;
+    }
+
+    &__text {
+        margin-bottom: 30px;
+    }
+
+    &__button {
+        color: #fff;
+        text-decoration: none;
+        padding: 0.7em 1em;
+        background-color: #000;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .not-found {
+        padding-top: 40%;
+
+        &__content {
+            justify-content: center;
+            padding: 20px;
+        }
+
+        &__text {
+            margin-bottom: 20px;
+        }
+    }
+}

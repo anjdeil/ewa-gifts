@@ -9,6 +9,7 @@ import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 export const CategoriesMenu = () => {
     const dispatch = useAppDispatch();
     const { isOpen, isCategoryActive } = useAppSelector(state => state.MenuCategoriesSlice);
+    const popup = useAppSelector(state => state.Popup);
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { data: categoriesData = [] } = useFetchCategoryListQuery({});
     const categories = categoriesData.data ? transformCategoriesMenu(categoriesData.data.items) : [];
@@ -21,7 +22,7 @@ export const CategoriesMenu = () => {
     }, [isOpen, dispatch, setMenuOpen, setCategory]);
 
     return (
-        <div className={`${styles.categories} ${isOpen && styles.active}`}>
+        <div className={`${styles.categories} ${popup === "categories-menu" && `${styles.active} close-outside`}`}>
             <div className={styles['categories__list-wrapper']}>
                 <ul className={styles['categories__list']}>
                     {categories.map((category) => (

@@ -12,7 +12,7 @@ interface OrderTotalsPropsType {
 }
 
 const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, isLoading = false }) => {
-    const subtotal = order ? getSubtotalByLineItems(order.line_items) : 0;
+    const subtotal = order?.line_items ? getSubtotalByLineItems(order.line_items) : 0;
 
     return (
         <div className={`${styles['totals-table']} ${includeBorders && styles['totals-table_borders']}`}>
@@ -23,13 +23,13 @@ const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, i
                         <div className={styles['totals-table__label']}>Kwota</div>
                         <div className={styles['totals-table__value']}>{formatPrice(subtotal)}</div>
                     </div>
-                    {order?.shipping_lines.map(line => (
+                    {order?.shipping_lines?.map(line => (
                         <div key={line.id} className={styles['totals-table__row']}>
                             <div className={styles['totals-table__label']}>{line.method_title}</div>
                             <div className={styles['totals-table__value']}>{line.total} zł</div>
                         </div>
                     ))}
-                    {order?.coupon_lines.map(line => {
+                    {order?.coupon_lines?.map(line => {
                         const name = `Kod rabatowy ${line.discount_type === 'percent' ? `-${line.nominal_amount}% ` : ""}`;
                         return (
                             <div key={line.id} className={styles['totals-table__row']}>
@@ -41,13 +41,13 @@ const OrderTotals: FC<OrderTotalsPropsType> = ({ order, includeBorders = true, i
                             </div>
                         );
                     })}
-                    {order?.fee_lines.map(line => (
+                    {order?.fee_lines?.map(line => (
                         <div key={line.id} className={styles['totals-table__row']}>
                             <div className={styles['totals-table__label']}>{line.name}</div>
                             <div className={styles['totals-table__value']}>{line.total} zł</div>
                         </div>
                     ))}
-                    {order?.tax_lines.map(line => (
+                    {order?.tax_lines?.map(line => (
                         <div key={line.id} className={styles['totals-table__row']}>
                             <div className={styles['totals-table__label']}>{line.label} ({line.rate_percent}%)</div>
                             <div className={styles['totals-table__value']}>{line.tax_total} zł</div>

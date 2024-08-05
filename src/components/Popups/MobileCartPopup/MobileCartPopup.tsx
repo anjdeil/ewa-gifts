@@ -9,6 +9,7 @@ import MiniCart from "@/components/Cart/MiniCart";
 import { Skeleton } from "@mui/material";
 import formatPrice from "@/Utils/formatPrice";
 import Link from "next/link";
+import OrderTotals from "@/components/MyAccount/OrderTotals";
 
 interface MobileCartPopupPropsType {
     onClose: () => void
@@ -30,8 +31,6 @@ const MobileCartPopup: FC<MobileCartPopupPropsType> = ({ onClose }) => {
 
     }, [cartItems]);
 
-    const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items);
-
     return (
         <MobilePopup title="Koszyk" onClose={onClose}>
             <div className={styles["mobile-cart"]}>
@@ -39,35 +38,14 @@ const MobileCartPopup: FC<MobileCartPopupPropsType> = ({ onClose }) => {
                     <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
                 </div>
                 <div className={styles["mobile-cart__bottom"]}>
-                    <div className={styles["mobile-cart__subtotal"]}>
-                        <span className={styles["mobile-cart__subtotal-title"]}>
-                            Kwota
-                        </span>
-                        <span className={styles["mobile-cart__subtotal-price"]}>
-                            {isLoading ?
-                                <Skeleton
-                                    sx={{
-                                        backgroundColor: variables.inputDarker,
-                                        borderRadius: '5px',
-                                        marginBottom: '10px'
-                                    }}
-                                    width={"70px"}
-                                    height={"1em"}
-                                    variant="rectangular"
-                                >
-                                </Skeleton> :
-                                (subtotal) ?
-                                    <>{formatPrice(subtotal)}</> :
-                                    <>—</>
-
-                            }
-                        </span>
+                    <div className={styles["mobile-cart__totals"]}>
+                        <OrderTotals order={orderData} isLoading={!Boolean(orderData?.id) || isLoading || cartItems.length === 0} includeBorders={false} />
                     </div>
                     <div className={styles["mobile-cart__buttons"]}>
                         <Link className={`desc link btn-primary ${styles["mobile-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/checkout'}>
                             Zamówienie
                         </Link>
-                        {orderData?.id ?
+                        {(orderData?.id && cartItems.length !== 0) ?
                             <Link className={`desc link btn-secondary ${styles["mobile-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={`https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${orderData.id}`}>
                                 Pobierz ofertę
                             </Link> :

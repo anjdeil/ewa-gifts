@@ -29,7 +29,7 @@ const MiniCartPopup = () => {
     const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items);
 
     return (
-        <div className={styles["mini-cart-popup"]}>
+        <div className={`${styles["mini-cart-popup"]} close-outside`}>
             <div className={styles["mini-cart-popup__content"]}>
                 <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
             </div>

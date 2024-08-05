@@ -48,3 +48,15 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .side-list {
+        &__button {
+
+            &:hover,
+            &:focus {
+                background-color: transparent;
+            }
+        }
+    }
+}
