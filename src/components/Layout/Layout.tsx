@@ -7,8 +7,11 @@ import { useMediaQuery } from "@mui/material";
 import MobileHeader from "../Layouts/MobileHeader/MobileHeader";
 import BottomMenu from "../Layouts/BottomMenu";
 
-const Layout: FC = ({ children }: { children?: ReactNode }) =>
-{
+interface LayoutProps {
+    children: ReactNode
+}
+
+const Layout: FC<LayoutProps> = ({ children }) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (

@@ -7,13 +7,47 @@ import SwiperPopup from "@/components/Popups/SwiperPopup/SwiperPopup";
 import { useAppSelector } from "@/hooks/redux";
 import MobileCartPopup from "../MobileCartPopup";
 import MobileCategoriesMenu from "../MobileCategoriesMenu";
+import { usePathname } from "next/navigation";
 
 const unscrollablePopups = ['mobile-search', 'hamburger-menu', 'swiper-popup', 'mobile-cart', 'mobile-categories'];
 
 const PopupContainer = () => {
     const dispatch = useDispatch();
+    const pathname = usePathname();
 
     const popup = useAppSelector(state => state.Popup);
+
+    useEffect(() => {
+        dispatch(popupClosed());
+
+        let firstClick = true;
+
+        const handleClick = (event: MouseEvent) => {
+            const somePopupOpen = Boolean(document.querySelector(".close-outside"));
+            if (!somePopupOpen) {
+                firstClick = true;
+                return;
+            }
+
+            if (firstClick) {
+                firstClick = false;
+                return;
+            }
+
+            const target = event.target as HTMLElement;
+            const targetPopup = target?.closest(".close-outside");
+            if (!targetPopup) {
+                firstClick = true;
+                dispatch(popupClosed());
+            }
+        };
+
+        document.addEventListener('click', handleClick);
+
+        return () => {
+            document.removeEventListener('click', handleClick);
+        };
+    }, [pathname]);
 
     useEffect(() => {
         if (unscrollablePopups.some(popupName => popup === popupName)) {

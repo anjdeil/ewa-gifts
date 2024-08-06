@@ -1,19 +1,17 @@
 import Box from '@mui/material/Box';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
-import { useFetchMenuItemsQuery } from '@/store/wordpress';
-import { WpWooError, wpMenuProps } from '@/types';
+import { wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
+import { MenusContext } from '@/pages/_app';
+import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
 
 const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
-    const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
+    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+    const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
-    if (isError) {
-        return <p>{(error as WpWooError).data.message}</p>;
-    }
-
-    if (isLoading && skeleton) {
+    if (!menuItems && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -29,10 +27,10 @@ const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
         <Box className={`${className && className}`}>
             <nav>
                 <ul className={`list-reset ${styles.nav__list}`}>
-                    {data && data.map((link, index) => (
-                        <li key={index}>
-                            <Link className='desc nav-link link' href={link.url}>
-                                {link.title}
+                    {menuItems && menuItems.map(({ title, url }) => (
+                        <li key={url}>
+                            <Link className='desc nav-link link' href={url}>
+                                {title}
                             </Link>
                         </li>
                     ))}

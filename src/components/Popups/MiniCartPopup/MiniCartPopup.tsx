@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import variables from "@/styles/variables.module.scss";
 import React, { useEffect } from "react";
 import styles from "./styles.module.scss"
@@ -29,7 +28,7 @@ const MiniCartPopup = () => {
     const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items);
 
     return (
-        <div className={styles["mini-cart-popup"]}>
+        <div className={`${styles["mini-cart-popup"]} close-outside`}>
             <div className={styles["mini-cart-popup__content"]}>
                 <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
             </div>

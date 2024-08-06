@@ -22,7 +22,7 @@ export const CategoryBars = () => {
         }
     }
 
-    const categories: CategoryType[] = data.data.items.length ?
+    const categories: CategoryType[] = data?.data?.items?.length ?
         data.data.items.filter((item: CategoryType) => {
             if (item.parent_id) return false;
             else if (item.slug === "uncategorized") return false;

@@ -1,21 +1,19 @@
 import { wpMenuProps } from "@/types/layouts/Menus";
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import Link from 'next/link';
 import styles from './styles.module.scss';
-import { useFetchMenuItemsQuery } from '@/store/wordpress';
 import { MenuSkeleton } from "../MenuSkeleton";
-import { WpWooError } from "@/types";
+import { MenusContext } from "@/pages/_app";
+import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
 
 const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
-    const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
-    const iconLinks = data?.filter(link => link.isIcon.length > 0) || [];
-    const otherLinks = data?.filter(link => link.isIcon.length === 0) || [];
+    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+    const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
-    if (isError) {
-        return <p>{(error as WpWooError).data.message}</p>;
-    }
+    const iconLinks = menuItems?.filter(({ fa_icon_code }) => fa_icon_code.length > 0) || [];
+    const otherLinks = menuItems?.filter(({ fa_icon_code }) => fa_icon_code.length === 0) || [];
 
-    if (isLoading && skeleton) {
+    if (!menuItems && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -31,35 +29,35 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
         <div className={`${styles.socials} ${className && className}`}>
             <nav className="nav">
                 <ul className={`list-reset ${styles.socials__list}`}>
-                    {Boolean(otherLinks?.length) && otherLinks.map((link, index) => {
+                    {Boolean(otherLinks?.length) && otherLinks.map(({ title, is_button, url }) => {
                         switch (true) {
-                            case link.isButton:
+                            case is_button:
                                 return (
-                                    <Link key={index} className={`desc link btn-primary`} href={link.url}>
-                                        {link.title}
+                                    <Link key={url} className={`desc link btn-primary`} href={url}>
+                                        {title}
                                     </Link>
                                 )
 
-                            case link.url === '':
+                            case url === '':
                                 return (
-                                    <p key={index} className={`desc`}>
-                                        {link.title}
+                                    <p key={url} className={`desc`}>
+                                        {title}
                                     </p>
                                 )
 
                             default:
                                 return (
-                                    <Link key={index} className={`desc link nav-link `} href={link.url}>
-                                        {link.title}
+                                    <Link key={url} className={`desc link nav-link `} href={url}>
+                                        {title}
                                     </Link>
                                 );
                         }
                     })}
                     {Boolean(iconLinks?.length) &&
                         <div className={styles.footer__icons}>
-                            {iconLinks.map((link, index) =>
-                                <Link key={index} className={`link`} href={link.url}>
-                                    {link.isIcon}
+                            {iconLinks.map(({ fa_icon_code, url }) =>
+                                <Link key={url} className={`link`} href={url}>
+                                    {fa_icon_code}
                                 </Link>
                             )}
                         </div>

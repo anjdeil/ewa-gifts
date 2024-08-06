@@ -16,7 +16,7 @@
     z-index: 11;
     display: flex;
     bottom: 0;
-
+    border-radius: 0 0 10px 0;
     transition: .4s transform ease-in-out;
     transform: translateX(-105%);
     background-color: $bg-accent;
