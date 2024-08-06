@@ -55,7 +55,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
                     })}
                     {Boolean(iconLinks?.length) &&
                         <div className={styles.footer__icons}>
-                            {iconLinks.map(({ title, fa_icon_code, url }) =>
+                            {iconLinks.map(({ fa_icon_code, url }) =>
                                 <Link key={url} className={`link`} href={url}>
                                     {fa_icon_code}
                                 </Link>

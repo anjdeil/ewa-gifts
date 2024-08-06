@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import variables from "@/styles/variables.module.scss";
 import React, { useEffect } from "react";
 import styles from "./styles.module.scss"

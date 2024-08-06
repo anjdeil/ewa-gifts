@@ -2,12 +2,10 @@ import variables from "@/styles/variables.module.scss";
 import React, { FC, useEffect } from "react";
 import styles from "./styles.module.scss";
 import MobilePopup from "../MobilePopup";
-import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import { useAppSelector } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
 import MiniCart from "@/components/Cart/MiniCart";
 import { Skeleton } from "@mui/material";
-import formatPrice from "@/Utils/formatPrice";
 import Link from "next/link";
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 
@@ -39,7 +37,7 @@ const MobileCartPopup: FC<MobileCartPopupPropsType> = ({ onClose }) => {
                 </div>
                 <div className={styles["mobile-cart__bottom"]}>
                     <div className={styles["mobile-cart__totals"]}>
-                        <OrderTotals order={orderData} isLoading={!Boolean(orderData?.id) || isLoading || cartItems.length === 0} includeBorders={false} />
+                        <OrderTotals order={orderData} isLoading={!orderData?.id || isLoading || cartItems.length === 0} includeBorders={false} />
                     </div>
                     <div className={styles["mobile-cart__buttons"]}>
                         <Link className={`desc link btn-primary ${styles["mobile-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/checkout'}>
