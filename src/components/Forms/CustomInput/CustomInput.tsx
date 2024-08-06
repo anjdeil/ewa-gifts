@@ -57,6 +57,20 @@ export const CustomInput: FC<CustomInputProps> = ({
         e.currentTarget.value = e.currentTarget.value.replace(regex, '');
     }
 
+    const commonProps = {
+        placeholder,
+        ...registerProps,
+        style: { color: 'black' },
+        className: `${inputClass} ${isError && styles.customInput__input_error} ${isTextarea && styles.customInput__input_textarea}`,
+        inputMode: isNumeric ? "numeric" : undefined,
+        pattern: isNumeric ? (isPost ? "[0-9\\-]*" : "[0-9]*") : undefined,
+        onInput: isNumeric ? numericValidate : undefined,
+        onChange,
+        value,
+        checked: isCheckbox ? checked : undefined,
+        name
+    };
+
     return (
         <div>
             <label className={`${styles.customInput} ${isCheckbox && styles.customInput_checkbox} ${className}`}>
@@ -65,23 +79,16 @@ export const CustomInput: FC<CustomInputProps> = ({
                     {isRequire && <span className={styles.customInput__require}>*</span>}
                 </span>
                 <div className={styles.customInput__inputWrapper}>
-                    <input
-                        placeholder={placeholder && placeholder}
-                        {...registerProps}
-                        style={{ color: 'black' }}
-                        type={type && type}
-                        className={`${inputClass}
-                         ${isError && styles.customInput__input_error}
-                         ${isTextarea && styles.customInput__input_textarea}
-                         `}
-                        inputMode={isNumeric && "numeric"}
-                        pattern={isNumeric && (isPost ? "[0-9\\-]*" : "[0-9]*")}
-                        onInput={isNumeric ? numericValidate : undefined}
-                        onChange={onChange && onChange}
-                        value={value}
-                        checked={isCheckbox && checked}
-                        name={name}
-                    />
+                    {isTextarea ? (
+                        <textarea
+                            {...commonProps}
+                        />
+                    ) : (
+                        <input
+                            type={type || 'text'}
+                            {...commonProps}
+                        />
+                    )}
                     {
                         isPassword &&
                         <Image

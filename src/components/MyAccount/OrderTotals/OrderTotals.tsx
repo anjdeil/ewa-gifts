@@ -6,7 +6,7 @@ import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import OrderTotalsRowsSkeleton from "./OrderTotalsRowsSkeleton";
 
 interface OrderTotalsPropsType {
-    order: OrderType | undefined,
+    order: OrderType | undefined | null,
     includeBorders?: boolean,
     isLoading?: boolean
 }

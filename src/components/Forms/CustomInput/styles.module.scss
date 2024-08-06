@@ -67,9 +67,10 @@
 
         &_textarea {
             min-height: 150px;
+            resize: none;
 
             &::placeholder {
-                text-align: top;
+                text-align: start;
             }
         }
     }
