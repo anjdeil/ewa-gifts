@@ -26,4 +26,14 @@
             height: 15px;
         }
     }
+
+    &__slideLink {
+        color: $black-color;
+        transition: .2s ease;
+        text-decoration: none;
+
+        &:hover {
+            color: $accent;
+        }
+    }
 }

@@ -1,26 +1,25 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation } from 'swiper/modules';
-import { WpWooError, wpMenuProps, wpNavLink } from '@/types';
-import { useFetchMenuItemsQuery } from '@/store/wordpress';
+import { wpMenuProps } from '@/types';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
+import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
+import { MenusContext } from '@/pages/_app';
+import Link from 'next/link';
 
 export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
-    const { isError, error, isLoading, data } = useFetchMenuItemsQuery({ menus: `${menuId}` });
-
-    if (isError) {
-        return <p>{(error as WpWooError).data.message}</p>;
-    }
+    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+    const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
     const swiperId = `SliderMenu`;
     const nextElId = `btn-next`;
     const prevElId = `btn-prev`;
 
-    if (isLoading && skeleton) {
+    if (!menuItems && skeleton) {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -51,10 +50,16 @@ export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => 
                 spaceBetween={30}
                 className={`${styles.sliderMenu} ${className ? className : ''}`}
             >
-                {data && data.map((item: wpNavLink, index) => (
+                {menuItems && menuItems.map(({ title, url }) => (
                     <SwiperSlide
-                        className={`${styles.sliderMenu__slide} desc`}
-                        key={index}>{item.title}
+                        className={`${styles.sliderMenu__slide}`}
+                        key={url}>
+                        <Link
+                            href={url}
+                            className={styles.sliderMenu__slideLink}
+                        >
+                            {title}
+                        </Link>
                     </SwiperSlide>
                 ))}
                 <SwiperSlide

@@ -12,7 +12,7 @@ export const CategoriesMenu = () => {
     const popup = useAppSelector(state => state.Popup);
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
     const { data: categoriesData = [] } = useFetchCategoryListQuery({});
-    const categories = categoriesData.data ? transformCategoriesMenu(categoriesData.data.items) : [];
+    const categories = categoriesData?.data ? transformCategoriesMenu(categoriesData.data.items) : [];
 
     const onLinkClick = useCallback(() => {
         if (isOpen) {
