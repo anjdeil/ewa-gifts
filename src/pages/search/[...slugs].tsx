@@ -80,9 +80,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 }
             }
         };
-    } catch (error: any | { message: string }) {
+    } catch (error) {
         context.res.statusCode = 500;
-        return { props: { error: error?.message } };
+        console.log(error);
+        return { props: { error: "Something went wrong!" } };
     }
 }
 

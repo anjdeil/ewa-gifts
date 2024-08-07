@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { FC } from "react";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import { BreadcrumbType } from "@/types/layouts/Breadcrumbs";
