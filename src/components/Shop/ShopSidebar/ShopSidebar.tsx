@@ -128,9 +128,11 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
 
     return (
         <>
-            <FilterCollapsed title={currentCategory?.name} collapsed={false}>
-                <SubcategoriesList categories={categories} parent={currentCategory} currentSubcategorySlug={subcategorySlug} />
-            </FilterCollapsed>
+            {currentCategory && (
+                <FilterCollapsed title={currentCategory?.name} collapsed={false}>
+                    <SubcategoriesList categories={categories} parent={currentCategory} currentSubcategorySlug={subcategorySlug} />
+                </FilterCollapsed>
+            )}
 
             <FilterCollapsed title={"Cena"} collapsed={false}>
                 <PriceFilter

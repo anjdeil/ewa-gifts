@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { FC } from "react";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import { BreadcrumbType } from "@/types/layouts/Breadcrumbs";
@@ -14,7 +14,7 @@ export const PageHeader: FC<PageHeaderProps> = ({ title, breadLinks, count = 0, 
         <Box className={`page-top ${isCentered && "page-top_center"}`}>
             {breadLinks && <Breadcrumbs links={breadLinks} />}
             <Box className={'page-top__titling'}>
-                <Typography className="page-top__title" variant="h1">{title}</Typography>
+                <h1 className="page-top__title">{title}</h1>
                 {count > 0 &&
                     <Chip
                         className="page-top__count"

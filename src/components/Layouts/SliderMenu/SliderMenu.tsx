@@ -53,7 +53,7 @@ export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => 
                 {menuItems && menuItems.map(({ title, url }) => (
                     <SwiperSlide
                         className={`${styles.sliderMenu__slide}`}
-                        key={url}>
+                        key={title}>
                         <Link
                             href={url}
                             className={styles.sliderMenu__slideLink}

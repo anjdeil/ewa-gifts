@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { FormEvent, SyntheticEvent, useState } from "react";
 import { Chip, CircularProgress } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -8,6 +8,7 @@ import { transformSearchBarCategories, transformSearchBarProducts } from "@/serv
 import variables from '@/styles/variables.module.scss';
 import styles from './styles.module.scss';
 import { useFetchCategoryListQuery } from "@/store/custom/customApi";
+import { useRouter } from "next/router";
 
 const defaultStyles = {
     borderRadius: '10px',
@@ -42,6 +43,7 @@ interface SearchBarOptionType {
 }
 
 const SearchBar = () => {
+    const router = useRouter();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isTyping, setTyping] = useState(false);
@@ -85,43 +87,51 @@ const SearchBar = () => {
         </li>
     );
 
+    const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+        if (searchTerm?.length >= 3) {
+            router.push(`/search/${searchTerm}`)
+        }
+    }
+
     return (
-        <Autocomplete
-            defaultValue={searchTerm}
-            freeSolo
-            loading={isLoading || isFetching}
-            options={searchTerm?.length >= 3 ? searchResults : []}
-            getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
-            renderOption={renderOption}
-            onInputChange={onSearch}
-            blurOnSelect
-            inputValue={searchTerm}
-            renderInput={(params) => (
-                <TextField
-                    {...params}
-                    sx={{
-                        '& .MuiOutlinedInput-root': defaultStyles,
-                        '& .MuiOutlinedInput-root:hover': hoverStyles,
-                        '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
-                    }}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <>
-                                {isLoading || isFetching ?
-                                    <CircularProgress
-                                        sx={{ color: variables.darker }}
-                                        size={20} />
-                                    : null}
-                                {params.InputProps.endAdornment}
-                            </>
-                        ),
-                        placeholder: "Szukaj",
-                        type: 'search'
-                    }}
-                />
-            )}
-        />
+        <form onSubmit={handleSubmit}>
+            <Autocomplete
+                defaultValue={searchTerm}
+                freeSolo
+                loading={isLoading || isFetching}
+                options={searchTerm?.length >= 3 ? searchResults : []}
+                getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
+                renderOption={renderOption}
+                onInputChange={onSearch}
+                inputValue={searchTerm}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        sx={{
+                            '& .MuiOutlinedInput-root': defaultStyles,
+                            '& .MuiOutlinedInput-root:hover': hoverStyles,
+                            '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
+                        }}
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <>
+                                    {isLoading || isFetching ?
+                                        <CircularProgress
+                                            sx={{ color: variables.darker }}
+                                            size={20} />
+                                        : null}
+                                    {params.InputProps.endAdornment}
+                                </>
+                            ),
+                            placeholder: "Szukaj",
+                            type: 'search'
+                        }}
+                    />
+                )}
+            />
+        </form>
     );
 }
 
