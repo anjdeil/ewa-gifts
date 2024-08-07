@@ -9,6 +9,7 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { ResponseMenuItemsType } from "@/types/Services/customApi/Menu/ResponseMenuItemsType";
 import App from "next/app";
 import { createContext } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 export const MenusContext = createContext<MenuItemsType[] | undefined>(undefined);
 
@@ -21,7 +22,9 @@ export const MyApp = ({ Component, pageProps, menus }: AppProps & AppOwnProps) =
         <Provider store={store}>
             <MenusContext.Provider value={menus}>
                 <Layout>
-                    <Component {...pageProps} />
+                    <ErrorBoundary>
+                        <Component {...pageProps} />
+                    </ErrorBoundary>
                 </Layout>
             </MenusContext.Provider>
         </Provider>

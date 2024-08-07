@@ -22,7 +22,9 @@ const MobileCartPopup: FC<MobileCartPopupPropsType> = ({ onClose }) => {
 
         const createOrderRequestBody = {
             line_items: cartItems,
-            shipping_lines: shippingLines
+            shipping_lines: shippingLines,
+            payment_method: "bacs",
+            payment_method_title: "Przelew bandowy"
         };
 
         fetchCreateOrder(createOrderRequestBody);

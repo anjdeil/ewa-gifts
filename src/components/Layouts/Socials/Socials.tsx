@@ -33,21 +33,21 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
                         switch (true) {
                             case is_button:
                                 return (
-                                    <Link key={url} className={`desc link btn-primary`} href={url}>
+                                    <Link key={title} className={`desc link btn-primary`} href={url}>
                                         {title}
                                     </Link>
                                 )
 
                             case url === '':
                                 return (
-                                    <p key={url} className={`desc`}>
+                                    <p key={title} className={`desc`}>
                                         {title}
                                     </p>
                                 )
 
                             default:
                                 return (
-                                    <Link key={url} className={`desc link nav-link `} href={url}>
+                                    <Link key={title} className={`desc link nav-link `} href={url}>
                                         {title}
                                     </Link>
                                 );
@@ -56,7 +56,7 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
                     {Boolean(iconLinks?.length) &&
                         <div className={styles.footer__icons}>
                             {iconLinks.map(({ fa_icon_code, url }) =>
-                                <Link key={url} className={`link`} href={url}>
+                                <Link key={fa_icon_code} className={`link`} href={url}>
                                     {fa_icon_code}
                                 </Link>
                             )}

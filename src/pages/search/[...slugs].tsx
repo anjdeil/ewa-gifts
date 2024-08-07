@@ -1,6 +1,4 @@
 import { customRestApi } from "@/services/CustomRestApi";
-import { ResponseCategoryListType } from "@/types/Services/customApi/Category/ResponseCategoryListType";
-import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { ResponseProductListType } from "@/types/Services/customApi/Product/ResponseProductListType";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -8,7 +6,6 @@ import Archive from "@/components/Shop/Archive";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     try {
-
         const { slugs, ...params } = context.query;
         if (slugs === undefined || !Array.isArray(slugs)) return {
             notFound: true
@@ -18,42 +15,19 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
          *
          * Find pagination param */
         const pageSlugIndex = slugs.findIndex((slug: string) => slug === 'page');
-        const page = pageSlugIndex >= 0 ? slugs[pageSlugIndex + 1] : '1';
+        const page = pageSlugIndex >= 0 && Array.isArray(slugs) ? slugs[pageSlugIndex + 1] : '1';
         if (page === undefined || page === '0') return {
             notFound: true
         };
 
-        /** Categories:
+        /** Search:
          *
-         * Find categories param */
-        const lastCategorySlugIndex = pageSlugIndex >= 0 ? pageSlugIndex : slugs.length;
-        const categorySlugs = slugs.slice(0, lastCategorySlugIndex);
+         * Find search param */
+        const lastSearchSlugIndex = pageSlugIndex >= 0 ? pageSlugIndex : slugs.length;
+        const searchSlugs = slugs.slice(0, lastSearchSlugIndex);
 
-        /* Сannot be more than two categories */
-        if (categorySlugs[2]) return {
-            notFound: true
-        };
-
-        /* Fetch categories */
-        const categoriesResponseData = await customRestApi.get(`categories`, {
-            slugs: categorySlugs.join(',')
-        });
-        const categoriesResponse = categoriesResponseData?.data as ResponseCategoryListType;
-        const categories = categoriesResponse?.data && categoriesResponse.data.items as CategoryType[];
-        if (!categories?.length) return {
-            notFound: true
-        };
-
-        /* Sort categories */
-        categories.sort((a, b) => a.parent_id - b.parent_id);
-
-        /* Do not open a subcategory without a parent category */
-        if (categories[0].parent_id !== 0) return {
-            notFound: true
-        };
-
-        /* Check if the second category is the child of the first category */
-        if (categories[1] && categories[1].parent_id !== categories[0].id) return {
+        /* Сannot be more than one search slug */
+        if (searchSlugs[1]) return {
             notFound: true
         };
 
@@ -66,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         const productListQueryParams: ProductListQueryParamsType = {
             page: (page !== "1") ? page : undefined,
             per_page: productsPerPage,
-            category: categories[categories.length - 1].slug,
+            search: searchSlugs[0],
             attribute: typeof params?.attribute === 'string' ? params.attribute : undefined,
             attribute_term: typeof params?.attribute_term === 'string' ? params.attribute_term : undefined,
             order_by: typeof params?.order_by === 'string' ? params.order_by : undefined,
@@ -97,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             props: {
                 products,
                 productsCount: statistic.products_count,
-                categories,
+                searchTerm: searchSlugs[0],
                 page,
                 pagesCount,
                 priceRange: {
@@ -106,12 +80,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 }
             }
         };
-
     } catch (error: any | { message: string }) {
         context.res.statusCode = 500;
         return { props: { error: error?.message } };
     }
-
 }
 
 export default Archive;
