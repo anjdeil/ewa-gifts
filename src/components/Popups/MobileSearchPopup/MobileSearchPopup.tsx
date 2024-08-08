@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent, useState } from 'react';
+import React, { FC, FormEvent, SyntheticEvent, useState } from 'react';
 import { Chip, CircularProgress, Button, Paper, PaperOwnProps } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -7,6 +7,7 @@ import { useFetchProductListQuery, useFetchCategoryListQuery } from "@/store/cus
 import { transformSearchBarCategories, transformSearchBarProducts } from "@/services/transformers"
 import variables from '@/styles/variables.module.scss';
 import styles from './styles.module.scss';
+import { useRouter } from 'next/router';
 
 const defaultStyles = {
     borderRadius: '10px',
@@ -58,6 +59,8 @@ interface MobileSearchPopup {
 }
 
 const MobileSearchPopup: FC<MobileSearchPopup> = ({ onClose }) => {
+    const router = useRouter();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [isTyping, setTyping] = useState(false);
 
@@ -85,6 +88,13 @@ const MobileSearchPopup: FC<MobileSearchPopup> = ({ onClose }) => {
         }, 2000);
     }
 
+    const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+        if (searchTerm?.length >= 3) {
+            router.push(`/search/${searchTerm}`)
+        }
+    }
+
     const renderOption = (props: React.JSX.IntrinsicAttributes & React.ClassAttributes<HTMLLIElement> & React.LiHTMLAttributes<HTMLLIElement>, option: SearchBarOptionType) => (
         <li
             {...props}
@@ -104,59 +114,61 @@ const MobileSearchPopup: FC<MobileSearchPopup> = ({ onClose }) => {
         </li>
     );
 
+
     return (
         <div className={styles['search-popup']}>
             <div className={styles['search-popup__header']}>
-                <Autocomplete
-                    ListboxProps={{
-                        style: {
-                            maxHeight: 'none',
-                        }
-                    }}
-                    PaperComponent={SearchPaper}
-                    open={true}
-                    freeSolo
-                    loading={isLoading || isFetching}
-                    options={searchTerm?.length >= 3 ? searchResults : []}
-                    getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
-                    renderOption={renderOption}
-                    onInputChange={onSearch}
-                    blurOnSelect
-                    inputValue={searchTerm}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            inputRef={input => input && input.focus()}
-                            sx={{
-                                '& .MuiOutlinedInput-root': defaultStyles,
-                                '& .MuiOutlinedInput-root:hover': hoverStyles,
-                                '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
-                            }}
-                            InputProps={{
-                                ...params.InputProps,
-                                endAdornment: (
-                                    <>
-                                        {isLoading || isFetching ?
-                                            <CircularProgress
-                                                sx={{ color: variables.darker }}
-                                                size={20} />
-                                            : null}
-                                        {params.InputProps.endAdornment}
-                                    </>
-                                ),
-                                placeholder: "Search",
-                                type: 'search'
-                            }}
-                        />
-                    )}
-                />
+                <form onSubmit={handleSubmit}>
+                    <Autocomplete
+                        ListboxProps={{
+                            style: {
+                                maxHeight: 'none',
+                            }
+                        }}
+                        PaperComponent={SearchPaper}
+                        open={true}
+                        freeSolo
+                        loading={isLoading || isFetching}
+                        options={searchTerm?.length >= 3 ? searchResults : []}
+                        getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
+                        renderOption={renderOption}
+                        onInputChange={onSearch}
+                        inputValue={searchTerm}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                inputRef={input => input && input.focus()}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': defaultStyles,
+                                    '& .MuiOutlinedInput-root:hover': hoverStyles,
+                                    '& .MuiOutlinedInput-root.Mui-focused': focusStyles,
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                        <>
+                                            {isLoading || isFetching ?
+                                                <CircularProgress
+                                                    sx={{ color: variables.darker }}
+                                                    size={20} />
+                                                : null}
+                                            {params.InputProps.endAdornment}
+                                        </>
+                                    ),
+                                    placeholder: "Search",
+                                    type: 'search'
+                                }}
+                            />
+                        )}
+                    />
+                </form>
                 <Button
                     sx={{
                         textTransform: "none",
                         fontSize: "1rem",
-                        color: variables.textGrey,
                         borderRadius: "10px",
                         padding: "8px",
+                        color: variables.textGray,
                         '&:hover': {
                             backgroundColor: variables.inputLight,
                         }
