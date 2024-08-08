@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import Nav from "@/components/Layouts/Navigation/Nav";
+// import Nav from "@/components/Layouts/Navigation/Nav";
 import React from 'react';
 import Socials from '../Socials/Socials';
 import styles from './styles.module.scss';
@@ -11,7 +11,7 @@ const TopBar: React.FC = () => {
                 <Link href={'/'} passHref className={styles.topBar__logoLink}>
                     <Image src="/logo.svg" className={styles.topBar__logoLinkImage} alt="Logo" width={150} height={40} />
                 </Link>
-                <Nav
+                {/* <Nav
                     menuId={816}
                     className={styles.topBar__nav}
                     skeleton={
@@ -22,7 +22,7 @@ const TopBar: React.FC = () => {
                             gap: '10px'
                         }
                     }
-                />
+                /> */}
                 <Socials
                     menuId={358}
                     skeleton={
