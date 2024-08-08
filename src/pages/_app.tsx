@@ -34,7 +34,7 @@ export const MyApp = ({ Component, pageProps, menus }: AppProps & AppOwnProps) =
 MyApp.getInitialProps = async (ctx: AppContext): Promise<AppInitialProps & AppOwnProps> => {
     const appProps = await App.getInitialProps(ctx);
 
-    const menuIds = [820, 818, 817, 819, 816, 358];
+    const menuIds = [820, 818, 817, 816, 358];
 
     const menusResponseData = await customRestApi.get(`menu-items`, {
         include: menuIds.join(',')

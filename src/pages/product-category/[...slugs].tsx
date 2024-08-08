@@ -100,6 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 categories,
                 page,
                 pagesCount,
+                availableAttributes: statistic.attributes,
                 priceRange: {
                     min: statistic.min_price,
                     max: statistic.max_price
