@@ -61,7 +61,9 @@ export const CustomInput: FC<CustomInputProps> = ({
         placeholder,
         ...registerProps,
         style: { color: 'black' },
-        className: `${inputClass} ${isError && styles.customInput__input_error} ${isTextarea && styles.customInput__input_textarea}`,
+        className: `${inputClass}
+        ${isError && styles.customInput__input_error} 
+        ${isTextarea && styles.customInput__input_textarea}`,
         inputMode: isNumeric ? "numeric" : undefined,
         pattern: isNumeric ? (isPost ? "[0-9\\-]*" : "[0-9]*") : undefined,
         onInput: isNumeric ? numericValidate : undefined,
@@ -84,10 +86,13 @@ export const CustomInput: FC<CustomInputProps> = ({
                             {...commonProps}
                         />
                     ) : (
-                        <input
-                            type={type || 'text'}
-                            {...commonProps}
-                        />
+                        <>
+                            <input
+                                type={type || 'text'}
+                                {...commonProps}
+                            />
+                            {isCheckbox && <span className={styles.customInput__custCheck} />}
+                        </>
                     )}
                     {
                         isPassword &&
