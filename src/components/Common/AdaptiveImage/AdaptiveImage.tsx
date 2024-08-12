@@ -11,7 +11,7 @@ export const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ isMobile, imageUrl
                 src={src}
                 alt={alt}
                 style={{
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                 }}
                 sizes={'100% 100%'}
                 fill />

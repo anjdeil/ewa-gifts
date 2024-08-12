@@ -10,22 +10,27 @@ import { Split } from "../Common/Split";
 import { transformBuilderSplitSection } from "@/services/transformers";
 import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { RichTextComponent } from "../Common/RichTextComponent";
-import { CustomTabs } from "../Common/Tabs";
+// import { CustomTabs } from "../Common/Tabs";
 import { BlogList } from "../Blog/BlogList";
-import { ProductCarousel } from "../Shop/ProductCarousel";
+// import { ProductCarousel } from "../Shop/ProductCarousel";
 import { Section } from "../Layouts/Section";
 import { HeroSchema, PageBuilderProp, SplitBuild } from "@/types";
-import { TopSeller } from "../Shop/TopSeller";
+// import { TopSeller } from "../Shop/TopSeller";
 
-export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
+export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
+{
     // console.log(sections);
     return (
         <div>
-            {sections.map((section) => {
-                if ('_type' in section) {
-                    switch (section._type) {
+            {sections.map((section) =>
+            {
+                if ('_type' in section)
+                {
+                    switch (section._type)
+                    {
                         case "slider": {
-                            if ('slider' in section) {
+                            if ('slider' in section)
+                            {
                                 return (
                                     <Section isContainer={true} className={'slider'}>
                                         <Slider slides={section.slider} />
@@ -36,7 +41,8 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
                         }
 
                         case "features": {
-                            if ('features' in section) {
+                            if ('features' in section)
+                            {
                                 return (
                                     <Section isContainer={true} className={'features'}>
                                         <Features features={section.features} />
@@ -47,7 +53,8 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
                         }
 
                         case "categories": {
-                            if ('categories' in section) {
+                            if ('categories' in section)
+                            {
                                 return (
                                     <Section isContainer={true} className={'section'}>
                                         <CategoryBars />
@@ -68,7 +75,8 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
 
                         case "split":
                         case "split_reversible": {
-                            if ('split' in section || 'split_reversible' in section) {
+                            if ('split' in section || 'split_reversible' in section)
+                            {
                                 const splitSection = section as SplitBuild;
                                 const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
                                 const isReversed = section._type === "split_reversible";
@@ -85,23 +93,25 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
                             break;
                         }
 
-                        case "tabs": {
-                            if ('tabs' in section) {
-                                section.tabs[0].title = "Bestsellers";
-                                section.tabs[1].title = "New";
-                                return (
-                                    <Section className={'tabs'}>
-                                        <div className="container">
-                                            <CustomTabs tabs={section.tabs} ></CustomTabs>
-                                        </div>
-                                    </Section>
-                                )
-                            }
-                            break;
-                        }
+                        // case "tabs": {
+                        //     if ('tabs' in section)
+                        //     {
+                        //         section.tabs[0].title = "Bestsellers";
+                        //         section.tabs[1].title = "New";
+                        //         return (
+                        //             <Section className={'tabs'}>
+                        //                 <div className="container">
+                        //                     <CustomTabs tabs={section.tabs} ></CustomTabs>
+                        //                 </div>
+                        //             </Section>
+                        //         )
+                        //     }
+                        //     break;
+                        // }
 
                         case "blog": {
-                            if ('blog' in section) {
+                            if ('blog' in section)
+                            {
                                 return (
                                     <Section className={'section'} isContainer={true}>
                                         <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
@@ -112,38 +122,41 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
                             break;
                         }
 
-                        case "topseller": {
-                            if ('topseller' in section) {
-                                return (
-                                    <Section className={'topseller'}>
-                                        <div className="container">
-                                            <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
-                                            <TopSeller />
-                                        </div>
-                                    </Section>
-                                );
-                            }
-                            break;
-                        }
+                        // case "topseller": {
+                        //     if ('topseller' in section) {
+                        //         return (
+                        //             <Section className={'topseller'}>
+                        //                 <div className="container">
+                        //                     <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
+                        //                     <TopSeller />
+                        //                 </div>
+                        //             </Section>
+                        //         );
+                        //     }
+                        //     break;
+                        // }
 
                         case "google_reviews": {
-                            if ('google_reviews' in section) {
+                            if ('google_reviews' in section)
+                            {
                                 break;
                             }
                             break;
                         }
 
-                        case "product_carousel": {
-                            if ('product_carousel' in section) {
-                                return (
-                                    <ProductCarousel ids={section.products} />
-                                )
-                            }
-                            break;
-                        }
+                        // case "product_carousel": {
+                        //     if ('product_carousel' in section)
+                        //     {
+                        //         return (
+                        //             <ProductCarousel ids={section.products} />
+                        //         )
+                        //     }
+                        //     break;
+                        // }
 
                         case "split_image":
-                            if ("title" in section) {
+                            if ("title" in section)
+                            {
                                 return <AdaptiveImage
                                     imageUrl={section.image}
                                     alt={section.title}
@@ -153,7 +166,8 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) => {
                             break;
 
                         case "rich_text":
-                            if ("text" in section) {
+                            if ("text" in section)
+                            {
                                 return <RichTextComponent
                                     text={section.text}
                                     link_url={section.link_url}
