@@ -3,96 +3,115 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
-import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
+import { customRestApi } from "@/services/CustomRestApi";
+import { z } from "zod";
+import ErrorPage from "../500";
 
-interface ArticleProps
-{
+const PostSchema = z.object({
+  id: z.number(),
+  slug: z.string(),
+  status: z.string(),
+  type: z.string(),
+  parent: z.number(),
+  title: z.string(),
+  content: z.string(),
+  excerpt: z.string(),
+  menu_order: z.number(),
+  categories: z.array(
+    z.object({
+      id: z.number(),
+      parent_id: z.number(),
+      name: z.string(),
+      slug: z.string(),
+      description: z.string(),
+      count: z.number(),
+    })
+  ),
+});
+
+const ResponseSchema = z.object({
+  status: z.string(),
+  data: z.object({
+    item: PostSchema,
+  }),
+});
+
+interface ArticleProps {
+  response: z.infer<typeof PostSchema>;
+  prevPost: z.infer<typeof PostSchema> | null;
+  nextPost: z.infer<typeof PostSchema> | null;
+  error?: string;
 }
+const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
+  if (error) {
+    throw new Error(error);
+  }
 
-const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) =>
-{
-    if (!response)
-    {
-        return <p>Loading...</p>;
-    }
-    console.log(response);
-    const breadCurrent = {
-        name: response.title.rendered,
-        url: response.link,
-    };
-    console.log(breadCurrent);
-    return (
-        <>
-            <Head>
-                <title>{response.title.rendered}</title>
-                <meta name="description" content={response.title.rendered} />
-            </Head>
-            <main>
-                <div className="container">
-                    <BlogPost post={response} />
-                    <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
-                </div>
-            </main>
-        </>
-    );
+  //   if (error) {
+  //     return <ErrorPage statusCode={500} />;
+  //   }
+
+  return (
+    <>
+      <Head>
+        <title>{response.title.rendered}</title>
+        <meta name="description" content={response.excerpt} />
+      </Head>
+      <main>
+        <div className="container">
+          <BlogPost post={response} />
+          <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
+        </div>
+      </main>
+    </>
+  );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) =>
-{
-    const { slug } = context.params!;
-    let response;
-    let prevPost = null;
-    let nextPost = null;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { slug } = context.params!;
+  let response;
+  let prevPost = null;
+  let nextPost = null;
 
-    try
-    {
-        const currentPostResponse = await wpRestApi.get(`posts?slug=${slug}`);
-        if (currentPostResponse.data.length === 0)
-        {
-            return { notFound: true };
-        }
+  try {
+    const currentPostResponse = await customRestApi.get(`posts/${slug}`);
 
-        const currentPost = currentPostResponse.data[0];
-
-        const allPostsResponse = await wpRestApi.get(`posts`);
-        const allPosts = allPostsResponse.data;
-
-        const currentIndex = allPosts.findIndex((post) => post.id === currentPost.id);
-
-        if (currentIndex > 0)
-        {
-            prevPost = allPosts[currentIndex - 1];
-        }
-        if (currentIndex < allPosts.length - 1)
-        {
-            nextPost = allPosts[currentIndex + 1];
-        }
-
-        response = currentPost;
-    } catch (error)
-    {
-        console.log(error, '77777777');
-        return {
-            props: {
-                response: null,
-                prevPost: null,
-                nextPost: null,
-                error: (error as Error).message,
-            },
-        };
+    if (!currentPostResponse.data.data.item) {
+      return { notFound: true };
     }
 
-    const props = {
-        response,
-        prevPost,
-        nextPost,
-    };
+    const currentPost = currentPostResponse.data.data.item;
 
-    return {
-        props,
-    };
+    const allPostsResponse = await customRestApi.get(`posts`);
+    const allPosts = allPostsResponse.data.data.items;
+
+    const currentIndex = allPosts.findIndex(
+      (post) => post.id === currentPost.id
+    );
+
+    if (currentIndex > 0) {
+      prevPost = allPosts[currentIndex - 1];
+    }
+    if (currentIndex < allPosts.length - 1) {
+      nextPost = allPosts[currentIndex + 1];
+    }
+
+    response = currentPost;
+  } catch (error) {
+    return { props: { error: "Server Error." } };
+  }
+
+  const props = {
+    response,
+    prevPost,
+    nextPost,
+  };
+
+  return {
+    props,
+  };
 };
 
 export default Article;

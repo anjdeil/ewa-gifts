@@ -14,8 +14,10 @@ const Blog = ({ response }) => {
         <meta name="description" content={`This is ${pageTitle}`} />
       </Head>
       <main>
-        <h1>{pageTitle}</h1>
-        <p>Welcome to the Blog Page</p>
+        <div className="container">
+          <h1>{pageTitle}</h1>
+          <p>Welcome to the Blog Page</p>
+        </div>
       </main>
     </>
   );
