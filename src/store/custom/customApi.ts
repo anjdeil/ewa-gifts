@@ -26,7 +26,17 @@ export const customApi = createApi({
             query: (slug) => ({
                 url: `/attributes/${slug}/terms`
             })
-        })
+        }),
+        fetchProductsCirculations: build.mutation({
+            query: (body) => ({
+                url: `/products/circulations`,
+                method: 'POST',
+                body: body,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+        }),
     })
 });
 
@@ -34,5 +44,6 @@ export const {
     useFetchProductListQuery,
     useFetchProductQuery,
     useFetchCategoryListQuery,
-    useFetchAttributeTermsQuery
+    useFetchAttributeTermsQuery,
+    useFetchProductsCirculationsMutation
 } = customApi;

@@ -1,74 +1,54 @@
 import { Box, Skeleton } from '@mui/material';
 import styles from './styles.module.scss';
-import { useAppDispatch } from '@/hooks/redux';
-import { updateCart } from '@/store/reducers/CartSlice';
 import { CartTableProps } from '@/types/Cart';
 import { FC } from 'react';
-import { lineOrderItems } from '@/types/store/reducers/CartSlice';
 import { CartTableRow } from './CartTableRow';
 import React from 'react';
 
-export const CartTable: FC<CartTableProps> = ({ products, total, isLoading, items }) =>
-{
-    const dispatch = useAppDispatch();
-    const MemoizedCartTableRow = React.memo(CartTableRow);
-    // const onProductChange = (product: lineOrderItems, count: number): void =>
-    // {
-    //     if (count >= 0)
-    //     {
-    //         dispatch(updateCart({
-    //             id: product.product_id,
-    //             quantity: count,
-    //             ...(product.variation_id && { variationId: product.variation_id })
-    //         }));
-    //     }
-    // };
+export const CartTable: FC<CartTableProps> = ({ lineItems, productsSpecs, isLoading, cartItems }) => {
 
-    const onProductDelete = (product: lineOrderItems): void =>
-    {
-        dispatch(updateCart({
-            id: product.product_id,
-            quantity: 0,
-            ...(product.variation_id && { variationId: product.variation_id })
-        }));
+    const getProductSpecs = (productId: number, variationId: number) => {
+        return productsSpecs.find(({ product_id, variation_id }) => {
+            if (variationId) {
+                return productId === product_id && variationId === variation_id;
+            }
+            return productId === product_id;
+        });
     }
 
     return (
-        <Box className={styles.CartTable}>
-            <Box className={`${styles.CartTable__row_head} ${styles.CartTable__row}`}>
-                <Box className={`${styles.CartTable__cell}`}>
-                    Product
+        <Box className={styles.cartTable}>
+            <Box className={`${styles.cartTable__row} ${styles.cartTable__row_head}`}>
+                <Box className={`${styles.cartTable__cell}`}>
+                    Produkt
                 </Box>
-                <Box className={`${styles.CartTable__cell}`}>
-                    Price
+                <Box className={`${styles.cartTable__cell}`}>
+                    Cena
                 </Box>
-                <Box className={`${styles.CartTable__cell}`}>
-                    Amount
+                <Box className={`${styles.cartTable__cell}`}>
+                    Ilość
                 </Box>
-                <Box className={`${styles.CartTable__cell}`}>
-                    Total
+                <Box className={`${styles.cartTable__cell}`}>
+                    Kwota
                 </Box>
             </Box >
-            <Box className={styles.CartTable__tableBody}>
-                {(isLoading && items.length > 0) ? (
+            <Box className={styles.cartTable__tableBody}>
+                {(isLoading && !Boolean(lineItems.length)) ? (
                     <Box>
                         {
-                            items.map(item => (
-                                <Skeleton className={`${styles.CartTable__skeleton}`} key={item.product_id} animation="wave" />
+                            cartItems.map(item => (
+                                <Skeleton className={`${styles.cartTable__skeleton}`} key={item.product_id} animation="wave" />
                             ))
                         }
                     </Box>
                 ) : (
-                    products &&
-                    products.map((product) => (
-                        <MemoizedCartTableRow
-                            key={product.id}
-                            product={product}
-                            onProductChange={() => { }}
-                            onProductDelete={onProductDelete}
-                            lineItems={items}
+                    lineItems &&
+                    lineItems.map((lineItem) => (
+                        <CartTableRow
+                            key={lineItem.id}
+                            lineItem={lineItem}
+                            productSpecs={getProductSpecs(lineItem.product_id, lineItem.variation_id) || null}
                             isLoading={isLoading}
-                            total={total}
                         />
                     ))
                 )}

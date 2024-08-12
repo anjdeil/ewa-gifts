@@ -20,6 +20,22 @@ class CustomRestApi {
             }
         }
     }
+
+    async post(url: string, body: object): Promise<AxiosResponse<unknown> | undefined> {
+        for (let i = 0; i < 3; i++) {
+            try {
+                const response = await axios.post(this._apiBase + url, body);
+
+                if (response.status !== 200) {
+                    throw new Error(`Could not fetch ${url}, received ${response.status}`)
+                }
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+    }
 }
 
 export const customRestApi = new CustomRestApi();
