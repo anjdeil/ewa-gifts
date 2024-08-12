@@ -36,8 +36,8 @@ export const CartTable: FC<CartTableProps> = ({ lineItems, productsSpecs, isLoad
                 {(isLoading && !lineItems.length) ? (
                     <Box>
                         {
-                            cartItems.map(item => (
-                                <Skeleton className={`${styles.cartTable__skeleton}`} key={item.product_id} animation="wave" />
+                            cartItems.map((_item, index) => (
+                                <Skeleton className={`${styles.cartTable__skeleton}`} key={index} animation="wave" />
                             ))
                         }
                     </Box>

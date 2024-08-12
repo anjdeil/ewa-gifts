@@ -82,7 +82,7 @@ export const CartSlice = createSlice({
     reducers: {
         updateCart: (state, { payload }: { payload: UpdateCartPayloadType }) => {
             const { id, quantity, variationId, supplier, total } = payload;
-            if (quantity > 0) {
+            if (quantity > 0 && supplier && total) {
 
                 const foundItem = state.items.find((item) =>
                     item.product_id === id && (!variationId || item.variation_id === variationId)
@@ -95,9 +95,9 @@ export const CartSlice = createSlice({
                     state.items.push({
                         product_id: id,
                         quantity: quantity,
-                        ...(supplier && { supplier }),
+                        supplier,
+                        total,
                         ...(variationId && { variation_id: variationId }),
-                        ...(total && { total })
                     });
                 }
             } else {
