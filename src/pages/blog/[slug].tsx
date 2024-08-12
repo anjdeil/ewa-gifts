@@ -76,20 +76,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let nextPost = null;
 
   try {
-    const currentPostResponse = await customRestApi.get(`posts/${slug}`);
-
-    if (!currentPostResponse.data.data.item) {
-      return { notFound: true };
-    }
-
-    const currentPost = currentPostResponse.data.data.item;
-
     const allPostsResponse = await customRestApi.get(`posts`);
     const allPosts = allPostsResponse.data.data.items;
 
-    const currentIndex = allPosts.findIndex(
-      (post) => post.id === currentPost.id
-    );
+    const currentIndex = allPosts.findIndex((post) => post.slug === slug);
+
+    if (currentIndex === -1) {
+      return { notFound: true };
+    }
 
     if (currentIndex > 0) {
       prevPost = allPosts[currentIndex - 1];
@@ -98,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       nextPost = allPosts[currentIndex + 1];
     }
 
-    response = currentPost;
+    response = allPosts[currentIndex];
   } catch (error) {
     return { props: { error: "Server Error." } };
   }
