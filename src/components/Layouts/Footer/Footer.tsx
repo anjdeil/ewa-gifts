@@ -91,7 +91,7 @@ export const Footer: FC = () => {
                         <h3 className={`${styles.footer__title} secondary-title`}>Infomarmacja</h3>
                     </AccordionSummaryCustom>
                     <AccordionDetails>
-                        <Nav menuId={819}
+                        <Nav menuId={817}
                             className={styles.footer__nav}
                             skeleton={
                                 {

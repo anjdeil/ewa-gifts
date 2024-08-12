@@ -14,6 +14,7 @@ import ShopToolbar from "../ShopToolbar";
 import MobileSidebar from "../ShopSidebar/MobileSidebar";
 import { ProductCardList } from "../ProductCardsList";
 import Notification from "@/components/Layouts/Notification";
+import { StatisticAttributeType } from "@/types/Services/customApi/Attribute/StatisticAttributeType";
 
 interface ArchiveProps {
     searchTerm?: string,
@@ -22,6 +23,7 @@ interface ArchiveProps {
     page: string,
     pagesCount: number,
     productsCount: number,
+    availableAttributes: StatisticAttributeType[],
     priceRange: {
         min: number,
         max: number
@@ -35,6 +37,7 @@ export default function Archive({
     page,
     pagesCount,
     productsCount,
+    availableAttributes,
     priceRange
 }: ArchiveProps) {
     const isMobile = useMediaQuery('(max-width: 768px)');
@@ -94,11 +97,11 @@ export default function Archive({
                     />
                     <div className={styles['product-archive__container']}>
                         <aside className={styles['product-archive__sidebar']}>
-                            {!isMobile && <ShopSidebar priceRange={priceRange} />}
+                            {!isMobile && <ShopSidebar availableAttributes={availableAttributes} priceRange={priceRange} />}
                         </aside>
                         <div className={styles['product-archive__archive']}>
                             <ShopToolbar renderPagination={() => renderPagination(page, pagesCount)} />
-                            {popup === 'mobile-filter' && <MobileSidebar priceRange={priceRange} />}
+                            {popup === 'mobile-filter' && <MobileSidebar availableAttributes={availableAttributes} priceRange={priceRange} />}
                             {products.length ?
                                 <ProductCardList products={products} columns={{ desktop: 3 }} isShopPage={true} /> :
                                 <Notification><p>Nie znaleziono żadnych produktów dla tego żądania.</p></Notification>

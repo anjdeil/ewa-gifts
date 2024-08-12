@@ -9,7 +9,8 @@
 
     &__content {
         display: grid;
-        grid-template-columns: 2.2fr 1fr;
+        grid-template-columns: 2fr 1fr;
+        align-items: start;
         gap: 40px;
     }
 
@@ -22,8 +23,16 @@
 @media(max-width: 1200px) {
     .Cart {
         &__content {
-            display: flex;
-            flex-direction: column;
+            gap: 20px;
+        }
+    }
+}
+
+@media(max-width: 1024px) {
+    .Cart {
+        &__content {
+            gap: 40px;
+            grid-template-columns: 1fr;
         }
     }
 }

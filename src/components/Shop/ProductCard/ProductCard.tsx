@@ -26,6 +26,7 @@ interface ProductCardPropsType {
 type ProductInfoType = {
     image: string,
     stock: number,
+    sku: string,
     price?: number,
     priceСirculations?: {
         type: string,
@@ -109,6 +110,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             setProductInfo({
                 image: choosenVariation.images.length > 0 ? choosenVariation.images[0].src : "",
                 stock: (typeof choosenVariation.stock_quantity === 'number') ? choosenVariation.stock_quantity : 0,
+                sku: choosenVariation.sku,
                 ...((typeof choosenVariation.price === 'number') && { price: Number(choosenVariation.price) }),
                 ...(choosenVariation?.price_circulations && { priceСirculations: choosenVariation.price_circulations })
             });
@@ -116,6 +118,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             setProductInfo({
                 image: product.images.length > 0 ? product.images[0].src : "",
                 stock: (typeof product.stock_quantity === 'number') ? product.stock_quantity : 0,
+                sku: product.sku,
                 ...((typeof product.price === 'number') && { price: Number(product.price) }),
                 ...(product?.price_circulations && { priceСirculations: product.price_circulations })
             });
@@ -276,53 +279,60 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     {product.name}
                 </p>
             </Link>
-            <div className={styles["product-card__calculations"]}>
-                {(Boolean(colors.length)) &&
-                    <div className={styles['product-card__colors']}>
-                        <Swiper
-                            className="product-card-slider"
-                            slidesPerView={isTablet ? 3 : 6}
-                            spaceBetween={0}
-                            modules={[Navigation]}
-                            navigation={true}
-                        >
-                            {colors.map(color => {
-                                const { label, cssColor } = transformColorByName(color.name);
-                                return (
-                                    <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
-                                        <Radio
-                                            onChange={handleChangeColor}
-                                            checked={choosenColor === color.slug}
-                                            inputProps={{ 'aria-label': label }}
-                                            value={color.slug}
-                                            icon={<EwaColorPickIcon color={cssColor} />}
-                                            checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
-                                        />
-                                    </SwiperSlide>
-                                )
-                            })}
-                        </Swiper>
-                    </div>
-                }
-                {(Boolean(sizes.length)) &&
-                    <div className={`size-picks ${styles['product-card__sizes']}`}>
-                        {sizes.map(option => (
-                            <label key={option.slug} className="size-pick">
-                                <input
-                                    className="size-pick__input"
-                                    type="radio"
-                                    value={option.slug}
-                                    disabled={!checkSizeAvailability(option.slug)}
-                                    checked={checkIsSizeChecked(option.slug)}
-                                    onChange={handleChangeSize}
-                                />
-                                <div className="size-pick__island">{option.name}</div>
+            {productInfo?.sku &&
+                <p className={styles["product-card__sku"]}>
+                    {productInfo.sku}
+                </p>
+            }
+            {(Boolean(sizes.length)) || (Boolean(colors.length)) &&
+                <div className={styles["product-card__calculations"]}>
+                    {(Boolean(colors.length)) &&
+                        <div className={styles['product-card__colors']}>
+                            <Swiper
+                                className="product-card-slider"
+                                slidesPerView={isTablet ? 3 : 6}
+                                spaceBetween={0}
+                                modules={[Navigation]}
+                                navigation={true}
+                            >
+                                {colors.map(color => {
+                                    const { label, cssColor } = transformColorByName(color.name);
+                                    return (
+                                        <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
+                                            <Radio
+                                                onChange={handleChangeColor}
+                                                checked={choosenColor === color.slug}
+                                                inputProps={{ 'aria-label': label }}
+                                                value={color.slug}
+                                                icon={<EwaColorPickIcon color={cssColor} />}
+                                                checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
+                                            />
+                                        </SwiperSlide>
+                                    )
+                                })}
+                            </Swiper>
+                        </div>
+                    }
+                    {(Boolean(sizes.length)) &&
+                        <div className={`size-picks ${styles['product-card__sizes']}`}>
+                            {sizes.map(option => (
+                                <label key={option.slug} className="size-pick">
+                                    <input
+                                        className="size-pick__input"
+                                        type="radio"
+                                        value={option.slug}
+                                        disabled={!checkSizeAvailability(option.slug)}
+                                        checked={checkIsSizeChecked(option.slug)}
+                                        onChange={handleChangeSize}
+                                    />
+                                    <div className="size-pick__island">{option.name}</div>
 
-                            </label>
-                        ))}
-                    </div>
-                }
-            </div>
+                                </label>
+                            ))}
+                        </div>
+                    }
+                </div>
+            }
             {productInfo?.price &&
                 <p className={styles["product-card__price"]}>
                     Od {formatPrice(productInfo.price)}

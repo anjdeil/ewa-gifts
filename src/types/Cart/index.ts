@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { lineOrderItemsSchema } from "../store";
+import { ProductsCirculationsSchema } from "../Services/customApi/Product/ProductsCirculationsType";
 
 const CartProductsSchema = z.object({
     id: z.number(),
@@ -27,24 +28,21 @@ export const CartItemSchema = z.object({
     product_id: z.number(),
     variation_id: z.number().optional(),
     quantity: z.number(),
-    total: z.string().optional(),
-    supplier: z.string().optional()
+    total: z.string(),
+    supplier: z.string()
 });
 
 export const CartTablePropsSchema = z.object({
-    products: z.array(lineOrderItemsSchema),
-    total: z.string(),
+    lineItems: z.array(lineOrderItemsSchema),
+    productsSpecs: z.array(ProductsCirculationsSchema),
     isLoading: z.boolean(),
-    items: z.array(CartItemSchema),
+    cartItems: z.array(CartItemSchema),
 });
 
 export const CartTableRowProps = z.object({
-    product: lineOrderItemsSchema,
-    onProductChange: z.function().args(lineOrderItemsSchema, z.number()).returns(z.void()),
-    onProductDelete: z.function().args(lineOrderItemsSchema).returns(z.void()),
-    lineItems: z.array(CartItemSchema).nullable(),
-    isLoading: z.boolean(),
-    total: z.string(),
+    lineItem: lineOrderItemsSchema,
+    productSpecs: ProductsCirculationsSchema.nullable(),
+    isLoading: z.boolean()
 });
 
 export type CartTableRowType = z.infer<typeof CartTableRowProps>;

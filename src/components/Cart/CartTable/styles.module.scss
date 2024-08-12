@@ -1,32 +1,25 @@
 @import "@/styles/variables.module.scss";
 
-.cartItem {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    &__title {
-        max-width: 50%;
-        max-width: 200px;
-
-        h3 {
-            opacity: 0.5;
-        }
-    }
-}
-
-.CartTable {
-    margin: 0 auto;
-    width: 100%;
+.cartTable {
+    font-size: 0.9rem;
+    border: 2px solid $white-lilac;
+    border-radius: 10px;
+    overflow: hidden;
 
     &__row {
-        padding: 15px 20px;
+        border-bottom: 2px solid $white-lilac;
         display: grid;
-        grid-template-columns: 35% 20% 20% 20%;
-        gap: 16px;
+        gap: 1em;
+        padding: 0.8em;
+        grid-template-columns: 300px 1fr 1fr 1fr;
 
         &_head {
             background-color: $white-lilac;
+            height: 70px;
+        }
+
+        &:last-child {
+            border-bottom: none;
         }
     }
 
@@ -34,9 +27,14 @@
         justify-content: center;
         display: flex;
         align-items: center;
-        padding: 13px 0;
         text-align: center;
+
+        &Key {
+            display: none;
+            color: $text-gray;
+        }
     }
+
 
     &__skeleton {
         width: 100%;
@@ -44,44 +42,49 @@
     }
 }
 
+.cartItem {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+
+    &__image {
+        object-fit: contain;
+        object-position: center;
+    }
+
+    &__title {
+        color: $text-gray;
+    }
+}
+
 @media(max-width: 1200px) {
-    .CartTable {
-        margin-bottom: 30px;
-
+    .cartTable {
         &__row {
-            padding: 15px 20px;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 16px;
-
-            &_head {
-                background-color: $white-lilac;
-            }
+            grid-template-columns: 250px 1fr 1fr 1fr;
         }
     }
 }
 
-@media(max-width: 574px) {
-    .CartTable {
+@media(max-width: 600px) {
+    .cartTable {
+        overflow: visible;
+        border: none;
+        font-size: 1rem;
+
         &__tableBody {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-
-        &__skeleton {
-            height: 290px;
+            gap: 1em;
         }
 
         &__row {
-            margin: 0 auto;
-            padding: 15px 20px;
-            width: fit-content;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            border: 1px solid $input-light;
+            grid-template-columns: 1fr;
+            border: 2px solid $white-lilac;
             border-radius: 10px;
+
+            &:last-child {
+                border-bottom: 2px solid $white-lilac;
+            }
 
             &_head {
                 display: none;
@@ -89,13 +92,27 @@
         }
 
         &__cell {
-            padding: 5px 0;
-        }
-    }
+            display: flex;
+            justify-content: space-between;
 
-    .cartItem {
-        &__delete {
-            order: 2;
+            &_counter {
+                justify-self: center;
+            }
+
+            &Key {
+                display: inline-block;
+            }
+        }
+
+
+        .cartItem {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+
+            &__delete {
+                align-self: flex-start;
+                order: 2;
+            }
         }
     }
 }
