@@ -77,7 +77,7 @@ const Cart = () => {
             <main>
                 <Section className="section" isContainer={true}>
                     <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
-                    {!Boolean(cartItems.length) && !isUpdating ?
+                    {!cartItems.length && !isUpdating ?
                         <Notification>
                             <Box className={styles.Cart__notification}>
                                 <p>

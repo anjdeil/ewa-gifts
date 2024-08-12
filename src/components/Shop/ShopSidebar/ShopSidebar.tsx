@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import FilterCollapsed from './Filters/FilterCollapsed';
-import { useFetchAttributeTermsQuery } from '@/store/custom/customApi';
 import { useParams, useSearchParams } from 'next/navigation';
 import PriceFilter from './Filters/PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
@@ -8,7 +7,6 @@ import ColorsFilter from './Filters/ColorsFilter';
 import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
-import { AttributeTermType } from '@/types/Services/customApi/Attribute/AttributeTermType';
 import { StatisticAttributeType } from '@/types/Services/customApi/Attribute/StatisticAttributeType';
 
 type PriceRange = {

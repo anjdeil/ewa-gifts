@@ -33,7 +33,7 @@ export const CartTable: FC<CartTableProps> = ({ lineItems, productsSpecs, isLoad
                 </Box>
             </Box >
             <Box className={styles.cartTable__tableBody}>
-                {(isLoading && !Boolean(lineItems.length)) ? (
+                {(isLoading && !lineItems.length) ? (
                     <Box>
                         {
                             cartItems.map(item => (
