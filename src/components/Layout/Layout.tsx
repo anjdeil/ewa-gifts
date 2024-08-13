@@ -9,7 +9,6 @@ import BottomMenu from "../Layouts/BottomMenu";
 import { useFetchMenuItemsListQuery } from "@/store/custom/customApi";
 import { createContext } from "react";
 import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
-import { ResponseMenuItemsType } from "@/types/Services/customApi/Menu/ResponseMenuItemsType";
 
 export const MenusContext = createContext<MenuItemsType[] | undefined>(undefined);
 
