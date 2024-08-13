@@ -79,7 +79,7 @@ export const BlogPost = ({ post }) => {
     const transformedDate = transformDate(created);
     ({ day, month, year } = transformedDate);
   } catch (error) {
-    day = month = year = "Nieznane";
+    day = month = year = null;
   }
 
   return (
@@ -90,7 +90,7 @@ export const BlogPost = ({ post }) => {
         </div>
 
         <h1 className="sub-title">{title}</h1>
-        <time>{`${day} ${month}, ${year}`}</time>
+        {day && <time>{`${day} ${month}, ${year}`}</time>}
       </header>
       <div className={styles.article__img}>
         <Image
