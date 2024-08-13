@@ -22,6 +22,12 @@ export const customApi = createApi({
                 params
             })
         }),
+        fetchMenuItemsList: build.query({
+            query: (params) => ({
+                url: `/menu-items`,
+                params
+            })
+        }),
         fetchAttributeTerms: build.query({
             query: (slug) => ({
                 url: `/attributes/${slug}/terms`
@@ -45,5 +51,6 @@ export const {
     useFetchProductQuery,
     useFetchCategoryListQuery,
     useFetchAttributeTermsQuery,
-    useFetchProductsCirculationsMutation
+    useFetchProductsCirculationsMutation,
+    useFetchMenuItemsListQuery
 } = customApi;

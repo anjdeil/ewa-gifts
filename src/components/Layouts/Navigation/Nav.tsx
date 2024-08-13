@@ -4,8 +4,8 @@ import styles from './styles.module.scss';
 import Link from 'next/link';
 import { wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
-import { MenusContext } from '@/pages/_app';
 import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
+import { MenusContext } from '@/components/Layout/Layout';
 
 const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
     const menus: MenuItemsType[] | undefined = useContext(MenusContext);
