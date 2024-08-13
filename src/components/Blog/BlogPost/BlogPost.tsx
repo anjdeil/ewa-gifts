@@ -35,9 +35,19 @@ const CustomBox = styled(Box)`
   }
 `;
 
-export const BlogPost = ({ post }) => {
-  const { date, title, image_src, content } = post;
-  const dateTime: Date = new Date(date);
+interface TransformedDate {
+  day: number;
+  month: string;
+  year: number;
+}
+
+const transformDate = (isoDate: string): TransformedDate => {
+  const dateTime = new Date(isoDate);
+
+  if (isNaN(dateTime.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
   const monthsPolish: string[] = [
     "stycznia",
     "lutego",
@@ -52,9 +62,25 @@ export const BlogPost = ({ post }) => {
     "listopada",
     "grudnia",
   ];
+
   const day: number = dateTime.getDate();
   const month: string = monthsPolish[dateTime.getMonth()];
   const year: number = dateTime.getFullYear();
+
+  return { day, month, year };
+};
+
+export const BlogPost = ({ post }) => {
+  const { created, title, thumbnail, content } = post;
+
+  let day, month, year;
+
+  try {
+    const transformedDate = transformDate(created);
+    ({ day, month, year } = transformedDate);
+  } catch (error) {
+    day = month = year = "Nieznane";
+  }
 
   return (
     <Container className={styles.article}>
@@ -68,7 +94,7 @@ export const BlogPost = ({ post }) => {
       </header>
       <div className={styles.article__img}>
         <Image
-          src={image_src}
+          src={thumbnail}
           alt={title}
           sx={{ position: "static" }}
           width={1135}
