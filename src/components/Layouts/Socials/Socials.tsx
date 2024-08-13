@@ -3,9 +3,9 @@ import { FC, useContext } from 'react';
 import Link from 'next/link';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
-import { MenusContext } from "@/pages/_app";
 import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
 import Image from "next/image";
+import { MenusContext } from "@/components/Layout/Layout";
 
 const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
     const menus: MenuItemsType[] | undefined = useContext(MenusContext);
