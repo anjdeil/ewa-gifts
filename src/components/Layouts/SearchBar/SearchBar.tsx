@@ -34,7 +34,8 @@ const focusStyles = {
     }
 };
 
-interface SearchBarOptionType {
+interface SearchBarOptionType
+{
     key: string,
     name: string,
     type: string,
@@ -42,14 +43,15 @@ interface SearchBarOptionType {
     count?: number
 }
 
-const SearchBar = () => {
+const SearchBar = () =>
+{
     const router = useRouter();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isTyping, setTyping] = useState(false);
 
     const { data: categoriesData = [] } = useFetchCategoryListQuery({});
-    const categories = categoriesData.data ? transformSearchBarCategories(categoriesData.data.items) : [];
+    const categories = categoriesData?.data ? transformSearchBarCategories(categoriesData.data.items) : [];
 
     const { data: productsData = [], isLoading, isFetching } = useFetchProductListQuery({
         search: searchTerm,
@@ -61,13 +63,15 @@ const SearchBar = () => {
 
     const searchResults = [...categories, ...products];
 
-    const onSearch = (evt: SyntheticEvent, value: string) => {
+    const onSearch = (evt: SyntheticEvent, value: string) =>
+    {
         setSearchTerm(value);
 
         if (value.length < 3) return
 
         setTyping(true);
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             setTyping(false);
         }, 2000);
     }
@@ -87,9 +91,11 @@ const SearchBar = () => {
         </li>
     );
 
-    const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (evt: FormEvent<HTMLFormElement>) =>
+    {
         evt.preventDefault();
-        if (searchTerm?.length >= 3) {
+        if (searchTerm?.length >= 3)
+        {
             router.push(`/search/${searchTerm}`)
         }
     }

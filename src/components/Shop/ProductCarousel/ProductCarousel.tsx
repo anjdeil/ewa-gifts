@@ -1,32 +1,43 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
-import { ProductCard } from "../ProductCard";
+import { ProductCard, ProductCardSkeleton } from "../ProductCard";
 import { typeProductType } from "@/types";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
+import Notification from "@/components/Layouts/Notification";
 
 
-export const ProductCarousel: FC = () =>
+export const ProductCarousel: FC = ({ ids }) =>
 {
-    const { data, isLoading } = useFetchProductListQuery({})
-
-    if (isLoading)
+    const { data, error, isError } = useFetchProductListQuery({ include: ['12312', '213123'] });
+    const [products, setProducts] = useState<[] | null>(null);
+    const [isLoading, setLoading] = useState(false);
+    const [customError, setCustomError] = useState<boolean | string>(false);
+    const skeletonSlides = products ? products.length : 4;
+    useEffect(() =>
     {
-        return <h3>Loading...</h3>
-    }
+        if (data && data.data.items.length > 0)
+        {
+            setLoading(false);
+            console.log('Products', data);
+            setProducts(data.data.items);
+        } else
+        {
+            setLoading(true);
+        }
 
-    if (!data)
-    {
-        return <div>Products not found.</div>
-    }
+        if (data) console.log(data);
 
-    let products;
+        if (isError)
+        {
+            console.error(error);
+            setLoading(false);
+            setCustomError("Server Error");
+        }
+    }, [data, isError, error])
 
-    if (data)
-    {
-        products = data.data.items;
-    }
+    if (customError) return <Notification><div>{customError}</div></Notification>
 
     return (
         <Swiper
@@ -50,9 +61,15 @@ export const ProductCarousel: FC = () =>
                 }
             }}
         >
-            {
-                products && products.map((product: typeProductType) => (
-                    <SwiperSlide key={product.id} style={{ height: 'auto' }}>
+            {isLoading && Array.from({ length: skeletonSlides }).map((_, index) => (
+                <SwiperSlide key={index} style={{ height: 'auto', display: 'flex', alignItems: 'stretch' }}>
+                    <ProductCardSkeleton />
+                </SwiperSlide>
+            ))}
+
+            {(products && !isLoading) &&
+                products.map((product: typeProductType) => (
+                    <SwiperSlide key={product.id} style={{ height: 'auto', display: 'flex', alignItems: 'stretch' }}>
                         <ProductCard product={product} />
                     </SwiperSlide>
                 ))

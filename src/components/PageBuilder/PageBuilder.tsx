@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
 import { FC } from "react";
 import { CategoryBars } from "../Common/CategoryBars";
@@ -14,60 +12,55 @@ import { RichTextComponent } from "../Common/RichTextComponent";
 import { BlogList } from "../Blog/BlogList";
 // import { ProductCarousel } from "../Shop/ProductCarousel";
 import { Section } from "../Layouts/Section";
-import { HeroSchema, PageBuilderProp, SplitBuild } from "@/types";
+import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
+import { HeroSchema, SplitBuild } from "@/types";
+import { CustomTabs } from "../Common/Tabs";
+import { ProductCarousel } from "../Shop";
+// import { HeroSchema, PageBuilderProp, SplitBuild } from "@/types";
 // import { TopSeller } from "../Shop/TopSeller";
 
-export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
+export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
 {
-    // console.log(sections);
     return (
-        <div>
-            {sections.map((section) =>
+        <>
+            {sections.map((section, index) =>
             {
+                const key = `${('_type' in section) && section._type}-${index}`;
                 if ('_type' in section)
                 {
                     switch (section._type)
                     {
                         case "slider": {
-                            if ('slider' in section)
-                            {
-                                return (
-                                    <Section isContainer={true} className={'slider'}>
-                                        <Slider slides={section.slider} />
-                                    </Section>
-                                );
-                            }
-                            break;
+                            if (!('slider' in section)) break;
+                            return (
+                                <Section isContainer={true} className={'slider'} key={key}>
+                                    <Slider slides={section.slider} />
+                                </Section>
+                            );
                         }
 
                         case "features": {
-                            if ('features' in section)
-                            {
-                                return (
-                                    <Section isContainer={true} className={'features'}>
-                                        <Features features={section.features} />
-                                    </Section>
-                                )
-                            }
-                            break;
+                            if (!('features' in section)) break;
+                            return (
+                                <Section isContainer={true} className={'features'} key={key}>
+                                    <Features features={section.features} />
+                                </Section>
+                            )
                         }
 
                         case "categories": {
-                            if ('categories' in section)
-                            {
-                                return (
-                                    <Section isContainer={true} className={'section'}>
-                                        <CategoryBars />
-                                    </Section>
-                                )
-                            }
-                            break;
+                            if (!('categories' in section)) break;
+                            return (
+                                <Section isContainer={true} className={'section'} key={key}>
+                                    <CategoryBars />
+                                </Section>
+                            )
                         }
 
                         case "hero": {
                             const heroSection = section as HeroSchema;
                             return (
-                                <Section isContainer={true} className={'hero section'}>
+                                <Section isContainer={true} className={'hero section'} key={key}>
                                     <Hero section={heroSection} />
                                 </Section>
                             )
@@ -75,45 +68,49 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
 
                         case "split":
                         case "split_reversible": {
-                            if ('split' in section || 'split_reversible' in section)
-                            {
-                                const splitSection = section as SplitBuild;
-                                const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
-                                const isReversed = section._type === "split_reversible";
-                                return (
-                                    <Section className={'split section'} isContainer={true}>
-                                        <Split
-                                            leftContent={leftSections}
-                                            rightContent={rightSections}
-                                            isReversed={isReversed}
-                                        ></Split>
-                                    </Section>
-                                )
-                            }
-                            break;
+                            if (!('split' in section) || !('split_reversible' in section)) break;
+                            const splitSection = section as SplitBuild;
+                            const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
+                            const isReversed = section._type === "split_reversible";
+                            return (
+                                <Section className={'split section'} isContainer={true} key={key}>
+                                    <Split
+                                        leftContent={leftSections}
+                                        rightContent={rightSections}
+                                        isReversed={isReversed}
+                                    ></Split>
+                                </Section>
+                            )
                         }
 
-                        // case "tabs": {
-                        //     if ('tabs' in section)
-                        //     {
-                        //         section.tabs[0].title = "Bestsellers";
-                        //         section.tabs[1].title = "New";
-                        //         return (
-                        //             <Section className={'tabs'}>
-                        //                 <div className="container">
-                        //                     <CustomTabs tabs={section.tabs} ></CustomTabs>
-                        //                 </div>
-                        //             </Section>
-                        //         )
-                        //     }
-                        //     break;
-                        // }
+                        case "tabs": {
+                            if (!('tabs' in section)) break;
+                            section.tabs[0].title = "Bestsellers";
+                            section.tabs[1].title = "New";
+                            // console.log(section.tabs);
+                            return (
+                                <Section className={'tabs'} key={key}>
+                                    <div className="container">
+                                        <CustomTabs tabs={section.tabs} ></CustomTabs>
+                                    </div>
+                                </Section>
+                            )
+                        }
+
+
+                        case "product_carousel": {
+                            if (!("products" in section)) break;
+                            // console.log(section);
+                            return (
+                                <ProductCarousel ids={section.products} key={key} />
+                            )
+                        }
 
                         case "blog": {
                             if ('blog' in section)
                             {
                                 return (
-                                    <Section className={'section'} isContainer={true}>
+                                    <Section className={'section'} isContainer={true} key={key}>
                                         <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
                                         <BlogList />
                                     </Section>
@@ -123,9 +120,10 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                         }
 
                         // case "topseller": {
-                        //     if ('topseller' in section) {
+                        //     if ('topseller' in section)
+                        //     {
                         //         return (
-                        //             <Section className={'topseller'}>
+                        //             <Section className={'topseller'} key={key}>
                         //                 <div className="container">
                         //                     <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
                         //                     <TopSeller />
@@ -144,15 +142,6 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                             break;
                         }
 
-                        // case "product_carousel": {
-                        //     if ('product_carousel' in section)
-                        //     {
-                        //         return (
-                        //             <ProductCarousel ids={section.products} />
-                        //         )
-                        //     }
-                        //     break;
-                        // }
 
                         case "split_image":
                             if ("title" in section)
@@ -161,6 +150,7 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                                     imageUrl={section.image}
                                     alt={section.title}
                                     descOffset={'60%'}
+                                    key={key}
                                 />
                             }
                             break;
@@ -173,6 +163,7 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                                     link_url={section.link_url}
                                     link_text={section.link_text}
                                     title={section.title}
+                                    key={key}
                                 />
                             }
                             break;
@@ -183,6 +174,6 @@ export const PageBuilder: FC<PageBuilderProp> = ({ sections }) =>
                     }
                 }
             })}
-        </div>
+        </>
     );
 }

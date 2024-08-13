@@ -10,7 +10,8 @@ import { FC, useState, SyntheticEvent } from 'react';
 import { CustomTabsProps } from '@/types';
 import { styled } from '@mui/material';
 
-function tabsNavigationAttr(index: number) {
+function tabsNavigationAttr(index: number)
+{
     return {
         id: `tab-${index}`,
         'aria-controls': `tabpanel-${index}`,
@@ -33,12 +34,10 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)`
   }
 `;
 
-export const CustomTabs: FC<CustomTabsProps> = ({ tabs }) => {
+export const CustomTabs: FC<CustomTabsProps> = ({ tabs }) =>
+{
     const [value, setValue] = useState<number>(0);
-    const handleChange = (_: SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
-
+    const handleChange = (_: SyntheticEvent, newValue: number) => setValue(newValue);
     return (
         <Box sx={{ width: '100%' }}>
             <Box>

@@ -17,7 +17,6 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) =>
     {
         return <p>Loading...</p>;
     }
-    console.log(response);
     const breadCurrent = {
         name: response.title.rendered,
         url: response.link,
@@ -73,7 +72,6 @@ export const getServerSideProps: GetServerSideProps = async (context) =>
         response = currentPost;
     } catch (error)
     {
-        console.log(error, '77777777');
         return {
             props: {
                 response: null,
