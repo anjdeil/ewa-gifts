@@ -1,6 +1,6 @@
 import { HeroProps } from "@/types";
 import { FC } from "react";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
 import Image from "next/image";
 import { Text } from '@/components/Common/Text';
 import Link from "next/link";
@@ -8,47 +8,23 @@ import styles from './styles.module.scss';
 
 export const Hero: FC<HeroProps> = ({ section }) =>
 {
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    const isTablet = useMediaQuery('(max-width: 1024px)');
-    const imagePaddingTop = isMobile && '40%' || isTablet && '80%' || '60%';
-    const isReverse = section.is_reverse;
+    const isReverse = section.is_reverse ? styles.hero__wrapper_reverse : '';
     return (
         <>
-            <Box display="flex"
-                flexDirection={isMobile ? "column-reverse" : (isReverse ? "row-reverse" : "row")}
-                gap={isMobile ? 0 : '80px'}
-            >
-                <Box width={isMobile ? "100%" : "60%"} sx={{
-                    paddingTop: isMobile ? '20px' : 'initial',
-                }}>
+            <Box className={`${styles.hero__wrapper} ${isReverse}`}>
+                <Box className={styles.hero__left}>
                     <h3 className={`sub-title ${styles.hero__title}`}>{section.title}</h3>
                     <Text className={styles.hero__text} text={section.text} />
                     {section.link_url && <Link className="more-link" href={section.link_url}>{section.link_text}</Link>}
                 </Box>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: isMobile ? "100%" : "40%",
-                    position: 'relative',
-                    borderRadius: '10px',
-                    overflow: 'hidden',
-                }}>
-                    <Box sx={{
-                        position: 'relative',
-                        paddingTop: imagePaddingTop,
-                        flexGrow: 1,
-                        overflow: 'hidden',
-                        borderRadius: '15px',
-                    }}                    >
+                <Box className={styles.hero__right}>
+                    <Box className={styles.hero__image}>
                         <Image
                             src={section.image}
-                            style={{
-                                objectFit: "cover"
-                            }}
                             alt={section.title}
                             layout="fill"
-                            objectFit="cover"
                             sizes="100%"
+                            objectFit={section.object_fit}
                         />
                     </Box>
                 </Box>

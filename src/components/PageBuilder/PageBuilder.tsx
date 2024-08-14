@@ -38,7 +38,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 </Section>
                             );
                         }
-
                         case "features": {
                             if (!('features' in section)) break;
                             return (
@@ -47,7 +46,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 </Section>
                             )
                         }
-
                         case "categories": {
                             if (!('categories' in section)) break;
                             return (
@@ -56,16 +54,14 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 </Section>
                             )
                         }
-
                         case "hero": {
                             const heroSection = section as HeroSchema;
                             return (
-                                <Section isContainer={true} className={'hero section'} key={key}>
+                                <Section isContainer={true} className={'hero section section_offset'} key={key}>
                                     <Hero section={heroSection} />
                                 </Section>
                             )
                         }
-
                         case "split":
                         case "split_reversible": {
                             if (!('split' in section) || !('split_reversible' in section)) break;
@@ -73,7 +69,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                             const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
                             const isReversed = section._type === "split_reversible";
                             return (
-                                <Section className={'split section'} isContainer={true} key={key}>
+                                <Section className={'split section section_offset'} isContainer={true} key={key}>
                                     <Split
                                         leftContent={leftSections}
                                         rightContent={rightSections}
@@ -82,43 +78,31 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 </Section>
                             )
                         }
-
                         case "tabs": {
                             if (!('tabs' in section)) break;
-                            section.tabs[0].title = "Bestsellers";
-                            section.tabs[1].title = "New";
-                            // console.log(section.tabs);
                             return (
-                                <Section className={'tabs'} key={key}>
-                                    <div className="container">
-                                        <CustomTabs tabs={section.tabs} ></CustomTabs>
-                                    </div>
+                                <Section className={'tabs section section_offset'} isContainer={true} key={key}>
+                                    <CustomTabs tabs={section.tabs} ></CustomTabs>
                                 </Section>
                             )
                         }
-
-
                         case "product_carousel": {
                             if (!("products" in section)) break;
-                            // console.log(section);
                             return (
                                 <ProductCarousel ids={section.products} key={key} />
                             )
                         }
-
                         case "blog": {
                             if ('blog' in section)
                             {
                                 return (
-                                    <Section className={'section'} isContainer={true} key={key}>
-                                        <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Blog</h3>
+                                    <Section className={'section section_offset'} isContainer={true} key={key}>
                                         <BlogList />
                                     </Section>
                                 )
                             }
                             break;
                         }
-
                         // case "topseller": {
                         //     if ('topseller' in section)
                         //     {
@@ -133,7 +117,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                         //     }
                         //     break;
                         // }
-
                         case "google_reviews": {
                             if ('google_reviews' in section)
                             {
@@ -141,8 +124,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                             }
                             break;
                         }
-
-
                         case "split_image":
                             if ("title" in section)
                             {
@@ -154,7 +135,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 />
                             }
                             break;
-
                         case "rich_text":
                             if ("text" in section)
                             {
@@ -167,7 +147,6 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                                 />
                             }
                             break;
-
                         default:
                             console.error(`There's not section with this name.`)
                             break;

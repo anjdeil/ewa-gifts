@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { variationsProductType, typeProductType } from "@/types";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";

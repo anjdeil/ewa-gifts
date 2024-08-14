@@ -25,14 +25,6 @@ h1 {
     font-size: 1.1rem;
 }
 
-@media (max-width: 768px) {
-
-    html,
-    body {
-        font-size: 14px;
-    }
-}
-
 .container {
     margin: 0 auto;
     padding: 0 40px;
@@ -45,6 +37,11 @@ h1 {
 
 .section {
     padding-bottom: 100px;
+
+    &_offset {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
 }
 
 .slider {
@@ -62,6 +59,14 @@ h1 {
     background-color: $white-lilac;
 }
 
+@media (max-width: 768px) {
+
+    html,
+    body {
+        font-size: 14px;
+    }
+}
+
 @media(max-width: 1024px) {
     .container {
         padding: 0 20px;
@@ -73,6 +78,11 @@ h1 {
 
     .section {
         padding-bottom: 80px;
+
+        &_offset {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
     }
 
     .features {
@@ -83,6 +93,11 @@ h1 {
 @media(max-width: 768px) {
     .section {
         padding-bottom: 40px;
+
+        &_offset {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
     }
 
     .slider {

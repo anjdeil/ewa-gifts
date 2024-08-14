@@ -5,6 +5,7 @@ export const HeroSchema = z.object({
     is_reverse: z.boolean(),
     link_text: z.string(),
     link_url: z.string(),
+    object_fit: z.string(),
     text: z.string(),
     title: z.string(),
     _type: z.string()
