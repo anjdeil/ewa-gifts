@@ -14,18 +14,50 @@
     text-align: center;
     margin-bottom: 43px;
 
+    @media (max-width: 1024px) {
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      margin-bottom: 17px;
+    }
+
+    & > div:first-of-type {
+      padding-bottom: 20px;
+
+      @media (max-width: 1024px) {
+        padding-bottom: 16px;
+      }
+
+      @media (max-width: 768px) {
+        padding-bottom: 8px;
+      }
+    }
+
     & h1 {
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-top: 11px;
+
+      @media (max-width: 1024px) {
+        margin-top: 19px;
+      }
+
+      @media (max-width: 768px) {
+        margin-top: 21px;
+      }
     }
   }
 
   &__img {
     display: block;
     width: 100%;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     position: relative;
     border-radius: 10px;
+
+    @media (max-width: 1024px) {
+      max-width: 643px;
+    }
 
     & img {
       width: 100%;
@@ -41,24 +73,46 @@
       max-width: 720px;
       width: 100%;
       margin: 0 auto;
+
+      @media (max-width: 1024px) {
+        max-width: 643px;
+      }
     }
 
     p {
       font-weight: 400;
       font-size: 18px;
-      line-height: 156%;
+      line-height: 28px;
       color: $black-color;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
+
+      @media (max-width: 1024px) {
+        font-size: 16px;
+        margin-bottom: 26px;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
     }
     & h2,
     & h3,
     & h4 {
       font-weight: 600;
       font-size: 20px;
-      line-height: 120%;
+      line-height: 1.2em;
       text-transform: uppercase;
       color: $black-color;
       margin-bottom: 20px;
+
+      @media (max-width: 1024px) {
+        font-size: 18px;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 14px;
+      }
     }
     & blockquote {
       padding: 8px 0 8px 20px;
@@ -66,6 +120,14 @@
       margin-bottom: 20px;
       & p {
         margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 1.2em;
+        text-transform: uppercase;
+
+        @media (max-width: 1024px) {
+          font-size: 14px;
+        }
       }
       cite {
         font-style: italic;

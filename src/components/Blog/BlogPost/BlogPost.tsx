@@ -1,15 +1,23 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { Container, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
+import { BlogItemType } from "@/types";
+import { FC } from "react";
+import { transformDate } from "@/Utils/transformDateForBlog";
+import { PageHeader } from "@/components/Layouts/PageHeader";
 
 const CustomBox = styled(Box)`
   .wp-block-image {
     margin-bottom: 39px;
+    @media (max-width: 1024px) {
+      margin-bottom: 28px;
+    }
+    @media (max-width: 768px) {
+      margin-bottom: 34px;
+    }
   }
   .wp-block-image img {
     width: 100%;
@@ -18,85 +26,56 @@ const CustomBox = styled(Box)`
     display: block;
   }
   .wp-element-caption {
-    margin-top: 12px;
+    margin-top: 16px;
     font-weight: 400;
     font-size: 16px;
     line-height: 150%;
     color: #696969;
+    @media (max-width: 768px) {
+      margin-top: 8px;
+    }
   }
   .wp-block-group {
     background-color: #f6f8fc;
     border-radius: 10px;
     padding: 32px;
     margin-bottom: 22px;
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
     & p {
       margin-bottom: 0;
     }
   }
 `;
 
-interface TransformedDate {
-  day: number;
-  month: string;
-  year: number;
-}
-
-const transformDate = (isoDate: string): TransformedDate => {
-  const dateTime = new Date(isoDate);
-
-  if (isNaN(dateTime.getTime())) {
-    throw new Error("Invalid date format");
-  }
-
-  const monthsPolish: string[] = [
-    "stycznia",
-    "lutego",
-    "marca",
-    "kwietnia",
-    "maja",
-    "czerwca",
-    "lipca",
-    "sierpnia",
-    "września",
-    "października",
-    "listopada",
-    "grudnia",
-  ];
-
-  const day: number = dateTime.getDate();
-  const month: string = monthsPolish[dateTime.getMonth()];
-  const year: number = dateTime.getFullYear();
-
-  return { day, month, year };
+type Props = {
+  post: BlogItemType;
 };
 
-export const BlogPost = ({ post }) => {
+export const BlogPost: FC<Props> = ({ post }) => {
   const { created, title, thumbnail, content } = post;
 
-  let day, month, year;
+  const transformedDate = transformDate(created);
 
-  try {
-    const transformedDate = transformDate(created);
-    ({ day, month, year } = transformedDate);
-  } catch (error) {
-    day = month = year = null;
-  }
+  const day = transformedDate?.day ?? null;
+  const month = transformedDate?.month ?? null;
+  const year = transformedDate?.year ?? null;
+
+  const breadLinks = [{ name: title, url: "" }];
 
   return (
     <Container className={styles.article}>
       <header className={styles.article__header}>
-        <div className="page-top page-top_center">
-          <Breadcrumbs links={[{ name: title, url: "" }]} />
-        </div>
+        <PageHeader title={title} breadLinks={breadLinks} />
 
-        <h1 className="sub-title">{title}</h1>
         {day && <time>{`${day} ${month}, ${year}`}</time>}
       </header>
       <div className={styles.article__img}>
         <Image
           src={thumbnail}
           alt={title}
-          sx={{ position: "static" }}
+          style={{ position: "static" }}
           width={1135}
           height={518}
           priority

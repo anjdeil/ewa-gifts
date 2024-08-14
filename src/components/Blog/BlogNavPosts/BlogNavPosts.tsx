@@ -1,11 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
 import Link from "next/link";
 import styles from "./styles.module.scss";
 import { Container } from "@mui/material";
+import { FC } from "react";
+import { BlogItemType } from "@/types";
 
-export const BlogNavPosts = ({ prevPost, nextPost }) => {
+type Props = {
+  prevPost: BlogItemType | null;
+  nextPost: BlogItemType | null;
+};
+
+export const BlogNavPosts: FC<Props> = ({ prevPost, nextPost }) => {
   return (
     <Container className={styles.wrapper}>
       <nav className={styles.nav}>

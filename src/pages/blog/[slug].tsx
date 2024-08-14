@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
@@ -7,63 +6,36 @@ import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
 import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
-import ErrorPage from "../500";
+import { Section } from "@/components/Layouts/Section";
+import { BlogItemSchema, BlogItemType } from "@/types";
+// import ErrorPage from "../500";
 
-const PostSchema = z.object({
-  id: z.number(),
-  slug: z.string(),
-  status: z.string(),
-  type: z.string(),
-  parent: z.number(),
-  title: z.string(),
-  content: z.string(),
-  excerpt: z.string(),
-  menu_order: z.number(),
-  categories: z.array(
-    z.object({
-      id: z.number(),
-      parent_id: z.number(),
-      name: z.string(),
-      slug: z.string(),
-      description: z.string(),
-      count: z.number(),
-    })
-  ),
+const ArticlePropsSchema = z.object({
+  response: BlogItemSchema,
+  prevPost: BlogItemSchema.nullable(),
+  nextPost: BlogItemSchema.nullable(),
+  error: z.string().optional(),
 });
 
-const ResponseSchema = z.object({
-  status: z.string(),
-  data: z.object({
-    item: PostSchema,
-  }),
-});
+type ArticleProps = z.infer<typeof ArticlePropsSchema>;
 
-interface ArticleProps {
-  response: z.infer<typeof PostSchema>;
-  prevPost: z.infer<typeof PostSchema> | null;
-  nextPost: z.infer<typeof PostSchema> | null;
-  error?: string;
-}
 const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
   if (error) {
+    // return <ErrorPage />;
     throw new Error(error);
   }
-
-  //   if (error) {
-  //     return <ErrorPage statusCode={500} />;
-  //   }
 
   return (
     <>
       <Head>
-        <title>{response.title.rendered}</title>
+        <title>{response.title}</title>
         <meta name="description" content={response.excerpt} />
       </Head>
       <main>
-        <div className="container">
+        <Section className={"container"}>
           <BlogPost post={response} />
           <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
-        </div>
+        </Section>
       </main>
     </>
   );
@@ -71,40 +43,56 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { slug } = context.params!;
-  let response;
-  let prevPost = null;
-  let nextPost = null;
+  let response: BlogItemType | null = null;
+  let prevPost: BlogItemType | null = null;
+  let nextPost: BlogItemType | null = null;
+  let error: string | null = null;
 
   try {
     const allPostsResponse = await customRestApi.get(`posts`);
-    const allPosts = allPostsResponse.data.data.items;
 
-    const currentIndex = allPosts.findIndex((post) => post.slug === slug);
+    if (allPostsResponse) {
+      if (allPostsResponse.data) {
+        const allPosts = (
+          allPostsResponse.data as { data: { items: BlogItemType[] } }
+        ).data.items;
+        const currentIndex = allPosts.findIndex(
+          (post: BlogItemType) => post.slug === slug
+        );
 
-    if (currentIndex === -1) {
-      return { notFound: true };
+        if (currentIndex === -1) {
+          return { notFound: true };
+        }
+
+        if (currentIndex > 0) {
+          prevPost = allPosts[currentIndex - 1];
+        }
+        if (currentIndex < allPosts.length - 1) {
+          nextPost = allPosts[currentIndex + 1];
+        }
+
+        response = allPosts[currentIndex];
+      } else {
+        throw new Error("There are no articles");
+      }
+    } else {
+      throw new Error("Server Error.");
     }
-
-    if (currentIndex > 0) {
-      prevPost = allPosts[currentIndex - 1];
+  } catch (err) {
+    if (err instanceof Error) {
+      error = err.message;
+    } else {
+      error = "Server Error.";
     }
-    if (currentIndex < allPosts.length - 1) {
-      nextPost = allPosts[currentIndex + 1];
-    }
-
-    response = allPosts[currentIndex];
-  } catch (error) {
-    return { props: { error: "Server Error." } };
   }
 
-  const props = {
-    response,
-    prevPost,
-    nextPost,
-  };
-
   return {
-    props,
+    props: {
+      response: response ?? null,
+      prevPost: prevPost ?? null,
+      nextPost: nextPost ?? null,
+      error,
+    },
   };
 };
 
