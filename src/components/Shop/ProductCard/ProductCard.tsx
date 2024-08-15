@@ -367,9 +367,9 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
                 }
             </div>
             {productInfo?.price &&
-                <p className={styles["product-card__price"]}>
+                <p className={"product-price"}>
                     Od {formatPrice(productInfo.price)}
-                    &nbsp;<span className={styles["product-card__price-ending"]}>Bez VAT</span>
+                    &nbsp;<span className={"product-price-ending"}>Bez VAT</span>
                 </p>
             }
             <p className={styles["product-card__stock"]}>

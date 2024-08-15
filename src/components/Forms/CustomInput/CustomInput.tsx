@@ -91,7 +91,7 @@ export const CustomInput: FC<CustomInputProps> = ({
                                 type={type || 'text'}
                                 {...commonProps}
                             />
-                            {isCheckbox && <span className={styles.customInput__custCheck} />}
+                            {/* {isCheckbox && <span className={styles.customInput__custCheck} />} */}
                         </>
                     )}
                     {

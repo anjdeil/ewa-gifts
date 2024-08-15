@@ -16,6 +16,7 @@ import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
 import { HeroSchema, SplitBuild } from "@/types";
 import { CustomTabs } from "../Common/Tabs";
 import { ProductCarousel } from "../Shop";
+import { TopSeller } from "../Shop/TopSeller";
 // import { HeroSchema, PageBuilderProp, SplitBuild } from "@/types";
 // import { TopSeller } from "../Shop/TopSeller";
 
@@ -103,20 +104,18 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                             }
                             break;
                         }
-                        // case "topseller": {
-                        //     if ('topseller' in section)
-                        //     {
-                        //         return (
-                        //             <Section className={'topseller'} key={key}>
-                        //                 <div className="container">
-                        //                     <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
-                        //                     <TopSeller />
-                        //                 </div>
-                        //             </Section>
-                        //         );
-                        //     }
-                        //     break;
-                        // }
+                        case "topseller": {
+                            if ('topseller' in section)
+                            {
+                                return (
+                                    <Section className={'topseller'} isContainer={true} key={key}>
+                                        <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
+                                        <TopSeller />
+                                    </Section>
+                                );
+                            }
+                            break;
+                        }
                         case "google_reviews": {
                             if ('google_reviews' in section)
                             {

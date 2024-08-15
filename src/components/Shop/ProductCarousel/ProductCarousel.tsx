@@ -9,7 +9,7 @@ import Notification from "@/components/Layouts/Notification";
 
 interface ProductCarousel
 {
-    ids: string
+    ids?: string
 }
 
 export const ProductCarousel: FC<ProductCarousel> = ({ ids }) =>

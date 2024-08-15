@@ -3,7 +3,6 @@
 @import 'globals';
 @import './variables.module';
 @import './swiperLib';
-@import './TopProductSlider';
 
 html,
 body {
@@ -57,6 +56,15 @@ h1 {
 .topseller {
     padding: 50px;
     background-color: $white-lilac;
+}
+
+.product-price {
+    margin-bottom: 0.8em;
+    text-align: center;
+
+    &-ending {
+        color: $text-gray;
+    }
 }
 
 @media (max-width: 768px) {
