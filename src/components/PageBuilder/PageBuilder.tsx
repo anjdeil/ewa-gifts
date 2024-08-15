@@ -65,19 +65,21 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                         }
                         case "split":
                         case "split_reversible": {
-                            if (!('split' in section) || !('split_reversible' in section)) break;
-                            const splitSection = section as SplitBuild;
-                            const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
-                            const isReversed = section._type === "split_reversible";
-                            return (
-                                <Section className={'split section section_offset'} isContainer={true} key={key}>
-                                    <Split
-                                        leftContent={leftSections}
-                                        rightContent={rightSections}
-                                        isReversed={isReversed}
-                                    ></Split>
-                                </Section>
-                            )
+                            if ('split' in section || 'split_reversible' in section)
+                            {
+                                const splitSection = section as SplitBuild;
+                                const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
+                                const isReversed = section._type === "split_reversible";
+                                return (
+                                    <Section className={'split section section_offset'} isContainer={true} key={key}>
+                                        <Split
+                                            leftContent={leftSections}
+                                            rightContent={rightSections}
+                                            isReversed={isReversed}
+                                        ></Split>
+                                    </Section>
+                                )
+                            } else break;
                         }
                         case "tabs": {
                             if (!('tabs' in section)) break;
@@ -124,7 +126,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections }) =>
                             break;
                         }
                         case "split_image":
-                            if ("title" in section)
+                            if ("title" in section && "image" in section)
                             {
                                 return <AdaptiveImage
                                     imageUrl={section.image}

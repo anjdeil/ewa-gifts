@@ -10,6 +10,7 @@ import { typeProductType } from "@/types/Shop";
 import formatPrice from "@/Utils/formatPrice";
 import Link from "next/link";
 import variables from "@/styles/variables.module.scss";
+import { TopSellerCardSkeleton } from "./TopSellerCardSkeleton";
 
 const CustomSwiper = styled(Swiper)`
   border-radius: 10px;
@@ -39,12 +40,14 @@ const imageBoxStyle = {
 
 interface TopSellerCardProps
 {
-    products: typeProductType[],
+    products: typeProductType[] | null,
+    isLoading?: boolean
 }
 
-export const TopSellerCard: FC<TopSellerCardProps> = ({ products }) =>
+export const TopSellerCard: FC<TopSellerCardProps> = ({ products, isLoading }) =>
 {
-    console.log(products);
+    if (isLoading) return <TopSellerCardSkeleton />
+
     return (
         <CustomSwiper
             modules={[Pagination]}
@@ -55,7 +58,7 @@ export const TopSellerCard: FC<TopSellerCardProps> = ({ products }) =>
             {
                 products && products.map((product, index) => (
                     <SwiperSlide key={index}>
-                        <Link style={boxStyle} href={""}>
+                        <Link style={boxStyle} href={`/product/${product.slug}`}>
                             <Box width={"50%"}
                                 textAlign={"center"}
                             >
@@ -92,6 +95,7 @@ export const TopSellerCard: FC<TopSellerCardProps> = ({ products }) =>
                                             objectFit="contain"
                                             fill
                                             sizes="min-height: 250px"
+                                            unoptimized={true}
                                         />
                                     </div>
                                 </Box>

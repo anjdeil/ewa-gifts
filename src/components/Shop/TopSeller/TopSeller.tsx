@@ -2,7 +2,6 @@ import { useFetchProductListQuery } from "@/store/custom/customApi";
 import { Box } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { TopSellerCard } from "../TopSellerCard";
-import { ProductCardList } from "../ProductCardsList";
 import Notification from "@/components/Layouts/Notification";
 import { ProductCarousel } from "../ProductCarousel";
 
@@ -16,7 +15,7 @@ export const TopSeller: FC = () =>
     {
         if (data && data.data.items.length > 0)
         {
-            // setLoading(false);
+            setLoading(false);
             setProducts(data.data.items);
         }
 
@@ -25,7 +24,7 @@ export const TopSeller: FC = () =>
         if ((isError || !data) && !isLoading)
         {
             console.error(error);
-            // setLoading(false);
+            setLoading(false);
             setCustomError("Server Error");
         }
     }, [data, isError, error, isLoading]);
@@ -34,15 +33,11 @@ export const TopSeller: FC = () =>
 
     return (
         <>
-            {products &&
-                <>
-                    <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{ flexDirection: 'row' }}>
-                        <TopSellerCard products={products} />
-                        <TopSellerCard products={products} />
-                    </Box>
-                    <ProductCarousel />
-                </>
-            }
+            <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{ flexDirection: 'row' }}>
+                <TopSellerCard products={products} isLoading={isLoading} />
+                <TopSellerCard products={products} isLoading={isLoading} />
+            </Box>
+            <ProductCarousel />
         </>
     )
 }

@@ -6,7 +6,7 @@ export const AdaptiveImagePropsSchema = z.object({
     mobileImageUrl: z.string().optional(),
     alt: z.string(),
     descOffset: z.string(),
-    mobOffset: z.string(),
+    mobOffset: z.string().optional(),
     objectFit: z.enum(['contain', 'cover']).optional()
 });
 
