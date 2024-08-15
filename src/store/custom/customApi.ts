@@ -1,38 +1,45 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const customApi = createApi({
-    reducerPath: "customApi",
-    baseQuery: fetchBaseQuery({ baseUrl: '/api/custom' }),
-    endpoints: (build) => ({
-        fetchProductList: build.query({
-            query: (params) => ({
-                url: `/products`,
-                params,
-            })
-        }),
-        fetchProduct: build.query({
-            query: ({ slug, ...params }) => ({
-                url: `/products/${slug}`,
-                params,
-            })
-        }),
-        fetchCategoryList: build.query({
-            query: (params) => ({
-                url: `/categories`,
-                params
-            })
-        }),
-        fetchAttributeTerms: build.query({
-            query: (slug) => ({
-                url: `/attributes/${slug}/terms`
-            })
-        })
-    })
+  reducerPath: "customApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/custom" }),
+  endpoints: (build) => ({
+    fetchProductList: build.query({
+      query: (params) => ({
+        url: `/products`,
+        params,
+      }),
+    }),
+    fetchProduct: build.query({
+      query: ({ slug, ...params }) => ({
+        url: `/products/${slug}`,
+        params,
+      }),
+    }),
+    fetchCategoryList: build.query({
+      query: (params) => ({
+        url: `/categories`,
+        params,
+      }),
+    }),
+    fetchAttributeTerms: build.query({
+      query: (slug) => ({
+        url: `/attributes/${slug}/terms`,
+      }),
+    }),
+    fetchPosts: build.query({
+      query: (params) => ({
+        url: `/posts`,
+        params,
+      }),
+    }),
+  }),
 });
 
 export const {
-    useFetchProductListQuery,
-    useFetchProductQuery,
-    useFetchCategoryListQuery,
-    useFetchAttributeTermsQuery
+  useFetchProductListQuery,
+  useFetchProductQuery,
+  useFetchCategoryListQuery,
+  useFetchAttributeTermsQuery,
+  useFetchPostsQuery,
 } = customApi;

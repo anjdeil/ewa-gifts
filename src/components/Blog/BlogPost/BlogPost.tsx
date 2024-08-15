@@ -62,7 +62,10 @@ export const BlogPost: FC<Props> = ({ post }) => {
   const month = transformedDate?.month ?? null;
   const year = transformedDate?.year ?? null;
 
-  const breadLinks = [{ name: title, url: "" }];
+  const breadLinks = [
+    { name: "Blog", url: "/blog" },
+    { name: title, url: "" },
+  ];
 
   return (
     <Container className={styles.article}>

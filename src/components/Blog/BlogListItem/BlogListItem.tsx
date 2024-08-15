@@ -14,8 +14,8 @@ export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
   const year = transformedDate?.year ?? null;
 
   return (
-    <div key={post.id}>
-      <Link href={post.slug} className={styles.blogItem__image}>
+    <div className={styles.blogItem}>
+      <Link href={`/blog/${post.slug}`} className={styles.blogItem__image}>
         <Image
           src={post.thumbnail}
           alt={post.title}
@@ -32,7 +32,7 @@ export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
         text={post.excerpt}
         className={styles.blogItem__text}
       />
-      <Link href={`/blog/${post.slug}`} className="more-link">
+      <Link href={`/blog/${post.slug}`} className="desc more-link">
         Więcej
       </Link>
     </div>

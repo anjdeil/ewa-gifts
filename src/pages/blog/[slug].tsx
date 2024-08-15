@@ -8,20 +8,28 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
 import { Section } from "@/components/Layouts/Section";
 import { BlogItemSchema, BlogItemType } from "@/types";
-// import ErrorPage from "../500";
+import { BlogList } from "@/components/Blog/BlogList";
+import { Typography } from "@mui/material";
+import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
 
 const ArticlePropsSchema = z.object({
   response: BlogItemSchema,
   prevPost: BlogItemSchema.nullable(),
   nextPost: BlogItemSchema.nullable(),
+  relatedPosts: z.array(BlogItemSchema).optional(),
   error: z.string().optional(),
 });
 
 type ArticleProps = z.infer<typeof ArticlePropsSchema>;
 
-const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
+const Article: FC<ArticleProps> = ({
+  response,
+  prevPost,
+  nextPost,
+  relatedPosts,
+  error,
+}) => {
   if (error) {
-    // return <ErrorPage />;
     throw new Error(error);
   }
 
@@ -35,6 +43,7 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
         <Section className={"container"}>
           <BlogPost post={response} />
           <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
+          <BlogRelatedPosts data={relatedPosts} />
         </Section>
       </main>
     </>
@@ -46,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let response: BlogItemType | null = null;
   let prevPost: BlogItemType | null = null;
   let nextPost: BlogItemType | null = null;
+  let relatedPosts: BlogItemType[] = [];
   let error: string | null = null;
 
   try {
@@ -72,6 +82,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
 
         response = allPosts[currentIndex];
+
+        const remainingPosts = allPosts.filter((post) => post.slug !== slug);
+
+        relatedPosts = remainingPosts
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 2);
       } else {
         throw new Error("There are no articles");
       }
@@ -91,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       response: response ?? null,
       prevPost: prevPost ?? null,
       nextPost: nextPost ?? null,
+      relatedPosts,
       error,
     },
   };

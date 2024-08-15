@@ -55,10 +55,6 @@
     position: relative;
     border-radius: 10px;
 
-    @media (max-width: 1024px) {
-      max-width: 643px;
-    }
-
     & img {
       width: 100%;
       height: auto;
@@ -73,10 +69,6 @@
       max-width: 720px;
       width: 100%;
       margin: 0 auto;
-
-      @media (max-width: 1024px) {
-        max-width: 643px;
-      }
     }
 
     p {
