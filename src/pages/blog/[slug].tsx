@@ -8,8 +8,6 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
 import { Section } from "@/components/Layouts/Section";
 import { BlogItemSchema, BlogItemType } from "@/types";
-import { BlogList } from "@/components/Blog/BlogList";
-import { Typography } from "@mui/material";
 import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
 
 const ArticlePropsSchema = z.object({
@@ -19,6 +17,14 @@ const ArticlePropsSchema = z.object({
   relatedPosts: z.array(BlogItemSchema).optional(),
   error: z.string().optional(),
 });
+
+const fetchPostData = async (slug: string) => {
+  const response = await customRestApi.get(`posts/${slug}`);
+  if (response && response.data) {
+    return (response.data as { data: { item: BlogItemType } }).data.item;
+  }
+  throw new Error("Failed to fetch post data.");
+};
 
 type ArticleProps = z.infer<typeof ArticlePropsSchema>;
 
@@ -59,40 +65,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let error: string | null = null;
 
   try {
-    const allPostsResponse = await customRestApi.get(`posts`);
+    response = await fetchPostData(slug as string);
 
-    if (allPostsResponse) {
-      if (allPostsResponse.data) {
-        const allPosts = (
-          allPostsResponse.data as { data: { items: BlogItemType[] } }
-        ).data.items;
-        const currentIndex = allPosts.findIndex(
-          (post: BlogItemType) => post.slug === slug
-        );
+    const [prevPostPromise, nextPostPromise] = await Promise.all([
+      response.prev_post ? fetchPostData(response.prev_post) : null,
+      response.next_post ? fetchPostData(response.next_post) : null,
+    ]);
 
-        if (currentIndex === -1) {
-          return { notFound: true };
-        }
+    prevPost = prevPostPromise;
+    nextPost = nextPostPromise;
 
-        if (currentIndex > 0) {
-          prevPost = allPosts[currentIndex - 1];
-        }
-        if (currentIndex < allPosts.length - 1) {
-          nextPost = allPosts[currentIndex + 1];
-        }
+    const morePostsResponse = await customRestApi.get(`posts?per_page=3`);
+    if (morePostsResponse && morePostsResponse.data) {
+      const posts = (
+        morePostsResponse.data as { data: { items: BlogItemType[] } }
+      ).data.items;
 
-        response = allPosts[currentIndex];
-
-        const remainingPosts = allPosts.filter((post) => post.slug !== slug);
-
-        relatedPosts = remainingPosts
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 2);
-      } else {
-        throw new Error("There are no articles");
-      }
-    } else {
-      throw new Error("Server Error.");
+      relatedPosts = posts.filter((post) => post.slug !== slug).slice(0, 2);
     }
   } catch (err) {
     if (err instanceof Error) {
@@ -104,9 +93,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      response: response ?? null,
-      prevPost: prevPost ?? null,
-      nextPost: nextPost ?? null,
+      response,
+      prevPost,
+      nextPost,
       relatedPosts,
       error,
     },

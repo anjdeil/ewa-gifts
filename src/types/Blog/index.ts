@@ -23,6 +23,8 @@ export const BlogItemSchema = z.object({
   thumbnail: z.string().url(),
   menu_order: z.number(),
   categories: z.array(BlogCategorySchema),
+  prev_post: z.string(),
+  next_post: z.string(),
 });
 
 const BlogListPropsSchema = z.object({
