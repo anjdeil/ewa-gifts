@@ -29,7 +29,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
-    const [currentStock, setCurrentStock] = useState<number>(0);
+    const [currentStock, setCurrentStock] = useState<number>(stock_quantity);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
 
