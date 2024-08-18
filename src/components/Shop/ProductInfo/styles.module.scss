@@ -55,6 +55,33 @@
 		margin-bottom: 23px;
 	}
 
+	&__island {
+
+		&-title {
+			font-size: 0.9em;
+			color: $text-gray;
+			margin-bottom: 1em;
+			font-weight: 400;
+		}
+
+		margin-bottom: 1.5rem;
+	}
+
+	&__stock {
+
+		&-dot {
+			display: inline-block;
+			background: $text-gray;
+			width: 0.75em;
+			height: 0.75em;
+			border-radius: 50%;
+
+			&_active {
+				background: #01a900;
+			}
+		}
+	}
+
 	&__price {
 		font-weight: 400;
 		font-size: 18px;
