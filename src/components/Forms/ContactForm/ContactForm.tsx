@@ -27,7 +27,7 @@ export default function ContactForm() {
         resolver: zodResolver(ContactFormSchema)
     });
 
-    const [sendAnEmail, { isError, error, data }] = useSendAnEmailMutation();
+    const [sendAnEmail, { isError, error }] = useSendAnEmailMutation();
 
     const submitForm = async ({
         companyName,
