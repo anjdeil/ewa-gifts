@@ -41,7 +41,11 @@
     }
 
     input[type="checkbox"] {
-        display: none;
+        // display: none;
+        width: 24px;
+        height: 24px;
+        border: 1px solid $dusty-gray;
+        margin-right: 15px;
     }
 
     &__custCheck {
