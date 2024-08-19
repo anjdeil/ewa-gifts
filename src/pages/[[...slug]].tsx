@@ -20,7 +20,7 @@ const Page: FC<PageProps> = ({ page, error }) =>
 {
   if (error || !page) throw new Error(error);
 
-  // if (page) console.log(page);
+  if (page) console.log(page);
   // const router = useRouter();
   // const { slug } = router.query;
 
