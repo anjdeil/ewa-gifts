@@ -3,8 +3,9 @@ import { FC, useContext } from 'react';
 import Link from 'next/link';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
-import { MenusContext } from "@/pages/_app";
 import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
+import Image from "next/image";
+import { MenusContext } from "@/components/Layout/Layout";
 
 const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
     const menus: MenuItemsType[] | undefined = useContext(MenusContext);
@@ -54,10 +55,10 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
                         }
                     })}
                     {Boolean(iconLinks?.length) &&
-                        <div className={styles.footer__icons}>
+                        <div className={styles.socials__icons}>
                             {iconLinks.map(({ fa_icon_code, url }) =>
-                                <Link key={fa_icon_code} className={`link`} href={url}>
-                                    {fa_icon_code}
+                                <Link key={fa_icon_code} target="_blank" className={`link`} href={url}>
+                                    <Image width={24} height={24} src={`/images/socials/${fa_icon_code}.svg`} alt={fa_icon_code} />
                                 </Link>
                             )}
                         </div>

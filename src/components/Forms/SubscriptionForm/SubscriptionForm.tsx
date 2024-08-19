@@ -68,7 +68,8 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
                 {isError && <p className={styles.form__error}>{error.data}</p>}
             </form>
             <p className={`${styles.form__rules} desc`}>
-                Sprawdź naszą <Link href={'/privacy-policy'}>Politykę Prywatności</Link> i dowiedz się, w jaki sposób przetwarzamy dane. W każdej chwili możesz przerwać subskrybcję newslettera za darmo.
+                Sprawdź naszą <Link href={'/polityka-prywatnosci'}>Politykę Prywatności</Link> i dowiedz się, w jaki sposób przetwarzamy dane.<br />
+                W każdej chwili możesz przerwać subskrybcję newslettera za darmo.
             </p>
 
         </div>

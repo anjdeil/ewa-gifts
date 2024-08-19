@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 export const CounterPropsSchema = z.object({
-    onCountChange: z.function().args(z.number(), z.number().optional()).returns(z.void()),
-    count: z.number(),
+    onCountChange: z.function().args(z.number()).returns(z.void()),
+    value: z.number(),
+    max: z.number(),
+    min: z.number().optional(),
     isLoading: z.boolean().optional(),
     currentProduct: z.number().optional()
 });

@@ -25,6 +25,7 @@ interface ProductCardPropsType
 type ProductInfoType = {
     image: string,
     stock: number,
+    sku: string,
     price?: number,
     priceСirculations?: {
         type: string,
@@ -128,6 +129,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
             setProductInfo({
                 image: choosenVariation.images.length > 0 ? choosenVariation.images[0].src : "",
                 stock: (typeof choosenVariation.stock_quantity === 'number') ? choosenVariation.stock_quantity : 0,
+                sku: choosenVariation.sku,
                 ...((typeof choosenVariation.price === 'number') && { price: Number(choosenVariation.price) }),
                 ...(choosenVariation?.price_circulations && { priceСirculations: choosenVariation.price_circulations })
             });
@@ -136,6 +138,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
             setProductInfo({
                 image: product.images.length > 0 ? product.images[0].src : "",
                 stock: (typeof product.stock_quantity === 'number') ? product.stock_quantity : 0,
+                sku: product.sku,
                 ...((typeof product.price === 'number') && { price: Number(product.price) }),
                 ...(product?.price_circulations && { priceСirculations: product.price_circulations })
             });
@@ -366,6 +369,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
                     </div>
                 }
             </div>
+            }
             {productInfo?.price &&
                 <p className={"product-price"}>
                     Od {formatPrice(productInfo.price)}

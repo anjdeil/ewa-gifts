@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import FilterCollapsed from './Filters/FilterCollapsed';
-import { useFetchAttributeTermsQuery } from '@/store/custom/customApi';
 import { useParams, useSearchParams } from 'next/navigation';
 import PriceFilter from './Filters/PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
@@ -8,7 +7,7 @@ import ColorsFilter from './Filters/ColorsFilter';
 import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
-import { AttributeTermType } from '@/types/Services/customApi/Attribute/AttributeTermType';
+import { StatisticAttributeType } from '@/types/Services/customApi/Attribute/StatisticAttributeType';
 
 type PriceRange = {
     min: number,
@@ -16,10 +15,11 @@ type PriceRange = {
 }
 
 interface ShopSidebarPropsType {
+    availableAttributes: StatisticAttributeType[],
     priceRange: PriceRange
 }
 
-const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
+const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes }) => {
     const { slugs } = useParams();
     const [categorySlug, subcategorySlug] = slugs as string[];
     const router = useRouter();
@@ -35,9 +35,9 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
     /**
      * Colors
      */
-    const { data: colorsData } = useFetchAttributeTermsQuery('base_color');
-    const colors = colorsData?.data && colorsData.data.items as AttributeTermType[];
-    const currentColor = searchParams.get('attribute_term');
+    const colorAttribute = availableAttributes.find(({ slug }) => slug === "base_color");
+    const colors = colorAttribute?.options;
+    const currentColor = searchParams.get('attribute') === "pa_base_color" ? searchParams.get('attribute_term') : null;
 
     const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { slugs, ...params } = router.query;
@@ -145,9 +145,11 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange }) => {
                 />
             </FilterCollapsed>
 
-            <FilterCollapsed title={"Kolor"} collapsed={false}>
-                <ColorsFilter colors={colors} currentColor={currentColor} onChangeColor={handleChangeColor} onReset={() => resetColor()} />
-            </FilterCollapsed>
+            {Array.isArray(colors) && colors.length &&
+                <FilterCollapsed title={"Kolor"} collapsed={false}>
+                    <ColorsFilter colors={colors} currentColor={currentColor} onChangeColor={handleChangeColor} onReset={() => resetColor()} />
+                </FilterCollapsed>
+            }
         </>
     )
 }

@@ -1,106 +1,118 @@
-import { Box, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Image from 'next/image';
-import { FC, useEffect, useRef, useState } from "react";
+import { FC } from "react";
 import styles from './styles.module.scss';
-import { getLineItemQuantity } from "@/Utils/getLineItemQuantity";
 import formatPrice from "@/Utils/formatPrice";
 import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 import React from "react";
 import { CartTableRowType } from "@/types/Cart";
+import { Counter } from "@/components/Buttons";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import getCirculatedPrices from "@/Utils/getCirculatedPrices";
+import getCirculatedPrice from "@/Utils/getCirculatedPrice";
+import { updateCart } from "@/store/reducers/CartSlice";
+
 
 export const CartTableRow: FC<CartTableRowType> = ({
-    product,
-    onProductChange,
-    onProductDelete,
-    lineItems,
-    isLoading,
-    total }) =>
-{
-    const [count, setCount] = useState<number | null>(null);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const productName = transformCartItemName(product);
-    const productPrice = formatPrice(product.price);
-    // const MemoizedCounter = React.memo(Counter);
+    lineItem,
+    productSpecs,
+    isLoading
+}) => {
 
-    useEffect(() =>
-    {
-        if (product && lineItems)
-        {
-            const hasItemQuantity = getLineItemQuantity(product.product_id, lineItems);
-            if (hasItemQuantity) setCount(hasItemQuantity);
+    const productName = transformCartItemName(lineItem);
+    const { items } = useAppSelector(state => state.Cart);
+    const MemoizedCounter = React.memo(Counter);
+
+
+    const dispatch = useAppDispatch();
+
+    const matchedCartItem = items.find(({ product_id, variation_id }) => {
+        if (lineItem.variation_id) {
+            return lineItem.product_id === product_id && lineItem.variation_id === variation_id;
         }
-        return () => { if (timerRef.current) clearTimeout(timerRef.current); }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        return lineItem.product_id === product_id;
+    })
 
-    useEffect(() =>
-    {
-        if (isLoading) return;
-        if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() =>
-        {
-            onProductChange(product, Number(count));
-        }, 1000)
+    if (!matchedCartItem || !productSpecs) return;
 
-        return () => { if (timerRef.current) clearTimeout(timerRef.current); }
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onCountChange])
+    const circulatedPrices = getCirculatedPrices(productSpecs.price, productSpecs.price_circulations)
 
-    function onCountChange(count: number)
-    {
-        if (count >= 0) setCount(count);
+    function handleCountChange(count: number) {
+        if (!matchedCartItem) return;
+
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(count, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * count;
+
+        dispatch(updateCart({
+            id: matchedCartItem.product_id,
+            quantity: count,
+            supplier: matchedCartItem.supplier,
+            total: String(total),
+            ...(matchedCartItem?.variation_id && { variationId: matchedCartItem.variation_id })
+        }));
     }
 
+    const handleDelete = () => {
+        if (!matchedCartItem) return;
+
+        dispatch(updateCart({
+            id: matchedCartItem.product_id,
+            quantity: 0,
+            ...(matchedCartItem?.variation_id && { variationId: matchedCartItem.variation_id })
+        }));
+    }
+
+    const rowPrice = +matchedCartItem.total / matchedCartItem.quantity;
+
     return (
-        <Box className={`${styles.CartTable__row}`}>
+        <Box className={`${styles.cartTable__row}`}>
             <Box className={`${styles.cartItem}`}>
                 <Box className={styles.cartItem__delete}>
-                    <IconButton aria-label="delete" onClick={() => onProductDelete(product)}>
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 1L1 13M1 1L13 13" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                    <IconButton aria-label="delete" onClick={() => handleDelete()}>
+                        <Image src="/images/trash.svg" width={19} height={19} alt="trash" />
                     </IconButton>
                 </Box>
                 <Box>
                     <Image
-                        src={product.image.src}
-                        width={75}
-                        height={75}
-                        alt={product.name}
+                        className={styles.cartItem__image}
+                        src={lineItem.image.src}
+                        width={65}
+                        height={65}
+                        alt={lineItem.name}
                         unoptimized={true}
                     />
                 </Box>
                 <Box className={`${styles.cartItem__title}`}>
-                    <Typography variant='h6' className='desc'>
-                        {productName}
-                    </Typography>
+                    {productName}
                 </Box>
             </Box>
-            <Box className={styles.CartTable__cell}>
-                <Typography variant='body1'>
-                    {isLoading ? (
-                        <Skeleton width={'100px'} height={'50px'} animation="wave" />
-                    ) : (
-                        productPrice
-                    )}
-                </Typography>
+            <Box className={styles.cartTable__cell}>
+                <div className={styles.cartTable__cellKey}>
+                    Cena
+                </div>
+                <div className={styles.cartTable__cellValue}>
+                    {formatPrice(rowPrice)}
+                </div>
             </Box>
-            <Box className={styles.CartTable__cell}>
-                {/* {count && <MemoizedCounter
-                    count={count}
-                    onCountChange={onCountChange}
+            <Box className={`${styles.cartTable__cell} ${styles.cartTable__cell_counter}`}>
+                <MemoizedCounter
+                    value={matchedCartItem.quantity}
+                    min={0}
+                    max={productSpecs.stock_quantity}
+                    onCountChange={handleCountChange}
                     isLoading={isLoading}
-                    currentProduct={product.id}
-                />} */}
-                {count}
+                />
+                <div className={styles.cartTable__countCell}></div>
+
             </Box>
-            <Box className={styles.CartTable__cell}>
-                {isLoading ? (
-                    <Skeleton width={'100px'} height={'50px'} animation="wave" />
-                ) : (
-                    total
-                )}
+            <Box className={styles.cartTable__cell}>
+                <div className={styles.cartTable__cellKey}>
+                    Kwota
+                </div>
+                <div className={styles.cartTable__cellValue}>
+                    {formatPrice(+matchedCartItem.total)}
+                </div>
             </Box>
         </Box>
     )
