@@ -1,7 +1,7 @@
 import { CatalogType } from "@/types/Catalog";
-import {
+import
+{
   Box,
-  Button,
   ImageList,
   ImageListItem,
   useMediaQuery,
@@ -9,18 +9,22 @@ import {
 } from "@mui/material";
 import { FC, useState } from "react";
 import styles from "./styles.module.scss";
+import Image from "next/image";
 
-interface CatalogListProps {
+interface CatalogListProps
+{
   catalogs: CatalogType[];
 }
 
-export const CatalogList: FC<CatalogListProps> = ({ catalogs }) => {
+export const CatalogList: FC<CatalogListProps> = ({ catalogs }) =>
+{
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [showAll, setShowAll] = useState(false);
 
-  const handleShowMore = () => {
+  const handleShowMore = () =>
+  {
     setShowAll(true);
   };
 
@@ -36,7 +40,12 @@ export const CatalogList: FC<CatalogListProps> = ({ catalogs }) => {
             className={styles.catalogList__item}
           >
             <a href={catalog.link_url} target="_blank">
-              <img src={catalog.image} alt={catalog.title} loading="lazy" />
+              <Image
+                src={catalog.image}
+                alt={catalog.title!}
+                objectFit="cover"
+                objectPosition="center"
+                loading="lazy" />
             </a>
           </ImageListItem>
         ))}
