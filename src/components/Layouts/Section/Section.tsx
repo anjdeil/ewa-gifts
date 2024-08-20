@@ -1,4 +1,4 @@
-import { SectionProps } from "@/types"
+import { SectionProps } from "@/types/layouts";
 import { FC } from "react"
 
 export const Section: FC<SectionProps> = ({ children, className, isContainer, isBreadcrumbs }) =>

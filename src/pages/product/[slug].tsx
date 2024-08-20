@@ -9,7 +9,7 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { ProductCardList } from "@/components/Shop/ProductCardsList/ProductCardsList";
-import { typeProductType } from "@/types";
+import { typeProductType } from "@/types/Shop";
 import { responseSingleCustomApi } from "@/types/Services/customApi";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
