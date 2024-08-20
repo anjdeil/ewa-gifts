@@ -1,4 +1,4 @@
-import { HeroProps } from "@/types";
+import { HeroProps } from "@/types/Common";
 import { FC } from "react";
 import { Box } from "@mui/material";
 import Image from "next/image";

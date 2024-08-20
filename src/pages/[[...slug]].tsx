@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import { customRestApi } from "@/services/CustomRestApi";
-// import { pageSchema } from "@/types/Services/customApi";
+import { pageSchema } from "@/types/Services/customApi";
 import { z } from "zod";
 import { FC } from "react";
 // import { PageBuilder } from "@/components/PageBuilder";
@@ -9,10 +9,7 @@ import { AxiosResponse } from "axios";
 // import { PageHeader } from "@/components/Layouts/PageHeader";
 
 const PagePropsSchema = z.object({
-  // page: pageSchema,
-  page: z.object({
-    title: z.string()
-  }),
+  page: pageSchema,
   isMain: z.boolean(),
   error: z.string()
 })

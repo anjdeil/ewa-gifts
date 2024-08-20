@@ -1,5 +1,5 @@
 import { PageBuilder } from "@/components/PageBuilder";
-import { CustomTabType } from "@/types";
+import { CustomTabType } from "@/types/Common";
 import { Box } from "@mui/material";
 import { FC } from 'react';
 

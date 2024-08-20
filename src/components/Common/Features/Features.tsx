@@ -1,4 +1,4 @@
-import { FeaturesProps } from "@/types";
+import { FeaturesProps } from "@/types/Common";
 import * as React from 'react';
 import styles from './styles.module.scss';
 import Image from "next/image";
@@ -11,7 +11,8 @@ import { useMediaQuery } from "@mui/material";
 
 const Item: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
 
-export const Features: React.FC<FeaturesProps> = ({ features }) => {
+export const Features: React.FC<FeaturesProps> = ({ features }) =>
+{
     const isMobile = useMediaQuery('(max-width: 1024px)');
     return (
         <Swiper

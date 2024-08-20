@@ -1,5 +1,5 @@
 import { PageBuilder } from "@/components/PageBuilder";
-import { SplitProps } from "@/types";
+import { SplitProps } from "@/types/Common";
 import { Box, styled, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 import { SplitContainer } from '@/types/Common/Split';
