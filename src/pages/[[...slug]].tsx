@@ -1,6 +1,4 @@
-// import { useRouter } from "next/router";
 import Head from "next/head";
-// import variables from '../styles/variables.module.scss';
 import { GetServerSidePropsContext } from "next";
 import { customRestApi } from "@/services/CustomRestApi";
 import { pageSchema } from "@/types/Services/customApi";
@@ -37,7 +35,6 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
     </>
   );
 }
-
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function getServerSideProps(context: GetServerSidePropsContext)
