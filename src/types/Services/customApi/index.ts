@@ -1,4 +1,4 @@
-import { PageBuilderFullSectionsSchema } from "@/types";
+import { PageBuilderFullSectionsSchema } from "@/types/PageBuilder/PageBuilderFullSectionsSchema";
 import { ProductSchema } from "@/types/Shop";
 import { z } from "zod";
 
