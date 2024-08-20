@@ -1,20 +1,11 @@
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import { customRestApi } from "@/services/CustomRestApi";
-import { pageSchema } from "@/types/Services/customApi";
-import { z } from "zod";
 import { FC } from "react";
-// import { PageBuilder } from "@/components/PageBuilder";
+import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
 import { PageHeader } from "@/components/Layouts/PageHeader";
-
-const PagePropsSchema = z.object({
-  page: pageSchema,
-  isMain: z.boolean(),
-  error: z.string()
-})
-
-type PageProps = z.infer<typeof PagePropsSchema>;
+import { PageProps } from "@/types/Pages";
 
 const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
@@ -31,7 +22,7 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
       </Head>
       <main>
         {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}
-        {/* <PageBuilder sections={page.sections} /> */}
+        <PageBuilder sections={page.sections} />
       </main>
     </>
   );
