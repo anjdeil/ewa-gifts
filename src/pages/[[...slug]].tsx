@@ -4,9 +4,9 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { pageSchema } from "@/types/Services/customApi";
 import { z } from "zod";
 import { FC } from "react";
-// import { PageBuilder } from "@/components/PageBuilder";
+import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
-// import { PageHeader } from "@/components/Layouts/PageHeader";
+import { PageHeader } from "@/components/Layouts/PageHeader";
 
 const PagePropsSchema = z.object({
   page: pageSchema,
@@ -30,8 +30,8 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {/* {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />} */}
-        {/* <PageBuilder sections={page.sections} /> */}
+        {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}
+        <PageBuilder sections={page.sections} />
       </main>
     </>
   );
