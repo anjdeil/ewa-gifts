@@ -4,7 +4,7 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { pageSchema } from "@/types/Services/customApi";
 import { z } from "zod";
 import { FC } from "react";
-import { PageBuilder } from "@/components/PageBuilder";
+// import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 
@@ -24,13 +24,13 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
     <>
       <Head>
         <title>{page.title}</title>
-        <meta name="description" content="Main page" />
+        <meta name="description" content={page.title} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}
-        <PageBuilder sections={page.sections} />
+        {/* <PageBuilder sections={page.sections} /> */}
       </main>
     </>
   );
