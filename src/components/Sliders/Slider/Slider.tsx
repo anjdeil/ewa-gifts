@@ -41,6 +41,7 @@ export const Slider: FC<SliderProps> = ({ slides, height }) =>
                                 alt={slide.text}
                                 descOffset={'30%'}
                                 mobOffset={'100%'}
+                                objectFit={'cover'}
                             />
                         </Link>
                     </SwiperSlide>

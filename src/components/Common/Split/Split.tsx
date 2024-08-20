@@ -33,13 +33,11 @@ export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed = 
 {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const mobileColumn = isReversed ? "column-reverse" : "column";
-
   const SplitSection: FC<SplitContainer> = ({ isMobile, content }) =>
   {
     return (
-      <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}
-      >
-        <PageBuilder sections={content} />
+      <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}>
+        <PageBuilder isContainer={false} sections={content} />
       </StyledBox>
     )
   };

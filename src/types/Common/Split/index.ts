@@ -1,9 +1,9 @@
-import { PageBuilderSectionSchema } from "@/types/PageBuilder";
+import { PageBuilderSectionsSchema } from "@/types/PageBuilder/PageBuilderSectionsSchema";
 import { z } from "zod";
 
 export const SplitPropsSchema = z.object({
-    leftContent: z.array(PageBuilderSectionSchema),
-    rightContent: z.array(PageBuilderSectionSchema),
+    leftContent: z.array(PageBuilderSectionsSchema),
+    rightContent: z.array(PageBuilderSectionsSchema),
     isReversed: z.boolean().optional()
 });
 
@@ -20,11 +20,11 @@ export const SplitImage = z.object({
 
 export const SplitContainerSchema = z.object({
     isMobile: z.boolean(),
-    content: z.array(PageBuilderSectionSchema),
+    content: z.array(PageBuilderSectionsSchema),
 });
 
 export const transformBuilderSplitPropsSchema = z.object({
-    sections: z.array(PageBuilderSectionSchema),
+    sections: z.array(PageBuilderSectionsSchema),
     _type: z.string()
 });
 

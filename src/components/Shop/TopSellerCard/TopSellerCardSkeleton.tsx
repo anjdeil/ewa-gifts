@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
-export const ProductCardSkeleton: FC = () =>
+export const TopSellerCardSkeleton: FC = () =>
 {
     return (
         <Box sx={{ width: '100%' }}>
@@ -13,7 +13,7 @@ export const ProductCardSkeleton: FC = () =>
                     width: '100%',
                     height: '100%'
                 }}
-                height={400}
+                height={300}
             >
             </Skeleton>
         </Box>
