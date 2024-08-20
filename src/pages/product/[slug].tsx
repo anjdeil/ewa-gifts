@@ -6,25 +6,28 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Breadcrumbs from "@/components/Layouts/Breadcrumbs";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { customRestApi } from "@/services/CustomRestApi";
-import { responseProductInfoType } from "@/types/Services/customApi";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { ProductCardList } from "@/components/Shop/ProductCardsList/ProductCardsList";
 import { typeProductType } from "@/types";
+import { responseSingleCustomApi } from "@/types/Services/customApi";
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
     const { slug } = context.query;
 
-    try {
+    try
+    {
         const productResponseData = await customRestApi.get(`products/${slug}`);
 
-        if (!productResponseData?.data) {
+        if (!productResponseData?.data)
+        {
             return {
                 notFound: true
             };
         }
 
-        const productResponse = productResponseData.data as responseProductInfoType;
+        const productResponse = productResponseData.data as responseSingleCustomApi;
         const product = productResponse?.data && productResponse.data.item;
 
         return {
@@ -33,7 +36,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             },
         };
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error(error);
         return {
             notFound: true
@@ -41,11 +45,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     }
 }
 
-interface ProductPropsType {
+interface ProductPropsType
+{
     product: typeProductType
 }
 
-const Product: FC<ProductPropsType> = ({ product }) => {
+const Product: FC<ProductPropsType> = ({ product }) =>
+{
     const slug = product.categories[product.categories.length - 1].slug;
     const productListQueryParams: ProductListQueryParamsType = {
         per_page: 5,

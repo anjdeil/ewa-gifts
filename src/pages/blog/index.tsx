@@ -3,7 +3,7 @@
 //@ts-nocheck
 import Head from "next/head";
 
-const Blog = ({ response }) =>
+const Blog = () =>
 {
   const pageTitle = "Blog";
 
