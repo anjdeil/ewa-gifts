@@ -11,13 +11,13 @@ import { RichTextComponent } from "../Common/RichTextComponent";
 import { BlogList } from "../Blog/BlogList";
 import { Section } from "../Layouts/Section";
 import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
-import { HeroSchema, SplitBuild } from "@/types";
 import { CustomTabs } from "../Common/Tabs";
 import { ProductCarousel } from "../Shop";
 import { TopSeller } from "../Shop/TopSeller";
 import { CatalogList } from "../Catalog/CatalogList";
 import { Title } from "../Layouts/Title";
 import { TitleBuilder } from "@/types/layouts/Title";
+import { HeroSchema, SplitBuild } from "@/types/Common";
 
 export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
 {

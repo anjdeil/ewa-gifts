@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
 import { ProductCard, ProductCardSkeleton } from "../ProductCard";
-import { typeProductType } from "@/types";
+import { typeProductType } from "@/types/Shop";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
 import Notification from "@/components/Layouts/Notification";
 

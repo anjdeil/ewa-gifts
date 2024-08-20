@@ -1,4 +1,4 @@
-import { variationsProductType, typeProductType } from "@/types";
+import { variationsProductType, typeProductType } from "@/types/Shop";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";

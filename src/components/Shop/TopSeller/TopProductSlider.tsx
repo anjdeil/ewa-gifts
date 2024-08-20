@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import { FC } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from "swiper/modules";
@@ -8,11 +5,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 import Image from "next/image";
-import { TopProductSliderType } from "@/types";
 import { Box, Typography } from "@mui/material";
+import { TopSeller } from "@/types/Sliders";
 
-interface TopProductSliderProps {
-    data: TopProductSliderType[]
+interface TopProductSliderProps
+{
+    data: TopSeller[]
 }
 
 const swiperStyle = {
@@ -31,7 +29,8 @@ const imageBoxStyle = {
 };
 
 
-export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) => {
+export const TopProductSlider: FC<TopProductSliderProps> = ({ data }) =>
+{
     return (
         <Swiper
             modules={[Pagination]}
