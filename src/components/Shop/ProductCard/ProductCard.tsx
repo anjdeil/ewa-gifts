@@ -284,7 +284,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     {productInfo.sku}
                 </p>
             }
-            {(Boolean(sizes.length)) || (Boolean(colors.length)) &&
+            {((Boolean(sizes.length)) || (Boolean(colors.length))) &&
                 <div className={styles["product-card__calculations"]}>
                     {(Boolean(colors.length)) &&
                         <div className={styles['product-card__colors']}>
