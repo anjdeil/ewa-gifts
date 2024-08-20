@@ -9,14 +9,16 @@
 .nav {
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
-  row-gap: 16px;
+  flex-direction: row;
+  row-gap: 10px;
   align-items: flex-start;
-  padding-top: 14px;
-  border-top: 1px solid $input-light;
+  padding-top: 16px;
 
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
+  @media screen and (max-width: 1024px) {
+    border-top: 1px solid $input-light;
+  }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
   }
 
   &__block {
@@ -30,29 +32,50 @@
       font-size: 16px;
       line-height: 24px;
       font-weight: 400;
+      color: $black-color;
 
       @media screen and (max-width: 768px) {
         font-size: 14px;
+      }
+
+      &.nav__text {
+        display: block;
+        line-height: 1.2;
+        color: $gray-transparent;
+        font-weight: 600;
+        font-size: 16px;
+
+        @media screen and (max-width: 768px) {
+          font-size: 14px;
+        }
       }
     }
 
     & a {
-      line-height: 1.2;
-      color: grey;
-      font-weight: 600;
-      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 13px;
       text-decoration: none;
-
-      @media screen and (max-width: 768px) {
-        font-size: 14px;
-      }
     }
+
     &:last-child {
       text-align: right;
 
       @media screen and (max-width: 768px) {
         text-align: left;
       }
+    }
+  }
+
+  &__text {
+    display: block;
+    line-height: 1.2;
+    color: $gray-transparent;
+    font-weight: 600;
+    font-size: 16px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 14px;
     }
   }
 }

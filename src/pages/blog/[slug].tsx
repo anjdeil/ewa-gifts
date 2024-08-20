@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
@@ -8,7 +7,6 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
 import { Section } from "@/components/Layouts/Section";
 import { BlogItemSchema, BlogItemType } from "@/types";
-// import ErrorPage from "../500";
 
 const ArticlePropsSchema = z.object({
   response: BlogItemSchema,
@@ -21,7 +19,6 @@ type ArticleProps = z.infer<typeof ArticlePropsSchema>;
 
 const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
   if (error) {
-    // return <ErrorPage />;
     throw new Error(error);
   }
 
@@ -43,57 +40,46 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { slug } = context.params!;
-  let response: BlogItemType | null = null;
-  let prevPost: BlogItemType | null = null;
-  let nextPost: BlogItemType | null = null;
-  let error: string | null = null;
 
   try {
-    const allPostsResponse = await customRestApi.get(`posts`);
+    const allPostsResponse = await customRestApi.get("posts");
 
-    if (allPostsResponse) {
-      if (allPostsResponse.data) {
-        const allPosts = (
-          allPostsResponse.data as { data: { items: BlogItemType[] } }
-        ).data.items;
-        const currentIndex = allPosts.findIndex(
-          (post: BlogItemType) => post.slug === slug
-        );
+    if (!allPostsResponse || !allPostsResponse.data)
+      return { props: { error: "Server Error" } };
 
-        if (currentIndex === -1) {
-          return { notFound: true };
-        }
+    const allPosts: BlogItemType[] = allPostsResponse.data.data.items;
 
-        if (currentIndex > 0) {
-          prevPost = allPosts[currentIndex - 1];
-        }
-        if (currentIndex < allPosts.length - 1) {
-          nextPost = allPosts[currentIndex + 1];
-        }
+    if (allPosts.length === 0)
+      return { props: { error: "There are no articles" } };
 
-        response = allPosts[currentIndex];
-      } else {
-        throw new Error("There are no articles");
-      }
-    } else {
-      throw new Error("Server Error.");
+    const currentIndex = allPosts.findIndex((post) => post.slug === slug);
+
+    if (currentIndex === -1) {
+      return { notFound: true };
     }
+
+    const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+    const nextPost =
+      currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+
+    return {
+      props: {
+        response: allPosts[currentIndex] || null,
+        prevPost,
+        nextPost,
+      },
+    };
   } catch (err) {
-    if (err instanceof Error) {
-      error = err.message;
-    } else {
-      error = "Server Error.";
-    }
+    console.error("Error fetching posts:", err);
+    return {
+      props: {
+        response: null,
+        prevPost: null,
+        nextPost: null,
+        error: "An unexpected error occurred",
+      },
+    };
   }
-
-  return {
-    props: {
-      response: response ?? null,
-      prevPost: prevPost ?? null,
-      nextPost: nextPost ?? null,
-      error,
-    },
-  };
 };
 
 export default Article;

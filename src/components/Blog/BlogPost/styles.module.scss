@@ -51,20 +51,24 @@
   &__img {
     display: block;
     width: 100%;
-    margin: 0 auto 20px;
+    aspect-ratio: 2.19;
+    margin: 0 auto 43px;
     position: relative;
+    overflow: hidden;
     border-radius: 10px;
 
     @media (max-width: 1024px) {
+      margin: 0 auto 25px;
       max-width: 643px;
     }
 
+    @media (max-width: 768px) {
+      margin: 0 auto 16px;
+      aspect-ratio: 2.14;
+    }
+
     & img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-      border-radius: 10px;
+      position: absolute;
     }
   }
 
