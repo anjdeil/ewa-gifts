@@ -19,6 +19,7 @@ type PageProps = z.infer<typeof PagePropsSchema>;
 const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
   if (error || !page) throw new Error(error);
+  console.log(isMain);
 
   return (
     <>
