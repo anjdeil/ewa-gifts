@@ -74,12 +74,8 @@ h1 {
     }
 }
 
-@media (max-width: 768px) {
-
-    html,
-    body {
-        font-size: 14px;
-    }
+.catalogs {
+    margin-top: 50px;
 }
 
 @media(max-width: 1024px) {
@@ -103,9 +99,19 @@ h1 {
     .features {
         padding-bottom: 40px;
     }
+
+    .catalogs {
+        margin-top: 30px;
+    }
 }
 
 @media(max-width: 768px) {
+
+    html,
+    body {
+        font-size: 14px;
+    }
+
     .section {
         padding-bottom: 40px;
 

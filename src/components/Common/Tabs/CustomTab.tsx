@@ -14,7 +14,7 @@ export const CustomTab: FC<CustomTabType> = ({ sections, index, value }) =>
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <PageBuilder sections={sections} />
+                    <PageBuilder isContainer={false} sections={sections} />
                 </Box>
             )}
         </div>

@@ -37,7 +37,7 @@ export const Split: FC<SplitProps> = ({ leftContent, rightContent, isReversed = 
   {
     return (
       <StyledBox width={isMobile ? "100%" : "50%"} p={2} display={'flex'} alignItems={'center'}>
-        <PageBuilder sections={content} />
+        <PageBuilder isContainer={false} sections={content} />
       </StyledBox>
     )
   };

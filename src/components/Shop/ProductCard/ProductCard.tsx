@@ -369,7 +369,6 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) =>
                     </div>
                 }
             </div>
-            }
             {productInfo?.price &&
                 <p className={"product-price"}>
                     Od {formatPrice(productInfo.price)}

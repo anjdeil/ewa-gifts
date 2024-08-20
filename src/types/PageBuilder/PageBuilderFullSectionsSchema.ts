@@ -4,6 +4,8 @@ import { AdaptiveImagePropsSchema, CustomTabBuilderSchema, FeaturesBuild, HeroSc
 import { CategoryBarsBuildSchema } from "@/components/PageBuilder";
 import { BlogBuildSchema } from "../Blog";
 import { GoogleReviewsBuildSchema } from "../GoogleReviews";
+import { CatalogSchemaBuilder } from "../Catalog";
+import { TitleBuilderSchema } from "../layouts/Title";
 
 export const PageBuilderFullSectionsSchema = z.union([
     SliderBuild,
@@ -18,7 +20,9 @@ export const PageBuilderFullSectionsSchema = z.union([
     AdaptiveImagePropsSchema,
     RichTextPropsSchema,
     GoogleReviewsBuildSchema,
-    productCarouselBuilderSchema
+    productCarouselBuilderSchema,
+    CatalogSchemaBuilder,
+    TitleBuilderSchema
 ]);
 
 export type PageBuilderSection = z.infer<typeof PageBuilderFullSectionsSchema>;

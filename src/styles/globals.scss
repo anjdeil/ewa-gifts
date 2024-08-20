@@ -150,6 +150,11 @@ input[type=number]::-webkit-outer-spin-button {
     @extend .main-title;
     font-size: 20px;
     text-transform: none;
+
+    &_builder {
+        margin-bottom: 40px;
+        text-transform: uppercase;
+    }
 }
 
 .list-reset {
@@ -318,6 +323,12 @@ input[type=number]::-webkit-outer-spin-button {
     .desc,
     .sub-title {
         font-size: 14px;
+    }
+
+    .sub-title {
+        &_builder {
+            margin-bottom: 30px;
+        }
     }
 
     .more-link {
