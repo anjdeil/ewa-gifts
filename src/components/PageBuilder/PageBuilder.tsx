@@ -7,7 +7,7 @@ import { Hero } from "../Common/Hero";
 import { Split } from "../Common/Split";
 import { transformBuilderSplitSection } from "@/services/transformers";
 import { AdaptiveImage } from "../Common/AdaptiveImage";
-import { RichTextComponent } from "../Common/RichTextComponent";
+// import { RichTextComponent } from "../Common/RichTextComponent";
 import { BlogList } from "../Blog/BlogList";
 import { Section } from "../Layouts/Section";
 import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
@@ -143,20 +143,22 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             }
                             break;
                         case "rich_text": {
-                            if (!("text" in section)) break;
-                            const richTextComponent = (
-                                <RichTextComponent
-                                    text={section.text}
-                                    link_url={section.link_url}
-                                    link_text={section.link_text}
-                                    title={section.title}
-                                    key={key}
-                                />
-                            );
-                            if (isContainer)
-                                return <Section isContainer={true} className={"rich-text"}>{richTextComponent}</Section>;
+                            console.log(section, isContainer);
+                            break;
+                            // if (!("text" in section)) break;
+                            // const richTextComponent = (
+                            //     <RichTextComponent
+                            //         text={section.text}
+                            //         link_url={section.link_url}
+                            //         link_text={section.link_text}
+                            //         title={section.title}
+                            //         key={key}
+                            //     />
+                            // );
+                            // if (isContainer)
+                            //     return <Section isContainer={true} className={"rich-text"}>{richTextComponent}</Section>;
 
-                            return richTextComponent;
+                            // return richTextComponent;
                         }
 
                         case "title": {
