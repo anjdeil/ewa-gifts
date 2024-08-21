@@ -40,7 +40,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
-    const baseColor = searchParams.get('attribute_term');
+    const baseColor = searchParams.get('pa_base_color');
 
     const colors = product.attributes.find(({ slug, variation }) => slug === "color" && variation)?.options || [];
     const sizes = product.attributes.find(({ slug, variation }) => slug === "size" && variation)?.options || [];
@@ -67,7 +67,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
 
     /* Finding relevant product and variation from CartItems */
     useEffect(() => {
-        setCartMatch(cartItems.find(cartItem => {
+        setCartMatch(cartItems.find((cartItem: CartItem) => {
             if (cartItem.product_id === product.id) {
                 if (choosenVariation) {
                     if (choosenVariation.id === cartItem.variation_id) return true;
@@ -84,9 +84,19 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             product.attributes.forEach(({ id, slug, variation }) => {
                 if (baseColor) {
                     if (slug === 'base_color' && variation) {
+                        const baseColorSplit = baseColor.split('-');
+
                         const matchedVariation = product?.variations?.find(({ attributes }) => {
-                            return attributes.some(({ name, option }) => name === "base_color" && option === baseColor);
+
+                            return attributes.some(({ name, option }) => {
+                                if (name === "base_color") {
+                                    const colorSplit = option.split('-');
+                                    return colorSplit.some(color => baseColorSplit.includes(color))
+
+                                }
+                            });
                         });
+
                         if (matchedVariation !== undefined) {
                             setColor(matchedVariation.attributes.find(({ name }) => name == "color")?.option);
                         }

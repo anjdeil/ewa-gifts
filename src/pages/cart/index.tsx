@@ -66,8 +66,10 @@ const Cart = () => {
         }
     }, [createError]);
 
-    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
+    console.log(createError);
 
+
+    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
     return (
         <>
@@ -88,18 +90,20 @@ const Cart = () => {
                                 </p>
                             </Box>
                         </Notification> :
-                        <Box className={styles.Cart__content}>
-                            <Box>
-                                <CartTable
-                                    lineItems={lineItems}
-                                    productsSpecs={productsSpecs}
-                                    cartItems={cartItems}
-                                    isLoading={isUpdating || isProductsSpecsLoading}
-                                />
-                                {/* <AddCoupon orderId={orderId && orderId} /> */}
+                        createError ?
+                            <Notification type="warning">{createError}</Notification> :
+                            <Box className={styles.Cart__content}>
+                                <Box>
+                                    <CartTable
+                                        lineItems={lineItems}
+                                        productsSpecs={productsSpecs}
+                                        cartItems={cartItems}
+                                        isLoading={isUpdating || isProductsSpecsLoading}
+                                    />
+                                    {/* <AddCoupon orderId={orderId && orderId} /> */}
+                                </Box>
+                                <CartSummary order={currentOrder} isLoading={isUpdating || isProductsSpecsLoading} />
                             </Box>
-                            <CartSummary order={currentOrder} isLoading={isUpdating || isProductsSpecsLoading} />
-                        </Box>
                     }
                 </Section>
             </main>
