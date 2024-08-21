@@ -9,7 +9,7 @@ import styles from './styles.module.scss';
 import Link from "next/link";
 import Image from 'next/image';
 import { useSendAnEmailMutation } from "@/store/contactForm7/contactForm7Api";
-import { SubscriptionFormProps } from "@/types";
+import { SubscriptionFormProps } from "@/types/Forms";
 
 const SubscriptionFormSchema = z.object({
     email: z.string().email('Please, type valid email'),
@@ -20,7 +20,8 @@ const SubscriptionFormSchema = z.object({
 
 type SubscriptionFormValues = z.infer<typeof SubscriptionFormSchema>;
 
-export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
+export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) =>
+{
     const [sendAnEmail, { isError, error, data }] = useSendAnEmailMutation();
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<SubscriptionFormValues>({
@@ -35,7 +36,8 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
             <h3 className={`secondary-title ${styles.form__title}`}>
                 Zapisz się do naszego newslettera
             </h3>
-            <form onSubmit={handleSubmit(async ({ email }) => {
+            <form onSubmit={handleSubmit(async ({ email }) =>
+            {
                 const formData = {
                     _wpcf7_unit_tag: 'wpcf7-c68d4a7-o1',
                     'your-email': email
@@ -44,7 +46,8 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
                 await sendAnEmail({ formId, formData });
                 const response = await sendAnEmail({ formId, formData });
 
-                if (response && 'data' in response) {
+                if (response && 'data' in response)
+                {
                     reset();
                 }
 

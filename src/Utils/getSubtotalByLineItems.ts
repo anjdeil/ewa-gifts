@@ -1,9 +1,11 @@
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store";
 
-const getSubtotalByLineItems = (lineItems: lineOrderItems[]): number => {
+const getSubtotalByLineItems = (lineItems: lineOrderItems[]): number =>
+{
     let subtotal = 0;
 
-    lineItems.forEach(item => {
+    lineItems.forEach(item =>
+    {
         const itemSubtotal = +item.subtotal;
         if (!Number.isNaN(itemSubtotal)) subtotal += itemSubtotal;
     });

@@ -8,7 +8,6 @@ import { useFetchUserTokenMutation } from "@/store/jwt/jwtApi";
 import { useCookies } from 'react-cookie';
 import React from 'react';
 import variables from '@/styles/variables.module.scss';
-import { CartItem, WpWooError } from "@/types";
 import { RegistrationFormSchema } from "@/types/Forms/RegistrationForm/index";
 import { z } from "zod";
 import styles from './styles.module.scss';
@@ -16,6 +15,8 @@ import { registrationUserDataType, userFieldsType } from "@/types/Pages/checkout
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
 import { ShippingLine } from "@/store/reducers/CartSlice";
 import { useRouter } from "next/router";
+import { CartItem } from "@/types/Cart";
+import { WpWooError } from "@/types/Services";
 
 interface RegistrationFormProps
 {
@@ -53,7 +54,6 @@ export const RegistrationForm = forwardRef<FormHandle, RegistrationFormProps>(({
     const [fetchUserToken] = useFetchUserTokenMutation();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
 
     useEffect(() =>
     {

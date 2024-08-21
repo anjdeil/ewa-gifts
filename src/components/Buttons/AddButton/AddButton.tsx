@@ -1,4 +1,4 @@
-import { AddButtonProps } from "@/types";
+import { AddButtonProps } from "@/types/Buttons";
 import { FC } from "react";
 import styles from './styles.module.scss';
 

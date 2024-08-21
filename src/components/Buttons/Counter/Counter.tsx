@@ -1,12 +1,14 @@
 import React, { FC, useState } from "react";
 import styles from './styles.module.scss';
-import { CounterProps } from "@/types";
+import { CounterProps } from "@/types/Buttons";
 import { IconButton, Input } from "@mui/material";
 
-export const Counter: FC<CounterProps> = ({ value, min = 0, max, onCountChange, isLoading = false }) => {
+export const Counter: FC<CounterProps> = ({ value, min = 0, max, onCountChange, isLoading = false }) =>
+{
     const [localCount, setLocalCount] = useState<number>(value);
 
-    const changeLocalCount = (count: number) => {
+    const changeLocalCount = (count: number) =>
+    {
         if (isLoading) return;
 
         let newCount = count;
@@ -17,7 +19,8 @@ export const Counter: FC<CounterProps> = ({ value, min = 0, max, onCountChange, 
         setLocalCount(newCount);
     }
 
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         if (event.target.value) changeLocalCount(Number(event.target.value));
     }
 

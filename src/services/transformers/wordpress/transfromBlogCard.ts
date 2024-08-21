@@ -1,4 +1,4 @@
-import { BlogFetchData, BlogItemType } from "@/types";
+import { BlogFetchData, BlogItemType } from "@/types/Blog";
 
 export const transformBlogCard = (cards: BlogFetchData): BlogItemType[] =>
 {

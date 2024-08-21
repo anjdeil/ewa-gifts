@@ -1,14 +1,16 @@
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store";
 import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import formatPrice from "@/Utils/formatPrice";
 import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 
-interface OrderItemsPropsType {
+interface OrderItemsPropsType
+{
     orderItems: lineOrderItems[]
 }
-const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
+const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) =>
+{
     return (
         <div className={styles["order-items"]}>
             <div className={`${styles["order-items__row"]} ${styles["order-items__row_header"]}`}>
@@ -17,7 +19,8 @@ const OrderItems: FC<OrderItemsPropsType> = ({ orderItems }) => {
                 <div className={styles["order-items__cell"]}>Ilość</div>
                 <div className={styles["order-items__cell"]}>Kwota</div>
             </div>
-            {orderItems?.map((item) => {
+            {orderItems?.map((item) =>
+            {
                 const totalDifference = +item.total - +item.subtotal;
 
                 const cartItemName = transformCartItemName(item);

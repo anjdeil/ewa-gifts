@@ -1,10 +1,10 @@
-import { HeroProps } from "@/types";
+import { HeroProps } from "@/types/Common";
 import { FC } from "react";
 import { Box } from "@mui/material";
 import Image from "next/image";
-import { Text } from '@/components/Common/Text';
 import Link from "next/link";
 import styles from './styles.module.scss';
+import { RichTextComponent } from "../RichTextComponent";
 
 export const Hero: FC<HeroProps> = ({ section }) =>
 {
@@ -14,7 +14,7 @@ export const Hero: FC<HeroProps> = ({ section }) =>
             <Box className={`${styles.hero__wrapper} ${isReverse}`}>
                 <Box className={styles.hero__left}>
                     <h3 className={`sub-title ${styles.hero__title}`}>{section.title}</h3>
-                    <Text className={styles.hero__text} text={section.text} />
+                    <RichTextComponent text={section.text} className={styles.hero__text} />
                     {section.link_url && <Link className="more-link" href={section.link_url}>{section.link_text}</Link>}
                 </Box>
                 <Box className={styles.hero__right}>

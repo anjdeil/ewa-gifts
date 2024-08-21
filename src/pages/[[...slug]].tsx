@@ -1,43 +1,38 @@
-// import { useRouter } from "next/router";
 import Head from "next/head";
-// import variables from '../styles/variables.module.scss';
 import { GetServerSidePropsContext } from "next";
 import { customRestApi } from "@/services/CustomRestApi";
-import { pageSchema } from "@/types/Services/customApi";
-import { z } from "zod";
 import { FC } from "react";
 import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
 import { PageHeader } from "@/components/Layouts/PageHeader";
-
-const PagePropsSchema = z.object({
-  page: pageSchema,
-  isMain: z.boolean(),
-  error: z.string()
-})
-
-type PageProps = z.infer<typeof PagePropsSchema>;
-
+import { PageProps } from "@/types/Pages";
+import { RichTextComponent } from "@/components/Common/RichTextComponent";
+import { Section } from "@/components/Layouts/Section";
 const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
   if (error || !page) throw new Error(error);
+  console.log(page);
 
   return (
     <>
       <Head>
         <title>{page.title}</title>
-        <meta name="description" content="Main page" />
+        <meta name="description" content={page.title} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}
         <PageBuilder sections={page.sections} />
+        {page.content.length > 0 &&
+          <Section className={"content-page"} isContainer={true}>
+            <RichTextComponent text={page.content} />
+          </Section>
+        }
       </main>
     </>
   );
 }
-
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function getServerSideProps(context: GetServerSidePropsContext)

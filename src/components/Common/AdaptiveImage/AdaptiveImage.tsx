@@ -1,4 +1,4 @@
-import { AdaptiveImageProps } from "@/types";
+import { AdaptiveImageProps } from "@/types/Common";
 import { Box } from "@mui/material";
 import Image from "next/image";
 export const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ isMobile, imageUrl, mobileImageUrl, alt, descOffset, mobOffset, objectFit = 'contain' }) =>

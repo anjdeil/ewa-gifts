@@ -1,4 +1,4 @@
-import { defaultAttributesType, ProductAttributesType } from "@/types";
+import { defaultAttributesType, ProductAttributesType } from "@/types/Shop";
 
 export function getDefaultVariation(
     attrName: string,
