@@ -22,7 +22,6 @@ import { HeroSchema, SplitBuild } from "@/types/Common";
 export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
 {
     console.log(sections);
-    console.log(isContainer);
     return (
         <>
             {sections.map((section, index) =>
@@ -160,12 +159,10 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
 
                             return richTextComponent;
                         }
-
                         case "title": {
                             const title = section as TitleBuilder;
                             return <Title title={title.title} isCenter={title.is_center} />
                         }
-
                         default:
                             console.error(`There's not section with this name.`)
                             break;

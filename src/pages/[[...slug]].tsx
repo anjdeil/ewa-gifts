@@ -6,11 +6,12 @@ import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { PageProps } from "@/types/Pages";
-
+import { RichTextComponent } from "@/components/Common/RichTextComponent";
+import { Section } from "@/components/Layouts/Section";
 const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
   if (error || !page) throw new Error(error);
-  console.log(isMain);
+  console.log(page);
 
   return (
     <>
@@ -23,6 +24,11 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
       <main>
         {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}
         <PageBuilder sections={page.sections} />
+        {page.content.length > 0 &&
+          <Section className={"content-page"} isContainer={true}>
+            <RichTextComponent text={page.content} />
+          </Section>
+        }
       </main>
     </>
   );
