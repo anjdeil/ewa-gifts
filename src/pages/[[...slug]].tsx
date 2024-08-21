@@ -37,13 +37,14 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
 export async function getServerSideProps(context: GetServerSidePropsContext)
 {
   const { params } = context;
-  const isMain = Object.keys(params ?? {}).length === 0;
+  let isMain = true;
   let slug = "homepage";
 
-  console.log('SSS', params);
-
-  if (params && params.slug && params.slug[0] !== "index" && params.slug[0] !== "homepage")
+  if (params && params.slug && params.slug[0] !== "index")
+  {
     slug = params.slug[0];
+    isMain = false;
+  }
 
   try
   {
