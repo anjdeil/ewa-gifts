@@ -7,4 +7,9 @@ const CatalogSchema = z.object({
   link_url: z.string().url(),
 });
 
+export const CatalogSchemaBuilder = z.object({
+  catalogs: z.array(CatalogSchema),
+  _type: z.string()
+})
+
 export type CatalogType = z.infer<typeof CatalogSchema>;

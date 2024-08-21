@@ -2,11 +2,13 @@ import { Box } from "@mui/material";
 import { FC, useMemo } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
-import { CartSummaryProps } from "@/types";
+import { CartSummaryProps } from "@/types/Shop";
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 
-export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) => {
-    const link = useMemo(() => {
+export const CartSummary: FC<CartSummaryProps> = ({ order, isLoading }) =>
+{
+    const link = useMemo(() =>
+    {
         return order
             ? `https://new.ewagifts.pl/super-import-2/order-sheet.php?order_id=${order.id}`
             : '/';

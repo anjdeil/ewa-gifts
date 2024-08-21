@@ -1,11 +1,12 @@
-import { BlogItemProps } from "@/types";
+import { BlogItemProps } from "@/types/Blog";
 import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RichTextComponent } from "../../Common/RichTextComponent";
 import styles from './styles.module.scss';
 
-export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
+export const BlogListItem: FC<BlogItemProps> = ({ post }) =>
+{
     return (
         <div key={post.id}>
             <Link href={post.slug} className={styles.blogItem__image}>

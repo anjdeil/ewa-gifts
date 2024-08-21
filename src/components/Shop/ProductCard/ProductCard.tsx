@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
-import { variationsProductType, typeProductType } from "@/types";
+import { variationsProductType, typeProductType } from "@/types/Shop";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
@@ -20,7 +18,7 @@ import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedP
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 
 interface ProductCardPropsType {
-    product: typeProductType
+    product: typeProductType,
 }
 
 type ProductInfoType = {
@@ -294,59 +292,57 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     {productInfo.sku}
                 </p>
             }
-            {((Boolean(sizes.length)) || (Boolean(colors.length))) &&
-                <div className={styles["product-card__calculations"]}>
-                    {(Boolean(colors.length)) &&
-                        <div className={styles['product-card__colors']}>
-                            <Swiper
-                                className="product-card-slider"
-                                slidesPerView={isTablet ? 3 : 6}
-                                spaceBetween={0}
-                                modules={[Navigation]}
-                                navigation={true}
-                            >
-                                {colors.map(color => {
-                                    const { label, cssColor } = transformColorByName(color.name);
-                                    return (
-                                        <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
-                                            <Radio
-                                                onChange={handleChangeColor}
-                                                checked={choosenColor === color.slug}
-                                                inputProps={{ 'aria-label': label }}
-                                                value={color.slug}
-                                                icon={<EwaColorPickIcon color={cssColor} />}
-                                                checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
-                                            />
-                                        </SwiperSlide>
-                                    )
-                                })}
-                            </Swiper>
-                        </div>
-                    }
-                    {(Boolean(sizes.length)) &&
-                        <div className={`size-picks ${styles['product-card__sizes']}`}>
-                            {sizes.map(option => (
-                                <label key={option.slug} className="size-pick">
-                                    <input
-                                        className="size-pick__input"
-                                        type="radio"
-                                        value={option.slug}
-                                        disabled={!checkSizeAvailability(option.slug)}
-                                        checked={checkIsSizeChecked(option.slug)}
-                                        onChange={handleChangeSize}
-                                    />
-                                    <div className="size-pick__island">{option.name}</div>
+            <div className={styles["product-card__calculations"]}>
+                {(Boolean(colors.length)) &&
+                    <div className={styles['product-card__colors']}>
+                        <Swiper
+                            className="product-card-slider"
+                            slidesPerView={isTablet ? 3 : 6}
+                            spaceBetween={0}
+                            modules={[Navigation]}
+                            navigation={true}
+                        >
+                            {colors.map(color => {
+                                const { label, cssColor } = transformColorByName(color.name);
+                                return (
+                                    <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
+                                        <Radio
+                                            onChange={handleChangeColor}
+                                            checked={choosenColor === color.slug}
+                                            inputProps={{ 'aria-label': label }}
+                                            value={color.slug}
+                                            icon={<EwaColorPickIcon color={cssColor} />}
+                                            checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
+                                        />
+                                    </SwiperSlide>
+                                )
+                            })}
+                        </Swiper>
+                    </div>
+                }
+                {(Boolean(sizes.length)) &&
+                    <div className={`size-picks ${styles['product-card__sizes']}`}>
+                        {sizes.map(option => (
+                            <label key={option.slug} className="size-pick">
+                                <input
+                                    className="size-pick__input"
+                                    type="radio"
+                                    value={option.slug}
+                                    disabled={!checkSizeAvailability(option.slug)}
+                                    checked={checkIsSizeChecked(option.slug)}
+                                    onChange={handleChangeSize}
+                                />
+                                <div className="size-pick__island">{option.name}</div>
 
-                                </label>
-                            ))}
-                        </div>
-                    }
-                </div>
-            }
+                            </label>
+                        ))}
+                    </div>
+                }
+            </div>
             {productInfo?.price &&
-                <p className={styles["product-card__price"]}>
+                <p className={"product-price"}>
                     Od {formatPrice(productInfo.price)}
-                    &nbsp;<span className={styles["product-card__price-ending"]}>Bez VAT</span>
+                    &nbsp;<span className={"product-price-ending"}>Bez VAT</span>
                 </p>
             }
             <p className={styles["product-card__stock"]}>

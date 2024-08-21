@@ -3,19 +3,21 @@ import React, { FC, useEffect, useState } from "react";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
-import { typeProductType, variationsProductType } from "@/types";
+import { typeProductType, variationsProductType } from "@/types/Shop";
 import { CartItem } from "@/types/Cart";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import ProductButtons from "../ProductButtons";
 import { updateCart } from "@/store/reducers/CartSlice";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 
-interface ProductCalculations {
+interface ProductCalculations
+{
     product: typeProductType,
     variation?: variationsProductType | null
 }
 
-const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) => {
+const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
+{
     const [currentQuantity, setCurrentQuantity] = useState(1);
     const [targetProductObject, setTargetProductObject] = useState<typeProductType | variationsProductType | undefined>();
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
@@ -29,20 +31,25 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
     const [circulatedPrice, setCirculatedPrice] = useState<number | undefined>()
 
     /* Set product object for circulations */
-    useEffect(() => {
-        if (variation) {
+    useEffect(() =>
+    {
+        if (variation)
+        {
             setTargetProductObject(variation);
-        } else {
+        } else
+        {
             setTargetProductObject(product);
         }
     }, [variation]);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         /* Set product circulations */
         const productPrice = targetProductObject?.price as number || 0;
         const productCirculations = targetProductObject?.price_circulations;
 
-        if (productCirculations) {
+        if (productCirculations)
+        {
             setCirculatedPrices(
                 getCirculatedPrices(productPrice, productCirculations)
             );
@@ -52,48 +59,61 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         setProductStock(targetProductObject?.stock_quantity as number || 0);
     }, [targetProductObject]);
 
-    useEffect(() => {
-        if (circulatedPrices) {
+    useEffect(() =>
+    {
+        if (circulatedPrices)
+        {
             setCirculatedPrice(getCirculatedPrice(currentQuantity, circulatedPrices) || 0);
         }
     }, [currentQuantity, circulatedPrices]);
 
     /* Find and set matched cartItem */
-    useEffect(() => {
-        const cartMatch = cartItems.find(cartItem => {
-            if (cartItem.product_id === product.id) {
-                if (variation) {
+    useEffect(() =>
+    {
+        const cartMatch = cartItems.find(cartItem =>
+        {
+            if (cartItem.product_id === product.id)
+            {
+                if (variation)
+                {
                     if (variation.id === cartItem.variation_id) return true;
-                } else {
+                } else
+                {
                     return true;
                 }
             }
         });
 
-        if (cartMatch) {
+        if (cartMatch)
+        {
             setCurrentQuantity(cartMatch.quantity);
-        } else {
+        } else
+        {
             setCurrentQuantity(1);
         }
 
         setCartMatch(cartMatch);
     }, [variation, cartItems]);
 
-    useEffect(() => {
-        if (circulatedPrice) {
+    useEffect(() =>
+    {
+        if (circulatedPrice)
+        {
             setTotal(circulatedPrice * currentQuantity);
         }
     }, [circulatedPrice, currentQuantity]);
 
     if (!circulatedPrices) return;
 
-    const onChangeQuantity = (inputValue: number) => {
+    const onChangeQuantity = (inputValue: number) =>
+    {
         if (inputValue < 1) setCurrentQuantity(1);
         else if (inputValue > productStock) setCurrentQuantity(productStock);
         else setCurrentQuantity(inputValue);
     }
 
-    const handleAddToCart = () => {
+    const handleAddToCart = () =>
+    {
         dispatch(updateCart({
             id: product.id,
             ...(variation && { variationId: variation.id }),
@@ -103,7 +123,8 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         }));
     }
 
-    const isQuantitiesMatch = () => {
+    const isQuantitiesMatch = () =>
+    {
         if (cartMatch)
             return currentQuantity === cartMatch.quantity;
         return false;

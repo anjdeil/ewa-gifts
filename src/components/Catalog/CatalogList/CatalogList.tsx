@@ -43,9 +43,11 @@ export const CatalogList: FC<CatalogListProps> = ({ catalogs }) =>
               <Image
                 src={catalog.image}
                 alt={catalog.title!}
+                fill
                 objectFit="cover"
                 objectPosition="center"
-                loading="lazy" />
+                loading="lazy"
+              />
             </a>
           </ImageListItem>
         ))}

@@ -1,4 +1,4 @@
-import { defaultAttributesType, variationsProductType } from "@/types";
+import { defaultAttributesType, variationsProductType } from "@/types/Shop";
 import { transformProductSizes } from "../types/Services/transformers/transformProductSizes";
 
 export function filterOptionsByColorName(variations: variationsProductType[], name: string): defaultAttributesType[]

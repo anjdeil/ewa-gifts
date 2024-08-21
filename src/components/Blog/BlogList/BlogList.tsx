@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 import { Grid } from "@mui/material";
 import { BlogListItem } from "../BlogListItem";
-import { BlogItemType, BlogListProps } from "@/types";
+import { BlogItemType, BlogListProps } from "@/types/Blog";
 import { useFetchAllBlogPostsQuery } from "@/store/wordpress";
 import { transformBlogCard } from "@/services/transformers";
 

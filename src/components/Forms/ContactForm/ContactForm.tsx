@@ -5,7 +5,7 @@ import { z } from "zod";
 import { CustomInput } from "../CustomInput";
 import { useSendAnEmailMutation } from "@/store/contactForm7/contactForm7Api";
 import variables from "@/styles/variables.module.scss";
-import { WpWooError } from "@/types";
+import { WpWooError } from "@/types/Services";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 
@@ -22,7 +22,8 @@ const ContactFormSchema = z.object({
 
 type ContactForm = z.infer<typeof ContactFormSchema>;
 
-export default function ContactForm() {
+export default function ContactForm()
+{
     const { register, handleSubmit, reset, formState: { errors, isSubmitting, isSubmitSuccessful } } = useForm<ContactForm>({
         resolver: zodResolver(ContactFormSchema)
     });
@@ -35,7 +36,8 @@ export default function ContactForm() {
         phone,
         email,
         notice,
-    }: ContactForm) => {
+    }: ContactForm) =>
+    {
         const formData = {
             _wpcf7_unit_tag: 'wpcf7-9cea8df-o1',
             'company-name': companyName,
@@ -47,7 +49,8 @@ export default function ContactForm() {
 
         const response = await sendAnEmail({ formId: 237618, formData });
 
-        if (response && 'data' in response) {
+        if (response && 'data' in response)
+        {
             reset();
         }
     }

@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/navigation';
 import 'swiper/css';
 import { Navigation } from 'swiper/modules';
-import { SliderProps } from "@/types";
+import { SliderProps } from "@/types/Sliders";
 import { useMediaQuery } from "@mui/material";
 import { AdaptiveImage } from "@/components/Common/AdaptiveImage";
 import Link from "next/link";
@@ -41,6 +41,7 @@ export const Slider: FC<SliderProps> = ({ slides, height }) =>
                                 alt={slide.text}
                                 descOffset={'30%'}
                                 mobOffset={'100%'}
+                                objectFit={'cover'}
                             />
                         </Link>
                     </SwiperSlide>
