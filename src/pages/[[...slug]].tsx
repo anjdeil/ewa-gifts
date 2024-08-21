@@ -40,7 +40,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext)
   const isMain = Object.keys(params ?? {}).length === 0;
   let slug = "homepage";
 
-  if (params && params.slug && params.slug[0] !== "index")
+  if (params && params.slug && params.slug[0] !== "index" && params.slug[0] !== "homepage")
     slug = params.slug[0];
 
   try
