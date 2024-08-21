@@ -94,7 +94,6 @@ export default function ContactForm()
                 isCheckbox={true}
                 register={register}
                 errors={errors}
-                onChange={(evt) => { console.log(evt.target.value) }}
             />
 
             {(isSubmitSuccessful && !isError) &&

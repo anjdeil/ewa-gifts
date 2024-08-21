@@ -21,7 +21,6 @@ import { HeroSchema, SplitBuild } from "@/types/Common";
 
 export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
 {
-    console.log(sections);
     return (
         <>
             {sections.map((section, index) =>

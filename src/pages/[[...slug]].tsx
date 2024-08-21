@@ -11,7 +11,6 @@ import { Section } from "@/components/Layouts/Section";
 const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
   if (error || !page) throw new Error(error);
-  console.log(page);
 
   return (
     <>
@@ -40,6 +39,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext)
   const { params } = context;
   const isMain = Object.keys(params ?? {}).length === 0;
   let slug = "homepage";
+  console.log('SSSS', params);
 
   if (params && Array.isArray(params.slug) && params.slug.length > 0)
     slug = params.slug[0];
