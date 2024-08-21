@@ -7,6 +7,18 @@
     background-color: $white-lilac;
     font-size: 0.9rem;
 
+    &_danger {
+        background-color: #fce2e2;
+    }
+
+    &_warning {
+        background-color: #fff9b5;
+    }
+
+    &_success {
+        background-color: #d0ffde;
+    }
+
     a {
         color: $text-gray;
         text-decoration: none;

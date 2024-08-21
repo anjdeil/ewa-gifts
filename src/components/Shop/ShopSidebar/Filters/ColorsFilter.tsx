@@ -25,7 +25,7 @@ const ColorsFilter: FC<ColorsFilter> = ({ colors, currentColor, onChangeColor, o
                     const { label, cssColor } = transformColorByName(color.name);
                     return (
                         <Radio
-                            key={color.id}
+                            key={color.slug}
                             onChange={onChangeColor}
                             checked={currentColor === String(color.slug)}
                             inputProps={{ 'aria-label': label }}
