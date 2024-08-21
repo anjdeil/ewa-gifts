@@ -39,9 +39,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext)
   const { params } = context;
   const isMain = Object.keys(params ?? {}).length === 0;
   let slug = "homepage";
-  console.log('SSSS', params);
 
-  if (params && Array.isArray(params.slug) && params.slug.length > 0)
+  if (params && params.slug && params.slug[0] !== "index")
     slug = params.slug[0];
 
   try
