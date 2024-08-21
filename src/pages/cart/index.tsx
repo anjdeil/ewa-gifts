@@ -35,7 +35,7 @@ const Cart = () => {
         fetchProductsCirculations({
             products: shortenedCartItems
         });
-    }, []);
+    }, [fetchProductsCirculations, items]);
 
     useEffect(() => {
         setCartItems(items);

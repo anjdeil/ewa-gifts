@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store";
 import React, { FC } from "react";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -8,15 +8,18 @@ import { updateCart } from "@/store/reducers/CartSlice";
 import formatPrice from "@/Utils/formatPrice";
 import { transformCartItemName } from "@/services/transformers/woocommerce/transformCartItemName";
 
-interface MiniCartItemPropsType {
+interface MiniCartItemPropsType
+{
     cartItem: lineOrderItems,
     showSubtotal?: boolean
 }
 
-const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartItem }) => {
+const MiniCartItem: FC<MiniCartItemPropsType> = ({ showSubtotal = false, cartItem }) =>
+{
     const dispatch = useAppDispatch();
 
-    const deleteCartItem = () => {
+    const deleteCartItem = () =>
+    {
         dispatch(updateCart({
             id: cartItem.product_id,
             ...(cartItem.variation_id && { variationId: cartItem.variation_id }),

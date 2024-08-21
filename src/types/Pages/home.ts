@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { cookieSchema } from "../Cookie";
+import { pageSchema } from "../Services/customApi";
 
-const HomePropsSchema = z.object({
-    response: z.any(),
-    cookies: cookieSchema,
-});
+export const PagePropsSchema = z.object({
+    page: pageSchema,
+    isMain: z.boolean(),
+    error: z.string()
+})
 
-export type HomeProps = z.infer<typeof HomePropsSchema>;
+export type PageProps = z.infer<typeof PagePropsSchema>;

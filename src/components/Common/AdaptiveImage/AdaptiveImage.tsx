@@ -1,7 +1,7 @@
-import { AdaptiveImageProps } from "@/types";
+import { AdaptiveImageProps } from "@/types/Common";
 import { Box } from "@mui/material";
 import Image from "next/image";
-export const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ isMobile, imageUrl, mobileImageUrl, alt, descOffset, mobOffset }) =>
+export const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ isMobile, imageUrl, mobileImageUrl, alt, descOffset, mobOffset, objectFit = 'contain' }) =>
 {
     const src = isMobile && mobileImageUrl ? mobileImageUrl : imageUrl;
     const paddingTop = isMobile ? mobOffset : descOffset;
@@ -11,7 +11,7 @@ export const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ isMobile, imageUrl
                 src={src}
                 alt={alt}
                 style={{
-                    objectFit: 'contain',
+                    objectFit: objectFit,
                 }}
                 sizes={'100% 100%'}
                 fill />

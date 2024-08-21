@@ -1,4 +1,4 @@
-import { RichTextProps } from "@/types";
+import { RichTextProps } from "@/types/Common";
 import Link from "next/link";
 import React, { FC } from "react";
 import styles from './styles.module.scss';

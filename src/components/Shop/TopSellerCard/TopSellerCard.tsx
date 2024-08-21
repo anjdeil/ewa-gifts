@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import { FC } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from "swiper/modules";
@@ -8,19 +5,31 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 import Image from "next/image";
-import { Box, Typography } from "@mui/material";
-import { useFetchProductListQuery } from "@/store/wooCommerce/wooCommerceApi";
-import { transformProductCard } from "@/services/transformers";
+import { Box, styled, Typography } from "@mui/material";
+import { typeProductType } from "@/types/Shop";
+import formatPrice from "@/Utils/formatPrice";
+import Link from "next/link";
+import variables from "@/styles/variables.module.scss";
+import { TopSellerCardSkeleton } from "./TopSellerCardSkeleton";
 
-const swiperStyle = {
-    borderRadius: '10px',
-    backgroundColor: '#fff'
-};
+const CustomSwiper = styled(Swiper)`
+  border-radius: 10px;
+  background-color: #fff;
+
+  .swiper-pagination-bullet {
+        border-radius: 10px;
+        width: 34px;
+        height: 5px;
+        background-color: ${variables.techBg};
+    }
+`;
 
 const boxStyle = {
     display: "flex",
     padding: '40px 20px',
-    alignItems: "center"
+    alignItems: "center",
+    textDecoration: "auto",
+    color: "unset",
 };
 
 const imageBoxStyle = {
@@ -28,51 +37,48 @@ const imageBoxStyle = {
     height: '100%'
 };
 
-export const TopSellerCard: FC = () => {
-    const { data, isError } = useFetchProductListQuery({ per_page: 10 });
 
-    if (!data) {
-        return <div>Products not found.</div>
-    }
+interface TopSellerCardProps
+{
+    products: typeProductType[] | null,
+    isLoading?: boolean
+}
 
-    let products;
-
-    if (data) {
-        products = transformProductCard(data);
-
-    }
-
-    if (isError) {
-        return <h3>Products not found.</h3>
-    }
+export const TopSellerCard: FC<TopSellerCardProps> = ({ products, isLoading }) =>
+{
+    if (isLoading) return <TopSellerCardSkeleton />
 
     return (
-        <Swiper
+        <CustomSwiper
             modules={[Pagination]}
             pagination={{ clickable: true }}
             spaceBetween={50}
             slidesPerView={1}
-            style={swiperStyle}
-            className="top-product-slider"
         >
             {
                 products && products.map((product, index) => (
                     <SwiperSlide key={index}>
-                        <Box style={boxStyle}>
+                        <Link style={boxStyle} href={`/product/${product.slug}`}>
                             <Box width={"50%"}
                                 textAlign={"center"}
                             >
                                 <Typography
                                     component={"h3"}
                                     className="sub-title"
-                                    sx={{
+                                    style={{
                                         textTransform: 'uppercase',
-                                        opacity: 0.5,
+                                        color: variables.textGray,
                                         marginBottom: '30px'
                                     }}
                                 >
                                     {product.name}
                                 </Typography>
+                                {typeof product.price === 'number' &&
+                                    <p className={"product-price"}>
+                                        Od {formatPrice(product.price)}
+                                        &nbsp;<span className={"product-price-ending"}>Bez VAT</span>
+                                    </p>
+                                }
                             </Box>
                             <Box width={"50%"}
                                 position={'relative'}
@@ -84,19 +90,20 @@ export const TopSellerCard: FC = () => {
                                         position: 'relative',
                                     }}>
                                         <Image
-                                            src={product.image}
+                                            src={product.images[0].src}
                                             alt={product.name}
+                                            objectFit="contain"
                                             fill
-                                            style={{ objectFit: 'contain' }}
                                             sizes="min-height: 250px"
+                                            unoptimized={true}
                                         />
                                     </div>
                                 </Box>
                             </Box>
-                        </Box >
+                        </Link >
                     </SwiperSlide>
                 ))
             }
-        </Swiper >
+        </CustomSwiper >
     )
 }

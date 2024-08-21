@@ -1,11 +1,14 @@
 import { z } from "zod";
-import { SliderBuild, TopSellerBuildSchema, productCarouselBuilderSchema } from "../Sliders";
+import { productCarouselBuilderSchema, SliderBuild, TopSellerBuildSchema } from "../Sliders";
 import { AdaptiveImagePropsSchema, CustomTabBuilderSchema, FeaturesBuild, HeroSchema, RichTextPropsSchema, SplitBuild, SplitImage } from "../Common";
+import { CategoryBarsBuildSchema } from "@/components/PageBuilder";
 import { BlogBuildSchema } from "../Blog";
 import { GoogleReviewsBuildSchema } from "../GoogleReviews";
-import { CategoryBarsBuildSchema } from "../Common/CategoryBars";
+import { CatalogSchemaBuilder } from "../Catalog";
+import { TitleBuilderSchema } from "../layouts/Title";
 
-export const PageBuilderSectionSchema = z.union([SliderBuild,
+export const PageBuilderFullSectionsSchema = z.union([
+    SliderBuild,
     FeaturesBuild,
     CategoryBarsBuildSchema,
     HeroSchema,
@@ -17,11 +20,9 @@ export const PageBuilderSectionSchema = z.union([SliderBuild,
     AdaptiveImagePropsSchema,
     RichTextPropsSchema,
     GoogleReviewsBuildSchema,
-    productCarouselBuilderSchema]);
+    productCarouselBuilderSchema,
+    CatalogSchemaBuilder,
+    TitleBuilderSchema
+]);
 
-export const PageBuilderPropsSchema = z.object({
-    sections: z.array(PageBuilderSectionSchema)
-});
-
-export type PageBuilderSection = z.infer<typeof PageBuilderSectionSchema>;
-export type PageBuilderProp = z.infer<typeof PageBuilderPropsSchema>;
+export type PageBuilderSection = z.infer<typeof PageBuilderFullSectionsSchema>;

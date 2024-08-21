@@ -7,7 +7,8 @@ import CatalogButton from '../CatalogButton';
 import HeaderIconButtons from '../HeaderIconButtons';
 import { popupToggle } from '@/store/reducers/PopupSlice';
 
-const Header: React.FC = () => {
+const Header: React.FC = () =>
+{
     const dispatch = useAppDispatch();
 
     return (

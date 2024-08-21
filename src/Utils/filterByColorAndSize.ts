@@ -1,4 +1,4 @@
-import { variationsProductType } from "@/types";
+import { variationsProductType } from "@/types/Shop";
 
 export function filterByColorAndSize(variations: variationsProductType[], currentColor: string, currentSize: string): variationsProductType[]
 {
