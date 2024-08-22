@@ -37,7 +37,7 @@ export const TopSeller: FC = () =>
                 <TopSellerCard products={products} isLoading={isLoading} />
                 <TopSellerCard products={products} isLoading={isLoading} />
             </Box>
-            <ProductCarousel />
+            <ProductCarousel ids='235724, 235689, 235665, 235652' />
         </>
     )
 }
