@@ -8,8 +8,8 @@ import { wpMenuProps } from '@/types';
 import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
 import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
-import { MenusContext } from '@/pages/_app';
 import Link from 'next/link';
+import { MenusContext } from '@/components/Layout/Layout';
 
 export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
     const menus: MenuItemsType[] | undefined = useContext(MenusContext);

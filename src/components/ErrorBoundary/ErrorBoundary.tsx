@@ -1,35 +1,43 @@
 import React, { Component, ErrorInfo } from 'react';
 import ErrorBanner from '@/components/Layouts/ErrorBanner';
 
-interface Props {
+interface Props
+{
     children: React.ReactNode;
 }
 
-interface State {
+interface State
+{
     hasError: boolean;
 }
 
-class ErrorBoundary extends Component<Props, State> {
-    constructor(props: Props) {
+class ErrorBoundary extends Component<Props, State>
+{
+    constructor(props: Props)
+    {
         super(props);
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError() {
+    static getDerivedStateFromError()
+    {
         return { hasError: true };
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    componentDidCatch(error: Error, errorInfo: ErrorInfo)
+    {
         console.error('ErrorBoundary caught an error: ', error, errorInfo);
     }
 
-    removeError = () => {
+    removeError = () =>
+    {
         this.setState({ hasError: false });
-
     }
 
-    render() {
-        if (this.state.hasError) {
+    render()
+    {
+        if (this.state.hasError)
+        {
             return <ErrorBanner />;
         }
 

@@ -1,9 +1,8 @@
-import { PageBuilderPropsSchema } from '@/types';
+import { PageBuilderSectionsSchema } from '@/types';
 import { z } from 'zod';
 
 export const CustomTabsSchema = z.object({
-    sections: PageBuilderPropsSchema,
-    title: z.string(),
+    sections: z.array(PageBuilderSectionsSchema),
     _type: z.string().optional()
 });
 

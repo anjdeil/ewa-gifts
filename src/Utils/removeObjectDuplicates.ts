@@ -1,4 +1,4 @@
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store";
 type LineOrderItemsKey = keyof lineOrderItems;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

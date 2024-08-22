@@ -8,10 +8,13 @@ import { useAppSelector } from "@/hooks/redux";
 import { Skeleton } from "@mui/material";
 import formatPrice from "@/Utils/formatPrice";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
+import Notification from "@/components/Layouts/Notification";
+import { WpWooError } from "@/types/Services/error";
 
 const MiniCartPopup = () => {
-    const [fetchCreateOrder, { data: orderData, isLoading }] = useFetchCreateOrderMutation();
+    const [fetchCreateOrder, { data: orderData, isLoading, isError, error }] = useFetchCreateOrderMutation();
     const { items: cartItems, shippingLines } = useAppSelector(state => state.Cart);
+    const fetchCreateOrderError = error as WpWooError;
 
     useEffect(() => {
         if (cartItems.length === 0) return;
@@ -30,7 +33,10 @@ const MiniCartPopup = () => {
     return (
         <div className={`${styles["mini-cart-popup"]} close-outside`}>
             <div className={styles["mini-cart-popup__content"]}>
-                <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
+                {isError ?
+                    <Notification type="warning">{fetchCreateOrderError?.data?.message}</Notification> :
+                    <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
+                }
             </div>
             <div className={styles["mini-cart-popup__subtotal"]}>
                 <span className={styles["mini-cart-popup__subtotal-title"]}>
@@ -52,7 +58,6 @@ const MiniCartPopup = () => {
                         (subtotal) ?
                             <>{formatPrice(subtotal)}</> :
                             <>—</>
-
                     }
                 </span>
             </div>

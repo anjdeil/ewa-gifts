@@ -1,12 +1,13 @@
 import { FC } from "react";
 import styles from './style.module.scss';
-import { ProductCardListProps } from "@/types";
+import { ProductCardListProps } from "@/types/Shop";
 import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
 import { ProductCard } from "../ProductCard";
 import { useMediaQuery } from "@mui/material";
 
 
-export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns, isShopPage = false }) => {
+export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns, isShopPage = false }) =>
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
 

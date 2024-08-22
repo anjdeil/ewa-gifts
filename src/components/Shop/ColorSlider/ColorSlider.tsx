@@ -4,7 +4,7 @@ import 'swiper/css/navigation';
 import 'swiper/css';
 import { Navigation } from 'swiper/modules';
 import styles from './styles.module.scss';
-import { ColorSliderProps } from "@/types";
+import { ColorSliderProps } from "@/types/Shop";
 import { Radio } from "@mui/material";
 import { EwaColorPickCheckedIcon, EwaColorPickIcon } from "@/components/EwaComponents/EwaColorPickIcons";
 

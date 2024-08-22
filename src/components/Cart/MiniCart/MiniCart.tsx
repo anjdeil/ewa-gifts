@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styles from "./styles.module.scss"
-import { lineOrderItems } from "@/types";
+import { lineOrderItems } from "@/types/store";
 import MiniCartItem from "./MiniCartItem";
 import MiniCartSkeleton from "./MiniCartSkeleton";
 import Notification from "@/components/Layouts/Notification";

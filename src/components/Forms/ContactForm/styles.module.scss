@@ -1,0 +1,27 @@
+@import "@/styles/variables.module.scss";
+
+.contact-form {
+    &__button {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    &__message {
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+
+    &__rules {
+        margin-top: 20px;
+        font-size: 0.9rem;
+
+        a {
+            color: $text-gray;
+            transition: .2s ease;
+
+            &:hover {
+                color: $accent;
+            }
+        }
+    }
+}

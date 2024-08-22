@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import { typeProductType } from "@/types";
+import { typeProductType } from "@/types/Shop";
 import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 import { useMediaQuery } from "@mui/material";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
@@ -16,7 +16,8 @@ import { ProductCardList } from "../ProductCardsList";
 import Notification from "@/components/Layouts/Notification";
 import { StatisticAttributeType } from "@/types/Services/customApi/Attribute/StatisticAttributeType";
 
-interface ArchiveProps {
+interface ArchiveProps
+{
     searchTerm?: string,
     products: typeProductType[],
     categories?: CategoryType[],
@@ -39,7 +40,8 @@ export default function Archive({
     productsCount,
     availableAttributes,
     priceRange
-}: ArchiveProps) {
+}: ArchiveProps)
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const currentCategory = Array.isArray(categories) ? categories[categories.length - 1] as CategoryType : null;
@@ -49,7 +51,8 @@ export default function Archive({
     const popup = useAppSelector(state => state.Popup);
     const router = useRouter();
 
-    const switchPage = (page: number) => {
+    const switchPage = (page: number) =>
+    {
         const { slugs, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 

@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import React from 'react';
 import Link from "next/link";
 import variables from '@/styles/variables.module.scss';
-import { WpWooError } from "@/types";
+import { WpWooError } from "@/types/Services";
 
 const LoginFormSchema = z.object({
     email: z.string().email('Please, type valid email'),

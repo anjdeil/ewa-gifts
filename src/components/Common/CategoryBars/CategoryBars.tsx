@@ -6,33 +6,40 @@ import CategoryBarsSkeleton from "./CategoryBarsSkeleton";
 import styles from "./styles.module.scss";
 import { useMediaQuery } from "@mui/material";
 import MobileCategoryBars from "./MobileCategoryBars";
-import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 import MobileCategoryBarsSkeleton from "./MobileCategoryBarsSkeleton";
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 
-export const CategoryBars = () => {
+export const CategoryBars = () =>
+{
     const isMobile = useMediaQuery('(max-width: 1200px)');
 
     const { data = [], isLoading } = useFetchCategoryListQuery({});
 
-    if (isLoading) {
-        if (isMobile) {
+    if (isLoading)
+    {
+        if (isMobile)
+        {
             return (<MobileCategoryBarsSkeleton />)
-        } else {
+        } else
+        {
             return (<CategoryBarsSkeleton />)
         }
     }
 
     const categories: CategoryType[] = data?.data?.items?.length ?
-        data.data.items.filter((item: CategoryType) => {
+        data.data.items.filter((item: CategoryType) =>
+        {
             if (item.parent_id) return false;
             else if (item.slug === "uncategorized") return false;
             else return true;
         }) : [];
 
 
-    if (isMobile) {
+    if (isMobile)
+    {
         return (<MobileCategoryBars categories={categories} />);
-    } else {
+    } else
+    {
         return (
             <ul className={styles["categories-list"]}>
                 {categories?.map(({ id, name, slug }) => (

@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import ProductCirculations from "../ProductCirculations";
 import ProductTotals from "../ProductTotals";
-import { typeProductType, variationsProductType } from "@/types";
+import { typeProductType, variationsProductType } from "@/types/Shop";
 import { CartItem } from "@/types/Cart";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import ProductButtons from "../ProductButtons";
@@ -27,6 +27,8 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
     const [productStock, setProductStock] = useState<number>(0);
     const [circulatedPrices, setCirculatedPrices] = useState<CirculatedPriceType[] | undefined>();
     const [circulatedPrice, setCirculatedPrice] = useState<number | undefined>()
+    const [minQuantity, setMinQuantity] = useState<number>(1);
+
 
     /* Set product object for circulations */
     useEffect(() => {
@@ -43,9 +45,11 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         const productCirculations = targetProductObject?.price_circulations;
 
         if (productCirculations) {
-            setCirculatedPrices(
-                getCirculatedPrices(productPrice, productCirculations)
-            );
+            const updatedCirculatedPrices = getCirculatedPrices(productPrice, productCirculations);
+            const updatedMinQuantity = updatedCirculatedPrices ? updatedCirculatedPrices[0].from || 1 : 0;
+
+            setCirculatedPrices(updatedCirculatedPrices);
+            setMinQuantity(updatedMinQuantity);
         }
 
         /* Set product stock */
@@ -73,7 +77,7 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
         if (cartMatch) {
             setCurrentQuantity(cartMatch.quantity);
         } else {
-            setCurrentQuantity(1);
+            setCurrentQuantity(minQuantity);
         }
 
         setCartMatch(cartMatch);
@@ -88,7 +92,7 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
     if (!circulatedPrices) return;
 
     const onChangeQuantity = (inputValue: number) => {
-        if (inputValue < 1) setCurrentQuantity(1);
+        if (inputValue < minQuantity) setCurrentQuantity(minQuantity);
         else if (inputValue > productStock) setCurrentQuantity(productStock);
         else setCurrentQuantity(inputValue);
     }
@@ -116,6 +120,7 @@ const ProductCalculations: FC<ProductCalculations> = ({ product, variation }) =>
                 onChangeQuantity={onChangeQuantity}
                 currentQuantity={currentQuantity}
                 circulatedPrices={circulatedPrices}
+                minQuantity={minQuantity}
             />
             {(Boolean(productStock) && circulatedPrice !== undefined && total !== undefined) &&
                 <>

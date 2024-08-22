@@ -11,6 +11,16 @@ const nextConfig = {
     domains: ['new.ewagifts.pl', 'ewagifts.pl'],
   },
   productionBrowserSourceMaps: true,
+  async redirects()
+  {
+    return [
+      {
+        source: '/homepage',
+        destination: '/',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

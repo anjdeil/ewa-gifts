@@ -1,6 +1,7 @@
 @import "@/styles/variables.module.scss";
 
 .product-card {
+    width: 100%;
     background: $white;
     display: flex;
     flex-direction: column;
@@ -29,8 +30,7 @@
     }
 
     &__calculations {
-        padding: 0 5px;
-        width: 100%;
+        width: 110%;
         margin-bottom: 0.8em;
     }
 
@@ -43,15 +43,10 @@
         &-slide {
             display: flex;
             justify-content: center;
-        }
-    }
 
-    &__price {
-        margin-bottom: 0.8em;
-        text-align: center;
-
-        &-ending {
-            color: $text-gray;
+            span {
+                padding: 0;
+            }
         }
     }
 

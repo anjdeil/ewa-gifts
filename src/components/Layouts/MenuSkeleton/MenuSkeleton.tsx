@@ -1,8 +1,9 @@
-import { MenuSkeletonProps } from "@/types";
+import { MenuSkeletonProps } from "@/types/layouts";
 import { Box, Skeleton } from "@mui/material"
 import { FC } from "react";
 
-export const MenuSkeleton: FC<MenuSkeletonProps> = ({ elements, isColumn, width, height, gap }) => {
+export const MenuSkeleton: FC<MenuSkeletonProps> = ({ elements, isColumn, width, height, gap }) =>
+{
     const skeletonItems = Array.from({ length: elements || 0 }).map((_, index) => (
         <Skeleton
             key={index}

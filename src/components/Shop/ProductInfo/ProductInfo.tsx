@@ -22,13 +22,14 @@ import ProductTitling from "../ProductTitling";
 const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const router = useRouter();
     const isTablet = useMediaQuery('(max-width: 1024px)');
-    const { name, description, price, sku, images, attributes, default_attributes, type } = product;
+    const { name, description, price, sku, images, attributes, default_attributes, type, stock_quantity } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
     const [currentPrice, setCurrentPrice] = useState<number | null>(Number(price) || null);
     const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
+    const [currentStock, setCurrentStock] = useState<number>(stock_quantity);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
 
@@ -90,6 +91,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
             setCurrentImages(currentVariation[0].images);
             setCurrentPrice(Number(currentVariation[0].price));
             setCurrentSku(currentVariation[0].sku);
+            setCurrentStock(currentVariation[0].stock_quantity);
             setCurrentVariation(currentVariation[0]);
         }
     }, [currentColor, currentSize, getCurrentVariation, isSimple, product.variations]);
@@ -130,6 +132,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
                             availableSizes={sizes}
                         />}
                 </Box>}
+
+                <div className={styles["product-info__island"]}>
+                    <h3 variant='h3' className={`${styles['product-info__island-title']} ${styles['product-info__stock']}`}>Dostępność:</h3>
+                    <span className={`${styles["product-info__stock-dot"]} ${currentStock && styles['product-info__stock-dot_active']}`}></span>
+                    &nbsp;{currentStock ? `${currentStock} w magazynie` : "Brak w magazynie"}
+                </div>
+
                 <ProductCalculations product={product} variation={currentVariation} />
                 <Box className={styles['product-info__accordionWrapper']}>
                     <AccordionProduct title={'OPIS PRODUKTU'} text={description} />
