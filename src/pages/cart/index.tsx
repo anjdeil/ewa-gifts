@@ -14,6 +14,8 @@ import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { CartItem } from "@/types/Cart";
 import { useFetchProductsCirculationsMutation } from "@/store/custom/customApi";
+import { ProductsCirculationsType } from "@/types/Services/customApi/Product/ProductsCirculationsType";
+import checkCartConflict from "@/Utils/checkCartConflict";
 
 const Cart = () => {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
@@ -66,8 +68,7 @@ const Cart = () => {
         }
     }, [createError]);
 
-    console.log(createError);
-
+    const isCartConflict = checkCartConflict(cartItems, productsSpecs);
 
     const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
@@ -102,7 +103,11 @@ const Cart = () => {
                                     />
                                     {/* <AddCoupon orderId={orderId && orderId} /> */}
                                 </Box>
-                                <CartSummary order={currentOrder} isLoading={isUpdating || isProductsSpecsLoading} />
+                                <CartSummary
+                                    order={currentOrder}
+                                    isLoading={isUpdating || isProductsSpecsLoading}
+                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading}
+                                />
                             </Box>
                     }
                 </Section>

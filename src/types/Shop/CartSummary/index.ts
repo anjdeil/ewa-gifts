@@ -3,7 +3,8 @@ import { z } from "zod";
 
 export const CartSummaryPropsSchema = z.object({
     order: OrderTypeSchema.nullable(),
-    isLoading: z.boolean().optional()
+    isLoading: z.boolean().optional(),
+    disabled: z.boolean().optional()
 });
 
 export const CartSummaryRowPropsSchema = z.object({
