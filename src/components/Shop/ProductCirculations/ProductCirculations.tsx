@@ -9,10 +9,11 @@ interface ProductCirculationsPropsType {
     stock: number,
     onChangeQuantity: (value: number) => void,
     circulatedPrices: circulatedPriceType[],
-    currentQuantity: number
+    currentQuantity: number,
+    minQuantity: number
 }
 
-const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChangeQuantity, circulatedPrices, currentQuantity }) => {
+const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChangeQuantity, circulatedPrices, currentQuantity, minQuantity }) => {
     const lastCirculationQuantity = circulatedPrices.length ? circulatedPrices.at(-1)?.from : 10000;
 
     const circulationMarks = circulatedPrices.map(({ from }) => ({
@@ -42,7 +43,7 @@ const ProductCirculations: FC<ProductCirculationsPropsType> = ({ stock, onChange
                         <div className={styles['circulations-modifier__slider']}>
                             <EwaSlider
                                 marks={circulationMarks}
-                                min={1} max={lastCirculationQuantity}
+                                min={minQuantity} max={lastCirculationQuantity}
                                 getAriaLabel={() => 'Quantity range'}
                                 value={currentQuantity}
                                 onChange={handleSliderChange}

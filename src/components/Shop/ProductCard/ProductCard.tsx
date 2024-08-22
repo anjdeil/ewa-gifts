@@ -4,11 +4,11 @@ import styles from "./styles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import formatPrice from "@/Utils/formatPrice";
-import { AddButton } from "@/components/Buttons";
+import { AddButton, Counter } from "@/components/Buttons";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { updateCart } from "@/store/reducers/CartSlice";
 import { CartItem } from "@/types/Cart";
-import { IconButton, Input, Radio, useMediaQuery } from "@mui/material";
+import { Radio, useMediaQuery } from "@mui/material";
 import { EwaColorPickCheckedIcon, EwaColorPickIcon } from "@/components/EwaComponents/EwaColorPickIcons";
 import { transformColorByName } from "@/services/transformers/woocommerce/transformColorByName";
 import { SwiperSlide, Swiper } from "swiper/react";
@@ -54,12 +54,15 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const [cartMatch, setCartMatch] = useState<CartItem | undefined>();
     const supplier = product?.attributes?.find(({ name }) => name === 'supplier')?.options[0].slug;
     const [circulatedPrices, setCirculatedPrices] = useState<CirculatedPriceType[] | undefined>();
+    const [minQuantity, setMinQuantity] = useState<number>(1);
 
     useEffect(() => {
         if (productInfo?.priceСirculations && productInfo?.price) {
-            setCirculatedPrices(
-                getCirculatedPrices(productInfo.price, productInfo.priceСirculations)
-            );
+            const updatedCirculatedPrices = getCirculatedPrices(productInfo.price, productInfo.priceСirculations);
+            const updatedMinQuantity = updatedCirculatedPrices ? updatedCirculatedPrices[0].from || 1 : 0;
+
+            setCirculatedPrices(updatedCirculatedPrices);
+            setMinQuantity(updatedMinQuantity);
         }
     }, [productInfo]);
 
@@ -186,67 +189,16 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         });
     }
 
-    const handleAddToCart = () => {
+    /* Add to cart */
+    const handleAddToCart = (count: number) => {
         if (!productInfo?.stock) return;
 
-        const circulatedPrice = circulatedPrices && getCirculatedPrice(1, circulatedPrices);
-        const total = circulatedPrice && circulatedPrice * 1;
+        const circulatedPrice = circulatedPrices && getCirculatedPrice(count, circulatedPrices);
+        const total = circulatedPrice && circulatedPrice * count;
 
         dispatch(updateCart({
             id: product.id,
-            quantity: 1,
-            ...(supplier && { supplier }),
-            ...(choosenVariation && { variationId: choosenVariation.id }),
-            ...(total && { total: String(total) })
-        }));
-    }
-
-    const handleChangeQuantity = (evt: ChangeEvent<HTMLInputElement>) => {
-        if (!productInfo?.stock) return;
-
-        let newQuantity = +evt.target.value;
-        if (productInfo.stock < newQuantity) newQuantity = productInfo.stock;
-
-        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
-        const total = circulatedPrice && circulatedPrice * newQuantity;
-
-        dispatch(updateCart({
-            id: product.id,
-            quantity: newQuantity,
-            ...(supplier && { supplier }),
-            ...(choosenVariation && { variationId: choosenVariation.id }),
-            ...(total && { total: String(total) })
-        }));
-    }
-
-    const handleIncrement = () => {
-        if (cartMatch === undefined || !productInfo?.stock) return;
-
-        let newQuantity = cartMatch.quantity + 1;
-        if (productInfo.stock < newQuantity) newQuantity = productInfo.stock;
-
-        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
-        const total = circulatedPrice && circulatedPrice * newQuantity;
-
-        dispatch(updateCart({
-            id: product.id,
-            quantity: newQuantity,
-            ...(supplier && { supplier }),
-            ...(choosenVariation && { variationId: choosenVariation.id }),
-            ...(total && { total: String(total) })
-        }));
-    }
-
-    const handleDecrement = () => {
-        if (cartMatch === undefined) return;
-        const newQuantity = cartMatch.quantity - 1;
-
-        const circulatedPrice = circulatedPrices && getCirculatedPrice(newQuantity, circulatedPrices);
-        const total = circulatedPrice && circulatedPrice * newQuantity;
-
-        dispatch(updateCart({
-            id: product.id,
-            quantity: newQuantity,
+            quantity: count,
             ...(supplier && { supplier }),
             ...(choosenVariation && { variationId: choosenVariation.id }),
             ...(total && { total: String(total) })
@@ -271,6 +223,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         return `${link}${index === 0 ? "?" : "&"}${param}`;
     }, productPageBase);
 
+
     return (
         <div className={styles["product-card"]}>
             <Link className={styles["product-card__link"]} href={productPageLink}>
@@ -292,53 +245,55 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     {productInfo.sku}
                 </p>
             }
-            <div className={styles["product-card__calculations"]}>
-                {(Boolean(colors.length)) &&
-                    <div className={styles['product-card__colors']}>
-                        <Swiper
-                            className="product-card-slider"
-                            slidesPerView={isTablet ? 3 : 6}
-                            spaceBetween={0}
-                            modules={[Navigation]}
-                            navigation={true}
-                        >
-                            {colors.map(color => {
-                                const { label, cssColor } = transformColorByName(color.name);
-                                return (
-                                    <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
-                                        <Radio
-                                            onChange={handleChangeColor}
-                                            checked={choosenColor === color.slug}
-                                            inputProps={{ 'aria-label': label }}
-                                            value={color.slug}
-                                            icon={<EwaColorPickIcon color={cssColor} />}
-                                            checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
-                                        />
-                                    </SwiperSlide>
-                                )
-                            })}
-                        </Swiper>
-                    </div>
-                }
-                {(Boolean(sizes.length)) &&
-                    <div className={`size-picks ${styles['product-card__sizes']}`}>
-                        {sizes.map(option => (
-                            <label key={option.slug} className="size-pick">
-                                <input
-                                    className="size-pick__input"
-                                    type="radio"
-                                    value={option.slug}
-                                    disabled={!checkSizeAvailability(option.slug)}
-                                    checked={checkIsSizeChecked(option.slug)}
-                                    onChange={handleChangeSize}
-                                />
-                                <div className="size-pick__island">{option.name}</div>
+            {(Boolean(colors.length) || Boolean(sizes.length)) &&
+                <div className={styles["product-card__calculations"]}>
+                    {(Boolean(colors.length)) &&
+                        <div className={styles['product-card__colors']}>
+                            <Swiper
+                                className="product-card-slider"
+                                slidesPerView={isTablet ? 3 : 6}
+                                spaceBetween={0}
+                                modules={[Navigation]}
+                                navigation={true}
+                            >
+                                {colors.map(color => {
+                                    const { label, cssColor } = transformColorByName(color.name);
+                                    return (
+                                        <SwiperSlide key={color.slug} className={styles["product-card__color-slider-slide"]}>
+                                            <Radio
+                                                onChange={handleChangeColor}
+                                                checked={choosenColor === color.slug}
+                                                inputProps={{ 'aria-label': label }}
+                                                value={color.slug}
+                                                icon={<EwaColorPickIcon color={cssColor} />}
+                                                checkedIcon={<EwaColorPickCheckedIcon color={cssColor} />}
+                                            />
+                                        </SwiperSlide>
+                                    )
+                                })}
+                            </Swiper>
+                        </div>
+                    }
+                    {(Boolean(sizes.length)) &&
+                        <div className={`size-picks ${styles['product-card__sizes']}`}>
+                            {sizes.map(option => (
+                                <label key={option.slug} className="size-pick">
+                                    <input
+                                        className="size-pick__input"
+                                        type="radio"
+                                        value={option.slug}
+                                        disabled={!checkSizeAvailability(option.slug)}
+                                        checked={checkIsSizeChecked(option.slug)}
+                                        onChange={handleChangeSize}
+                                    />
+                                    <div className="size-pick__island">{option.name}</div>
 
-                            </label>
-                        ))}
-                    </div>
-                }
-            </div>
+                                </label>
+                            ))}
+                        </div>
+                    }
+                </div>
+            }
             {productInfo?.price &&
                 <p className={"product-price"}>
                     Od {formatPrice(productInfo.price)}
@@ -351,30 +306,13 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             </p>
 
             <div className={styles["product-card__swatches"]}>
-                {!cartMatch ?
+                {(!cartMatch || (!productInfo?.stock)) ?
                     <AddButton
-                        onClickHandler={handleAddToCart}
+                        onClickHandler={() => handleAddToCart(minQuantity)}
                         className={styles["product-card__button"]}
                         disabled={!productInfo?.price || !productInfo?.stock}
                     /> :
-                    <div className={styles.counter}>
-                        <IconButton aria-hidden size="large" aria-label="Minus" onClick={handleDecrement} >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 12H19" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </IconButton>
-                        <Input
-                            value={cartMatch.quantity}
-                            onChange={handleChangeQuantity}
-                            className={styles.counter__window}
-                            type="number"
-                        />
-                        <IconButton size="large" aria-label="Plus" onClick={handleIncrement} >
-                            <svg aria-hidden width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 5V19M5 12H19" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </IconButton>
-                    </div>
+                    <Counter value={cartMatch.quantity} min={minQuantity} max={productInfo?.stock || 1} onCountChange={handleAddToCart} />
                 }
             </div>
         </div>
