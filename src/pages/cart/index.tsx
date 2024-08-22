@@ -14,6 +14,7 @@ import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { CartItem } from "@/types/Cart";
 import { useFetchProductsCirculationsMutation } from "@/store/custom/customApi";
+import checkCartConflict from "@/Utils/checkCartConflict";
 
 const Cart = () => {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
@@ -66,8 +67,9 @@ const Cart = () => {
         }
     }, [createError]);
 
-    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
+    const isCartConflict = checkCartConflict(cartItems, productsSpecs);
 
+    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
     return (
         <>
@@ -88,18 +90,24 @@ const Cart = () => {
                                 </p>
                             </Box>
                         </Notification> :
-                        <Box className={styles.Cart__content}>
-                            <Box>
-                                <CartTable
-                                    lineItems={lineItems}
-                                    productsSpecs={productsSpecs}
-                                    cartItems={cartItems}
+                        createError ?
+                            <Notification type="warning">{createError}</Notification> :
+                            <Box className={styles.Cart__content}>
+                                <Box>
+                                    <CartTable
+                                        lineItems={lineItems}
+                                        productsSpecs={productsSpecs}
+                                        cartItems={cartItems}
+                                        isLoading={isUpdating || isProductsSpecsLoading}
+                                    />
+                                    {/* <AddCoupon orderId={orderId && orderId} /> */}
+                                </Box>
+                                <CartSummary
+                                    order={currentOrder}
                                     isLoading={isUpdating || isProductsSpecsLoading}
+                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading}
                                 />
-                                {/* <AddCoupon orderId={orderId && orderId} /> */}
                             </Box>
-                            <CartSummary order={currentOrder} isLoading={isUpdating || isProductsSpecsLoading} />
-                        </Box>
                     }
                 </Section>
             </main>

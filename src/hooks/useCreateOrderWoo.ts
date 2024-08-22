@@ -6,11 +6,11 @@ import { CartItem } from "@/types/Cart";
 import { useCookies } from "react-cookie";
 import { registrationUserDataType } from "@/types/Pages/checkout";
 import { ShippingLine } from "@/store/reducers/CartSlice";
+import { WpWooError } from "@/types";
 
 type OrderStatus = "pending" | "processing" | "on-hold" | "completed" | "cancelled" | "refunded" | "failed";
 
-export const useCreateOrderWoo = () =>
-{
+export const useCreateOrderWoo = () => {
     const dispatch = useAppDispatch();
     const [fetchCreateOrder, { data: createdOrder }] = useFetchCreateOrderMutation();
     const [error, setError] = useState<string | null>(null);
@@ -18,8 +18,7 @@ export const useCreateOrderWoo = () =>
     const [_, setCookie] = useCookies(['orderId']);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-    const createOrder = useCallback(async (items: CartItem[], status: OrderStatus, shipping_lines: ShippingLine[] = [], userFields?: registrationUserDataType | null,) =>
-    {
+    const createOrder = useCallback(async (items: CartItem[], status: OrderStatus, shipping_lines: ShippingLine[] = [], userFields?: registrationUserDataType | null,) => {
         setError(null);
         const fetchCreateOrderBody = {
             line_items: items,
@@ -36,11 +35,9 @@ export const useCreateOrderWoo = () =>
             shipping_lines: shipping_lines
         };
 
-        try
-        {
+        try {
             const createOrderData = await fetchCreateOrder(fetchCreateOrderBody).unwrap();
-            if ('id' in createOrderData)
-            {
+            if ('id' in createOrderData) {
                 setCookie('orderId', createOrderData.id,
                     {
                         path: '/',
@@ -48,14 +45,12 @@ export const useCreateOrderWoo = () =>
                     });
                 dispatch(setCurrentOrder(createOrderData.id));
             }
-        } catch (error)
-        {
-            if (error instanceof Error)
-            {
+        } catch (error) {
+            if (error instanceof Error) {
                 setError(error.message);
-            } else
-            {
-                setError('An unknown error occurred');
+            } else {
+                const createOrderError = error as WpWooError;
+                setError(createOrderError?.data?.message || 'Failed to create order');
             }
             console.error(error, 'Failed to create order');
         }

@@ -11,8 +11,8 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
     const menus: MenuItemsType[] | undefined = useContext(MenusContext);
     const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
-    const iconLinks = menuItems?.filter(({ fa_icon_code }) => fa_icon_code.length > 0) || [];
-    const otherLinks = menuItems?.filter(({ fa_icon_code }) => fa_icon_code.length === 0) || [];
+    const iconLinks = menuItems?.filter(({ fa_icon_code, title }) => fa_icon_code === title) || [];
+    const otherLinks = menuItems?.filter(({ fa_icon_code, title }) => fa_icon_code !== title) || [];
 
     if (!menuItems && skeleton) {
         return (
@@ -30,25 +30,34 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
         <div className={`${styles.socials} ${className && className}`}>
             <nav className="nav">
                 <ul className={`list-reset ${styles.socials__list}`}>
-                    {Boolean(otherLinks?.length) && otherLinks.map(({ title, is_button, url }) => {
+                    {Boolean(otherLinks?.length) && otherLinks.map(({ title, is_button, url, fa_icon_code }) => {
                         switch (true) {
                             case is_button:
                                 return (
-                                    <Link key={title} className={`desc link btn-primary`} href={url}>
+                                    <Link key={title} className={`desc link btn-primary ${styles['socials__link']}`} href={url}>
+                                        {Boolean(fa_icon_code.length) &&
+                                            <Image width={18} height={28} src={`/images/socials/${fa_icon_code}.svg`} alt={fa_icon_code} />
+                                        }
                                         {title}
                                     </Link>
                                 )
 
                             case url === '':
                                 return (
-                                    <p key={title} className={`desc`}>
+                                    <p key={title} className={`desc ${styles['socials__link']}`}>
+                                        {Boolean(fa_icon_code.length) &&
+                                            <Image width={18} height={28} src={`/images/socials/${fa_icon_code}.svg`} alt={fa_icon_code} />
+                                        }
                                         {title}
                                     </p>
                                 )
 
                             default:
                                 return (
-                                    <Link key={title} className={`desc link nav-link `} href={url}>
+                                    <Link key={title} className={`desc link nav-link ${styles['socials__link']}`} href={url}>
+                                        {Boolean(fa_icon_code.length) &&
+                                            <Image width={18} height={28} src={`/images/socials/${fa_icon_code}.svg`} alt={fa_icon_code} />
+                                        }
                                         {title}
                                     </Link>
                                 );

@@ -8,6 +8,7 @@ import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
 import { StatisticAttributeType } from '@/types/Services/customApi/Attribute/StatisticAttributeType';
+import SuppliersFilter from './Filters/SuppliersFilter';
 
 type PriceRange = {
     min: number,
@@ -33,11 +34,54 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
     const currentCategory = categories?.find((category: CategoryType) => category.slug === categorySlug);
 
     /**
+     * suppliers
+     */
+    const supplierAttribute = availableAttributes.find(({ slug }) => slug === "supplier");
+    const suppliers = supplierAttribute?.options;
+    const currentSuppliers = searchParams.get('pa_supplier')?.split(',') || [];
+
+    const handleChangeSupplier = (suppliers: string[]) => {
+        if (suppliers.length <= 0) {
+            resetSupplier();
+            return;
+        }
+
+        const { slugs, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
+
+        const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
+
+        router.push({
+            pathname: router.pathname,
+            query: {
+                slugs: newSlugs,
+                ...params,
+                pa_supplier: suppliers.join(','),
+            }
+        })
+    }
+
+    const resetSupplier = () => {
+        const { slugs, pa_supplier, ...params } = router.query;
+        if (!Array.isArray(slugs)) return;
+
+        const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
+
+        if (pa_supplier) router.push({
+            pathname: router.pathname,
+            query: {
+                slugs: newSlugs,
+                ...params
+            },
+        })
+    }
+
+    /**
      * Colors
      */
     const colorAttribute = availableAttributes.find(({ slug }) => slug === "base_color");
     const colors = colorAttribute?.options;
-    const currentColor = searchParams.get('attribute') === "pa_base_color" ? searchParams.get('attribute_term') : null;
+    const currentColor = searchParams.get('pa_base_color') || null;
 
     const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { slugs, ...params } = router.query;
@@ -50,20 +94,19 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
             query: {
                 slugs: newSlugs,
                 ...params,
-                attribute: 'pa_base_color',
-                attribute_term: event.target.value,
+                pa_base_color: event.target.value,
             }
         })
 
     };
 
     const resetColor = () => {
-        const { slugs, attribute, attribute_term, ...params } = router.query;
+        const { slugs, pa_base_color, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
         const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
 
-        if (attribute || attribute_term) router.push({
+        if (pa_base_color) router.push({
             pathname: router.pathname,
             query: {
                 slugs: newSlugs,
@@ -146,8 +189,14 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
             </FilterCollapsed>
 
             {Array.isArray(colors) && colors.length &&
-                <FilterCollapsed title={"Kolor"} collapsed={false}>
+                <FilterCollapsed title="Kolor" collapsed={false}>
                     <ColorsFilter colors={colors} currentColor={currentColor} onChangeColor={handleChangeColor} onReset={() => resetColor()} />
+                </FilterCollapsed>
+            }
+
+            {Array.isArray(suppliers) && suppliers.length &&
+                <FilterCollapsed title="Dostawca" collapsed={false}>
+                    <SuppliersFilter currentSuppliers={currentSuppliers} suppliers={suppliers} onChangeSupplier={handleChangeSupplier} onReset={() => resetSupplier()} />
                 </FilterCollapsed>
             }
         </>

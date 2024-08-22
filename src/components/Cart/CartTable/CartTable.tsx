@@ -19,17 +19,19 @@ export const CartTable: FC<CartTableProps> = ({ lineItems, productsSpecs, isLoad
     return (
         <Box className={styles.cartTable}>
             <Box className={`${styles.cartTable__row} ${styles.cartTable__row_head}`}>
-                <Box className={`${styles.cartTable__cell}`}>
-                    Produkt
-                </Box>
-                <Box className={`${styles.cartTable__cell}`}>
-                    Cena
-                </Box>
-                <Box className={`${styles.cartTable__cell}`}>
-                    Ilość
-                </Box>
-                <Box className={`${styles.cartTable__cell}`}>
-                    Kwota
+                <Box className={styles.cartTable__content}>
+                    <Box className={`${styles.cartTable__cell}`}>
+                        Produkt
+                    </Box>
+                    <Box className={`${styles.cartTable__cell}`}>
+                        Cena
+                    </Box>
+                    <Box className={`${styles.cartTable__cell}`}>
+                        Ilość
+                    </Box>
+                    <Box className={`${styles.cartTable__cell}`}>
+                        Kwota
+                    </Box>
                 </Box>
             </Box >
             <Box className={styles.cartTable__tableBody}>
