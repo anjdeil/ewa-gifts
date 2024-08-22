@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { Container, Box } from "@mui/material";
@@ -53,7 +51,8 @@ type Props = {
   post: BlogItemType;
 };
 
-export const BlogPost: FC<Props> = ({ post }) => {
+export const BlogPost: FC<Props> = ({ post }) =>
+{
   const { created, title, thumbnail, content } = post;
 
   const transformedDate = transformDate(created);
@@ -66,6 +65,7 @@ export const BlogPost: FC<Props> = ({ post }) => {
     { name: "Blog", url: "/blog" },
     { name: title, url: "" },
   ];
+
   return (
     <Container className={styles.article}>
       <header className={styles.article__header}>
@@ -73,7 +73,7 @@ export const BlogPost: FC<Props> = ({ post }) => {
 
         {day && <time>{`${day} ${month}, ${year}`}</time>}
       </header>
-      <div className={styles.article__img}>
+      <Box className={styles.article__img}>
         <Image
           src={thumbnail}
           alt={title}
@@ -82,13 +82,13 @@ export const BlogPost: FC<Props> = ({ post }) => {
           priority
           unoptimized={true}
         />
-      </div>
-      <div className={styles.article__text_wrapper}>
+      </Box>
+      <Box className={styles.article__text_wrapper}>
         <CustomBox
           dangerouslySetInnerHTML={{ __html: content }}
           className={styles.article__text}
         />
-      </div>
+      </Box>
     </Container>
   );
 };

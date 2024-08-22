@@ -7,6 +7,7 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
 import { Section } from "@/components/Layouts/Section";
 import { BlogItemSchema, BlogItemType } from "@/types";
+import { AxiosResponse } from "axios";
 
 const ArticlePropsSchema = z.object({
   response: BlogItemSchema,
@@ -17,8 +18,10 @@ const ArticlePropsSchema = z.object({
 
 type ArticleProps = z.infer<typeof ArticlePropsSchema>;
 
-const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
-  if (error) {
+const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) =>
+{
+  if (error)
+  {
     throw new Error(error);
   }
 
@@ -38,23 +41,25 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) =>
+{
   const { slug } = context.params!;
 
-  try {
-    const allPostsResponse = await customRestApi.get("posts");
+  try
+  {
+    const { data } = await customRestApi.get("posts") as AxiosResponse;
 
-    if (!allPostsResponse || !allPostsResponse.data)
-      return { props: { error: "Server Error" } };
+    if (!data && !data.data) return { props: { error: "Server Error" } };
 
-    const allPosts: BlogItemType[] = allPostsResponse.data.data.items;
+    const allPosts: BlogItemType[] = data.data.items;
 
     if (allPosts.length === 0)
       return { props: { error: "There are no articles" } };
 
     const currentIndex = allPosts.findIndex((post) => post.slug === slug);
 
-    if (currentIndex === -1) {
+    if (currentIndex === -1)
+    {
       return { notFound: true };
     }
 
@@ -69,7 +74,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         nextPost,
       },
     };
-  } catch (err) {
+  } catch (err)
+  {
     console.error("Error fetching posts:", err);
     return {
       props: {

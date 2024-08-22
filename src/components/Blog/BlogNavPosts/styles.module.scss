@@ -5,7 +5,12 @@
   width: 100%;
   padding: 0 0 93px;
   margin: 0 auto;
+
+  @media screen and (max-width: 768px) {
+    padding: 0 0 40px;
+  }
 }
+
 .nav {
   display: flex;
   justify-content: space-between;
@@ -17,6 +22,7 @@
   @media screen and (max-width: 1024px) {
     border-top: 1px solid $input-light;
   }
+
   @media screen and (max-width: 768px) {
     flex-direction: column;
   }
