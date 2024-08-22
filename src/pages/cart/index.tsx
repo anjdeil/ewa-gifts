@@ -14,7 +14,6 @@ import { lineOrderItems } from "@/types/store/reducers/CartSlice";
 import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { CartItem } from "@/types/Cart";
 import { useFetchProductsCirculationsMutation } from "@/store/custom/customApi";
-import { ProductsCirculationsType } from "@/types/Services/customApi/Product/ProductsCirculationsType";
 import checkCartConflict from "@/Utils/checkCartConflict";
 
 const Cart = () => {
