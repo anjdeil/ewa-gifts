@@ -1,5 +1,3 @@
-// import wpRestApi from "@/services/wordpress/WPRestAPI";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { BlogList } from "@/components/Blog/BlogList";
 import { Loader } from "@/components/Layouts/Loader";
 import { PageHeader } from "@/components/Layouts/PageHeader";
@@ -30,7 +28,11 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogItemType[]>(response);
   const [currentPage, setCurrentPage] = useState<number>(page);
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [initialLoad, setInitialLoad] = useState<boolean>(true);
+
+  if (error) {
+    throw new Error(error);
+  }
 
   const { data: fetchedPosts, isLoading } = useFetchPostsQuery(
     { per_page: perPage, page: currentPage },
@@ -48,10 +50,6 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
       setPosts(fetchedPosts.data?.items || []);
     }
   }, [fetchedPosts]);
-
-  if (error) {
-    throw new Error(error);
-  }
 
   const switchPage = (newPage: number) => {
     const validPage = isNaN(newPage) || newPage <= 0 ? 1 : newPage;
@@ -113,62 +111,50 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let response: BlogItemType[] | null = null;
-  let count: number | null = null;
-  let error: string | null = null;
   const params = context.query;
-  let page: number =
-    typeof params.page === "string" &&
-    !isNaN(Number(params.page)) &&
-    Number(params.page) > 0
-      ? Number(params.page)
-      : 1;
+  const page: number = Number(params.page) > 0 ? Number(params.page) : 1;
 
   try {
     const allPostsResponse = await customRestApi.get(
       `posts?page=${page}&per_page=${perPage}`
     );
 
-    if (allPostsResponse) {
-      if (allPostsResponse.data) {
-        const allPostsData = allPostsResponse.data as {
-          data: {
-            items: BlogItemType[];
-            statistic: {
-              posts_count: number;
-            };
-          };
+    if (!allPostsResponse || !allPostsResponse.data)
+      return { props: { error: "Server Error" } };
+
+    const allPostsData = allPostsResponse.data as {
+      data: {
+        items: BlogItemType[];
+        statistic: {
+          posts_count: number;
         };
+      };
+    };
 
-        const allPosts = allPostsData.data.items;
-        count = allPostsData.data.statistic.posts_count;
+    const response = allPostsData.data.items;
 
-        if (!allPosts.length) {
-          return { notFound: true };
-        }
-        response = allPosts;
-      } else {
-        throw new Error("There are no articles");
-      }
-    } else {
-      throw new Error("Server Error.");
+    if (!response.length) {
+      return { notFound: true };
     }
+
+    const count = allPostsData.data.statistic.posts_count;
+
+    return {
+      props: {
+        response,
+        page,
+        count,
+        error: null,
+      },
+    };
   } catch (err) {
-    if (err instanceof Error) {
-      error = err.message;
-    } else {
-      error = "Server Error.";
-    }
+    console.error("Error fetching posts:", err);
+    return {
+      props: {
+        error: "An unexpected error occurred",
+      },
+    };
   }
-
-  return {
-    props: {
-      response: response ?? null,
-      page,
-      count,
-      error,
-    },
-  };
 };
 
 export default Blog;
