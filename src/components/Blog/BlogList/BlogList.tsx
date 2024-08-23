@@ -1,33 +1,56 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { BlogListItem } from "../BlogListItem";
-import { BlogItemType, BlogListProps } from "@/types";
-import { useFetchAllBlogPostsQuery } from "@/store/wordpress";
-import { transformBlogCard } from "@/services/transformers";
+import { BlogItemType, BlogListProps, WpWooError } from "@/types";
+import styles from "./styles.module.scss";
+import { useFetchPostsQuery } from "@/store/custom/customApi";
+import { Loader } from "@/components/Layouts/Loader";
 
-export const BlogList: FC<BlogListProps> = ({ data }) =>
+const perPage = 4;
+
+export const BlogList: FC<BlogListProps> = ({ data = [] }) =>
 {
-    const { data: fetchedBlogPosts, isError } = useFetchAllBlogPostsQuery(undefined, {
-        skip: !!data,
-    });
+    const [posts, setPosts] = useState<BlogItemType[]>(data);
+    const {
+        data: fetchedPosts,
+        isLoading,
+        isError,
+        error,
+    } = useFetchPostsQuery(
+        { per_page: perPage },
+        {
+            skip: data.length > 0,
+        }
+    );
 
-    const blogPosts = useMemo(() =>
+    useEffect(() =>
     {
-        const posts = data || fetchedBlogPosts || [];
-        return transformBlogCard(posts);
+        if (data.length > 0)
+        {
+            setPosts(data);
+        } else if (fetchedPosts)
+        {
+            setPosts(fetchedPosts.data?.items || []);
+        }
+    }, [data, fetchedPosts]);
 
-    }, [data, fetchedBlogPosts]);
+    const errorMessage = isError
+        ? (error as WpWooError).data?.message || "An error occurred"
+        : undefined;
 
-    if (isError)
-    {
-        return <h3>Blog posts not found.</h3>;
-    }
+    if (isLoading && data.length === 0) return <Loader thickness={5} size={24} />;
+    if (errorMessage && data.length === 0) return <p>Error: {errorMessage}</p>;
 
     return (
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            {blogPosts.map((post: BlogItemType, index: number) => (
-                <Grid item xs={12} sm={6} key={index} style={{ marginBottom: '20px' }}>
-                    <BlogListItem post={post} />
+        <Grid
+            container
+            rowSpacing={{ xs: 3, md: 6 }}
+            columnSpacing={{ sm: "20px" }}
+            className={styles.blogList}
+        >
+            {posts?.map((post: BlogItemType, index: number) => (
+                <Grid item xs={12} sm={6} key={index}>
+                    <BlogListItem post={post} key={post.id} />
                 </Grid>
             ))}
         </Grid>

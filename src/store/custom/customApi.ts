@@ -43,6 +43,12 @@ export const customApi = createApi({
                 }
             })
         }),
+        fetchPosts: build.query({
+            query: (params) => ({
+                url: `/posts`,
+                params,
+            }),
+        }),
     })
 });
 
@@ -52,5 +58,6 @@ export const {
     useFetchCategoryListQuery,
     useFetchAttributeTermsQuery,
     useFetchProductsCirculationsMutation,
-    useFetchMenuItemsListQuery
+    useFetchMenuItemsListQuery,
+    useFetchPostsQuery
 } = customApi;
