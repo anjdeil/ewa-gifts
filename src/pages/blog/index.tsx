@@ -5,7 +5,7 @@ import PagesNavigation from "@/components/Layouts/PagesNavigation";
 import { Section } from "@/components/Layouts/Section";
 import { customRestApi } from "@/services/CustomRestApi";
 import { useFetchPostsQuery } from "@/store/custom/customApi";
-import { BlogItemSchema, BlogItemType } from "@/types";
+import { BlogDataType, BlogItemSchema, BlogItemType } from "@/types";
 import { Box } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -122,14 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!allPostsResponse || !allPostsResponse.data)
       return { props: { error: "Server Error" } };
 
-    const allPostsData = allPostsResponse.data as {
-      data: {
-        items: BlogItemType[];
-        statistic: {
-          posts_count: number;
-        };
-      };
-    };
+    const allPostsData = allPostsResponse.data as BlogDataType;
 
     const response = allPostsData.data.items;
 

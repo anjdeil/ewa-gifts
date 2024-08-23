@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { BlogListItem } from "../BlogListItem";
-import { BlogItemType, BlogListProps } from "@/types";
+import { BlogItemType, BlogListProps, WpWooError } from "@/types";
 import styles from "./styles.module.scss";
 import { useFetchPostsQuery } from "@/store/custom/customApi";
 import { Loader } from "@/components/Layouts/Loader";
@@ -31,8 +31,7 @@ export const BlogList: FC<BlogListProps> = ({ data = [] }) => {
   }, [data, fetchedPosts]);
 
   const errorMessage = isError
-    ? (error as { status?: number; data?: any }).data?.message ||
-      "An error occurred"
+    ? (error as WpWooError).data?.message || "An error occurred"
     : undefined;
 
   if (isLoading && data.length === 0) return <Loader thickness={5} size={24} />;
