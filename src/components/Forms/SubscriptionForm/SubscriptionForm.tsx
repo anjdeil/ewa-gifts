@@ -20,8 +20,9 @@ const SubscriptionFormSchema = z.object({
 
 type SubscriptionFormValues = z.infer<typeof SubscriptionFormSchema>;
 
-export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
-  const [sendAnEmail, { isError, error, data }] = useSendAnEmailMutation();
+export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) =>
+{
+  const [sendAnEmail, { isError, error }] = useSendAnEmailMutation();
 
   const {
     register,
@@ -41,7 +42,8 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
         Zapisz się do naszego newslettera
       </h3>
       <form
-        onSubmit={handleSubmit(async ({ email }) => {
+        onSubmit={handleSubmit(async ({ email }) =>
+        {
           const formData = {
             _wpcf7_unit_tag: "wpcf7-c68d4a7-o1",
             "your-email": email,
@@ -49,7 +51,8 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) => {
 
           const response = await sendAnEmail({ formId, formData });
 
-          if (response && "data" in response) {
+          if (response && "data" in response)
+          {
             reset();
           }
         })}
