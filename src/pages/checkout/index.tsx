@@ -59,10 +59,8 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
 
   // ************start new code****************
 
-  const [
-    fetchProductsCirculations,
-    { data: productsSpecsData, isLoading: isProductsSpecsLoading },
-  ] = useFetchProductsCirculationsMutation();
+  const [fetchProductsCirculations, { data: productsSpecsData }] =
+    useFetchProductsCirculationsMutation();
   const productsSpecs = productsSpecsData?.data
     ? productsSpecsData.data.items
     : [];
@@ -76,10 +74,15 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
       products: shortenedCartItems,
     });
 
-    const isCartConflict = checkCartConflict(items, productsSpecs);
-    console.log("userData...", userData);
-    console.log("isCartConflict...", isCartConflict);
+    // console.log("userData...", userData);
+    // console.log("items...", items);
+    // console.log("shortenedCartItems...", shortenedCartItems);
+    // console.log("productsSpecs...", productsSpecs);
   }, []);
+
+  const isCartConflict = checkCartConflict(items, productsSpecs);
+
+  console.log("isCartConflict...", isCartConflict);
 
   // ************end new code******************
 
@@ -147,11 +150,9 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
       return;
     }
     if (childRef.current) {
-  // ************start new code******************
+      // ************start new code******************
 
-
-  
-  // ************end new code******************
+      // ************end new code******************
 
       childRef.current.submit();
       setErrMessage(false);
