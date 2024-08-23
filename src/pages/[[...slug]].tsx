@@ -39,7 +39,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext)
   const { params } = context;
   let isMain = true;
   let slug = "homepage";
-  console.log('ssss', params);
 
   if (params && params.slug && params.slug[0] !== "index")
   {
