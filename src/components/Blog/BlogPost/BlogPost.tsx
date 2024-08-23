@@ -1,67 +1,95 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 import Image from "next/image";
 import { Container, Box } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
+import { BlogItemType } from "@/types";
+import { FC } from "react";
+import { PageHeader } from "@/components/Layouts/PageHeader";
+import { transformDate } from "@/Utils/transformDateForBlog";
 
 const CustomBox = styled(Box)`
-  .wp-block-image{
-      margin-bottom: 39px;
+  .wp-block-image {
+    margin-bottom: 39px;
+    @media (max-width: 1024px) {
+      margin-bottom: 28px;
+    }
+    @media (max-width: 768px) {
+      margin-bottom: 34px;
+    }
   }
   .wp-block-image img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    display: block;
   }
   .wp-element-caption {
-      margin-top: 12px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 150%;
-      color: #696969;
+    margin-top: 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #696969;
+    @media (max-width: 768px) {
+      margin-top: 8px;
+    }
   }
   .wp-block-group {
-    background-color: #F6F8FC;
+    background-color: #f6f8fc;
     border-radius: 10px;
     padding: 32px;
     margin-bottom: 22px;
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
     & p {
       margin-bottom: 0;
     }
   }
 `;
 
-export const BlogPost = ({ post }) => {
+type Props = {
+  post: BlogItemType;
+};
 
-    const { date, title, image_src, content } = post;
-    const dateTime: Date = new Date(date);
-    const monthsPolish: string[] = [
-        "stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca",
-        "lipca", "sierpnia", "września", "października", "listopada", "grudnia",
-    ];
-    const day: number = dateTime.getDate();
-    const month: string = monthsPolish[dateTime.getMonth()];
-    const year: number = dateTime.getFullYear();
+export const BlogPost: FC<Props> = ({ post }) =>
+{
+  const { created, title, thumbnail, content } = post;
 
-    return (
-        <Container className={styles.article}>
-            <header className={styles.article__header}>
-                <h1 className='sub-title'>
-                    {title.rendered}
-                </h1>
-                <time>
-                    {`${day} ${month}, ${year}`}
-                </time>
-            </header>
-            <div className={styles.article__img}>
-                <Image src={image_src} alt={title.rendered} sx={{ position: 'static' }} width={1135} height={518} priority unoptimized={true} />
-            </div>
-            <div className={styles.article__text_wrapper}>
-                <CustomBox dangerouslySetInnerHTML={{ __html: content.rendered }} className={styles.article__text} />
-            </div>
-        </Container>
-    );
+  const transformedDate = transformDate(created);
+
+  const day = transformedDate?.day ?? null;
+  const month = transformedDate?.month ?? null;
+  const year = transformedDate?.year ?? null;
+
+  const breadLinks = [
+    { name: "Blog", url: "/blog" },
+    { name: title, url: "" },
+  ];
+  return (
+    <Container className={styles.article}>
+      <header className={styles.article__header}>
+        <PageHeader title={title} breadLinks={breadLinks} />
+
+        {day && <time>{`${day} ${month}, ${year}`}</time>}
+      </header>
+      <div className={styles.article__img}>
+        <Image
+          src={thumbnail}
+          alt={title}
+          fill
+          objectFit="cover"
+          priority
+          unoptimized={true}
+        />
+      </div>
+      <div className={styles.article__text_wrapper}>
+        <CustomBox
+          dangerouslySetInnerHTML={{ __html: content }}
+          className={styles.article__text}
+        />
+      </div>
+    </Container>
+  );
 };
