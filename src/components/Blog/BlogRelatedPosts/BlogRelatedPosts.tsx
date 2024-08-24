@@ -4,8 +4,6 @@ import styles from "./styles.module.scss";
 import { BlogList } from "../BlogList";
 import { BlogListProps } from "@/types";
 
-const perPage = 4;
-
 export const BlogRelatedPosts: FC<BlogListProps> = ({ data = [] }) => {
   return (
     <Box className={styles.blogRelatedPosts}>
