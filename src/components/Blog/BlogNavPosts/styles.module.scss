@@ -1,58 +1,58 @@
 @import "@/styles/variables.module.scss";
 
 .wrapper {
-  max-width: 720px;
-  width: 100%;
-  padding: 0 0 93px;
-  margin: 0 auto;
+    max-width: 720px;
+    width: 100%;
+    padding: 0 0 93px;
+    margin: 0 auto;
 }
 .nav {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  row-gap: 16px;
-  align-items: flex-start;
-  padding-top: 14px;
-  border-top: 1px solid $input-light;
-
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
-  }
-
-  &__block {
-    display: inline-flex;
+    display: flex;
+    justify-content: space-between;
     flex-direction: column;
-    grid-gap: 10px;
-    text-align: left;
-    width: 100%;
+    row-gap: 16px;
+    align-items: flex-start;
+    padding-top: 14px;
+    border-top: 1px solid $input-light;
 
-    & span {
-      font-size: 16px;
-      line-height: 24px;
-      font-weight: 400;
-
-      @media screen and (max-width: 768px) {
-        font-size: 14px;
-      }
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
     }
 
-    & a {
-      line-height: 1.2;
-      color: grey;
-      font-weight: 600;
-      font-size: 16px;
-      text-decoration: none;
-
-      @media screen and (max-width: 768px) {
-        font-size: 14px;
-      }
-    }
-    &:last-child {
-      text-align: right;
-
-      @media screen and (max-width: 768px) {
+    &__block {
+        display: inline-flex;
+        flex-direction: column;
+        grid-gap: 10px;
         text-align: left;
-      }
+        width: 100%;
+
+        & span {
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 400;
+
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+            }
+        }
+
+        & a {
+            line-height: 1.2;
+            color: grey;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+            }
+        }
+        &:last-child {
+            text-align: right;
+
+            @media screen and (max-width: 768px) {
+                text-align: left;
+            }
+        }
     }
-  }
 }

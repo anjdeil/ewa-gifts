@@ -5,7 +5,8 @@ import PagesNavigation from "@/components/Layouts/PagesNavigation";
 import { Section } from "@/components/Layouts/Section";
 import { customRestApi } from "@/services/CustomRestApi";
 import { useFetchPostsQuery } from "@/store/custom/customApi";
-import { BlogDataType, BlogItemSchema, BlogItemType } from "@/types";
+import { BlogItemSchema, BlogItemType } from "@/types/Blog";
+import { responseMultipleCustomApi } from "@/types/Services/customApi";
 import { Box } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -14,10 +15,10 @@ import { FC, useEffect, useState } from "react";
 import { z } from "zod";
 
 const BlogPropsSchema = z.object({
-  response: z.array(BlogItemSchema),
-  page: z.number(),
-  count: z.number(),
-  error: z.string().optional(),
+    response: z.array(BlogItemSchema),
+    page: z.number(),
+    count: z.number(),
+    error: z.string().optional(),
 });
 
 const perPage = 10;
@@ -25,129 +26,133 @@ const perPage = 10;
 type BlogProps = z.infer<typeof BlogPropsSchema>;
 
 const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
-  const router = useRouter();
-  const [posts, setPosts] = useState<BlogItemType[]>(response);
-  const [currentPage, setCurrentPage] = useState<number>(page);
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
+    const router = useRouter();
+    const [posts, setPosts] = useState<BlogItemType[]>(response);
+    const [currentPage, setCurrentPage] = useState<number>(page);
+    const [initialLoad, setInitialLoad] = useState<boolean>(true);
 
-  if (error) {
-    throw new Error(error);
-  }
-
-  const { data: fetchedPosts, isLoading } = useFetchPostsQuery(
-    { per_page: perPage, page: currentPage },
-    {
-      skip: initialLoad,
-    }
-  );
-
-  useEffect(() => {
-    setInitialLoad(false);
-  }, []);
-
-  useEffect(() => {
-    if (fetchedPosts) {
-      setPosts(fetchedPosts.data?.items || []);
-    }
-  }, [fetchedPosts]);
-
-  const switchPage = (newPage: number) => {
-    const validPage = isNaN(newPage) || newPage <= 0 ? 1 : newPage;
-
-    const params = { ...router.query };
-
-    if (validPage === 1) {
-      delete params.page;
-    } else {
-      params.page = String(validPage);
+    if (error) {
+        throw new Error(error);
     }
 
-    router.push(
-      {
-        pathname: router.pathname,
-        query: params,
-      },
-      undefined,
-      { shallow: true }
+    const { data: fetchedPosts, isLoading } = useFetchPostsQuery(
+        { per_page: perPage, page: currentPage },
+        {
+            skip: initialLoad,
+        }
     );
 
-    setCurrentPage(newPage);
-  };
+    useEffect(() => {
+        setInitialLoad(false);
+    }, []);
 
-  const pagesCount = Math.ceil(count / perPage);
-  const pageTitle = "Blog";
-  const breadLinks = [{ name: pageTitle, url: "" }];
+    useEffect(() => {
+        if (fetchedPosts) {
+            setPosts(fetchedPosts.data?.items || []);
+        }
+    }, [fetchedPosts]);
 
-  if (isLoading && posts.length === 0)
-    return <Loader thickness={5} size={24} />;
+    const switchPage = (newPage: number) => {
+        const validPage = isNaN(newPage) || newPage <= 0 ? 1 : newPage;
 
-  return (
-    <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={`This is ${pageTitle}`} />
-      </Head>
-      <main>
-        <Section className="container">
-          <PageHeader title={pageTitle} breadLinks={breadLinks} />
-          <BlogList data={posts} />
-          {pagesCount > 1 && (
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <PagesNavigation
-                page={currentPage}
-                count={pagesCount}
-                siblingCount={1}
-                shape="rounded"
-                hidePrevButton
-                hideNextButton
-                onChange={(_, page) => switchPage(page)}
-              />
-            </Box>
-          )}
-        </Section>
-      </main>
-    </>
-  );
+        const params = { ...router.query };
+
+        if (validPage === 1) {
+            delete params.page;
+        } else {
+            params.page = String(validPage);
+        }
+
+        router.push(
+            {
+                pathname: router.pathname,
+                query: params,
+            },
+            undefined,
+            { shallow: true }
+        );
+
+        setCurrentPage(newPage);
+    };
+
+    const pagesCount = Math.ceil(count / perPage);
+    const pageTitle = "Blog";
+    const breadLinks = [{ name: pageTitle, url: "" }];
+
+    if (isLoading && posts.length === 0)
+        return <Loader thickness={5} size={24} />;
+
+    return (
+        <>
+            <Head>
+                <title>{pageTitle}</title>
+                <meta name="description" content={`This is ${pageTitle}`} />
+            </Head>
+            <main>
+                <Section className="container">
+                    <PageHeader title={pageTitle} breadLinks={breadLinks} />
+                    <BlogList data={posts} />
+                    {pagesCount > 1 && (
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <PagesNavigation
+                                page={currentPage}
+                                count={pagesCount}
+                                siblingCount={1}
+                                shape="rounded"
+                                hidePrevButton
+                                hideNextButton
+                                onChange={(_, page) => switchPage(page)}
+                            />
+                        </Box>
+                    )}
+                </Section>
+            </main>
+        </>
+    );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const params = context.query;
-  const page: number = Number(params.page) > 0 ? Number(params.page) : 1;
+    const params = context.query;
+    const page: number = Number(params.page) > 0 ? Number(params.page) : 1;
 
-  try {
-    const allPostsResponse = await customRestApi.get(
-      `posts?page=${page}&per_page=${perPage}`
-    );
+    try {
+        const allPostsResponse = await customRestApi.get(
+            `posts?page=${page}&per_page=${perPage}`
+        );
 
-    if (!allPostsResponse || !allPostsResponse.data)
-      return { props: { error: "Server Error" } };
+        if (!allPostsResponse || !allPostsResponse.data)
+            return { props: { error: "Server Error" } };
 
-    const allPostsData = allPostsResponse.data as BlogDataType;
+        const allPostsData = allPostsResponse.data as responseMultipleCustomApi;
 
-    const response = allPostsData.data.items;
+        const response = allPostsData.data.items;
 
-    if (!response.length) {
-      return { notFound: true };
+        if (!response.length) {
+            return { notFound: true };
+        }
+
+        const count = allPostsData.data.statistic.posts_count;
+
+        return {
+            props: {
+                response,
+                page,
+                count,
+                error: null,
+            },
+        };
+    } catch (err) {
+        console.error("Error fetching posts:", err);
+        return {
+            props: {
+                error: "An unexpected error occurred",
+            },
+        };
     }
-
-    const count = allPostsData.data.statistic.posts_count;
-
-    return {
-      props: {
-        response,
-        page,
-        count,
-        error: null,
-      },
-    };
-  } catch (err) {
-    console.error("Error fetching posts:", err);
-    return {
-      props: {
-        error: "An unexpected error occurred",
-      },
-    };
-  }
 };
 
 export default Blog;
