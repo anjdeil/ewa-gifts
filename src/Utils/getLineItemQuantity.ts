@@ -1,4 +1,4 @@
-import { CartItem } from "@/types";
+import { CartItem } from "@/types/store";
 
 export function getLineItemQuantity(productId: number, lineItems: CartItem[]): number | null
 {

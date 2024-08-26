@@ -8,8 +8,8 @@ const ProductListQueryParamsSchema = z.object({
     min_price: z.string().optional(),
     max_price: z.string().optional(),
     category: z.string().optional(),
-    attribute: z.string().optional(),
-    attribute_term: z.string().optional(),
+    pa_supplier: z.string().optional(),
+    pa_base_color: z.string().optional(),
     search: z.string().optional(),
     include: z.string().optional(),
     slugs: z.string().optional()

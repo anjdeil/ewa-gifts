@@ -8,16 +8,22 @@ input[type=number]::-webkit-outer-spin-button {
 
 .product-card-slider {
 
+    .swiper-wrapper {
+        padding: 5px 0;
+    }
+
     .swiper-button-prev {
         left: -10px;
         color: $text-gray;
         transform: scaleX(0.25) scaleY(0.40);
+        font-weight: bold;
     }
 
     .swiper-button-next {
         right: -10px;
         color: $text-gray;
         transform: scaleX(0.25) scaleY(0.40);
+        font-weight: bold;
     }
 }
 
@@ -144,6 +150,11 @@ input[type=number]::-webkit-outer-spin-button {
     @extend .main-title;
     font-size: 20px;
     text-transform: none;
+
+    &_builder {
+        margin-bottom: 40px;
+        text-transform: uppercase;
+    }
 }
 
 .list-reset {
@@ -275,7 +286,7 @@ input[type=number]::-webkit-outer-spin-button {
     padding-bottom: 30px;
     border: 2px solid $white-lilac;
     border-radius: 10px;
-    height: fit-content;
+    // height: fit-content;
 }
 
 @media(max-width: 1024px) {
@@ -312,6 +323,12 @@ input[type=number]::-webkit-outer-spin-button {
     .desc,
     .sub-title {
         font-size: 14px;
+    }
+
+    .sub-title {
+        &_builder {
+            margin-bottom: 30px;
+        }
     }
 
     .more-link {

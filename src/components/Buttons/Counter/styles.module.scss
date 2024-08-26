@@ -5,6 +5,22 @@
     justify-content: center;
     gap: 10px;
 
+    &_loading {
+        .counter__button {
+            opacity: 0.1;
+        }
+
+        .counter__window {
+            animation-name: opacity-loading;
+            animation-duration: 0.8s;
+            animation-iteration-count: infinite;
+        }
+    }
+
+    &__button {
+        transition: .2s ease;
+    }
+
     &__window {
         min-width: 70px;
         border: none;
@@ -33,5 +49,26 @@
 
     &__window::before {
         display: none;
+    }
+}
+
+@keyframes opacity-loading {
+    0% {
+
+        background-color: rgba(246, 248, 252, 1);
+    }
+
+    50% {
+        background-color: rgba(246, 248, 252, 0.5);
+    }
+
+    100% {
+        background-color: rgba(246, 248, 252, 1);
+    }
+}
+
+@media (max-width: 768px) {
+    .counter {
+        gap: 0px;
     }
 }
