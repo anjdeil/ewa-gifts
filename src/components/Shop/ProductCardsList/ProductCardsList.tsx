@@ -15,7 +15,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
-    const [_, setUserWishlist] = useState([]);
+    // const [_, setUserWishlist] = useState([]);
 
     const dispatch = useAppDispatch();
 
@@ -30,12 +30,12 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
         }
     }, [cookie]);
 
-    useEffect(() => {
-        if (userData) {
-            setUserWishlist(userData.meta.wishlist);
-        }
+    // useEffect(() => {
+    //     if (userData) {
+    //         // setUserWishlist(userData.meta.wishlist);
+    //     }
 
-    }, [userData]);
+    // }, [userData]);
 
     const checkDesired = ({ product_id: checkedProductId, variation_id: checkedVariationId }: WishlistItem) => {
         return localWishlist.some(({ product_id, variation_id }) => product_id === checkedProductId && (!checkedVariationId || variation_id === checkedVariationId));
