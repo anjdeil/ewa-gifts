@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import styles from './style.module.scss';
 import { ProductCardListProps } from "@/types/Shop";
 import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
