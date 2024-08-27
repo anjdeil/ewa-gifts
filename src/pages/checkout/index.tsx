@@ -22,7 +22,6 @@ import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
-import { redirect } from "next/navigation";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
@@ -31,7 +30,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
     const router = useRouter();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
-    // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(userData ? false : true);
     const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
     const [errMessage, setErrMessage] = useState<string | boolean>(false);
