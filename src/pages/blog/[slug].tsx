@@ -1,38 +1,41 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
-import wpRestApi from "@/services/wordpress/wpRestAPI";
 import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
+import { customRestApi } from "@/services/CustomRestApi";
+import { z } from "zod";
+import { Section } from "@/components/Layouts/Section";
+import { BlogItemSchema, BlogItemType } from "@/types";
+import { AxiosResponse } from "axios";
 
-interface ArticleProps
-{
-}
+const ArticlePropsSchema = z.object({
+    response: BlogItemSchema,
+    prevPost: BlogItemSchema.nullable(),
+    nextPost: BlogItemSchema.nullable(),
+    error: z.string().optional(),
+});
 
-const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) =>
+type ArticleProps = z.infer<typeof ArticlePropsSchema>;
+
+const Article: FC<ArticleProps> = ({ response, prevPost, nextPost, error }) =>
 {
-    if (!response)
+    if (error)
     {
-        return <p>Loading...</p>;
+        throw new Error(error);
     }
-    const breadCurrent = {
-        name: response.title.rendered,
-        url: response.link,
-    };
-    console.log(breadCurrent);
+
     return (
         <>
             <Head>
-                <title>{response.title.rendered}</title>
-                <meta name="description" content={response.title.rendered} />
+                <title>{response.title}</title>
+                <meta name="description" content={response.excerpt} />
             </Head>
             <main>
-                <div className="container">
+                <Section className={"container"}>
                     <BlogPost post={response} />
                     <BlogNavPosts prevPost={prevPost} nextPost={nextPost} />
-                </div>
+                </Section>
             </main>
         </>
     );
@@ -41,56 +44,48 @@ const Article: FC<ArticleProps> = ({ response, prevPost, nextPost }) =>
 export const getServerSideProps: GetServerSideProps = async (context) =>
 {
     const { slug } = context.params!;
-    let response;
-    let prevPost = null;
-    let nextPost = null;
 
     try
     {
-        const currentPostResponse = await wpRestApi.get(`posts?slug=${slug}`);
-        if (currentPostResponse.data.length === 0)
+        const { data } = await customRestApi.get("posts") as AxiosResponse;
+
+        if (!data && !data.data) return { props: { error: "Server Error" } };
+
+        const allPosts: BlogItemType[] = data.data.items;
+
+        if (allPosts.length === 0)
+            return { props: { error: "There are no articles" } };
+
+        const currentIndex = allPosts.findIndex((post) => post.slug === slug);
+
+        if (currentIndex === -1)
         {
             return { notFound: true };
         }
 
-        const currentPost = currentPostResponse.data[0];
+        const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+        const nextPost =
+            currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
-        const allPostsResponse = await wpRestApi.get(`posts`);
-        const allPosts = allPostsResponse.data;
-
-        const currentIndex = allPosts.findIndex((post) => post.id === currentPost.id);
-
-        if (currentIndex > 0)
-        {
-            prevPost = allPosts[currentIndex - 1];
-        }
-        if (currentIndex < allPosts.length - 1)
-        {
-            nextPost = allPosts[currentIndex + 1];
-        }
-
-        response = currentPost;
-    } catch (error)
+        return {
+            props: {
+                response: allPosts[currentIndex] || null,
+                prevPost,
+                nextPost,
+            },
+        };
+    } catch (err)
     {
+        console.error("Error fetching posts:", err);
         return {
             props: {
                 response: null,
                 prevPost: null,
                 nextPost: null,
-                error: (error as Error).message,
+                error: "An unexpected error occurred",
             },
         };
     }
-
-    const props = {
-        response,
-        prevPost,
-        nextPost,
-    };
-
-    return {
-        props,
-    };
 };
 
 export default Article;
