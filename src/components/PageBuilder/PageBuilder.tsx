@@ -1,35 +1,31 @@
 
+import { transformBuilderSplitSection } from "@/services/transformers";
+import { HeroSchema, SplitBuild } from "@/types/Common";
+import { TitleBuilder } from "@/types/layouts/Title";
+import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
 import { FC } from "react";
+import { BlogList } from "../Blog/BlogList";
+import { CatalogList } from "../Catalog/CatalogList";
+import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { CategoryBars } from "../Common/CategoryBars";
-import { Slider } from "../Sliders/Slider";
 import { Features } from "../Common/Features";
 import { Hero } from "../Common/Hero";
-import { Split } from "../Common/Split";
-import { transformBuilderSplitSection } from "@/services/transformers";
-import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { RichTextComponent } from "../Common/RichTextComponent";
-import { BlogList } from "../Blog/BlogList";
-import { Section } from "../Layouts/Section";
-import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
+import { Split } from "../Common/Split";
 import { CustomTabs } from "../Common/Tabs";
+import { Section } from "../Layouts/Section";
+import { Title } from "../Layouts/Title";
 import { ProductCarousel } from "../Shop";
 import { TopSeller } from "../Shop/TopSeller";
-import { CatalogList } from "../Catalog/CatalogList";
-import { Title } from "../Layouts/Title";
-import { TitleBuilder } from "@/types/layouts/Title";
-import { HeroSchema, SplitBuild } from "@/types/Common";
+import { Slider } from "../Sliders/Slider";
 
-export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
-{
+export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) => {
     return (
         <>
-            {sections.map((section, index) =>
-            {
+            {sections.map((section, index) => {
                 const key = `${('_type' in section) && section._type}-${index}`;
-                if ('_type' in section)
-                {
-                    switch (section._type)
-                    {
+                if ('_type' in section) {
+                    switch (section._type) {
                         case "slider": {
                             if (!('slider' in section)) break;
                             return (
@@ -42,7 +38,15 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             if (!('features' in section)) break;
                             return (
                                 <Section isContainer={true} className={'features'} key={key}>
-                                    <Features features={section.features} />
+                                    {section.features && <Features features={section.features} />}
+                                </Section>
+                            )
+                        }
+                        case "features_centered": {
+                            if (!('features_centered' in section)) break;
+                            return (
+                                <Section isContainer={true} className={'features'} key={key}>
+                                    {section.features_centered && <Features features={section.features_centered} />}
                                 </Section>
                             )
                         }
@@ -64,8 +68,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                         }
                         case "split":
                         case "split_reversible": {
-                            if ('split' in section || 'split_reversible' in section)
-                            {
+                            if ('split' in section || 'split_reversible' in section) {
                                 const splitSection = section as SplitBuild;
                                 const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
                                 const isReversed = section._type === "split_reversible";
@@ -95,8 +98,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             )
                         }
                         case "blog": {
-                            if ('blog' in section)
-                            {
+                            if ('blog' in section) {
                                 return (
                                     <Section className={'section section_offset'} isContainer={true} key={key}>
                                         <BlogList />
@@ -106,8 +108,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "topseller": {
-                            if ('topseller' in section)
-                            {
+                            if ('topseller' in section) {
                                 return (
                                     <Section className={'topseller'} isContainer={true} key={key}>
                                         <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
@@ -118,8 +119,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "google_reviews": {
-                            if ('google_reviews' in section)
-                            {
+                            if ('google_reviews' in section) {
                                 break;
                             }
                             break;
@@ -132,8 +132,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                                 </Section>
                             )
                         case "split_image":
-                            if ("title" in section && "image" in section)
-                            {
+                            if ("title" in section && "image" in section) {
                                 return <AdaptiveImage
                                     imageUrl={section.image}
                                     alt={section.title}
@@ -163,7 +162,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             return <Title title={title.title} isCenter={title.is_center} />
                         }
                         default:
-                            console.error(`There's not section with this name.`)
+                            console.error(`There's not section with this name. ${section._type}`)
                             break;
                     }
                 }
