@@ -22,7 +22,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
     const { wishlist: localWishlist } = useAppSelector(state => state.Cart);
 
     const [cookie] = useCookies(['userToken']);
-    const [fetchUserData, { data: userData, error }] = useLazyFetchUserDataQuery();
+    const [fetchUserData] = useLazyFetchUserDataQuery();
 
     useEffect(() => {
         if ("userToken" in cookie) {
