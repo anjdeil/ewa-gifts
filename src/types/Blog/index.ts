@@ -1,17 +1,34 @@
 import { z } from "zod";
 
-export const BlogItemSchema = z.object({
-    author: z.string(),
+export const BlogCategorySchema = z.object({
     id: z.number(),
-    categories: z.any(),
+    parent_id: z.number(),
+    name: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+    count: z.number(),
+});
+
+export const BlogItemSchema = z.object({
+    id: z.number(),
+    slug: z.string(),
+    status: z.string(),
+    type: z.string(),
+    parent: z.number(),
+    title: z.string(),
     content: z.string(),
     excerpt: z.string(),
-    date: z.string(),
-    image_src: z.string(),
-    link: z.string(),
-    slug: z.string(),
-    tags: z.any(),
-    title: z.string(),
+    created: z.string(),
+    modified: z.string(),
+    thumbnail: z.string().url(),
+    menu_order: z.number(),
+    categories: z.array(BlogCategorySchema),
+    prev_post: z.string(),
+    next_post: z.string(),
+});
+
+export const BlogStatisticSchema = z.object({
+    posts_count: z.number(),
 });
 
 const BlogListPropsSchema = z.object({
@@ -24,12 +41,13 @@ const BlogItemPropsSchema = z.object({
 
 export const BlogBuildSchema = z.object({
     blog: z.string(),
-    _type: z.string()
+    _type: z.string(),
 });
 
 export const BlogFetchDataSchema = z.array(z.any());
 
-export type BlogItemType = z.infer<typeof BlogItemSchema>
+export type BlogCategoryType = z.infer<typeof BlogCategorySchema>;
+export type BlogItemType = z.infer<typeof BlogItemSchema>;
 export const BlogListSchema = z.array(BlogItemSchema);
 export type BlogListType = z.infer<typeof BlogListSchema>;
 export type BlogListProps = z.infer<typeof BlogListPropsSchema>;
