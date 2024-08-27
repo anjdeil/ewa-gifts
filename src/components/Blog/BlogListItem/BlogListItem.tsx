@@ -1,10 +1,10 @@
 import { BlogItemProps } from "@/types/Blog";
-import { FC } from "react";
+import { transformDate } from "@/Utils/transformDateForBlog";
 import Image from "next/image";
 import Link from "next/link";
+import { FC } from "react";
 import { RichTextComponent } from "../../Common/RichTextComponent";
 import styles from "./styles.module.scss";
-import { transformDate } from "@/Utils/transformDateForBlog";
 
 export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
     const transformedDate = transformDate(post.created);
@@ -20,7 +20,7 @@ export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
                 className={styles.blogItem__image}
             >
                 <Image
-                    src={post.thumbnail}
+                    src={post.thumbnail || '/images/image-plug.jpg'}
                     alt={post.title}
                     fill
                     style={{ objectFit: "cover" }}

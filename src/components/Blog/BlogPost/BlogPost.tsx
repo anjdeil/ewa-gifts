@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
-import styles from "./styles.module.scss";
-import Image from "next/image";
-import { Container, Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { BlogItemType } from "@/types/Blog";
-import { FC } from "react";
 import { transformDate } from "@/Utils/transformDateForBlog";
 import { PageHeader } from "@/components/Layouts/PageHeader";
+import { BlogItemType } from "@/types/Blog";
+import { Box, Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Image from "next/image";
+import { FC } from "react";
+import styles from "./styles.module.scss";
 
 const CustomBox = styled(Box)`
     .wp-block-image {
@@ -76,7 +76,7 @@ export const BlogPost: FC<Props> = ({ post }) => {
             </header>
             <div className={styles.article__img}>
                 <Image
-                    src={thumbnail}
+                    src={thumbnail || '/images/image-plug.jpg'}
                     alt={title}
                     style={{ position: "static" }}
                     width={1135}
