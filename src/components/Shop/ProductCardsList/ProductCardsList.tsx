@@ -15,7 +15,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
-    const [_userWishlist, setUserWishlist] = useState([]);
+    const [_, setUserWishlist] = useState([]);
 
     const dispatch = useAppDispatch();
 
