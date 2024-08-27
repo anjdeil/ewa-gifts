@@ -1,6 +1,11 @@
 import { CartItemSchema } from "@/types/Cart";
 import { z } from "zod";
 
+export const WishlistItemSchema = z.object({
+    product_id: z.number(),
+    variation_id: z.number().optional()
+});
+
 export const lineOrderItemsSchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -31,5 +36,6 @@ const CartSliceInitialStateSchema = z.object({
 
 
 export type CartItem = z.infer<typeof CartItemSchema>
+export type WishlistItem = z.infer<typeof WishlistItemSchema>
 export type lineOrderItems = z.infer<typeof lineOrderItemsSchema>;
 export type CartSliceInitialStateType = z.infer<typeof CartSliceInitialStateSchema>;
