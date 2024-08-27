@@ -20,12 +20,13 @@ import React, { useRef } from 'react';
 import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
 import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
+import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
+import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
+import { redirect } from "next/navigation";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
-const Checkout: FC<CheckoutProps> = ({ userData }) =>
-{
-    // const router = useRouter();
+const Checkout: FC<CheckoutProps> = ({ userData }) => {
     const childRef = useRef<FormHandle>(null);
     const router = useRouter();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
@@ -46,66 +47,56 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     const [fetchCheckUser, { data: jwtUser, error: jwtError }] = useLazyFetchUserDataQuery();
     const [fetchCustomerData, { data: customerData, error: customerError }] = useLazyFetchCustomerDataQuery();
     const pageTitle = 'Składania zamowienia';
+    const [subtotal, setSubtotal] = useState(0);
+    const [isInsufficient, setInsufficient] = useState(false);
 
-    useEffect(() =>
-    {
-        if (items.length === 0)
-        {
+
+    useEffect(() => {
+        if (items.length === 0) {
             router.push('/cart');
-        } else
-        {
+        } else {
             createOrder(items, 'pending', shippingLines);
             setCreating(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items])
 
-    useEffect(() =>
-    {
-        if (createdOrder)
-        {
+    useEffect(() => {
+        if (createdOrder) {
             setCreating(false);
-        } else if (createError)
-        {
+        } else if (createError) {
             setCreating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder])
 
-    useEffect(() =>
-    {
-        if ("userToken" in cookie)
-        {
+    useEffect(() => {
+        if ("userToken" in cookie) {
             fetchCheckUser(cookie.userToken);
             setModalOpen(false);
-        } else
-        {
+        } else {
             setModalOpen(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie])
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (jwtUser && "id" in jwtUser) { fetchCustomerData(jwtUser.id); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [jwtUser])
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (jwtError) alert('Server Error');
     }, [jwtError])
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (customerData) setUserFields(customerData);
         if (customerError) alert('Server Error');
     }, [customerError, customerData])
 
     function onContinueClick() { setModalOpen(false); }
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (isModalOpen)
             document.body.style.overflow = 'hidden';
         else
@@ -114,26 +105,40 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         return () => { document.body.style.overflow = 'unset'; }
     }, [isModalOpen]);
 
-    function onSubmitClick()
-    {
-        if (isSubmitDisabled)
-        {
+    useEffect(() => {
+        if (createdOrder?.line_items) {
+            setSubtotal(getSubtotalByLineItems(createdOrder.line_items));
+        }
+    }, [createdOrder]);
+
+
+    useEffect(() => {
+        if (subtotal) {
+            setInsufficient(subtotal < MIN_SUBTOTAL_TO_CHECKOUT);
+        }
+    }, [subtotal]);
+
+    useEffect(() => {
+        if (isInsufficient) {
+            router.push('/cart');
+        }
+    }, [isInsufficient])
+
+    function onSubmitClick() {
+        if (isSubmitDisabled) {
             setErrMessage("Zaznacz wszystkie zgody.");
             return;
         }
-        if (childRef.current)
-        {
+        if (childRef.current) {
             childRef.current.submit();
             setErrMessage(false);
         }
     }
 
-    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) =>
-    {
+    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
 
-        if (name === 'checkbox1')
-        {
+        if (name === 'checkbox1') {
             const newCheckboxes = {
                 checkbox1: checked,
                 checkbox2: checked,
@@ -142,19 +147,15 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
             };
             setCheckboxes(newCheckboxes);
             setIsSubmitDisabled(!checked);
-        } else
-        {
-            setCheckboxes(prevState =>
-            {
+        } else {
+            setCheckboxes(prevState => {
                 const newCheckboxes = { ...prevState, [name]: checked };
 
                 const allCheckedExceptCheckbox1 = newCheckboxes.checkbox2 && newCheckboxes.checkbox3 && newCheckboxes.checkbox4;
 
-                if (allCheckedExceptCheckbox1)
-                {
+                if (allCheckedExceptCheckbox1) {
                     newCheckboxes.checkbox1 = true;
-                } else if (!checked)
-                {
+                } else if (!checked) {
                     newCheckboxes.checkbox1 = false;
                 }
 
@@ -164,6 +165,8 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
             });
         }
     }
+
+
 
     return (
         <>
@@ -241,25 +244,19 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
-{
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
     let userData = null;
-    if (result && result.id)
-    {
-        try
-        {
+    if (result && result.id) {
+        try {
             const resp = await wooCommerceRestApi.get(`customers/${result.id}`);
             if (!("data" in resp)) userData = { error: 'Server error' };
             userData = resp.data;
 
-        } catch (err)
-        {
-            if (err instanceof Error)
-            {
+        } catch (err) {
+            if (err instanceof Error) {
                 userData = { error: err.message };
-            } else
-            {
+            } else {
                 userData = { error: 'Unknown error' };
             }
         }

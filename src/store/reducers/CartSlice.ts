@@ -1,6 +1,10 @@
+import { getCartItemsFromLocalStorage } from "@/Utils/CartSlice/cartItemsFunctions";
+import { getShippingLinesFromLocalStorage } from "@/Utils/CartSlice/shippingLinesFunctions";
+import { getWishlistFromLocalStorage } from "@/Utils/CartSlice/wishlistFunctions";
 import { availableShippingLines } from "@/Utils/availableShippingLines";
+import { WishlistItem } from "@/types";
 import { CartItem } from "@/types/Cart";
-import { Middleware, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type ShippingLine = {
     method_id: string,
@@ -10,6 +14,7 @@ export type ShippingLine = {
 
 type CartStateType = {
     items: CartItem[],
+    wishlist: WishlistItem[],
     shippingLines: ShippingLine[],
     itemsCount: number
 };
@@ -22,56 +27,9 @@ type UpdateCartPayloadType = {
     total?: string
 };
 
-const saveCartItemsToLocalStorage = (cartItems: CartItem[]) => {
-    if (typeof window !== 'undefined') {
-        const cartItemsJSON = JSON.stringify(cartItems);
-        localStorage.setItem('cartItems', cartItemsJSON);
-    }
-}
-
-const saveShippingLinesToLocalStorage = (shippingLines: ShippingLine[]) => {
-    if (typeof window !== 'undefined') {
-        const shippingLinesJSON = JSON.stringify(shippingLines);
-        localStorage.setItem('shippingLines', shippingLinesJSON);
-    }
-}
-
-const getCartItemsFromLocalStorage = (): CartItem[] | undefined => {
-    if (typeof window !== 'undefined') {
-        const cartItemsJSON = localStorage.getItem('cartItems');
-
-        if (!cartItemsJSON) return undefined;
-
-        const cartItems = JSON.parse(cartItemsJSON);
-        return cartItems;
-    }
-
-    return undefined;
-}
-
-const getShippingLinesFromLocalStorage = (): ShippingLine[] | undefined => {
-    if (typeof window !== 'undefined') {
-        const shippingLinesJSON = localStorage.getItem('shippingLines');
-
-        if (!shippingLinesJSON) return undefined;
-
-        const shippingLines = JSON.parse(shippingLinesJSON);
-        return shippingLines;
-    }
-
-    return undefined;
-}
-
-export const saveCartSliceToLocalStorageMiddleware: Middleware = (store) => (next) => (action) => {
-    const result = next(action);
-    const { items, shippingLines } = store.getState().Cart;
-    saveCartItemsToLocalStorage(items);
-    saveShippingLinesToLocalStorage(shippingLines);
-    return result;
-};
-
 const cartInitialState: CartStateType = {
     items: getCartItemsFromLocalStorage() || [],
+    wishlist: getWishlistFromLocalStorage() || [],
     shippingLines: getShippingLinesFromLocalStorage() || [],
     itemsCount: 0,
 };
@@ -117,13 +75,25 @@ export const CartSlice = createSlice({
         },
         refreshItemsCount: (state) => {
             state.itemsCount = state.items.length;
+        },
+        toggleWishlistItem: (state, { payload }: { payload: WishlistItem }) => {
+            const wishlistItemIndex = state.wishlist.findIndex(({ product_id, variation_id }) => {
+                product_id === payload.product_id && (!payload.variation_id || variation_id === payload.variation_id)
+            });
+
+            if (wishlistItemIndex > 0) {
+                state.wishlist.splice(wishlistItemIndex, 1)
+            } else {
+                state.wishlist.push(payload);
+            }
         }
     }
 });
 
 export const {
     updateCart,
-    refreshItemsCount
+    refreshItemsCount,
+    toggleWishlistItem
 } = CartSlice.actions;
 
 export default CartSlice.reducer;

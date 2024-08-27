@@ -16,9 +16,14 @@ import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
+import WishlistButton from "./wishlistButton";
+import { WishlistItem } from "@/types";
 
 interface ProductCardPropsType {
     product: typeProductType,
+    checkDesired?: (product: WishlistItem) => boolean,
+    desirable?: boolean,
+    onDesire?: (product: WishlistItem) => void
 }
 
 type ProductInfoType = {
@@ -34,7 +39,7 @@ type ProductInfoType = {
     }
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, checkDesired, onDesire }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -315,6 +320,25 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     <Counter value={cartMatch.quantity} min={minQuantity} max={productInfo?.stock || 1} onCountChange={handleAddToCart} />
                 }
             </div>
+
+            {desirable &&
+                <WishlistButton
+                    // onClick={onDesire && onDesire({
+                    //     product_id: product.id,
+                    //     ...(choosenVariation && { variation_id: choosenVariation.id }),
+                    // })}
+                    onClick={() => {
+                        if (onDesire) onDesire({
+                            product_id: product.id,
+                            ...(choosenVariation && { variation_id: choosenVariation.id }),
+                        })
+                    }}
+                    checked={checkDesired && checkDesired({
+                        product_id: product.id,
+                        ...(choosenVariation && { variation_id: choosenVariation.id }),
+                    })}
+                />
+            }
         </div>
     );
 }

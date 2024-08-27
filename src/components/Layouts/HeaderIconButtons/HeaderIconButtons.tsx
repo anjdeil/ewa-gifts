@@ -29,6 +29,19 @@ const HeaderIconButtons = () => {
 
     return (
         <div className={styles["header-icon-buttons"]}>
+
+            <Link href={'/my-account/wishlist'}>
+                <IconButton>
+                    <Image
+                        src={'/images/header-icons/wishlist-icon.svg'}
+                        alt={'Wishlist'}
+                        width={24}
+                        height={24}
+                        unoptimized={true}
+                    />
+                </IconButton>
+            </Link>
+
             <Link href={'/my-account'}>
                 <IconButton>
                     <Image
