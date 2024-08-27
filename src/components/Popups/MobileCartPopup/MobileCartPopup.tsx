@@ -1,13 +1,13 @@
-import variables from "@/styles/variables.module.scss";
-import React, { FC, useEffect } from "react";
-import styles from "./styles.module.scss";
-import MobilePopup from "../MobilePopup";
+import MiniCart from "@/components/Cart/MiniCart";
+import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useAppSelector } from "@/hooks/redux";
 import { useFetchCreateOrderMutation } from "@/store/wooCommerce/wooCommerceApi";
-import MiniCart from "@/components/Cart/MiniCart";
+import variables from "@/styles/variables.module.scss";
 import { Skeleton } from "@mui/material";
 import Link from "next/link";
-import OrderTotals from "@/components/MyAccount/OrderTotals";
+import { FC, useEffect } from "react";
+import MobilePopup from "../MobilePopup";
+import styles from "./styles.module.scss";
 
 interface MobileCartPopupPropsType {
     onClose: () => void
@@ -24,7 +24,7 @@ const MobileCartPopup: FC<MobileCartPopupPropsType> = ({ onClose }) => {
             line_items: cartItems,
             shipping_lines: shippingLines,
             payment_method: "bacs",
-            payment_method_title: "Przelew bandowy"
+            payment_method_title: "Przelew bankowy"
         };
 
         fetchCreateOrder(createOrderRequestBody);
