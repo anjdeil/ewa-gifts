@@ -16,7 +16,7 @@ import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
-import WishlistButton from "./wishlistButton";
+import WishlistButton from "./WishlistButton";
 import { WishlistItem } from "@/types";
 
 interface ProductCardPropsType {
