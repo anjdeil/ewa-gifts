@@ -84,7 +84,7 @@ const MiniCartPopup = () => {
                         variant="rectangular"
                     >
                     </Skeleton> :
-                    isInsufficient ?
+                    isInsufficient || isError ?
                         <div className={styles['mini-cart-popup__order-button-disabled']}>
                             Zamówienie
                         </div> :
