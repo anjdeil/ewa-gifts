@@ -75,6 +75,7 @@ const Cart = () => {
     }, [createError]);
 
     const isCartConflict = checkCartConflict(cartItems, productsSpecs);
+
     const subtotal = lineItems ? getSubtotalByLineItems(lineItems) : null;
     const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
     const insufficientAmount = subtotal ? formatPrice(MIN_SUBTOTAL_TO_CHECKOUT - subtotal) : null;
@@ -116,7 +117,7 @@ const Cart = () => {
                                 <CartSummary
                                     order={currentOrder}
                                     isLoading={isUpdating || isProductsSpecsLoading}
-                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading}
+                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading || isInsufficient}
                                 />
                             </Box>
                     }

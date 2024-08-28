@@ -29,4 +29,13 @@
             font-weight: 600;
         }
     }
+
+    &__order-button-disabled {
+        background-color: $input-darker;
+        padding: 12px 18px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        color: $text-gray;
+        text-align: center;
+    }
 }
