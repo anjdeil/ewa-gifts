@@ -147,7 +147,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
       setIsLoading(false);
     }
   }, [productsSpecs, items]);
-
   // ************end new code******************
 
   useEffect(() =>
@@ -341,7 +340,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                 </Notification>
               ) : (
                 // *************end new code**********
-
                 <Box className={styles.checkout__content}>
                   <Box>
                     <RegistrationForm
