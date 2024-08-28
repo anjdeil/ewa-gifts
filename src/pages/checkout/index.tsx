@@ -128,10 +128,10 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
   useEffect(() =>
   {
+    // Is it possible that items can be empty?
     setProductsSpecs(
       productsSpecsData?.data ? productsSpecsData.data.items : []
     );
-    console.log(productsSpecsData);
   }, [productsSpecsData]);
 
   useEffect(() =>
@@ -140,6 +140,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     {
       const conflict = checkCartConflict(items, productsSpecs);
       if (conflict)
+        // Why do you use message like this?
         setCartErrorMessage(
           "Wystąpił nieoczekiwany konflikt. Proszę wrócić do koszyka"
         );
@@ -233,7 +234,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     if (childRef.current)
     {
       // ************start new code******************
-
       setIsLoading(true);
 
       try
@@ -245,9 +245,8 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
           const conflict = checkCartConflict(items, result);
           if (conflict)
           {
-            setCartErrorMessage(
-              "Wystąpił nieoczekiwany konflikt. Proszę wrócić do koszyka"
-            );
+            // Why do you use message like this?
+            setCartErrorMessage("Wystąpił nieoczekiwany konflikt. Proszę wrócić do koszyka");
           } else
           {
             childRef.current.submit();
@@ -255,14 +254,13 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         }
       } catch (error)
       {
+        // Why do you use this text for the error? Why you don't use the error message?
         setCartErrorMessage("W witrynie wystąpił błąd krytyczny.");
       } finally
       {
         setIsLoading(false);
       }
-
       // ************end new code******************
-
       setErrMessage(false);
     }
   }
@@ -323,14 +321,16 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
           <PageHeader title={pageTitle} breadLinks={breadLinks} />
 
           {/* *************start new code********** */}
-
           {isLoading ? (
             <Loader thickness={5} size={24} />
           ) : (
             <>
               {cartErrorMessage ? (
-                <Notification type="danger">
+                // It's better to use a warning type here.
+                <Notification type="warning">
                   <Box className={styles.Cart__notification}>
+                    {/* Would it be better to use one p instead of two */}
+                    {/* There are two paragraphs all the time, it's not okay */}
                     <p>{cartErrorMessage}</p>
                     <p>
                       <Link href={"/cart"}>
