@@ -16,9 +16,13 @@ import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
+import WishlistButton from "./WishlistButton";
 
 interface ProductCardPropsType {
     product: typeProductType,
+    desirable?: boolean,
+    onDesire?: (productId: number, variationId?: number) => void
+    checkDesired?: (productId: number, variationId?: number) => boolean
 }
 
 type ProductInfoType = {
@@ -34,7 +38,7 @@ type ProductInfoType = {
     }
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, onDesire, checkDesired }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -315,6 +319,12 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     <Counter value={cartMatch.quantity} min={minQuantity} max={productInfo?.stock || 1} onCountChange={handleAddToCart} />
                 }
             </div>
+            {desirable && onDesire &&
+                <WishlistButton
+                    onClick={() => onDesire(product.id, choosenVariation?.id)}
+                    checked={checkDesired && checkDesired(product.id, choosenVariation?.id)}
+                />
+            }
         </div>
     );
 }
