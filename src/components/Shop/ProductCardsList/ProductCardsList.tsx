@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import styles from './style.module.scss';
 import { ProductCardListProps } from "@/types/Shop";
 import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
@@ -6,6 +6,9 @@ import { ProductCard } from "../ProductCard";
 import { useMediaQuery } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { toggleWishlistItem } from "@/store/reducers/CartSlice";
+import { useCookies } from "react-cookie";
+import { useFetchUserUpdateMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
+import { WishlistItem } from "@/types";
 
 
 export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns, isShopPage = false }) => {
@@ -19,33 +22,50 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
         (isTablet && (columns?.tablet !== undefined ? columns.tablet : 4)) ||
         (columns?.desktop !== undefined ? columns.desktop : 4);
 
-    const dispatch = useAppDispatch();
-    const { wishlist } = useAppSelector(state => state.Cart);
+    const [cookie] = useCookies(['userToken']);
+    const [fetchUserData, { data: userData }] = useLazyFetchUserDataQuery();
+    const [fetchUserUpdate] = useFetchUserUpdateMutation();
 
     useEffect(() => {
-        console.log(wishlist);
-
-    }, [wishlist]);
+        if ("userToken" in cookie) {
+            fetchUserData(cookie.userToken);
+        }
+    }, [cookie]);
 
     const handleDisire = (productId: number, variationId?: number) => {
-        dispatch(toggleWishlistItem({
-            product_id: productId,
-            ...(variationId && { variation_id: variationId })
-        }));
-    }
+        if (!userData?.meta?.wishlist || !cookie?.userToken) return;
+        const userWishlist = userData.meta.wishlist || [];
 
-    const checkDesired = (productId: number, variationId?: number): boolean => {
-        const wishlistItem = wishlist.find((item) =>
+        const index = userWishlist.findIndex((item: WishlistItem) =>
             item.product_id === productId && (!variationId || item.variation_id === variationId)
-        );
+        )
 
-        // if (wishlistItem) {
+        let updatedWishlist = null;
 
-        console.log(productId, variationId);
-        // }
+        if (index >= 0) {
+            updatedWishlist = userWishlist.filter((_: WishlistItem, index2: number) => index2 !== index);
+        } else {
+            updatedWishlist = [
+                ...userWishlist,
+                {
+                    product_id: productId,
+                    ...(variationId && { variation_id: variationId })
+                }
+            ]
+        }
 
+        const userUpdateRequestBody = {
+            meta: {
+                wishlist: updatedWishlist
+            }
+        };
 
-        return Boolean(wishlistItem);
+        if ("userToken" in cookie) {
+            fetchUserUpdate({
+                accessToken: cookie.userToken,
+                body: userUpdateRequestBody
+            });
+        }
     }
 
     return (
@@ -61,7 +81,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
                     product={product}
                     desirable
                     onDesire={handleDisire}
-                    checkDesired={checkDesired}
+                    wishlist={userData?.meta?.wishlist}
                 />
             ))}
         </div>

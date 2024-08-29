@@ -17,12 +17,13 @@ import { useSearchParams } from "next/navigation";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 import WishlistButton from "./WishlistButton";
+import { WishlistItem } from "@/types";
 
 interface ProductCardPropsType {
     product: typeProductType,
     desirable?: boolean,
     onDesire?: (productId: number, variationId?: number) => void
-    checkDesired?: (productId: number, variationId?: number) => boolean
+    wishlist?: WishlistItem[]
 }
 
 type ProductInfoType = {
@@ -38,7 +39,7 @@ type ProductInfoType = {
     }
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, onDesire, checkDesired }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, wishlist, onDesire }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -217,6 +218,11 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = fal
         });
     }
 
+    const checkDesired = () =>
+        Boolean(wishlist?.find((item: WishlistItem) =>
+            item.product_id === product.id && (!choosenVariation || item.variation_id === choosenVariation.id)
+        ));
+
     /* Generate link to the product page */
     const productPageBase = `/product/${product.slug}`;
     const productPageParams = [];
@@ -322,7 +328,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = fal
             {desirable && onDesire &&
                 <WishlistButton
                     onClick={() => onDesire(product.id, choosenVariation?.id)}
-                    checked={checkDesired && checkDesired(product.id, choosenVariation?.id)}
+                    checked={checkDesired()}
                 />
             }
         </div>
