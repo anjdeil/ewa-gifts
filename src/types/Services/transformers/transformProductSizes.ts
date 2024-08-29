@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import { defaultAttributesType, ProductAttributesType, ProductOptions } from "@/types";
 import { sortProductSizes } from "../../../Utils/sortProductSizes";
 
 export function transformProductSizes(attrArray: ProductAttributesType[] | defaultAttributesType[]): ProductOptions[] & defaultAttributesType[] | null
 {
+    if (!attrArray || attrArray.length === 0) return null;
+
     const simple = attrArray.filter(attr => "options" in attr);
     const variable = attrArray.filter(attr => "option" in attr);
 
