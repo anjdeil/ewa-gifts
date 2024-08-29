@@ -240,7 +240,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
