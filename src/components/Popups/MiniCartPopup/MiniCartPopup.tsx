@@ -10,6 +10,7 @@ import formatPrice from "@/Utils/formatPrice";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import Notification from "@/components/Layouts/Notification";
 import { WpWooError } from "@/types/Services/error";
+import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
 
 const MiniCartPopup = () => {
     const [fetchCreateOrder, { data: orderData, isLoading, isError, error }] = useFetchCreateOrderMutation();
@@ -29,13 +30,20 @@ const MiniCartPopup = () => {
     }, [cartItems]);
 
     const subtotal = (orderData && cartItems.length) && getSubtotalByLineItems(orderData.line_items);
+    const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
+    const insufficientAmount = subtotal ? formatPrice(MIN_SUBTOTAL_TO_CHECKOUT - subtotal) : null;
 
     return (
         <div className={`${styles["mini-cart-popup"]} close-outside`}>
             <div className={styles["mini-cart-popup__content"]}>
                 {isError ?
                     <Notification type="warning">{fetchCreateOrderError?.data?.message}</Notification> :
-                    <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
+                    <>
+                        {isInsufficient &&
+                            <Notification type="warning">Do złożenia zamówienia brakuje jeszcze {insufficientAmount}.</Notification>
+                        }
+                        <MiniCart isLoading={isLoading} lineItems={orderData?.line_items} isEmpty={cartItems.length === 0} />
+                    </>
                 }
             </div>
             <div className={styles["mini-cart-popup__subtotal"]}>
@@ -62,12 +70,28 @@ const MiniCartPopup = () => {
                 </span>
             </div>
             <div className={styles["mini-cart-popup__buttons"]}>
-                <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/checkout'}>
-                    Zamówienie
-                </Link>
-                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/cart'}>
+                <Link className={`desc link btn-secondary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center', marginBottom: '0.8em' }} href={'/cart'}>
                     Zobacz koszyk
                 </Link>
+                {isLoading ?
+                    <Skeleton
+                        sx={{
+                            backgroundColor: variables.inputDarker,
+                            borderRadius: '10px'
+                        }}
+                        width={"100%"}
+                        height={"2.8em"}
+                        variant="rectangular"
+                    >
+                    </Skeleton> :
+                    isInsufficient || isError ?
+                        <div className={styles['mini-cart-popup__order-button-disabled']}>
+                            Zamówienie
+                        </div> :
+                        <Link className={`desc link btn-primary ${styles["mini-cart__button"]}}`} style={{ display: "block", textAlign: 'center' }} href={'/checkout'}>
+                            Zamówienie
+                        </Link>
+                }
             </div>
         </div >
     );

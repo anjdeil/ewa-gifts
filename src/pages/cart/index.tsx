@@ -15,6 +15,11 @@ import { OrderType } from "@/types/Services/woocommerce/OrderType";
 import { CartItem } from "@/types/Cart";
 import { useFetchProductsCirculationsMutation } from "@/store/custom/customApi";
 import checkCartConflict from "@/Utils/checkCartConflict";
+import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
+import formatPrice from "@/Utils/formatPrice";
+import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
+
+const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
 const Cart = () => {
     const { items, shippingLines } = useAppSelector(state => state.Cart);
@@ -26,6 +31,8 @@ const Cart = () => {
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const [cartItems, setCartItems] = useState<CartItem[]>([])
+    // const [subtotal, setSubtotal] = useState<number | null>(null);
+    // const [isInsufficient, setInsufficient] = useState(false);
 
     /* Fetch circulations */
     useEffect(() => {
@@ -69,7 +76,9 @@ const Cart = () => {
 
     const isCartConflict = checkCartConflict(cartItems, productsSpecs);
 
-    const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
+    const subtotal = lineItems ? getSubtotalByLineItems(lineItems) : null;
+    const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
+    const insufficientAmount = subtotal ? formatPrice(MIN_SUBTOTAL_TO_CHECKOUT - subtotal) : null;
 
     return (
         <>
@@ -94,6 +103,9 @@ const Cart = () => {
                             <Notification type="warning">{createError}</Notification> :
                             <Box className={styles.Cart__content}>
                                 <Box>
+                                    {isInsufficient &&
+                                        <Notification type="warning">Do złożenia zamówienia brakuje jeszcze {insufficientAmount}.</Notification>
+                                    }
                                     <CartTable
                                         lineItems={lineItems}
                                         productsSpecs={productsSpecs}
@@ -105,7 +117,7 @@ const Cart = () => {
                                 <CartSummary
                                     order={currentOrder}
                                     isLoading={isUpdating || isProductsSpecsLoading}
-                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading}
+                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading || isInsufficient}
                                 />
                             </Box>
                     }

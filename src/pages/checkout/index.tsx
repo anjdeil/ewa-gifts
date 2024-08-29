@@ -20,17 +20,17 @@ import React, { useRef } from 'react';
 import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
 import { useRouter } from "next/router";
 import { CustomInput } from "@/components/Forms/CustomInput";
+import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
+import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
 
 const breadLinks = [{ name: 'Składania zamowienia', url: '/checkout' }];
 
 const Checkout: FC<CheckoutProps> = ({ userData }) =>
 {
-    // const router = useRouter();
     const childRef = useRef<FormHandle>(null);
     const router = useRouter();
     const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
-    // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(userData ? false : true);
     const [userFields, setUserFields] = useState<userFieldsType | null>(userData ? userData : null);
     const [errMessage, setErrMessage] = useState<string | boolean>(false);
@@ -165,6 +165,11 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         }
     }
 
+    const subtotal = createdOrder?.line_items ? getSubtotalByLineItems(createdOrder.line_items) : null;
+    const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
+    if (isInsufficient) router.push('/cart');
+
+
     return (
         <>
             <Head>
@@ -240,6 +245,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
     const result = await checkUserTokenInServerSide('/', context, 'userToken');
