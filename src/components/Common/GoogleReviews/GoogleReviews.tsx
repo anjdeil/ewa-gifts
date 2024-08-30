@@ -49,9 +49,8 @@ export default function GoogleReviews() {
                     }}
                 >
                     {reviews.map(({ photo, name, authorUrl, rating, text }) =>
-                        <SwiperSlide>
+                        <SwiperSlide key={name}>
                             <Review
-                                key={name}
                                 authorUrl={authorUrl}
                                 photo={photo}
                                 name={name}
