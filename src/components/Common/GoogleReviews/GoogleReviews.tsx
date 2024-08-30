@@ -24,7 +24,6 @@ export default function GoogleReviews() {
     }, []);
 
     const reviews = data?.reviews ? transformGoogleReviews(data.reviews) : [];
-    console.log(reviews);
 
     return (
         <>
