@@ -13,8 +13,9 @@ import { transformColorsArray } from "@/services/transformers/woocommerce/transf
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
 import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
-import { filterBySizes } from "@/Utils/filterBySizes";
-import { filterByColor } from "@/Utils/filterByColor";
+import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
+import { filterByCurrentAttr } from "@/Utils/filterByCurrentAttr";
+import { findOrDefault } from "@/Utils/findOrDefault";
 import { useRouter } from "next/router";
 import formatPrice from "@/Utils/formatPrice";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
@@ -59,8 +60,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     useEffect(() =>
     {
         if (color) setCurrentColor(color as string);
-        if (size) setCurrentSize(size as string);
-    }, [color, size]);
+        if (size, sizes) setCurrentSize(findOrDefault(sizes, size).option);
+    }, [color, size, sizes]);
 
     function onColorChange(checkedColor: string): void 
     {
@@ -79,7 +80,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
         const variations = currentColor
             ? filterOptionsByColorName(product.variations, currentColor)
-            : filterBySizes(product.variations);
+            : filterOptionsBySize(product.variations);
 
         if (variations)
         {
@@ -89,19 +90,20 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     const getCurrentVariation = useCallback(() =>
     {
-        if (currentSize)
+        if (currentColor && currentSize)
         {
             return filterByColorAndSize(product.variations, currentColor as string, currentSize);
         } else
         {
             const attrName = allSizes?.length ? 'size' : 'color';
-            return filterByColor(product.variations, currentColor as string, attrName);
+            const currentAttr = allSizes?.length ? currentSize : currentColor;
+            return filterByCurrentAttr(product.variations, currentAttr as string, attrName);
         }
     }, [currentColor, currentSize, allSizes, product.variations]);
 
     useEffect(() =>
     {
-        if (!product.variations || isSimple || !currentColor) return;
+        if (!product.variations || isSimple) return;
 
         const currentVariation = getCurrentVariation();
         if (currentVariation && currentVariation.length > 0)
