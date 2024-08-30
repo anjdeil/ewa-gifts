@@ -1,9 +1,9 @@
 import { customRestApi } from "@/services/CustomRestApi";
+import { AxiosRequestHeaders } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse)
 {
-
     const { path, ...params } = req.query;
 
     if (!path?.length)
@@ -13,18 +13,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const slug = typeof path === 'string' ? path : path.join('/');
 
+    const { method, body, headers } = req;
+    let response;
 
     try
     {
-        if (req.method === "POST")
+        switch (method)
         {
-            const response = await customRestApi.post(slug, req.body);
-            res.status(200).json(response?.data);
-        } else
-        {
-            const response = await customRestApi.get(slug, params);
-            res.status(200).json(response?.data);
+            case 'POST':
+                response = await customRestApi.post(slug, body, headers as AxiosRequestHeaders);
+                break;
+            case 'GET':
+                response = await customRestApi.get(slug, params, headers as AxiosRequestHeaders);
+                break;
+            default:
+                res.setHeader('Allow', ['POST', 'GET']);
+                return res.status(405).end(`Method ${method} Not Allowed`);
         }
+
+        if (response && response.data)
+            res.status(200).json(response?.data);
+
     } catch (error)
     {
         res.status(500);

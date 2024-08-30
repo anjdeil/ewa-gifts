@@ -28,19 +28,41 @@ export class WpRestApi
 
     async getResource(url: string, params?: paramsType, authorization?: string | null): Promise<AxiosResponse<unknown>>
     {
-        const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
-            params: params,
-            headers: {
-                Authorization: authorization ? authorization : this.getBasicAuth()
-            }
-        })
+        const maxRetries = 3;
+        let attempt = 0;
 
-        if (response.status !== 200)
+        while (attempt < maxRetries)
         {
-            throw new Error(`Could not fetch ${url}, received ${response.status}`)
+            try
+            {
+                const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
+                    params: params,
+                    headers: {
+                        Authorization: authorization ? authorization : this.getBasicAuth(),
+                    },
+                });
+
+                if (response.status >= 200 && response.status < 300)
+                {
+                    return response;
+                } else if (response.status === 400)
+                {
+                    throw new Error(`Bad request: ${response.statusText}`);
+                } else
+                {
+                    attempt++;
+                }
+            } catch (error)
+            {
+                attempt++;
+                if (attempt >= maxRetries)
+                {
+                    throw new Error(`Could not fetch ${url}, received ${error}`);
+                }
+            }
         }
 
-        return response;
+        throw new Error(`Failed to fetch ${url} after ${maxRetries} attempts`);
     }
 
     async get(url: string, params?: paramsType, authorization?: string | null)
@@ -48,6 +70,12 @@ export class WpRestApi
         const result = await this.getResource(url, params, authorization);
         return result;
     }
+
+    // async put(url: string, body: object, authorization?: string | null,)
+    // {
+    //     // const result = await this.getResource(url, params, authorization);
+    //     // return result;
+    // }
 }
 
 const wpRestApi = new WpRestApi(authConfig);

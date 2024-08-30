@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default function handler(req: NextApiRequest, res: NextApiResponse)
 {
     const { ...params } = req.query;
-    const headers = req.headers;
     const authorization = "authorization" in headers ? headers.authorization : null;
     let slug = req.query.path;
 
@@ -19,10 +18,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse)
         slug = slug.join('/');
     }
 
-    wpRestApi.get(slug, params, authorization)
-        .then((response) => res.status(200).json(response.data))
-        .catch((error) =>
+    const { method, body, headers } = req;
+    try
+    {
+        if (method !== "GET")
         {
-            validateApiError(error, res);
-        })
+            wpRestApi.get(slug, params, headers)
+        } else
+        {
+            wpRestApi.get(slug, params, body, headers)
+        }
+    } catch (error) 
+    {
+        validateApiError(error, res);
+    }
 }
