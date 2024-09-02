@@ -60,7 +60,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     useEffect(() =>
     {
         if (color) setCurrentColor(color as string);
-        if (size, sizes) setCurrentSize(findOrDefault(sizes, size).option);
+        if (size && sizes) setCurrentSize(findOrDefault(sizes, size).option);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
