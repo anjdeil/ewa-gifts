@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const contactForm7Api = createApi({
     reducerPath: 'contactForm7Api',
-    baseQuery: fetchBaseQuery({ baseUrl: 'api/contact-form' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/contact-form' }),
     endpoints: (build) => ({
         sendAnEmail: build.mutation({
             query: ({ formId, formData }) => ({

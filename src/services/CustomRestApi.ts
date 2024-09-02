@@ -1,48 +1,70 @@
+import { paramsType, method } from "@/types/Services";
 import axios, { AxiosResponse } from "axios";
 
 class CustomRestApi
 {
-    private readonly _apiBase = `${process.env.REST_API_URL}/api/v2/`;
-
-    async get(url: string, params?: Record<string, string[] | string | number | undefined>): Promise<AxiosResponse | undefined>
+    private readonly _apiBase: string;
+    constructor()
     {
-        for (let i = 0; i < 3; i++)
+        if (!process.env.REST_API_URL)
+        {
+            throw new Error("REST_API_URL environment variable is not defined");
+        }
+        this._apiBase = `${process.env.REST_API_URL}/api/v2/`;
+    }
+
+    async getResource(url: string, method: method, params?: paramsType, body?: object): Promise<AxiosResponse<unknown>>
+    {
+        const maxRetries = 3;
+        let attempt = 0;
+        console.log("Requesting:", this._apiBase + url);
+
+        while (attempt < maxRetries)
         {
             try
             {
-                const response: AxiosResponse = await axios.get(this._apiBase + url, {
-                    params: params
+                const response: AxiosResponse<unknown> = await axios({
+                    method: method,
+                    url: this._apiBase + url,
+                    params: params,
+                    data: body
                 });
 
-                if (response.status !== 200)
+                if (response.status >= 200 && response.status < 300)
                 {
-                    throw new Error(`Could not fetch ${url}, received ${response.status}`);
+                    return response;
+                } else if (response.status === 400)
+                {
+                    throw new Error(`Bad request: ${response.statusText}`);
+                } else
+                {
+                    attempt++;
                 }
-                return response;
+
             } catch (error)
             {
-                console.log(error);
+                attempt++;
+                if (attempt >= maxRetries)
+                {
+                    console.error("Error during request:", error);
+                    throw new Error(`Could not fetch ${this._apiBase + url}, received ${(error as Error).message}`);
+                }
             }
         }
+
+        throw new Error(`Failed to fetch ${url} after ${maxRetries} attempts`);
     }
 
-    async post(url: string, body: object): Promise<AxiosResponse<unknown> | undefined> {
-        for (let i = 0; i < 3; i++) {
-            try {
-                const response = await axios.post(this._apiBase + url, body);
+    async get(url: string, params?: paramsType): Promise<AxiosResponse<unknown>>
+    {
+        return this.getResource(url, 'GET', params);
+    }
 
-                if (response.status !== 200) {
-                    throw new Error(`Could not fetch ${url}, received ${response.status}`)
-                }
-                return response;
-            } catch (error) {
-                console.log(error);
-            }
-
-        }
+    async post(url: string, body: object): Promise<AxiosResponse<unknown>>
+    {
+        return this.getResource(url, 'POST', undefined, body);
     }
 }
 
 export const customRestApi = new CustomRestApi();
-
 export default CustomRestApi;
