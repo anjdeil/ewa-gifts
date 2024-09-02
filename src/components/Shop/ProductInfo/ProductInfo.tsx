@@ -61,12 +61,13 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     {
         if (color) setCurrentColor(color as string);
         if (size, sizes) setCurrentSize(findOrDefault(sizes, size).option);
-    }, [color, size, sizes]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function onColorChange(checkedColor: string): void 
     {
         setCurrentColor(checkedColor);
-        if (sizes) setCurrentSize(sizes[0].option);
+        // if (sizes) setCurrentSize(sizes[0].option);
     }
 
     function onSizeChange(checkedSize: string): void 
@@ -81,10 +82,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
         const variations = currentColor
             ? filterOptionsByColorName(product.variations, currentColor)
             : filterOptionsBySize(product.variations);
-
         if (variations)
         {
             setSizes(transformProductSizes(variations));
+            setCurrentSize(variations[0].option);
         }
     }, [currentColor, product.variations, allSizes]);
 
