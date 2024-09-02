@@ -3,16 +3,36 @@
 .accordion {
 	max-width: 630px;
 	border: 1px solid $input-light;
-	border-radius: 10px;
-	padding: 12px 0;
+	border-radius: 10px !important;
+	padding-block: 14px;
+	padding-inline: 35px;
 	box-shadow: none;
+	margin: 0 !important;
+
+	@media screen and (max-width: 1024px) {
+		max-width: unset;
+		padding-inline: 20px;
+		padding-block: 4px;
+	}
+
+
+	@media screen and (max-width: 768px) {
+		padding-inline: 10px;
+	}
+
+	&::before {
+		display: none;
+	}
+
 	&__opis {
-		padding: 0 35px;
+		padding: 0;
+		
 		min-height: 52px !important;
 		& > div {
 			min-height: 0;
 			margin: 12px 0 !important;
-		}
+		}		
+
 		span {
 			font-weight: 500;
 			font-size: 16px;
@@ -23,7 +43,7 @@
 		}
 	}
 	&__description{
-		padding: 16px 35px 23px;
+		padding: 16px 0;
 		p {
 			font-weight: 400;
 			font-size: 18px;
@@ -32,7 +52,7 @@
 		}
 	}
 	&__details {
-		padding: 0 35px;
+		padding: 0;
 	}
 	&__item {
 		display: flex;
@@ -40,6 +60,7 @@
 	}
 	&__name {
 		width: 100%;
+		text-transform: uppercase;
 		max-width: 150px;
 		font-weight: 500;
 		font-size: 16px;

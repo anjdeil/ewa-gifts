@@ -1,23 +1,22 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
-import styles from './styles.module.scss';
-import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types";
-import { ColorOptions } from "../ColorOptions";
-import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
-import ProductCalculations from "../ProductCalculations";
+import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
-import { getDefaultVariation } from "@/Utils/getDefaultVariation";
-import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
-import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
-import { filterByColor } from "@/Utils/filterByColor";
-import { useRouter } from "next/router";
-import formatPrice from "@/Utils/formatPrice";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
+import { filterByColor } from "@/Utils/filterByColor";
+import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
+import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
+import formatPrice from "@/Utils/formatPrice";
+import { getDefaultVariation } from "@/Utils/getDefaultVariation";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import { useRouter } from "next/router";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { ColorOptions } from "../ColorOptions";
+import ProductCalculations from "../ProductCalculations";
 import ProductTitling from "../ProductTitling";
+import { SizeOptions } from "../SizeOptions";
+import styles from './styles.module.scss';
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const router = useRouter();
@@ -29,7 +28,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
     const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
-    const [currentStock, setCurrentStock] = useState<number>(stock_quantity);
+    const [currentStock, setCurrentStock] = useState<number | boolean>(stock_quantity);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
 
@@ -110,7 +109,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
                 {currentPrice && <Box className={styles['price-wrapper']}>
                     <Typography variant='body2' className={styles['product-info__price']}>
                         Od {formatPrice(currentPrice)}
-                        &nbsp;<span className={styles["product-info__price_vat"]}>Bez VAT</span>
+                        &nbsp;Bez VAT
                     </Typography>
                 </Box>}
                 {!isSimple && <Box className={styles['color-wrapper']}>
@@ -126,7 +125,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
                     </Typography>
                     {isSized &&
                         <SizeOptions
-                            sizeAttributes={allSizes}
+                            sizeAttributes={allSizes || []}
                             onSizeChange={onSizeChange}
                             currentSize={currentSize}
                             availableSizes={sizes}
@@ -134,7 +133,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
                 </Box>}
 
                 <div className={styles["product-info__island"]}>
-                    <h3 variant='h3' className={`${styles['product-info__island-title']} ${styles['product-info__stock']}`}>Dostępność:</h3>
+                    <Typography variant='h3' className={`${styles['product-info__island-title']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
                     <span className={`${styles["product-info__stock-dot"]} ${currentStock && styles['product-info__stock-dot_active']}`}></span>
                     &nbsp;{currentStock ? `${currentStock} w magazynie` : "Brak w magazynie"}
                 </div>

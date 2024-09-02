@@ -1,40 +1,31 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
+import { ProductAttributesType } from "@/types";
+import { AccordionProductProps } from "@/types/Shop/AccordionProduct";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
+import { FC } from "react";
 import styles from "./styles.module.scss";
-import React from "react";
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 
-
-const AccordionProduct = ({ data, title, text }) =>
-{
-    const getOptions = (product, nameAttribute) =>
-    {
-        if (!product || !Array.isArray(product))
-        {
+const AccordionProduct: FC<AccordionProductProps> = ({ data, title, text }) => {
+    const getOptions = (product: ProductAttributesType[] | undefined, nameAttribute: string) => {
+        if (!product || !Array.isArray(product)) {
             return [];
         }
 
         const supplierAttribute = product.find(attr => attr.name === nameAttribute);
 
-        if (!supplierAttribute || !supplierAttribute.options)
-        {
+        if (!supplierAttribute || !supplierAttribute.options) {
             return [];
         }
 
         return supplierAttribute.options.map(option => option.name);
     }
-    const getColors = (product) =>
-    {
-        let colors = [];
-        if (product)
-        {
-            product.forEach(attr =>
-            {
-                if (attr.name === 'color')
-                {
-                    attr.options.forEach(option =>
-                    {
+    const getColors = (product: ProductAttributesType[] | undefined): string[] => {
+        let colors: string[] = [];
+        if (product) {
+            product.forEach(attr => {
+                if (attr.name === 'color') {
+                    attr.options.forEach(option => {
 
                         const cleanColors = option.name.replace(/\(#\w+\)/g, '');
 
@@ -47,8 +38,7 @@ const AccordionProduct = ({ data, title, text }) =>
         return colors;
     }
     const supplierOptions = getOptions(data, 'supplier');
-    const sizeOptions = getOptions(data, 'size').sort((a, b) =>
-    {
+    const sizeOptions = getOptions(data, 'size').sort((a, b) => {
         const numA = parseInt(a);
         const numB = parseInt(b);
         return numA - numB;

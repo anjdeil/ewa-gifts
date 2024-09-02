@@ -56,15 +56,15 @@
 	}
 
 	&__island {
+		margin-bottom: 2rem;
 
 		&-title {
 			font-size: 0.9em;
 			color: $text-gray;
-			margin-bottom: 1em;
+			margin-bottom: 1.1rem;
 			font-weight: 400;
 		}
 
-		margin-bottom: 1.5rem;
 	}
 
 	&__stock {
@@ -87,14 +87,13 @@
 		font-size: 18px;
 		color: $graphite;
 		margin-bottom: 22px;
-
-		&_vat {
-			color: $text-gray;
-		}
 	}
 
 	&__accordionWrapper {
 		margin-bottom: 40px;
+		display: flex;
+		flex-direction: column;
+		row-gap: 40px;
 	}
 }
 
