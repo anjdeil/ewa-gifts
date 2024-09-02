@@ -1,6 +1,3 @@
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { validateApiError } from "@/Utils/validateApiError";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,13 +17,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (method !== "GET")
     {
-        await fetchData(method, body, headers);
+        await fetchData(method, body, headers as Record<string, string>);
     } else
     {
         await fetchData(method);
     }
 
-    async function fetchData(method: string, body?: unknown, headers?: Record<string, string>)
+    async function fetchData(method: string = "GET", body?: unknown, headers?: Record<string, string>)
     {
         const maxRetries = 3;
         let attempt = 0;

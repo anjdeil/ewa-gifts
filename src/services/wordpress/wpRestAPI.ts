@@ -1,12 +1,11 @@
 import { AuthConfig } from "@/types";
 import axios, { AxiosResponse } from "axios";
+import { paramsType, method } from "@/types/Services";
 
 const authConfig: AuthConfig = {
     username: process.env.USER_NAME || '',
     password: process.env.USER_PASSWORD || ''
 };
-
-type paramsType = Record<string, string[] | string | number | undefined>;
 
 export class WpRestApi
 {
@@ -26,7 +25,7 @@ export class WpRestApi
         return `Basic ${encodedAuth}`;
     }
 
-    async getResource(url: string, params?: paramsType, authorization?: string | null): Promise<AxiosResponse<unknown>>
+    async getResource(url: string, method: method, params?: paramsType, authorization?: string | null, body?: object): Promise<AxiosResponse<unknown>>
     {
         const maxRetries = 3;
         let attempt = 0;
@@ -35,11 +34,14 @@ export class WpRestApi
         {
             try
             {
-                const response: AxiosResponse<unknown> = await axios.get(this._apiBase + url, {
+                const response: AxiosResponse<unknown> = await axios({
+                    method: method,
+                    url: this._apiBase + url,
                     params: params,
                     headers: {
                         Authorization: authorization ? authorization : this.getBasicAuth(),
                     },
+                    data: body
                 });
 
                 if (response.status >= 200 && response.status < 300)
@@ -67,15 +69,15 @@ export class WpRestApi
 
     async get(url: string, params?: paramsType, authorization?: string | null)
     {
-        const result = await this.getResource(url, params, authorization);
+        const result = await this.getResource(url, 'GET', params, authorization);
         return result;
     }
 
-    // async put(url: string, body: object, authorization?: string | null,)
-    // {
-    //     // const result = await this.getResource(url, params, authorization);
-    //     // return result;
-    // }
+    async put(url: string, body: object, authorization?: string | null,)
+    {
+        const result = await this.getResource(url, 'PUT', {}, authorization, body);
+        return result;
+    }
 }
 
 const wpRestApi = new WpRestApi(authConfig);
