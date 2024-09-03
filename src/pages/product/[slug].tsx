@@ -11,6 +11,7 @@ import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/P
 import { ProductCardList } from "@/components/Shop/ProductCardsList/ProductCardsList";
 import { typeProductType } from "@/types/Shop";
 import { responseSingleCustomApi } from "@/types/Services/customApi";
+import { Box } from "@mui/material";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
@@ -75,11 +76,11 @@ const Product: FC<ProductPropsType> = ({ product }) =>
             </Head>
 
             <main className={styles['product']}>
-                <div className="container">
+                <Box className="container">
                     <Breadcrumbs links={categoriesLinks} />
                     <ProductInfo product={product} />
                     {filteredRelatedProducts &&
-                        <div className={styles['product__relative-products']}>
+                        <Box className={styles['product__relative-products']}>
                             <h2 className={`secondary-title ${styles['product__relative-products-title']}`}>
                                 Produkty powiązane
                             </h2>
@@ -90,9 +91,9 @@ const Product: FC<ProductPropsType> = ({ product }) =>
                                 isError={isError}
                                 columns={{ desktop: 4, tablet: 3, mobile: 2 }}
                             />
-                        </div>
+                        </Box>
                     }
-                </div>
+                </Box>
             </main>
         </>
     );
