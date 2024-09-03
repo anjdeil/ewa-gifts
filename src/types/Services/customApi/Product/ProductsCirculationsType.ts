@@ -9,4 +9,13 @@ export const ProductsCirculationsSchema = z.object({
     price_circulations: PriceCirculationsSchema
 });
 
+export const FetchProductsCirculationsResponseSchema = z.object({
+    data: z.object({
+        data: z.object({
+            items: z.array(ProductsCirculationsSchema),
+        }),
+    }),
+});
+
 export type ProductsCirculationsType = z.infer<typeof ProductsCirculationsSchema>;
+export type FetchProductsCirculationsResponse = z.infer<typeof FetchProductsCirculationsResponseSchema>;
