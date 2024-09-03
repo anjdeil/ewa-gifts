@@ -1,21 +1,15 @@
 import { FC } from "react";
 import styles from './styles.module.scss';
 
-interface StockProps
-{
-    quantity: number | boolean;
+interface StockProps {
+    quantity: number | undefined;
 }
 
-export const Stock: FC<StockProps> = ({ quantity }) =>
-{
+export const Stock: FC<StockProps> = ({ quantity }) => {
     return (
-        <>
-
-            <div className={`${styles.productCard__stock} desc`}>
-                <div className={`${styles.productCard__stockCircle} ${!quantity && styles.productCard__stockCircle_empty}`}></div>
-                {quantity && <span>{quantity} in shop</span>}
-                {!quantity && <span>brak w magazynie</span>}
-            </div>
-        </>
+        <p className={styles["product-stock"]}>
+            <span className={`${styles["product-stock-dot"]} ${quantity && styles['product-stock-dot_active']}`}></span>
+            &nbsp;{quantity ? quantity : "Brak w magazynie"}
+        </p>
     );
 }
