@@ -1,6 +1,7 @@
 import MiniCart from "@/components/Cart/MiniCart";
 import { CustomInput } from "@/components/Forms/CustomInput";
-import {
+import
+{
     FormHandle,
     RegistrationForm,
 } from "@/components/Forms/RegistrationForm";
@@ -27,20 +28,16 @@ import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { CheckoutLogin } from "./CheckoutLogin/CheckoutLogin";
 import styles from "./styles.module.scss";
-
-// ************start new code****************
 import { compactCartItems } from "@/services/transformers/checkout";
 import { WpWooError } from "@/types";
 import { FetchProductsCirculationsResponse, ProductsCirculationsType } from "@/types/Services/customApi/Product/ProductsCirculationsType";
 import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 
-// ************end new code******************
-
 const breadLinks = [{ name: "Składania zamowienia", url: "/checkout" }];
 
-const Checkout: FC<CheckoutProps> = ({ userData }) => {
-    // const router = useRouter();
+const Checkout: FC<CheckoutProps> = ({ userData }) =>
+{
     const childRef = useRef<FormHandle>(null);
     const router = useRouter();
     const {
@@ -49,7 +46,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
         createdOrder,
     } = useCreateOrderWoo();
     const [isCreating, setCreating] = useState<boolean>(false);
-    // const [isLoggedIn, setLoggedIn] = useState<boolean>(userData ? true : false);
     const [isModalOpen, setModalOpen] = useState<boolean>(
         userData ? false : true
     );
@@ -73,149 +69,152 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
     const pageTitle = "Składania zamowienia";
 
     // ************start new code****************
-    const [productsSpecs, setProductsSpecs] = useState<ProductsCirculationsType[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [cartErrorMessage, setCartErrorMessage] = useState<string | null>(
         null
     );
 
-    const [fetchProductsCirculations, { data: productsSpecsData }] = useFetchProductsCirculationsMutation();
+    const [fetchProductsCirculations] = useFetchProductsCirculationsMutation();
 
-    async function fetchProducts() {
+    async function fetchProducts()
+    {
         const shortenedCartItems = compactCartItems(items);
 
-        try {
-            const result = await fetchProductsCirculations({
-                products: shortenedCartItems,
-            });
+        try
+        {
+            const result = await fetchProductsCirculations({ products: shortenedCartItems }) as FetchProductsCirculationsResponse;
 
-            return result
-                ? (result as FetchProductsCirculationsResponse).data.data.items
-                : [];
-        } catch (error) {
+            if (!result?.data?.data?.items || result?.data?.data?.items.length <= 0)
+                throw new Error("Coś poszło nie tak. Proszę wrócić do koszyka i spróbować jeszcze raz.");
+
+            return result.data.data.items;
+        } catch (error)
+        {
             console.error((error as WpWooError).data.message)
-            setCartErrorMessage("Something went wrong!");
-            return [];
+            throw new Error("Something went wrong!");
         }
     }
 
-    useEffect(() => {
-        fetchProducts();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() =>
+    {
+        fetchProducts()
+            .then((result) => { if (result) isProductAvailable(result) })
+            .catch((error) => { setCartErrorMessage(error.message); setIsLoading(false) });
     }, []);
 
-    useEffect(() => {
-        setProductsSpecs(
-            productsSpecsData?.data?.items ? productsSpecsData.data.items : []
-        );
-    }, [productsSpecsData]);
+    function isProductAvailable(products: ProductsCirculationsType[]) 
+    {
+        const conflict = checkCartConflict(items, products);
+        if (conflict)
+            setCartErrorMessage(
+                "Coś poszło nie tak. Proszę wrócić do koszyka i spróbować jeszcze raz."
+            );
+        setIsLoading(false);
+    }
 
-    useEffect(() => {
-        if (productsSpecs.length > 0) {
-            const conflict = checkCartConflict(items, productsSpecs);
-            if (conflict)
-                setCartErrorMessage(
-                    "Coś poszło nie tak. Proszę wrócić do koszyka i spróbować jeszcze raz."
-                );
-            setIsLoading(false);
-        }
-    }, [productsSpecs, items]);
-
-    // ************end new code******************
-
-    useEffect(() => {
-        if (items.length === 0) {
+    useEffect(() =>
+    {
+        if (items.length === 0)
+        {
             router.push("/cart");
-        } else {
+        } else
+        {
             createOrder(items, "pending", shippingLines);
             setCreating(true);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items]);
 
-    useEffect(() => {
-        if (createdOrder) {
+    useEffect(() =>
+    {
+        if (createdOrder)
+        {
             setCreating(false);
-        } else if (createError) {
+        } else if (createError)
+        {
             setCreating(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createError, createdOrder]);
 
-    useEffect(() => {
-        if ("userToken" in cookie) {
+    useEffect(() =>
+    {
+        if ("userToken" in cookie)
+        {
             fetchCheckUser(cookie.userToken);
             setModalOpen(false);
-        } else {
+        } else
+        {
             setModalOpen(true);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookie]);
 
-    useEffect(() => {
-        if (jwtUser && "id" in jwtUser) {
+    useEffect(() =>
+    {
+        if (jwtUser && "id" in jwtUser)
+        {
             fetchCustomerData(jwtUser.id);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [jwtUser]);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (jwtError) alert("Server Error");
     }, [jwtError]);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (customerData) setUserFields(customerData);
         if (customerError) alert("Server Error");
     }, [customerError, customerData]);
 
-    function onContinueClick() {
+    function onContinueClick()
+    {
         setModalOpen(false);
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (isModalOpen) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "unset";
 
-        return () => {
+        return () =>
+        {
             document.body.style.overflow = "unset";
         };
     }, [isModalOpen]);
 
-    async function onSubmitClick() {
-        if (isSubmitDisabled) {
+    async function onSubmitClick()
+    {
+        if (isSubmitDisabled)
+        {
             setErrMessage("Zaznacz wszystkie zgody.");
             return;
         }
-        if (childRef.current) {
-            // ************start new code******************
+        if (childRef.current)
+        {
             setIsLoading(true);
-
-            try {
-                const result = await fetchProducts();
-
-                if (result.length) {
-                    const conflict = checkCartConflict(items, result);
-                    if (conflict) {
-                        setCartErrorMessage("Coś poszło nie tak. Proszę wrócić do koszyka i spróbować jeszcze raz.");
-                    } else {
-                        childRef.current.submit();
-                    }
-                }
-            } catch (error) {
-                console.error((error as WpWooError).data.message)
+            try
+            {
+                const products = await fetchProducts();
+                if (products) isProductAvailable(products);
+                if (!cartErrorMessage) childRef.current.submit();
+            } catch (error)
+            {
+                setCartErrorMessage((error as Error).message);
                 setCartErrorMessage("Something went wrong!");
-            } finally {
+            } finally
+            {
                 setIsLoading(false);
             }
-            // ************end new code******************
             setErrMessage(false);
         }
     }
 
-    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) =>
+    {
         const { name, checked } = event.target;
 
-        if (name === "checkbox1") {
+        if (name === "checkbox1")
+        {
             const newCheckboxes = {
                 checkbox1: checked,
                 checkbox2: checked,
@@ -224,8 +223,10 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
             };
             setCheckboxes(newCheckboxes);
             setIsSubmitDisabled(!checked);
-        } else {
-            setCheckboxes((prevState) => {
+        } else
+        {
+            setCheckboxes((prevState) =>
+            {
                 const newCheckboxes = { ...prevState, [name]: checked };
 
                 const allCheckedExceptCheckbox1 =
@@ -233,9 +234,11 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
                     newCheckboxes.checkbox3 &&
                     newCheckboxes.checkbox4;
 
-                if (allCheckedExceptCheckbox1) {
+                if (allCheckedExceptCheckbox1)
+                {
                     newCheckboxes.checkbox1 = true;
-                } else if (!checked) {
+                } else if (!checked)
+                {
                     newCheckboxes.checkbox1 = false;
                 }
 
@@ -250,7 +253,6 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
     const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
     if (isInsufficient) router.push('/cart');
 
-
     return (
         <>
             <Head>
@@ -260,119 +262,109 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
             <main>
                 <Section className={""} isBreadcrumbs={true} isContainer={true}>
                     <PageHeader title={pageTitle} breadLinks={breadLinks} />
-
-                    {/* *************start new code********** */}
-                    {isLoading ? (
-                        <Loader thickness={5} size={24} />
-                    ) : (
-                        <>
-                            {cartErrorMessage ? (
-                                <Notification type="warning">
-                                    <Box className={styles.checkout__notification}>
-                                        <p>{cartErrorMessage}</p>
-                                        <Link href={"/cart"}>
-                                            Powrót do Koszyk
-                                        </Link>
-                                    </Box>
-                                </Notification>
-                            ) : (
-                                // *************end new code**********
-
-                                <Box className={styles.checkout__content}>
-                                    <Box>
-                                        <RegistrationForm
-                                            isCheckout={true}
-                                            ref={childRef}
-                                            userFields={userFields}
-                                            lineItems={items}
-                                            shippingLines={shippingLines}
-                                        />
-                                    </Box>
-                                    <Box
-                                        className={`summary-wrapper ${styles.checkout__summary}`}
-                                    >
-                                        <Typography
-                                            variant="h2"
-                                            className={`main-title ${styles.checkout__title}`}
-                                        >
-                                            Twoje zamówienie
-                                        </Typography>
-                                        <Box className={styles.checkout__cart}>
-                                            <MiniCart
-                                                lineItems={
-                                                    createdOrder &&
-                                                    createdOrder.line_items
-                                                }
-                                                showSubtotals={true}
-                                                isLoading={isCreating}
-                                            />
-                                        </Box>
-                                        {items && (
-                                            <Box
-                                                className={
-                                                    styles.checkout__total
-                                                }
-                                            >
-                                                <OrderTotals
-                                                    order={
-                                                        createdOrder &&
-                                                        createdOrder
-                                                    }
-                                                    includeBorders={false}
-                                                />
-                                            </Box>
-                                        )}
-                                        <Box
-                                            className={
-                                                styles.checkout__checkboxes
-                                            }
-                                        >
-                                            <CustomInput
-                                                fieldName="Zaznaczam wszystkie zgody."
-                                                name="checkbox1"
-                                                isCheckbox={true}
-                                                checked={checkboxes.checkbox1}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            <CustomInput
-                                                fieldName="Przeczytałem/am i akceptuję regulamin i polityka prywatności."
-                                                name="checkbox2"
-                                                isCheckbox={true}
-                                                checked={checkboxes.checkbox2}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            <CustomInput
-                                                fieldName="Wyrażam zgodę na przetwarzanie danych osobowych."
-                                                name="checkbox3"
-                                                isCheckbox={true}
-                                                checked={checkboxes.checkbox3}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            <CustomInput
-                                                fieldName="Wyrażam zgodę na przetwarzanie danych osobowych w celach marketingowych."
-                                                name="checkbox4"
-                                                isCheckbox={true}
-                                                checked={checkboxes.checkbox4}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            {errMessage && (
-                                                <span className={"error"}>
-                                                    {errMessage}
-                                                </span>
-                                            )}
-                                        </Box>
-                                        <button
-                                            onClick={onSubmitClick}
-                                            className={`btn-primary btn ${styles.checkout__button}`}
-                                            type="submit"
-                                        >
-                                            Kupuję i płacę
-                                        </button>
-                                    </Box>
+                    {isLoading && <Loader thickness={5} size={24} />}
+                    {cartErrorMessage &&
+                        <Notification type="warning">
+                            <Box className={styles.checkout__notification}>
+                                <p>{cartErrorMessage}</p>
+                                <Link href={"/cart"}>
+                                    Powrót do Koszyk
+                                </Link>
+                            </Box>
+                        </Notification>
+                    }
+                    {!isLoading && !cartErrorMessage && <Box className={styles.checkout__content}>
+                        <Box>
+                            <RegistrationForm
+                                isCheckout={true}
+                                ref={childRef}
+                                userFields={userFields}
+                                lineItems={items}
+                                shippingLines={shippingLines}
+                            />
+                        </Box>
+                        <Box
+                            className={`summary-wrapper ${styles.checkout__summary}`}
+                        >
+                            <Typography
+                                variant="h2"
+                                className={`main-title ${styles.checkout__title}`}
+                            >
+                                Twoje zamówienie
+                            </Typography>
+                            <Box className={styles.checkout__cart}>
+                                <MiniCart
+                                    lineItems={
+                                        createdOrder &&
+                                        createdOrder.line_items
+                                    }
+                                    showSubtotals={true}
+                                    isLoading={isCreating}
+                                />
+                            </Box>
+                            {items && (
+                                <Box
+                                    className={
+                                        styles.checkout__total
+                                    }
+                                >
+                                    <OrderTotals
+                                        order={
+                                            createdOrder &&
+                                            createdOrder
+                                        }
+                                        includeBorders={false}
+                                    />
                                 </Box>
                             )}
-                        </>
-                    )}
+                            <Box
+                                className={
+                                    styles.checkout__checkboxes
+                                }
+                            >
+                                <CustomInput
+                                    fieldName="Zaznaczam wszystkie zgody."
+                                    name="checkbox1"
+                                    isCheckbox={true}
+                                    checked={checkboxes.checkbox1}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <CustomInput
+                                    fieldName="Przeczytałem/am i akceptuję regulamin i polityka prywatności."
+                                    name="checkbox2"
+                                    isCheckbox={true}
+                                    checked={checkboxes.checkbox2}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <CustomInput
+                                    fieldName="Wyrażam zgodę na przetwarzanie danych osobowych."
+                                    name="checkbox3"
+                                    isCheckbox={true}
+                                    checked={checkboxes.checkbox3}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <CustomInput
+                                    fieldName="Wyrażam zgodę na przetwarzanie danych osobowych w celach marketingowych."
+                                    name="checkbox4"
+                                    isCheckbox={true}
+                                    checked={checkboxes.checkbox4}
+                                    onChange={handleCheckboxChange}
+                                />
+                                {errMessage && (
+                                    <span className={"error"}>
+                                        {errMessage}
+                                    </span>
+                                )}
+                            </Box>
+                            <button
+                                onClick={onSubmitClick}
+                                className={`btn-primary btn ${styles.checkout__button}`}
+                                type="submit"
+                            >
+                                Kupuję i płacę
+                            </button>
+                        </Box>
+                    </Box>}
 
                     {isModalOpen && (
                         <CheckoutLogin onContinueClick={onContinueClick} />
@@ -383,21 +375,26 @@ const Checkout: FC<CheckoutProps> = ({ userData }) => {
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (
     context: GetServerSidePropsContext
-) => {
+) =>
+{
     const result = await checkUserTokenInServerSide("/", context, "userToken");
     let userData = null;
-    if (result && result.id) {
-        try {
+    if (result && result.id)
+    {
+        try
+        {
             const resp = await wooCommerceRestApi.get(`customers/${result.id}`);
             if (!("data" in resp)) userData = { error: "Server error" };
             userData = resp.data;
-        } catch (err) {
-            if (err instanceof Error) {
+        } catch (err)
+        {
+            if (err instanceof Error)
+            {
                 userData = { error: err.message };
-            } else {
+            } else
+            {
                 userData = { error: "Unknown error" };
             }
         }

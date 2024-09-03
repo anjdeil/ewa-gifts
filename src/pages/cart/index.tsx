@@ -18,6 +18,7 @@ import checkCartConflict from "@/Utils/checkCartConflict";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import formatPrice from "@/Utils/formatPrice";
 import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
+import { compactCartItems } from "@/services/transformers/checkout";
 
 const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
@@ -32,16 +33,12 @@ const Cart = () =>
   const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
   const [isUpdating, setIsUpdating] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[]>([])
-  // const [subtotal, setSubtotal] = useState<number | null>(null);
-  // const [isInsufficient, setInsufficient] = useState(false);
 
   /* Fetch circulations */
   useEffect(() =>
   {
-    const shortenedCartItems = items.map(({ product_id, variation_id }) => ({
-      product_id,
-      ...(variation_id && { variation_id })
-    }));
+    const shortenedCartItems = compactCartItems(items);
+
     fetchProductsCirculations({
       products: shortenedCartItems
     });
