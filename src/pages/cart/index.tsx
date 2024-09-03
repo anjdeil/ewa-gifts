@@ -31,21 +31,9 @@ const Cart = () => {
     const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
     const [isUpdating, setIsUpdating] = useState<boolean>(true);
     const [cartItems, setCartItems] = useState<CartItem[]>([])
-    // const [subtotal, setSubtotal] = useState<number | null>(null);
-    // const [isInsufficient, setInsufficient] = useState(false);
-
-    /* Fetch circulations */
-    useEffect(() => {
-        const shortenedCartItems = items.map(({ product_id, variation_id }) => ({
-            product_id,
-            ...(variation_id && { variation_id })
-        }));
-        fetchProductsCirculations({
-            products: shortenedCartItems
-        });
-    }, [fetchProductsCirculations, items]);
 
     useEffect(() => {
+        /* Fetch create order */
         setCartItems(items);
 
         if (items.length === 0) {
@@ -56,7 +44,21 @@ const Cart = () => {
 
         setIsUpdating(true);
         createOrder(items, 'pending', shippingLines);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        /* Fetch circulations */
+        const shortenedCartItems = items.map(({
+            product_id,
+            variation_id
+        }: {
+            product_id: number,
+            variation_id?: number
+        }) => ({
+            product_id,
+            ...(variation_id && { variation_id })
+        }));
+        fetchProductsCirculations({
+            products: shortenedCartItems
+        });
     }, [items]);
 
     useEffect(() => {
@@ -66,13 +68,7 @@ const Cart = () => {
             setIsUpdating(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder])
-
-    useEffect(() => {
-        if (createError) {
-            setIsUpdating(false);
-        }
-    }, [createError]);
+    }, [createdOrder]);
 
     const isCartConflict = checkCartConflict(cartItems, productsSpecs);
     const subtotal = lineItems ? getSubtotalByLineItems(lineItems) : null;

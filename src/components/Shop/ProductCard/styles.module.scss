@@ -51,24 +51,6 @@
         }
     }
 
-    &__stock {
-        color: $text-gray;
-        font-size: 0.9em;
-        margin-bottom: 0.8em;
-
-        &-dot {
-            display: inline-block;
-            background: $text-gray;
-            width: 0.75em;
-            height: 0.75em;
-            border-radius: 50%;
-
-            &_active {
-                background: #01a900;
-            }
-        }
-    }
-
     &__title {
         text-align: center;
         margin-top: 1.2em;
@@ -113,8 +95,37 @@
         transition: .2s ease;
         cursor: pointer;
 
+        &_loading {
+
+            .product-card__wishlist-button-icon {
+                opacity: 0.1;
+            }
+        }
+
+        &-icon {
+            transition: 0.2s ease;
+        }
+
         &-text {
             display: none;
+        }
+    }
+}
+
+.product-stock {
+    color: $text-gray;
+    font-size: 0.9rem;
+    margin-bottom: 0.8em;
+
+    &-dot {
+        display: inline-block;
+        background: $text-gray;
+        width: 0.75em;
+        height: 0.75em;
+        border-radius: 50%;
+
+        &_active {
+            background: #01a900;
         }
     }
 }

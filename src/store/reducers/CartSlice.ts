@@ -70,25 +70,13 @@ export const CartSlice = createSlice({
         },
         refreshItemsCount: (state) => {
             state.itemsCount = state.items.length;
-        },
-        toggleWishlistItem: (state, { payload }: { payload: WishlistItem }) => {
-            const wishlistItemIndex = state.wishlist.findIndex((item) =>
-                item.product_id === payload.product_id && (!payload.variation_id || item.variation_id === payload.variation_id)
-            );
-
-            if (wishlistItemIndex >= 0) {
-                state.wishlist.splice(wishlistItemIndex, 1)
-            } else {
-                state.wishlist.push(payload);
-            }
         }
     }
 });
 
 export const {
     updateCart,
-    refreshItemsCount,
-    toggleWishlistItem
+    refreshItemsCount
 } = CartSlice.actions;
 
 export default CartSlice.reducer;

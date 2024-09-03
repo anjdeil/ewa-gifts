@@ -18,12 +18,14 @@ import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedP
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
 import WishlistButton from "./WishlistButton";
 import { WishlistItem } from "@/types";
+import { Stock } from "./Stock";
 
 interface ProductCardPropsType {
     product: typeProductType,
     desirable?: boolean,
     onDesire?: (productId: number, variationId?: number) => void
-    wishlist?: WishlistItem[]
+    wishlist?: WishlistItem[],
+    wishlistLoading?: boolean
 }
 
 type ProductInfoType = {
@@ -39,7 +41,7 @@ type ProductInfoType = {
     }
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, wishlist, onDesire }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, wishlist, onDesire, wishlistLoading = false }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -310,10 +312,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = fal
                     &nbsp;<span className={"product-price-ending"}>Bez VAT</span>
                 </p>
             }
-            <p className={styles["product-card__stock"]}>
-                <span className={`${styles["product-card__stock-dot"]} ${productInfo?.stock && styles['product-card__stock-dot_active']}`}></span>
-                &nbsp;{productInfo?.stock ? productInfo.stock : "Brak w magazynie"}
-            </p>
+            <Stock quantity={productInfo?.stock} />
 
             <div className={styles["product-card__swatches"]}>
                 {(!cartMatch || (!productInfo?.stock)) ?
@@ -329,6 +328,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = fal
                 <WishlistButton
                     onClick={() => onDesire(product.id, choosenVariation?.id)}
                     checked={checkDesired()}
+                    isLoading={wishlistLoading}
                 />
             }
         </div>
