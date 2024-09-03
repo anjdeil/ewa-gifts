@@ -137,20 +137,20 @@ export const getServerSideProps: GetServerSideProps = async (context) =>
     if (!allPostsResponse || !allPostsResponse.data)
       return { props: { error: "Server Error" } };
 
-    const allPostsData = allPostsResponse.data as responseMultipleCustomApi;
+    const response = allPostsResponse.data as responseMultipleCustomApi;
 
-    const response = allPostsData.data.items;
+    const allPostsData = response.data;
 
-    if (!response.length)
+    if (!allPostsData.items.length)
     {
       return { notFound: true };
     }
 
-    const count = allPostsData.data.statistic.posts_count;
+    const count = allPostsData.statistic.posts_count;
 
     return {
       props: {
-        response,
+        response: allPostsData.items,
         page,
         count,
         error: null,

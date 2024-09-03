@@ -1,12 +1,14 @@
 @import "@/styles/variables.module.scss";
 
 .product {
+	margin-bottom: 140px;
 	padding-top: 65px;
 	display: grid;
 	grid-template-columns: 50% 50%;
 	grid-gap: 20px;
 
 	@media screen and (max-width: 1024px) {
+		margin-bottom: 60px;
 		padding-top: 49px;
 	}
 
@@ -17,13 +19,10 @@
 	}
 
 	&__slider {
-		// flex: 0 1 50%;
-		// width: 50%;
 		overflow: hidden;
 
 		@media screen and (max-width: 768px) {
 			width: 100%;
-			// flex: 0 1 100%;
 		}
 	}
 }
@@ -94,6 +93,10 @@
 		display: flex;
 		flex-direction: column;
 		row-gap: 40px;
+
+		@media screen and (max-width: 1024px) {
+			row-gap: 25px;
+		}
 	}
 }
 
@@ -102,14 +105,10 @@
 }
 
 .color-wrapper {
-	margin-bottom: 39px;
-
-	@media screen and (max-width: 1024px) {
-		margin-bottom: 26px;
-	}
+	margin-bottom: 20px;
 
 	& h3 {
-		margin-bottom: 20px;
+		margin-bottom: 15px;
 
 		@media screen and (max-width: 768px) {
 			margin-bottom: 16px;

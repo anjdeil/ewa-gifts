@@ -53,8 +53,6 @@ interface ProductPropsType
 
 const Product: FC<ProductPropsType> = ({ product }) =>
 {
-    console.log('product...', product);
-
     const slug = product.categories[product.categories.length - 1].slug;
     const productListQueryParams: ProductListQueryParamsType = {
         per_page: 5,

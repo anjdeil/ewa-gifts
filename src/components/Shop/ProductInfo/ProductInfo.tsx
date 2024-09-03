@@ -65,7 +65,6 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     function onColorChange(checkedColor: string): void 
     {
         setCurrentColor(checkedColor);
-        // if (sizes) setCurrentSize(sizes[0].option);
     }
 
     function onSizeChange(checkedSize: string): void 
@@ -75,7 +74,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     useEffect(() =>
     {
-        if (!product?.variations || !allSizes?.length) return;
+        if (!product?.variations || !allSizes?.length || isSimple) return;
 
         const variations = currentColor
             ? filterOptionsByColorName(product.variations, currentColor)
