@@ -12,7 +12,8 @@ const store = setupStore();
 
 type AppOwnProps = { menus: MenuItemsType[] };
 
-export const MyApp = ({ Component, pageProps }: AppProps & AppOwnProps) => {
+export const MyApp = ({ Component, pageProps }: AppProps & AppOwnProps) =>
+{
 
 
     return (

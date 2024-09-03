@@ -10,11 +10,9 @@ export function getDefaultVariation(
     if (!attrId) return null;
 
     const defaultAttrOption = default_attributes.find(attr => attr.id === attrId);
+
     if (defaultAttrOption && "option" in defaultAttrOption)
-    {
         return defaultAttrOption.option;
-    } else
-    {
+    else
         return null;
-    }
 }

@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 import { ProductCardListProps } from "@/types/Shop";
 import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
 import { ProductCard } from "../ProductCard";
-import { useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 
 
 export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, isError = false, products, columns, isShopPage = false }) =>
@@ -19,7 +19,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
         (columns?.desktop !== undefined ? columns.desktop : 4);
 
     return (
-        <div
+        <Box
             className={`list-reset ${styles.productList} ${isShopPage && styles['productList_shop-page']}`}
             style={{
                 gridTemplateColumns: `repeat(${column}, 1fr)`,
@@ -28,6 +28,6 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
             {products && products.map((product, i) => (
                 <ProductCard key={`${product.id}-${i}`} product={product} />
             ))}
-        </div>
+        </Box>
     );
 }
