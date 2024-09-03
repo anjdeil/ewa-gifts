@@ -21,6 +21,7 @@ export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes, onSizeChange
                         className={`
                             ${styles.SizeOptions__button}
                             ${currentSize === uniqId && styles.SizeOptions__button_active}
+                            ${!isAvailable && styles.SizeOptions__button_active}
                             `}
                         onClick={() => onSizeChange(uniqId)}
                         disabled={!isAvailable}
