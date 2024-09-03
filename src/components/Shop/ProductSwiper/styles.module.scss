@@ -1,11 +1,16 @@
 @import "@/styles/variables.module.scss";
 
 .forNav {
+	align-items: center !important;	
 
 	&__nextBtn,
 	&__prevBtn {
 		width: 48px;
 		height: 48px;
+
+		@media screen and (max-width: 768px) {
+			display: none;
+		}
 
 		& svg {
 			width: 20px;
@@ -29,6 +34,7 @@
 
 .slide {
 	text-align: center;
+	align-self: center;
 
 	&__btn {
 		border: none;
@@ -39,14 +45,76 @@
 	}
 
 	&__img {
-		width: 100%;
+		width: 88%;
 		max-width: 600px;
 		height: auto;
 	}
 }
 
 .nav {
-	padding-top: 20px;
+	&__nextBtn,
+	&__prevBtn {
+		width: 24px;
+		height: 24px;
+		position: absolute;
+		top: 50% !important;
+		display: none;
+
+		@media screen and (max-width: 768px) {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		& svg {
+			width: 12px;
+			height: 12px;
+		}
+	}
+
+	&__nextBtn {
+		right: 0;
+		top: 60% !important;
+	}
+
+	&__prevBtn {
+		left: 0;
+		top: 60% !important;
+	}
+
+	&__nextBtn:after,
+	&__prevBtn:after {
+		font-size: 0;
+	}
+}
+
+.wrapper {
+	margin-top: 20px;
+	margin: 0 auto;
+	max-width: 404px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+
+	@media screen and (max-width: 1024px) {
+		max-width: 282px;
+	}
+
+	@media screen and (max-width: 768px) {
+		max-width: 300px;
+		padding-inline: 24px;
+		position: relative;
+	}
+
+	& .swiper-button-prev.swiper-button-disabled,
+	& .swiper-button-next.swiper-button-disabled {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	& .swiper-button-disabled svg path {
+		fill: #FECB00 !important;
+	}
 }
 
 .navSlide {

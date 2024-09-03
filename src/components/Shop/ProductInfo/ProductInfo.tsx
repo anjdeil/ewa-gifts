@@ -1,10 +1,12 @@
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
-import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
+import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types/Shop";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
-import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
 import { filterByCurrentAttr } from "@/Utils/filterByCurrentAttr";
+import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
+import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
 import { findOrDefault } from "@/Utils/findOrDefault";
 import formatPrice from "@/Utils/formatPrice";
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
@@ -16,13 +18,11 @@ import ProductCalculations from "../ProductCalculations";
 import ProductTitling from "../ProductTitling";
 import { SizeOptions } from "../SizeOptions";
 import styles from './styles.module.scss';
-import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types/Shop";
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     const router = useRouter();
-    const isTablet = useMediaQuery('(max-width: 1024px)');
+    const isTablet = useMediaQuery('(max-width: 768px)');
     const { name, description, price, sku, images, attributes, default_attributes, type, stock_quantity } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
@@ -116,7 +116,19 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     return (
         <Box className={styles.product}>
-            {isTablet && <ProductTitling title={name} sku={currentSku} />}
+            {isTablet && (
+                <>
+                    <ProductTitling title={name} sku={currentSku} />
+                    {currentPrice && (
+                        <Box className={styles['price-wrapper']}>
+                        <Typography variant='body2' className={styles['product-info__price']}>
+                            Od {formatPrice(currentPrice)}
+                            &nbsp;Bez VAT
+                        </Typography>
+                        </Box>
+                    )}
+                </>
+            )}
 
             {currentImages &&
                 <Box className={styles.product__slider}>
@@ -124,13 +136,18 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 </Box>
             }
             <Box className={styles.product__info}>
-                {!isTablet && <ProductTitling title={name} sku={currentSku} />}
-                {currentPrice && <Box className={styles['price-wrapper']}>
-                    <Typography variant='body2' className={styles['product-info__price']}>
-                        Od {formatPrice(currentPrice)}
-                        &nbsp;Bez VAT
-                    </Typography>
-                </Box>}
+                {!isTablet && (
+                    <>
+                        <ProductTitling title={name} sku={currentSku} />
+                        {currentPrice && (
+                            <Box className={styles['price-wrapper']}>
+                                <Typography variant='body2' className={styles['product-info__price']}>
+                                    Od {formatPrice(currentPrice)}
+                                    &nbsp;Bez VAT
+                                </Typography>
+                            </Box>
+                        )}
+                </>)}
                 {(allColors && currentColor) && <Box className={styles['color-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:

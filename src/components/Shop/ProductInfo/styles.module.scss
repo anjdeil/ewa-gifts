@@ -4,7 +4,7 @@
 	margin-bottom: 140px;
 	padding-top: 65px;
 	display: grid;
-	grid-template-columns: 50% 50%;
+	grid-template-columns: repeat(12, 1fr);
 	grid-gap: 20px;
 
 	@media screen and (max-width: 1024px) {
@@ -13,16 +13,35 @@
 	}
 
 	@media screen and (max-width: 768px) {
+		grid-template-columns: 1fr;
 		padding-top: 41px;
 		flex-direction: column;
-		grid-gap: 27px;
+		grid-gap: 16px;
 	}
 
 	&__slider {
 		overflow: hidden;
+		grid-column: span 6;
+
+		@media screen and (max-width: 1024px) {
+			grid-column: span 5;
+		}
 
 		@media screen and (max-width: 768px) {
-			width: 100%;
+			grid-column: 1 / -1;
+			margin-bottom: 11px;
+		}
+	}
+
+	&__info {
+		grid-column: span 6;
+
+		@media screen and (max-width: 1024px) {
+			grid-column: span 7;
+		}
+
+		@media screen and (max-width: 768px) {
+			grid-column: 1 / -1;
 		}
 	}
 }
@@ -86,6 +105,11 @@
 		font-size: 18px;
 		color: $graphite;
 		margin-bottom: 22px;
+
+		@media screen and (max-width: 768px) {
+			font-size: 14px;
+			margin-bottom: 0;
+		}
 	}
 
 	&__accordionWrapper {
@@ -102,6 +126,10 @@
 
 .price-wrapper {
 	margin: 23px 0 21px;
+
+	@media screen and (max-width: 768px) {
+		margin: 0;
+	}
 }
 
 .color-wrapper {
@@ -153,20 +181,5 @@
 		@media screen and (max-width: 768px) {
 			margin-bottom: 16px;
 		}
-	}
-}
-
-@media(max-width: 1024px) {
-	.product {
-		padding-top: 30px;
-		grid-template-columns: 1fr;
-	}
-}
-
-@media(max-width: 768px) {
-	.product {
-		padding-top: 20px;
-		flex-direction: column;
-		grid-gap: 30px;
 	}
 }
