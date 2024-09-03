@@ -77,7 +77,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     useEffect(() =>
     {
-        if (!product?.variations || !allSizes?.length) return;
+        if (!product?.variations || !allSizes?.length || isSimple) return;
 
         const variations = currentColor
             ? filterOptionsByColorName(product.variations, currentColor)
