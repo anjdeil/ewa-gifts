@@ -67,7 +67,6 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     function onColorChange(checkedColor: string): void 
     {
         setCurrentColor(checkedColor);
-        // if (sizes) setCurrentSize(sizes[0].option);
     }
 
     function onSizeChange(checkedSize: string): void 
