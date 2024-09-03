@@ -4,21 +4,25 @@ import ProductInfo from '@/components/Shop/ProductInfo/ProductInfo';
 import { customRestApi } from "@/services/CustomRestApi";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
-import { responseSingleCustomApi } from "@/types/Services/customApi";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { typeProductType } from "@/types/Shop";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { FC } from "react";
 import styles from './styles.module.scss';
+import { responseSingleCustomApi } from "@/types/Services/customApi";
+import { Box } from "@mui/material";
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
     const { slug } = context.query;
 
-    try {
+    try
+    {
         const productResponseData = await customRestApi.get(`products/${slug}`);
 
-        if (!productResponseData?.data) {
+        if (!productResponseData?.data)
+        {
             return {
                 notFound: true
             };
@@ -33,7 +37,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             },
         };
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error(error);
         return {
             notFound: true
@@ -41,11 +46,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     }
 }
 
-interface ProductPropsType {
+interface ProductPropsType
+{
     product: typeProductType
 }
 
-const Product: FC<ProductPropsType> = ({ product }) => {
+const Product: FC<ProductPropsType> = ({ product }) =>
+{
     console.log('product...', product);
 
     const slug = product.categories[product.categories.length - 1].slug;
@@ -71,11 +78,11 @@ const Product: FC<ProductPropsType> = ({ product }) => {
             </Head>
 
             <main className={styles['product']}>
-                <div className="container">
+                <Box className="container">
                     <Breadcrumbs links={categoriesLinks} />
                     <ProductInfo product={product} key={product.slug} />
                     {filteredRelatedProducts &&
-                        <div className={styles['product__relative-products']}>
+                        <Box className={styles['product__relative-products']}>
                             <h2 className={`secondary-title ${styles['product__relative-products-title']}`}>
                                 Produkty powiązane
                             </h2>
@@ -86,9 +93,9 @@ const Product: FC<ProductPropsType> = ({ product }) => {
                                 isError={isError}
                                 columns={{ desktop: 4, tablet: 3, mobile: 2 }}
                             />
-                        </div>
+                        </Box>
                     }
-                </div>
+                </Box>
             </main>
         </>
     );

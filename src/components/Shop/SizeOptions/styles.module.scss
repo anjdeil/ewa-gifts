@@ -16,5 +16,9 @@
         &_active {
             outline-color: $accent;
         }
+
+        &_disabled {
+            opacity: .5;
+        }
     }
 }
