@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 import { ProductCardListProps } from "@/types/Shop";
 import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
 import { ProductCard } from "../ProductCard";
-import { useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { useFetchUserUpdateMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
 import { WishlistItem } from "@/types";
@@ -73,7 +73,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
     }
 
     return (
-        <div
+        <Box
             className={`list-reset ${styles.productList} ${isShopPage && styles['productList_shop-page']}`}
             style={{
                 gridTemplateColumns: `repeat(${column}, 1fr)`,
@@ -89,6 +89,6 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
                     wishlistLoading={userDataLoading}
                 />
             ))}
-        </div>
+        </Box>
     );
 }

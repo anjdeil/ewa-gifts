@@ -3,10 +3,7 @@ import { transformColorByName } from "./transformColorByName";
 
 export function transformColorsArray(attr: ProductAttributesType[] | []): transColorsType[] | null
 {
-    if (!attr || attr.length === 0)
-    {
-        return null;
-    }
+    if (!attr || attr.length === 0) return null;
 
     const colors = attr.filter(attribute => attribute.name === "color");
     if (colors.length === 0)

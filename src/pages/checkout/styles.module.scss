@@ -114,4 +114,9 @@
             font-size: 14px;
         }
     }
+
+    &__notification {
+        display: flex;
+        justify-content: space-between;
+    }
 }

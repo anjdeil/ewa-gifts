@@ -18,108 +18,99 @@ import checkCartConflict from "@/Utils/checkCartConflict";
 import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import formatPrice from "@/Utils/formatPrice";
 import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
+import { compactCartItems } from "@/services/transformers/checkout";
 
 const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
 const Cart = () => {
-    const { items, shippingLines } = useAppSelector(state => state.Cart);
-    const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
-    const [fetchProductsCirculations, { data: productsSpecsData, isLoading: isProductsSpecsLoading }] = useFetchProductsCirculationsMutation();
-    const productsSpecs = productsSpecsData?.data ? productsSpecsData.data.items : [];
+  const { items, shippingLines } = useAppSelector(state => state.Cart);
+  const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
+  const [fetchProductsCirculations, { data: productsSpecsData, isLoading: isProductsSpecsLoading }] = useFetchProductsCirculationsMutation();
+  const productsSpecs = productsSpecsData?.data ? productsSpecsData.data.items : [];
+  const [lineItems, setLineItems] = useState<lineOrderItems[]>([]);
+  const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
+  const [isUpdating, setIsUpdating] = useState<boolean>(true);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-    const [lineItems, setLineItems] = useState<lineOrderItems[]>([]);
-    const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
-    const [isUpdating, setIsUpdating] = useState<boolean>(true);
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
+  useEffect(() => {
+    /* Fetch create order */
+    setCartItems(items);
+    setIsUpdating(true);
+    createOrder(items, 'pending', shippingLines);
 
-    useEffect(() => {
-        /* Fetch create order */
-        setCartItems(items);
+    /* Fetch circulations */
+    const shortenedCartItems = compactCartItems(items);
+    fetchProductsCirculations({
+      products: shortenedCartItems
+    });
+  }, [items]);
 
-        if (items.length === 0) {
-            setCurrentOrder(null);
-            setIsUpdating(false);
-            return;
-        }
+  useEffect(() => {
+    if (createdOrder && createdOrder.line_items) {
+      setCurrentOrder(createdOrder);
+      setLineItems(createdOrder.line_items);
+      setIsUpdating(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createdOrder])
 
-        setIsUpdating(true);
-        createOrder(items, 'pending', shippingLines);
+  useEffect(() => {
+    if (createError) {
+      setIsUpdating(false);
+    }
+  }, [createError]);
 
-        /* Fetch circulations */
-        const shortenedCartItems = items.map(({
-            product_id,
-            variation_id
-        }: {
-            product_id: number,
-            variation_id?: number
-        }) => ({
-            product_id,
-            ...(variation_id && { variation_id })
-        }));
-        fetchProductsCirculations({
-            products: shortenedCartItems
-        });
-    }, [items]);
+  const isCartConflict = checkCartConflict(cartItems, productsSpecs);
 
-    useEffect(() => {
-        if (createdOrder && createdOrder.line_items) {
-            setCurrentOrder(createdOrder);
-            setLineItems(createdOrder.line_items);
-            setIsUpdating(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createdOrder]);
+  const subtotal = lineItems ? getSubtotalByLineItems(lineItems) : null;
+  const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
+  const insufficientAmount = subtotal ? formatPrice(MIN_SUBTOTAL_TO_CHECKOUT - subtotal) : null;
 
-    const isCartConflict = checkCartConflict(cartItems, productsSpecs);
-    const subtotal = lineItems ? getSubtotalByLineItems(lineItems) : null;
-    const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
-    const insufficientAmount = subtotal ? formatPrice(MIN_SUBTOTAL_TO_CHECKOUT - subtotal) : null;
-
-    return (
-        <>
-            <Head>
-                <title>Koszyk</title>
-            </Head>
-            <main>
-                <Section className="section" isContainer={true}>
-                    <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
-                    {!cartItems.length && !isUpdating ?
-                        <Notification>
-                            <Box className={styles.Cart__notification}>
-                                <p>
-                                    Twój koszyk aktualnie jest pusty.
-                                </p>
-                                <p>
-                                    <Link href={"/"}>Powrót do sklepu</Link>
-                                </p>
-                            </Box>
-                        </Notification> :
-                        createError ?
-                            <Notification type="warning">{createError}</Notification> :
-                            <Box className={styles.Cart__content}>
-                                <Box>
-                                    {isInsufficient &&
-                                        <Notification type="warning">Do złożenia zamówienia brakuje jeszcze {insufficientAmount}.</Notification>
-                                    }
-                                    <CartTable
-                                        lineItems={lineItems}
-                                        productsSpecs={productsSpecs}
-                                        cartItems={cartItems}
-                                        isLoading={isUpdating || isProductsSpecsLoading}
-                                    />
-                                    {/* <AddCoupon orderId={orderId && orderId} /> */}
-                                </Box>
-                                <CartSummary
-                                    order={currentOrder}
-                                    isLoading={isUpdating || isProductsSpecsLoading}
-                                    disabled={isCartConflict || isUpdating || isProductsSpecsLoading}
-                                />
-                            </Box>
-                    }
-                </Section>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <title>Koszyk</title>
+      </Head>
+      <main>
+        <Section className="section" isContainer={true}>
+          <PageHeader title={"Koszyk"} breadLinks={breadLinks} />
+          {!cartItems.length && !isUpdating ?
+            <Notification>
+              <Box className={styles.Cart__notification}>
+                <p>
+                  Twój koszyk aktualnie jest pusty.
+                </p>
+                <p>
+                  <Link href={"/"}>Powrót do sklepu</Link>
+                </p>
+              </Box>
+            </Notification> :
+            createError ?
+              <Notification type="warning">{createError}</Notification> :
+              <Box className={styles.Cart__content}>
+                <Box>
+                  {isInsufficient &&
+                    <Notification type="warning">Do złożenia zamówienia brakuje jeszcze {insufficientAmount}.</Notification>
+                  }
+                  <CartTable
+                    lineItems={lineItems}
+                    productsSpecs={productsSpecs}
+                    cartItems={cartItems}
+                    isLoading={isUpdating || isProductsSpecsLoading}
+                  />
+                  {/* <AddCoupon orderId={orderId && orderId} /> */}
+                </Box>
+                <CartSummary
+                  order={currentOrder}
+                  isLoading={isUpdating || isProductsSpecsLoading}
+                  disabled={isCartConflict || isUpdating || isProductsSpecsLoading || isInsufficient}
+                />
+              </Box>
+          }
+        </Section>
+      </main>
+    </>
+  );
 }
 
 export default Cart;
