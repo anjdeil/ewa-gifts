@@ -1,5 +1,5 @@
 import { useFetchProductListQuery } from "@/store/custom/customApi";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { TopSellerCard } from "../TopSellerCard";
 import Notification from "@/components/Layouts/Notification";
@@ -11,6 +11,8 @@ export const TopSeller: FC = () =>
     const [isLoading, setLoading] = useState<boolean>(true);
     const [products, setProducts] = useState<[] | null>(null);
     const [customError, setCustomError] = useState<boolean | string>(false);
+    const isTable = useMediaQuery('(min-width:1024px)');
+
     useEffect(() =>
     {
         if (data && data.data.items.length > 0)
@@ -35,7 +37,7 @@ export const TopSeller: FC = () =>
         <>
             <Box display={'flex'} gap={'20px'} marginBottom={'20px'} sx={{ flexDirection: 'row' }}>
                 <TopSellerCard products={products} isLoading={isLoading} />
-                <TopSellerCard products={products} isLoading={isLoading} />
+                {isTable && <TopSellerCard products={products} isLoading={isLoading} />}
             </Box>
             <ProductCarousel ids='235724, 235689, 235665, 235652' />
         </>
