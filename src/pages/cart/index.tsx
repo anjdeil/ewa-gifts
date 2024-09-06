@@ -22,48 +22,31 @@ import { compactCartItems } from "@/services/transformers/checkout";
 
 const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
-const Cart = () =>
-{
+const Cart = () => {
   const { items, shippingLines } = useAppSelector(state => state.Cart);
   const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
   const [fetchProductsCirculations, { data: productsSpecsData, isLoading: isProductsSpecsLoading }] = useFetchProductsCirculationsMutation();
   const productsSpecs = productsSpecsData?.data ? productsSpecsData.data.items : [];
-
   const [lineItems, setLineItems] = useState<lineOrderItems[]>([]);
   const [currentOrder, setCurrentOrder] = useState<OrderType | null>(null);
   const [isUpdating, setIsUpdating] = useState<boolean>(true);
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  /* Fetch circulations */
-  useEffect(() =>
-  {
+  useEffect(() => {
+    /* Fetch create order */
+    setCartItems(items);
+    setIsUpdating(true);
+    createOrder(items, 'pending', shippingLines);
+
+    /* Fetch circulations */
     const shortenedCartItems = compactCartItems(items);
-
     fetchProductsCirculations({
       products: shortenedCartItems
     });
-  }, [fetchProductsCirculations, items]);
-
-  useEffect(() =>
-  {
-    setCartItems(items);
-
-    if (items.length === 0)
-    {
-      setCurrentOrder(null);
-      setIsUpdating(false);
-      return;
-    }
-
-    setIsUpdating(true);
-    createOrder(items, 'pending', shippingLines);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
-  useEffect(() =>
-  {
-    if (createdOrder && createdOrder.line_items)
-    {
+  useEffect(() => {
+    if (createdOrder && createdOrder.line_items) {
       setCurrentOrder(createdOrder);
       setLineItems(createdOrder.line_items);
       setIsUpdating(false);
@@ -71,10 +54,8 @@ const Cart = () =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createdOrder])
 
-  useEffect(() =>
-  {
-    if (createError)
-    {
+  useEffect(() => {
+    if (createError) {
       setIsUpdating(false);
     }
   }, [createError]);
