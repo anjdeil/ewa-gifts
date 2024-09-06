@@ -235,7 +235,6 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = fal
         return `${link}${index === 0 ? "?" : "&"}${param}`;
     }, productPageBase);
 
-
     return (
         <div className={styles["product-card"]}>
             <Link className={styles["product-card__link"]} href={productPageLink}>
