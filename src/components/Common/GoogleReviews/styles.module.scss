@@ -31,6 +31,13 @@
     &__text {
         font-size: 0.9em;
         line-height: 1.4;
+        max-height: 5.6em;
+        overflow: hidden;
+        transition: all 0.5s ease;
+    }
+
+    &:hover .review__text {
+        max-height: 1000px;
     }
 }
 
