@@ -47,7 +47,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             if (!('features_centered' in section)) break;
                             return (
                                 <Section isContainer={true} className={'features'} key={key}>
-                                    {section.features_centered && <Features features={section.features_centered} />}
+                                    {section.features_centered && <Features features={section.features_centered} isCentered />}
                                 </Section>
                             )
                         }
