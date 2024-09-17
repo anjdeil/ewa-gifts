@@ -20,13 +20,17 @@ import { TitleBuilder } from "@/types/layouts/Title";
 import { HeroSchema, SplitBuild } from "@/types/Common";
 import GoogleReviews from "../Common/GoogleReviews";
 
-export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) => {
+export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
+{
     return (
         <>
-            {sections.map((section, index) => {
+            {sections.map((section, index) =>
+            {
                 const key = `${('_type' in section) && section._type}-${index}`;
-                if ('_type' in section) {
-                    switch (section._type) {
+                if ('_type' in section)
+                {
+                    switch (section._type)
+                    {
                         case "slider": {
                             if (!('slider' in section)) break;
                             return (
@@ -61,7 +65,8 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                         }
                         case "split":
                         case "split_reversible": {
-                            if ('split' in section || 'split_reversible' in section) {
+                            if ('split' in section || 'split_reversible' in section)
+                            {
                                 const splitSection = section as SplitBuild;
                                 const { leftSections, rightSections } = transformBuilderSplitSection(splitSection.split);
                                 const isReversed = section._type === "split_reversible";
@@ -91,7 +96,8 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             )
                         }
                         case "blog": {
-                            if ('blog' in section) {
+                            if ('blog' in section)
+                            {
                                 return (
                                     <Section className={'section section_offset'} isContainer={true} key={key}>
                                         <BlogList />
@@ -101,7 +107,8 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "topseller": {
-                            if ('topseller' in section) {
+                            if ('topseller' in section)
+                            {
                                 return (
                                     <Section className={'topseller'} isContainer={true} key={key}>
                                         <h3 className="sub-title" style={{ textTransform: 'uppercase', marginBottom: '30px' }}>Topseller</h3>
@@ -112,7 +119,8 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "google_reviews": {
-                            if ('google_reviews' in section) {
+                            if ('google_reviews' in section)
+                            {
                                 return (
                                     <Section className={'reviews section_offset'} isContainer={true} key={key}>
                                         <GoogleReviews />
@@ -129,7 +137,8 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                                 </Section>
                             )
                         case "split_image":
-                            if ("title" in section && "image" in section) {
+                            if ("title" in section && "image" in section)
+                            {
                                 return <AdaptiveImage
                                     imageUrl={section.image}
                                     alt={section.title}

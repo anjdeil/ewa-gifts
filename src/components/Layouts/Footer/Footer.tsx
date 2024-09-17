@@ -88,7 +88,7 @@ export const Footer: FC = () => {
                         aria-controls="panel2a-content"
                         id="panel2a-header"
                     >
-                        <h3 className={`${styles.footer__title} secondary-title`}>Infomarmacja</h3>
+                        <h3 className={`${styles.footer__title} secondary-title`}>Informacja</h3>
                     </AccordionSummaryCustom>
                     <AccordionDetails>
                         <Nav menuId={817}

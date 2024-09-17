@@ -72,3 +72,19 @@
         color: $black-color;
     }
 }
+
+@media (max-width: 1200px) {
+    .mobile-category-bars {
+        &__name {
+            font-size: 0.7rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-category-bars {
+        &__name {
+            font-size: 0.9rem;
+        }
+    }
+}
