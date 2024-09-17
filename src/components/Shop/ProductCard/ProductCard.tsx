@@ -16,9 +16,16 @@ import { Navigation } from "swiper/modules";
 import { useSearchParams } from "next/navigation";
 import getCirculatedPrices, { CirculatedPriceType } from "@/Utils/getCirculatedPrices";
 import getCirculatedPrice from "@/Utils/getCirculatedPrice";
+import WishlistButton from "./WishlistButton";
+import { WishlistItem } from "@/types";
+import { Stock } from "./Stock";
 
 interface ProductCardPropsType {
     product: typeProductType,
+    desirable?: boolean,
+    onDesire?: (productId: number, variationId?: number) => void
+    wishlist?: WishlistItem[],
+    wishlistLoading?: boolean
 }
 
 type ProductInfoType = {
@@ -34,7 +41,7 @@ type ProductInfoType = {
     }
 };
 
-export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
+export const ProductCard: FC<ProductCardPropsType> = ({ product, desirable = false, wishlist, onDesire, wishlistLoading = false }) => {
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
     const searchParams = useSearchParams();
@@ -213,6 +220,11 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
         });
     }
 
+    const checkDesired = () =>
+        Boolean(wishlist?.find((item: WishlistItem) =>
+            item.product_id === product.id && (!choosenVariation || item.variation_id === choosenVariation.id)
+        ));
+
     /* Generate link to the product page */
     const productPageBase = `/product/${product.slug}`;
     const productPageParams = [];
@@ -222,7 +234,6 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     const productPageLink = productPageParams.reduce((link, param, index) => {
         return `${link}${index === 0 ? "?" : "&"}${param}`;
     }, productPageBase);
-
 
     return (
         <div className={styles["product-card"]}>
@@ -300,10 +311,7 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     &nbsp;<span className={"product-price-ending"}>Bez VAT</span>
                 </p>
             }
-            <p className={styles["product-card__stock"]}>
-                <span className={`${styles["product-card__stock-dot"]} ${productInfo?.stock && styles['product-card__stock-dot_active']}`}></span>
-                &nbsp;{productInfo?.stock ? productInfo.stock : "Brak w magazynie"}
-            </p>
+            <Stock quantity={productInfo?.stock} />
 
             <div className={styles["product-card__swatches"]}>
                 {(!cartMatch || (!productInfo?.stock)) ?
@@ -315,6 +323,13 @@ export const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                     <Counter value={cartMatch.quantity} min={minQuantity} max={productInfo?.stock || 1} onCountChange={handleAddToCart} />
                 }
             </div>
+            {desirable && onDesire &&
+                <WishlistButton
+                    onClick={() => onDesire(product.id, choosenVariation?.id)}
+                    checked={checkDesired()}
+                    isLoading={wishlistLoading}
+                />
+            }
         </div>
     );
 }

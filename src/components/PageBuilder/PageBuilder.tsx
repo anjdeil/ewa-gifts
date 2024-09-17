@@ -18,6 +18,7 @@ import { CatalogList } from "../Catalog/CatalogList";
 import { Title } from "../Layouts/Title";
 import { TitleBuilder } from "@/types/layouts/Title";
 import { HeroSchema, SplitBuild } from "@/types/Common";
+import GoogleReviews from "../Common/GoogleReviews";
 
 export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) =>
 {
@@ -120,7 +121,11 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                         case "google_reviews": {
                             if ('google_reviews' in section)
                             {
-                                break;
+                                return (
+                                    <Section className={'reviews section_offset'} isContainer={true} key={key}>
+                                        <GoogleReviews />
+                                    </Section>
+                                );
                             }
                             break;
                         }

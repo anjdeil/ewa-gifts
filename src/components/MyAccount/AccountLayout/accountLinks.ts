@@ -11,24 +11,12 @@ const accountLinks = [
         imageUrl: "/images/my-account/orders.svg",
         isActive: false
     },
-    // {
-    //     name: "Pliki do pobrania",
-    //     url: "/my-account/downloads",
-    //     imageUrl: "/images/my-account/downloads.svg",
-    //     isActive: false
-    // },
-    // {
-    //     name: "Adresy",
-    //     url: "/my-account/edit-address",
-    //     imageUrl: "/images/my-account/addresses.svg",
-    //     isActive: false
-    // },
-    // {
-    //     name: "Szczegóły konta",
-    //     url: "/my-account",
-    //     imageUrl: "/images/my-account/edit-account.svg",
-    //     isActive: false
-    // },
+    {
+        name: "Obserwowane",
+        url: "/my-account/wishlist",
+        imageUrl: "/images/my-account/wishlist.svg",
+        isActive: false
+    },
     {
         name: "Wyloguj się",
         url: "/my-account/logout",

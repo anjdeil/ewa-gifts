@@ -1,23 +1,21 @@
-import React from "react";
-import styles from "./styles.module.scss";
-import { typeProductType } from "@/types/Shop";
-import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
-import { useMediaQuery } from "@mui/material";
-import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
-import { useAppSelector } from "@/hooks/redux";
-import { useRouter } from "next/router";
-import PagesNavigation from "@/components/Layouts/PagesNavigation";
-import Head from "next/head";
-import { PageHeader } from "@/components/Layouts/PageHeader";
-import ShopSidebar from "../ShopSidebar";
-import ShopToolbar from "../ShopToolbar";
-import MobileSidebar from "../ShopSidebar/MobileSidebar";
-import { ProductCardList } from "../ProductCardsList";
 import Notification from "@/components/Layouts/Notification";
+import { PageHeader } from "@/components/Layouts/PageHeader";
+import PagesNavigation from "@/components/Layouts/PagesNavigation";
+import { useAppSelector } from "@/hooks/redux";
+import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { StatisticAttributeType } from "@/types/Services/customApi/Attribute/StatisticAttributeType";
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
+import { typeProductType } from "@/types/Shop";
+import { useMediaQuery } from "@mui/material";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { ProductCardList } from "../ProductCardsList";
+import ShopSidebar from "../ShopSidebar";
+import MobileSidebar from "../ShopSidebar/MobileSidebar";
+import ShopToolbar from "../ShopToolbar";
+import styles from "./styles.module.scss";
 
-interface ArchiveProps
-{
+interface ArchiveProps {
     searchTerm?: string,
     products: typeProductType[],
     categories?: CategoryType[],
@@ -40,8 +38,7 @@ export default function Archive({
     productsCount,
     availableAttributes,
     priceRange
-}: ArchiveProps)
-{
+}: ArchiveProps) {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const currentCategory = Array.isArray(categories) ? categories[categories.length - 1] as CategoryType : null;
@@ -51,8 +48,7 @@ export default function Archive({
     const popup = useAppSelector(state => state.Popup);
     const router = useRouter();
 
-    const switchPage = (page: number) =>
-    {
+    const switchPage = (page: number) => {
         const { slugs, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -84,11 +80,14 @@ export default function Archive({
     const pageTitle = currentCategory ? currentCategory.name :
         searchTerm ? `Wyniki wyszukiwania: ${searchTerm}` : "";
 
+    const linkCanonical = router.asPath.split('?')[0];
+
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
                 {currentCategory?.description && <meta name="description" content={currentCategory.description} />}
+                <link rel="canonical" href={`https://ewagifts.pl${linkCanonical}`} />
             </Head>
             <main className={styles['product-archive']}>
                 <div className="container">
