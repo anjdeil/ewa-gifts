@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
@@ -77,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         prevPost = prevPostPromise;
         nextPost = nextPostPromise;
 
-        const morePostsResponse = await customRestApi.get(`posts?per_page=3`);
+        const morePostsResponse = await customRestApi.get("posts", { per_page: 3 });
         if (morePostsResponse && morePostsResponse.data) {
             const posts = (morePostsResponse.data as responseMultipleCustomApi)
                 .data.items;

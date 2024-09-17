@@ -10,7 +10,7 @@ export const BlogRelatedPosts: FC<BlogListProps> = ({ data = [] }) => {
             <Typography
                 variant="h5"
                 component="h2"
-                className={`sub-title ${styles.blogRelatedPosts__title}`}
+                className={`secondary-title ${styles.blogRelatedPosts__title}`}
             >
                 Related Post
             </Typography>

@@ -71,6 +71,4 @@ export const {
     useFetchMenuItemsListQuery,
     useFetchPostsQuery,
     useFetchProductsMinimizedMutation,
-    useFetchMenuItemsListQuery,
-    useFetchPostsQuery,
 } = customApi;
