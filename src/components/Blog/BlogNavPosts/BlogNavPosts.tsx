@@ -1,10 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
-import Link from "next/link";
-import styles from "./styles.module.scss";
-import { Container } from "@mui/material";
-import { FC } from "react";
 import { BlogItemType } from "@/types/Blog";
+import { Container } from "@mui/material";
+import Link from "next/link";
+import { FC } from "react";
+import styles from "./styles.module.scss";
 
 type Props = {
     prevPost: BlogItemType | null;
@@ -17,14 +17,12 @@ export const BlogNavPosts: FC<Props> = ({ prevPost, nextPost }) => {
             <nav className={styles.nav}>
                 <div className={styles.nav__block}>
                     {prevPost && (
-                        <>
-                            <span>
-                                <Link href={`/blog/${prevPost.slug}`}>
-                                    PREVIOUS
-                                </Link>
+                        <Link href={`/blog/${prevPost.slug}`}>
+                            <span>                                
+                                    PREVIOUS                                
                             </span>
                             <span>{prevPost.title}</span>
-                        </>
+                        </Link>
                     )}
                 </div>
                 <div className={styles.nav__block}>
