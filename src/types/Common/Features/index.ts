@@ -7,11 +7,13 @@ export const FeaturesSchema = z.object({
 });
 
 const FeaturesPropsSchema = z.object({
-    features: z.array(FeaturesSchema)
+    features: z.array(FeaturesSchema),
+    isCentered: z.boolean().optional(),
 });
 
 export const FeaturesBuild = z.object({
-    features: z.array(FeaturesSchema),
+    features: z.array(FeaturesSchema).optional(),
+    features_centered: z.array(FeaturesSchema).optional(),
     _type: z.string(),
 })
 
