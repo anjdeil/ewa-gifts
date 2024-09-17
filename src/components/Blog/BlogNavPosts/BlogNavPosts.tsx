@@ -18,23 +18,17 @@ export const BlogNavPosts: FC<Props> = ({ prevPost, nextPost }) => {
                 <div className={styles.nav__block}>
                     {prevPost && (
                         <Link href={`/blog/${prevPost.slug}`}>
-                            <span>                                
-                                    PREVIOUS                                
-                            </span>
+                            <span className={styles.nav__text}>Poprzedni</span>
                             <span>{prevPost.title}</span>
                         </Link>
                     )}
                 </div>
                 <div className={styles.nav__block}>
                     {nextPost && (
-                        <>
-                            <span>
-                                <Link href={`/blog/${nextPost.slug}`}>
-                                    NEXT
-                                </Link>
-                            </span>
+                        <Link href={`/blog/${nextPost.slug}`}>
+                            <span className={styles.nav__text}>Następny</span>
                             <span>{nextPost.title}</span>
-                        </>
+                        </Link>
                     )}
                 </div>
             </nav>

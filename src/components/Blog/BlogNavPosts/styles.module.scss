@@ -30,29 +30,49 @@
             font-size: 16px;
             line-height: 24px;
             font-weight: 400;
+            color: $black-color;
+            transition: .2s color ease-in-out;
 
             @media screen and (max-width: 768px) {
                 font-size: 14px;
             }
+
+            &.nav__text {
+                display: block;
+                line-height: 1.2;
+                color: $gray-transparent;
+                font-weight: 500;
+                font-size: 16px;
+                text-transform: uppercase;
+
+                @media screen and (max-width: 1024px) {
+                    font-weight: 600;
+                }
+
+                @media screen and (max-width: 768px) {
+                    font-size: 14px;
+                }
+            }
         }
 
+        
         & a {
-            line-height: 1.2;
-            color: grey;
-            font-weight: 600;
-            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 13px;
             text-decoration: none;
-
-            @media screen and (max-width: 768px) {
-                font-size: 14px;
-            }
         }
+
         &:last-child {
             text-align: right;
 
             @media screen and (max-width: 768px) {
                 text-align: left;
             }
+        }
+
+        &:hover span {
+            color: $accent;
         }
     }
 }
