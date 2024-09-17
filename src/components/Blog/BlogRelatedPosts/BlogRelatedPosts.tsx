@@ -1,8 +1,8 @@
-import { FC } from "react";
-import { Box, Typography } from "@mui/material";
-import styles from "./styles.module.scss";
-import { BlogList } from "../BlogList";
 import { BlogListProps } from "@/types/Blog";
+import { Box, Typography } from "@mui/material";
+import { FC } from "react";
+import { BlogList } from "../BlogList";
+import styles from "./styles.module.scss";
 
 export const BlogRelatedPosts: FC<BlogListProps> = ({ data = [] }) => {
     return (
@@ -12,7 +12,7 @@ export const BlogRelatedPosts: FC<BlogListProps> = ({ data = [] }) => {
                 component="h2"
                 className={`secondary-title ${styles.blogRelatedPosts__title}`}
             >
-                Related Post
+                Powiązany post
             </Typography>
             <BlogList data={data} />
         </Box>
