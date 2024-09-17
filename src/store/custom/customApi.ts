@@ -2,46 +2,52 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const customApi = createApi({
     reducerPath: "customApi",
-    baseQuery: fetchBaseQuery({ baseUrl: '/api/custom' }),
+    baseQuery: fetchBaseQuery({ baseUrl: "/api/custom" }),
     endpoints: (build) => ({
         fetchProductList: build.query({
             query: (params) => ({
                 url: `/products`,
                 params,
-            })
+            }),
         }),
         fetchProduct: build.query({
             query: ({ slug, ...params }) => ({
                 url: `/products/${slug}`,
                 params,
-            })
+            }),
         }),
         fetchCategoryList: build.query({
             query: (params) => ({
                 url: `/categories`,
-                params
-            })
+                params,
+            }),
         }),
         fetchMenuItemsList: build.query({
             query: (params) => ({
                 url: `/menu-items`,
-                params
-            })
+                params,
+            }),
         }),
         fetchAttributeTerms: build.query({
             query: (slug) => ({
-                url: `/attributes/${slug}/terms`
-            })
+                url: `/attributes/${slug}/terms`,
+            }),
         }),
         fetchProductsCirculations: build.mutation({
             query: (body) => ({
                 url: `/products/circulations`,
-                method: 'POST',
+                method: "POST",
                 body: body,
                 headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+                    "Content-Type": "application/json",
+                },
+            }),
+        }),
+        fetchPosts: build.query({
+            query: (params) => ({
+                url: `/posts`,
+                params,
+            }),
         }),
         fetchProductsMinimized: build.mutation({
             query: (body) => ({
@@ -62,6 +68,9 @@ export const {
     useFetchCategoryListQuery,
     useFetchAttributeTermsQuery,
     useFetchProductsCirculationsMutation,
+    useFetchMenuItemsListQuery,
+    useFetchPostsQuery,
     useFetchProductsMinimizedMutation,
-    useFetchMenuItemsListQuery
+    useFetchMenuItemsListQuery,
+    useFetchPostsQuery,
 } = customApi;
