@@ -1,11 +1,8 @@
 
 import { transformBuilderSplitSection } from "@/services/transformers";
-import { HeroSchema, SplitBuild } from "@/types/Common";
-import { TitleBuilder } from "@/types/layouts/Title";
 import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
 import { FC } from "react";
 import { BlogList } from "../Blog/BlogList";
-import { CatalogList } from "../Catalog/CatalogList";
 import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { CategoryBars } from "../Common/CategoryBars";
 import { Features } from "../Common/Features";
@@ -14,7 +11,6 @@ import { RichTextComponent } from "../Common/RichTextComponent";
 import { Split } from "../Common/Split";
 import { CustomTabs } from "../Common/Tabs";
 import { Section } from "../Layouts/Section";
-import { Title } from "../Layouts/Title";
 import { ProductCarousel } from "../Shop";
 import { TopSeller } from "../Shop/TopSeller";
 import { Slider } from "../Sliders/Slider";
@@ -125,8 +121,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                         }
                         case "google_reviews": {
 
-                            if ('google_reviews' in section)
-                            {
+                            if ('google_reviews' in section) {
                                 return (
                                     <Section className={'reviews section_offset'} isContainer={true} key={key}>
                                         <GoogleReviews />
