@@ -1,2 +1,2 @@
 // export * from './transformMenu';
-export * from './transfromBlogCard';
+// export * from './transfromBlogCard';

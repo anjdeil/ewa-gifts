@@ -1,39 +1,45 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 
 import Link from "next/link";
 import styles from "./styles.module.scss";
 import { Container } from "@mui/material";
+import { FC } from "react";
+import { BlogItemType } from "@/types/Blog";
 
-export const BlogNavPosts = ({ prevPost, nextPost }) => {
+type Props = {
+    prevPost: BlogItemType | null;
+    nextPost: BlogItemType | null;
+};
+
+export const BlogNavPosts: FC<Props> = ({ prevPost, nextPost }) => {
     return (
         <Container className={styles.wrapper}>
             <nav className={styles.nav}>
-                {prevPost && (
-                    <div className={styles.nav__block}>
-                        <span>
-                            <Link href={`/blog/${prevPost.slug}`}>
-                                PREVIOUS
-                            </Link>
-                        </span>
-                        <span>
-                            {prevPost.title.rendered}
-                        </span>
-                    </div>
-                )}
-                {nextPost && (
-                    <div className={styles.nav__block}>
-                        <span>
-                            <Link href={`/blog/${nextPost.slug}`}>
-                                NEXT
-                            </Link>
-                        </span>
-                        <span>
-                            {nextPost.title.rendered}
-                        </span>
-                    </div>
-                )}
+                <div className={styles.nav__block}>
+                    {prevPost && (
+                        <>
+                            <span>
+                                <Link href={`/blog/${prevPost.slug}`}>
+                                    PREVIOUS
+                                </Link>
+                            </span>
+                            <span>{prevPost.title}</span>
+                        </>
+                    )}
+                </div>
+                <div className={styles.nav__block}>
+                    {nextPost && (
+                        <>
+                            <span>
+                                <Link href={`/blog/${nextPost.slug}`}>
+                                    NEXT
+                                </Link>
+                            </span>
+                            <span>{nextPost.title}</span>
+                        </>
+                    )}
+                </div>
             </nav>
         </Container>
-    )
-}
+    );
+};
