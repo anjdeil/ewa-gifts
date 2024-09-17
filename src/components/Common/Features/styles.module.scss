@@ -8,6 +8,16 @@
     }
 }
 
+.featuresCentered{
+    flex-direction: column;
+    text-align: center;
+    font-size:18px;
+    line-height: 21.78px;
+    font-weight: 400;
+    gap:30px;
+    text-transform: none;
+}
+
 @media(max-width: 768px) {
 
     .features {
