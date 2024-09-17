@@ -1,18 +1,18 @@
 import { FeaturesProps } from "@/types/Common";
-import * as React from 'react';
-import styles from './styles.module.scss';
+import { useMediaQuery } from "@mui/material";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css/navigation';
+import * as React from 'react';
 import 'swiper/css';
 import 'swiper/css/grid';
+import 'swiper/css/navigation';
 import { Grid } from 'swiper/modules';
-import { useMediaQuery } from "@mui/material";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import styles from './styles.module.scss';
 
 const Item: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
-
-export const Features: React.FC<FeaturesProps> = ({ features }) =>
-{
+// isCentered
+export const Features: React.FC<FeaturesProps> = ({ features, isCentered }) => {
+    const isCenteredClassName = isCentered && styles.featuresCentered;
     const isMobile = useMediaQuery('(max-width: 1024px)');
     return (
         <Swiper
@@ -34,7 +34,7 @@ export const Features: React.FC<FeaturesProps> = ({ features }) =>
         >
             {features.map((feature, index) => (
                 <SwiperSlide key={index}>
-                    <Item className={`${styles.features__text} sub-title`} >
+                    <Item className={`${styles.features__text} ${isCenteredClassName} sub-title`} >
                         <Image
                             src={feature.image}
                             alt={feature.text}
