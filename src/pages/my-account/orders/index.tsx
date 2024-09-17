@@ -8,13 +8,11 @@ import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
-{
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const customer = await checkUserTokenInServerSide('/my-account', context, 'userToken');
     if (!customer || !customer.id) return { redirect: { destination: "/my-account/login", permanent: false, } };
 
-    try
-    {
+    try {
         const userOrdersResponse = await wooCommerceRestApi.get('orders', {
             customer: customer.id
         });
@@ -24,21 +22,18 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 orders: userOrdersResponse.data
             }
         }
-    } catch (error)
-    {
+    } catch (error) {
         return {
             notFound: true
         }
     }
 }
 
-interface OrdersPropsType
-{
+interface OrdersPropsType {
     orders: OrderType[]
 }
 
-const Orders: FC<OrdersPropsType> = ({ orders }) =>
-{
+const Orders: FC<OrdersPropsType> = ({ orders }) => {
     return (
         <AccountLayout
             title="Zamówienia"

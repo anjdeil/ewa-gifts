@@ -1,10 +1,8 @@
 import React, { FC, ReactNode } from "react";
 import Header from "../Layouts/Header/Header";
-import TopBar from "../Layouts/TopBar/TopBar";
 import PopupContainer from "@/components/Popups/PopupContainer";
 import { Footer } from "../Layouts";
 import { useMediaQuery } from "@mui/material";
-import MobileHeader from "../Layouts/MobileHeader/MobileHeader";
 import BottomMenu from "../Layouts/BottomMenu";
 import { useFetchMenuItemsListQuery } from "@/store/custom/customApi";
 import { createContext } from "react";
@@ -29,9 +27,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     return (
         <>
             <MenusContext.Provider value={menus}>
-
-                {!isMobile && <TopBar />}
-                {!isMobile ? <Header /> : <MobileHeader />}
+                <Header />
                 <PopupContainer />
                 {isMobile && (<BottomMenu />)}
                 {children}

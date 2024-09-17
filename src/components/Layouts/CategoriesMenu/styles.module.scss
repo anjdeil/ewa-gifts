@@ -25,6 +25,8 @@
         padding: 20px 40px;
         overflow-y: auto;
         transition: opacity .3s ease-in-out;
+        background-color: $white-lilac;
+        height: 500px;
     }
 
     &__list {

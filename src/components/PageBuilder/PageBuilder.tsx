@@ -18,6 +18,11 @@ import { Title } from "../Layouts/Title";
 import { ProductCarousel } from "../Shop";
 import { TopSeller } from "../Shop/TopSeller";
 import { Slider } from "../Sliders/Slider";
+import { CatalogList } from "../Catalog/CatalogList";
+import { Title } from "../Layouts/Title";
+import { TitleBuilder } from "@/types/layouts/Title";
+import { HeroSchema, SplitBuild } from "@/types/Common";
+import GoogleReviews from "../Common/GoogleReviews";
 
 export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true }) => {
     return (
@@ -119,8 +124,15 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "google_reviews": {
-                            if ('google_reviews' in section) {
-                                break;
+
+                            if ('google_reviews' in section)
+                            {
+                                return (
+                                    <Section className={'reviews section_offset'} isContainer={true} key={key}>
+                                        <GoogleReviews />
+                                    </Section>
+                                );
+
                             }
                             break;
                         }
