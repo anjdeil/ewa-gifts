@@ -1,17 +1,10 @@
 import { paramsType, method } from "@/types/Services";
 import axios, { AxiosResponse } from "axios";
 
+
 class CustomRestApi
 {
-    private readonly _apiBase: string;
-    constructor()
-    {
-        if (!process.env.REST_API_URL)
-        {
-            throw new Error("REST_API_URL environment variable is not defined");
-        }
-        this._apiBase = `${process.env.REST_API_URL}/api/v2/`;
-    }
+    private readonly _apiBase = `${process.env.REST_API_URL}/api/v2/`;
 
     async getResource(url: string, method: method, params?: paramsType, body?: object): Promise<AxiosResponse<unknown>>
     {

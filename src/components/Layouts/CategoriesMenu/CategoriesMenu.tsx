@@ -1,21 +1,28 @@
 import Link from "next/link";
 import styles from "./styles.module.scss";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import MenuCategoriesSlice from "@/store/reducers/MenuCategoriesSlice";
 import transformCategoriesMenu from '@/services/transformers/woocommerce/transformCategoriesMenu';
-import { useFetchCategoryListQuery } from '@/store/custom/customApi';
+// import { useFetchCategoryListQuery } from '@/store/custom/customApi';
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
+import { AppContext } from "@/components/Layout/Layout";
 
-export const CategoriesMenu = () => {
+export const CategoriesMenu = () =>
+{
     const dispatch = useAppDispatch();
     const { isOpen, isCategoryActive } = useAppSelector(state => state.MenuCategoriesSlice);
     const popup = useAppSelector(state => state.Popup);
     const { setMenuOpen, setCategory } = MenuCategoriesSlice.actions;
-    const { data: categoriesData = [] } = useFetchCategoryListQuery({});
-    const categories = categoriesData?.data ? transformCategoriesMenu(categoriesData.data.items) : [];
 
-    const onLinkClick = useCallback(() => {
-        if (isOpen) {
+    const context = useContext(AppContext);
+    const categoriesData: CategoryType[] | undefined = context?.categories;
+    const categories = categoriesData ? transformCategoriesMenu(categoriesData) : [];
+
+    const onLinkClick = useCallback(() =>
+    {
+        if (isOpen)
+        {
             dispatch(setMenuOpen(false));
             dispatch(setCategory(null));
         }
