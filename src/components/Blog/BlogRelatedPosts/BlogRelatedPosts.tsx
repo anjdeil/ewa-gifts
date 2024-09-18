@@ -12,7 +12,7 @@ export const BlogRelatedPosts: FC<BlogListProps> = ({ data = [] }) => {
                 component="h2"
                 className={`secondary-title ${styles.blogRelatedPosts__title}`}
             >
-                Powiązany post
+                Powiązane posty
             </Typography>
             <BlogList data={data} />
         </Box>
