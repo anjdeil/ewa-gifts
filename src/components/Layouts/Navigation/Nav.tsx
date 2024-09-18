@@ -5,13 +5,16 @@ import Link from 'next/link';
 import { wpMenuProps } from '@/types';
 import { MenuSkeleton } from "../MenuSkeleton";
 import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
-import { MenusContext } from '@/components/Layout/Layout';
+import { AppContext } from '@/components/Layout/Layout';
 
-const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) => {
-    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+const Nav: FC<wpMenuProps> = ({ menuId, className = "", skeleton }) =>
+{
+    const context = useContext(AppContext);
+    const menus: MenuItemsType[] | undefined = context?.menus;
     const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
-    if (!menuItems && skeleton) {
+    if (!menuItems && skeleton)
+    {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
