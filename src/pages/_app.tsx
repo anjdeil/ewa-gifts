@@ -5,10 +5,9 @@ import Layout from "@/components/Layout/Layout";
 import { Provider } from "react-redux";
 import { setupStore } from "@/store/store";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
-import { customRestApi } from "@/services/CustomRestApi";
 import { ResponseMenuItemsType } from "@/types/Services/customApi/Menu/ResponseMenuItemsType";
 import { ResponseCategoryListType } from "@/types/Services/customApi/Category/ResponseCategoryListType";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 const store = setupStore();
 const menuIds = [820, 818, 817, 816, 358];
@@ -50,8 +49,8 @@ MyApp.getInitialProps = async () =>
     try
     {
         const [menus, categories]: [AxiosResponse, AxiosResponse] = await Promise.all([
-            customRestApi.get('menu-items', { include: menuIds.join(',') }),
-            customRestApi.get('categories')
+            axios.get('https://api.ewagifts.pl/api/v2/menu-items', { params: { include: menuIds.join(',') } }),
+            axios.get('https://api.ewagifts.pl/api/v2/categories'),
         ]);
 
         if (menus.status === 200 && menus?.data)

@@ -1,7 +1,6 @@
 import { paramsType, method } from "@/types/Services";
 import axios, { AxiosResponse } from "axios";
 
-
 class CustomRestApi
 {
     private readonly _apiBase = `${process.env.REST_API_URL}/api/v2/`;
@@ -10,7 +9,6 @@ class CustomRestApi
     {
         const maxRetries = 3;
         let attempt = 0;
-        console.log("Requesting:", this._apiBase + url);
 
         while (attempt < maxRetries)
         {

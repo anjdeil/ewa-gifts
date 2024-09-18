@@ -27,21 +27,13 @@ interface LayoutProps
 const Layout: FC<LayoutProps> = ({ children, menus, categories, error }) =>
 {
     const isMobile = useMediaQuery('(max-width: 768px)');
-    const [cachedMenu, setCachedMenu] = useState<MenuItemsType[]>([]);
-    const [cachedCategories, setCachedCategories] = useState<CategoryType[]>([]);
-
-    if (menus.length > 0 && cachedMenu.length === 0)
-        setCachedMenu(menus);
-
-    if (menus.length > 0 && cachedCategories.length === 0)
-        setCachedCategories(categories);
 
     if (error)
         throw new Error("Zaszła pomyłka");
 
     return (
         <>
-            <AppContext.Provider value={{ menus: cachedMenu, categories: cachedCategories }}>
+            <AppContext.Provider value={{ menus, categories }}>
                 <Header />
                 <PopupContainer />
                 {isMobile && (<BottomMenu />)}
