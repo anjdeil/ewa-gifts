@@ -7,7 +7,6 @@ import { setupStore } from "@/store/store";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { customRestApi } from "@/services/CustomRestApi";
 import { ResponseMenuItemsType } from "@/types/Services/customApi/Menu/ResponseMenuItemsType";
-import { useEffect } from "react";
 import { ResponseCategoryListType } from "@/types/Services/customApi/Category/ResponseCategoryListType";
 import { AxiosResponse } from "axios";
 
@@ -26,8 +25,6 @@ type AppOwnProps = {
 
 const MyApp = ({ Component, pageProps, response }: AppProps & AppOwnProps) =>
 {
-    useEffect(() => { console.log(response) }, [response])
-
     const menus = response?.menus?.data?.items ? response.menus.data.items : [];
     const categories = response?.categories?.data?.items ? response.categories.data.items : [];
 
