@@ -1,26 +1,28 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import FilterCollapsed from './Filters/FilterCollapsed';
 import { useParams, useSearchParams } from 'next/navigation';
 import PriceFilter from './Filters/PriceFilter';
 import SubcategoriesList from './SubcategoriesList';
 import ColorsFilter from './Filters/ColorsFilter';
-import { useFetchCategoryListQuery } from '@/store/custom/customApi';
 import { CategoryType } from '@/types/Services/customApi/Category/CategoryType';
 import { useRouter } from 'next/router';
 import { StatisticAttributeType } from '@/types/Services/customApi/Attribute/StatisticAttributeType';
 import SuppliersFilter from './Filters/SuppliersFilter';
+import { AppContext } from '@/components/Layout/Layout';
 
 type PriceRange = {
     min: number,
     max: number
 }
 
-interface ShopSidebarPropsType {
+interface ShopSidebarPropsType
+{
     availableAttributes: StatisticAttributeType[],
     priceRange: PriceRange
 }
 
-const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes }) => {
+const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes }) =>
+{
     const { slugs } = useParams();
     const [categorySlug, subcategorySlug] = slugs as string[];
     const router = useRouter();
@@ -29,9 +31,9 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
     /**
      * Categories
      */
-    const { data: categoriesData } = useFetchCategoryListQuery({});
-    const categories = categoriesData?.data && categoriesData.data.items as CategoryType[];
-    const currentCategory = categories?.find((category: CategoryType) => category.slug === categorySlug);
+    const context = useContext(AppContext);
+    const categoriesData: CategoryType[] | undefined = context?.categories ? context.categories : [];
+    const currentCategory = categoriesData?.find((category: CategoryType) => category.slug === categorySlug);
 
     /**
      * suppliers
@@ -40,8 +42,10 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
     const suppliers = supplierAttribute?.options;
     const currentSuppliers = searchParams.get('pa_supplier')?.split(',') || [];
 
-    const handleChangeSupplier = (suppliers: string[]) => {
-        if (suppliers.length <= 0) {
+    const handleChangeSupplier = (suppliers: string[]) =>
+    {
+        if (suppliers.length <= 0)
+        {
             resetSupplier();
             return;
         }
@@ -61,7 +65,8 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
         })
     }
 
-    const resetSupplier = () => {
+    const resetSupplier = () =>
+    {
         const { slugs, pa_supplier, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -83,7 +88,8 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
     const colors = colorAttribute?.options;
     const currentColor = searchParams.get('pa_base_color') || null;
 
-    const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeColor = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const { slugs, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -100,7 +106,8 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
 
     };
 
-    const resetColor = () => {
+    const resetColor = () =>
+    {
         const { slugs, pa_base_color, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -121,21 +128,26 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
     const [minPrice, setMinPrice] = useState(searchParams.get('min_price') || String(priceRange.min));
     const [maxPrice, setMaxPrice] = useState(searchParams.get('max_price') || String(priceRange.max));
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setMinPrice(searchParams.get('min_price') || String(priceRange.min));
         setMaxPrice(searchParams.get('max_price') || String(priceRange.max));
     }, [priceRange, searchParams])
 
-    const onChangePriceRange = (changedPriceRange: PriceRange) => {
-        if (changedPriceRange.min !== +minPrice) {
+    const onChangePriceRange = (changedPriceRange: PriceRange) =>
+    {
+        if (changedPriceRange.min !== +minPrice)
+        {
             setMinPrice(String(changedPriceRange.min));
         }
-        if (changedPriceRange.max !== +maxPrice) {
+        if (changedPriceRange.max !== +maxPrice)
+        {
             setMaxPrice(String(changedPriceRange.max));
         }
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const { slugs, min_price, max_price, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -145,16 +157,19 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
         }
         const newPriceParams: PriceParams = {};
 
-        if (+minPrice !== priceRange.min) {
+        if (+minPrice !== priceRange.min)
+        {
             newPriceParams.min_price = minPrice;
         }
 
-        if (+maxPrice !== priceRange.max) {
+        if (+maxPrice !== priceRange.max)
+        {
             newPriceParams.max_price = maxPrice;
         }
 
         if ((newPriceParams?.min_price !== min_price) ||
-            (newPriceParams?.max_price !== max_price)) {
+            (newPriceParams?.max_price !== max_price))
+        {
             const newSlugs = slugs.filter(slug => slug !== 'page' && Number.isNaN(+slug));
 
             router.push({
@@ -173,7 +188,7 @@ const ShopSidebar: FC<ShopSidebarPropsType> = ({ priceRange, availableAttributes
         <>
             {currentCategory && (
                 <FilterCollapsed title={currentCategory?.name} collapsed={false}>
-                    <SubcategoriesList categories={categories} parent={currentCategory} currentSubcategorySlug={subcategorySlug} />
+                    <SubcategoriesList categories={categoriesData} parent={currentCategory} currentSubcategorySlug={subcategorySlug} />
                 </FilterCollapsed>
             )}
 

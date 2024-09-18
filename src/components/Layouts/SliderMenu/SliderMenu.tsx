@@ -9,17 +9,20 @@ import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
 import { MenuItemsType } from '@/types/Services/customApi/Menu/MenuItemsType';
 import Link from 'next/link';
-import { MenusContext } from '@/components/Layout/Layout';
+import { AppContext } from '@/components/Layout/Layout';
 
-export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
-    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+export const SliderMenu: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
+{
+    const context = useContext(AppContext);
+    const menus: MenuItemsType[] | undefined = context?.menus;
     const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
     const swiperId = `SliderMenu`;
     const nextElId = `btn-next`;
     const prevElId = `btn-prev`;
 
-    if (!menuItems && skeleton) {
+    if (!menuItems && skeleton)
+    {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
