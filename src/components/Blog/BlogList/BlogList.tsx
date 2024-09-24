@@ -1,13 +1,13 @@
-import { FC, useEffect, useState } from "react";
-import { Grid } from "@mui/material";
-import { BlogListItem } from "../BlogListItem";
+import { Loader } from "@/components/Layouts/Loader";
+import { useFetchPostsQuery } from "@/store/custom/customApi";
 import { BlogItemType, BlogListProps } from "@/types/Blog";
 import { WpWooError } from "@/types/Services";
+import { Grid } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import { BlogListItem } from "../BlogListItem";
 import styles from "./styles.module.scss";
-import { useFetchPostsQuery } from "@/store/custom/customApi";
-import { Loader } from "@/components/Layouts/Loader";
 
-const perPage = 4;
+const perPage = 2;
 
 export const BlogList: FC<BlogListProps> = ({ data = [] }) => {
     const [posts, setPosts] = useState<BlogItemType[]>(data);

@@ -38,7 +38,7 @@ export const BlogListItem: FC<BlogItemProps> = ({ post }) => {
                 className={styles.blogItem__text}
             />
             <Link href={`/blog/${post.slug}`} className="desc more-link">
-                Więcej
+                Czytac wiecej
             </Link>
         </div>
     );
