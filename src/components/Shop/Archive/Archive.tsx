@@ -111,6 +111,14 @@ export default function Archive({
                             <div className={styles['product-archive__nav-wrap']}>
                                 {renderPagination(page, pagesCount)}
                             </div>
+                            {currentCategory?.video_url && (
+                                <div
+                                    className={`html-text ${styles['product-archive__video']}`}
+                                    dangerouslySetInnerHTML={{
+                                        __html: `<iframe allowfullscreen autoplay src="${currentCategory.video_url.match(/src="([^"]+)"/)?.[1] || ''}"></iframe>`
+                                    }}
+                                ></div>
+                            )}
                             <div
                                 className={`html-text ${styles['product-archive__description']}`}
                                 dangerouslySetInnerHTML={{ __html: currentCategory?.description || "" }}

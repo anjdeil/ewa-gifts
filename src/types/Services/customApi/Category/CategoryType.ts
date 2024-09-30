@@ -6,6 +6,7 @@ export const CategorySchema = z.object({
     name: z.string(),
     slug: z.string(),
     description: z.string(),
+    video_url: z.string().optional(),
     count: z.number()
 });
 
