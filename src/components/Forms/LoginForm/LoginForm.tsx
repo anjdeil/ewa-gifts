@@ -43,8 +43,8 @@ export const LoginForm: FC = () =>
             {
                 const userToken = response.token;
                 const options = data.rememberMe
-                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8) }
-                    : { path: '/' };
+                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8), sameSite: false, secure: true }
+                    : { path: '/', sameSite: false, secure: true };
                 setCookie('userToken', userToken, options);
             }
         } catch (error)
