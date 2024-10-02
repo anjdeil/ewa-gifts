@@ -5,7 +5,7 @@ import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { WishlistItem } from "@/types";
 import WishlistTable from "@/components/MyAccount/WishlistTable";
-import { useFetchUserUpdateMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
+import { useFetchUserUpdateByIdMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 
@@ -24,7 +24,7 @@ function Wishlist() {
     const router = useRouter();
 
     const [fetchUserData, { data: userData, isLoading: isUserDataLoading }] = useLazyFetchUserDataQuery();
-    const [fetchUserUpdate, { isLoading: isUserUpdating }] = useFetchUserUpdateMutation();
+    const [fetchUserUpdateById, { isLoading: isUserUpdating }] = useFetchUserUpdateByIdMutation();
 
     const isLoading = isUserDataLoading || isUserUpdating;
 
@@ -68,9 +68,9 @@ function Wishlist() {
             }
         };
 
-        if ("userToken" in cookie) {
-            fetchUserUpdate({
-                accessToken: cookie.userToken,
+        if (userData?.id) {
+            fetchUserUpdateById({
+                id: userData.id,
                 body: userUpdateRequestBody
             });
         }
