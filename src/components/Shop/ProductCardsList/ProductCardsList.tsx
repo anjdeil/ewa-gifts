@@ -5,7 +5,7 @@ import { ProductCardListSkeleton } from "./ProductCardListSkeleton";
 import { ProductCard } from "../ProductCard";
 import { Box, useMediaQuery } from "@mui/material";
 import { useCookies } from "react-cookie";
-import { useFetchUserUpdateMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
+import { useFetchUserUpdateByIdMutation, useLazyFetchUserDataQuery } from "@/store/wordpress";
 import { WishlistItem } from "@/types";
 import { useRouter } from "next/router";
 
@@ -21,7 +21,7 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
     const [cookie] = useCookies(['userToken']);
     const router = useRouter();
     const [fetchUserData, { data: userData }] = useLazyFetchUserDataQuery();
-    const [fetchUserUpdate, { isLoading: userDataLoading }] = useFetchUserUpdateMutation();
+    const [fetchUserUpdateById, { isLoading: userDataLoading }] = useFetchUserUpdateByIdMutation();
 
     useEffect(() => {
         if ("userToken" in cookie) {
@@ -61,9 +61,9 @@ export const ProductCardList: FC<ProductCardListProps> = ({ isLoading = false, i
             }
         };
 
-        if ("userToken" in cookie) {
-            fetchUserUpdate({
-                accessToken: cookie.userToken,
+        if (userData?.id) {
+            fetchUserUpdateById({
+                id: userData.id,
                 body: userUpdateRequestBody
             });
         }
