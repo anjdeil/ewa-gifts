@@ -8,14 +8,15 @@
 
 @media (max-width: 768px) {
     .shop-toolbar {
+
         &_fixed {
             padding-top: 55px;
 
             .shop-toolbar__sort {
+                top: 60px;
                 position: fixed;
                 left: 0;
                 right: 0;
-                top: 0;
                 background-color: $white-lilac;
                 padding: 10px 20px;
                 height: auto;

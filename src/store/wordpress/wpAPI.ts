@@ -57,6 +57,14 @@ export const wpAPI = createApi({
                 }
             }),
             invalidatesTags: ["User"]
+        }),
+        fetchUserUpdateById: build.mutation({
+            query: ({ id, body }) => ({
+                url: `/users/${id}`,
+                method: "PUT",
+                body: body
+            }),
+            invalidatesTags: ["User"]
         })
     }),
 })
@@ -67,5 +75,6 @@ export const {
     useFetchAllBlogPostsQuery,
     useLazyFetchUserDataQuery,
     useFetchUserDataQuery,
-    useFetchUserUpdateMutation
+    useFetchUserUpdateMutation,
+    useFetchUserUpdateByIdMutation
 } = wpAPI;
