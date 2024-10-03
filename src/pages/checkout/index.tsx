@@ -1,9 +1,8 @@
 import MiniCart from "@/components/Cart/MiniCart";
 import { CustomInput } from "@/components/Forms/CustomInput";
-import
-{
-    FormHandle,
-    RegistrationForm,
+import {
+FormHandle,
+RegistrationForm,
 } from "@/components/Forms/RegistrationForm";
 import { Loader } from "@/components/Layouts/Loader";
 import Notification from "@/components/Layouts/Notification";
@@ -36,8 +35,7 @@ import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 
 const breadLinks = [{ name: "Składania zamowienia", url: "/checkout" }];
 
-const Checkout: FC<CheckoutProps> = ({ userData }) =>
-{
+const Checkout: FC<CheckoutProps> = ({ userData }) => {
     const childRef = useRef<FormHandle>(null);
     const router = useRouter();
     const {
@@ -76,34 +74,29 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
     const [fetchProductsCirculations] = useFetchProductsCirculationsMutation();
 
-    async function fetchProducts()
-    {
+    async function fetchProducts() {
         const shortenedCartItems = compactCartItems(items);
 
-        try
-        {
+        try {
             const result = await fetchProductsCirculations({ products: shortenedCartItems }) as FetchProductsCirculationsResponse;
 
             if (!result?.data?.data?.items || result?.data?.data?.items.length <= 0)
                 throw new Error("Coś poszło nie tak. Proszę wrócić do koszyka i spróbować jeszcze raz.");
 
             return result.data.data.items;
-        } catch (error)
-        {
+        } catch (error) {
             console.error((error as WpWooError).data.message)
-            throw new Error("Something went wrong!");
+            throw new Error("Failed to fetch circulations.");
         }
     }
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         fetchProducts()
             .then((result) => { if (result) isProductAvailable(result) })
             .catch((error) => { setCartErrorMessage(error.message); setIsLoading(false) });
     }, []);
 
-    function isProductAvailable(products: ProductsCirculationsType[]) 
-    {
+    function isProductAvailable(products: ProductsCirculationsType[]) {
         const conflict = checkCartConflict(items, products);
         if (conflict)
             setCartErrorMessage(
@@ -112,109 +105,85 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
         setIsLoading(false);
     }
 
-    useEffect(() =>
-    {
-        if (items.length === 0)
-        {
+    useEffect(() => {
+        if (items.length === 0) {
             router.push("/cart");
-        } else
-        {
+        } else {
             createOrder(items, "pending", shippingLines);
             setCreating(true);
         }
     }, [items]);
 
-    useEffect(() =>
-    {
-        if (createdOrder)
-        {
+    useEffect(() => {
+        if (createdOrder) {
             setCreating(false);
-        } else if (createError)
-        {
+        } else if (createError) {
             setCreating(false);
         }
     }, [createError, createdOrder]);
 
-    useEffect(() =>
-    {
-        if ("userToken" in cookie)
-        {
+    useEffect(() => {
+        if ("userToken" in cookie) {
             fetchCheckUser(cookie.userToken);
             setModalOpen(false);
-        } else
-        {
+        } else {
             setModalOpen(true);
         }
     }, [cookie]);
 
-    useEffect(() =>
-    {
-        if (jwtUser && "id" in jwtUser)
-        {
+    useEffect(() => {
+        if (jwtUser && "id" in jwtUser) {
             fetchCustomerData(jwtUser.id);
         }
     }, [jwtUser]);
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (jwtError) alert("Server Error");
     }, [jwtError]);
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (customerData) setUserFields(customerData);
         if (customerError) alert("Server Error");
     }, [customerError, customerData]);
 
-    function onContinueClick()
-    {
+    function onContinueClick() {
         setModalOpen(false);
     }
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         if (isModalOpen) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "unset";
 
-        return () =>
-        {
+        return () => {
             document.body.style.overflow = "unset";
         };
     }, [isModalOpen]);
 
-    async function onSubmitClick()
-    {
-        if (isSubmitDisabled)
-        {
+    async function onSubmitClick() {
+        if (isSubmitDisabled) {
             setErrMessage("Zaznacz wszystkie zgody.");
             return;
         }
-        if (childRef.current)
-        {
+        if (childRef.current) {
             setIsLoading(true);
-            try
-            {
+            try {
                 const products = await fetchProducts();
                 if (products) isProductAvailable(products);
                 if (!cartErrorMessage) childRef.current.submit();
-            } catch (error)
-            {
+            } catch (error) {
                 setCartErrorMessage((error as Error).message);
                 setCartErrorMessage("Something went wrong!");
-            } finally
-            {
+            } finally {
                 setIsLoading(false);
             }
             setErrMessage(false);
         }
     }
 
-    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) =>
-    {
+    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
 
-        if (name === "checkbox1")
-        {
+        if (name === "checkbox1") {
             const newCheckboxes = {
                 checkbox1: checked,
                 checkbox2: checked,
@@ -223,10 +192,8 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
             };
             setCheckboxes(newCheckboxes);
             setIsSubmitDisabled(!checked);
-        } else
-        {
-            setCheckboxes((prevState) =>
-            {
+        } else {
+            setCheckboxes((prevState) => {
                 const newCheckboxes = { ...prevState, [name]: checked };
 
                 const allCheckedExceptCheckbox1 =
@@ -234,11 +201,9 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                     newCheckboxes.checkbox3 &&
                     newCheckboxes.checkbox4;
 
-                if (allCheckedExceptCheckbox1)
-                {
+                if (allCheckedExceptCheckbox1) {
                     newCheckboxes.checkbox1 = true;
-                } else if (!checked)
-                {
+                } else if (!checked) {
                     newCheckboxes.checkbox1 = false;
                 }
 
@@ -377,24 +342,18 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
 
 export const getServerSideProps: GetServerSideProps = async (
     context: GetServerSidePropsContext
-) =>
-{
+) => {
     const result = await checkUserTokenInServerSide("/", context, "userToken");
     let userData = null;
-    if (result && result.id)
-    {
-        try
-        {
+    if (result && result.id) {
+        try {
             const resp = await wooCommerceRestApi.get(`customers/${result.id}`);
             if (!("data" in resp)) userData = { error: "Server error" };
             userData = resp.data;
-        } catch (err)
-        {
-            if (err instanceof Error)
-            {
+        } catch (err) {
+            if (err instanceof Error) {
                 userData = { error: err.message };
-            } else
-            {
+            } else {
                 userData = { error: "Unknown error" };
             }
         }
