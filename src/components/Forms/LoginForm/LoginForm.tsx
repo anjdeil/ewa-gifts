@@ -46,7 +46,7 @@ export const LoginForm: FC = () =>
                 const date = new Date();
                 date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
                 const expires = "expires=" + date.toUTCString();
-                document.cookie = 'userToken' + "=" + userToken + ";" + expires + ";path=/";
+                document.cookie = 'userToken=' + userToken + ";expires=" + expires + ";path=/;domain=ewagifts.pl;Secure;SameSite=Lax";
                 // const date = new Date();
                 // const options = {
                 //     path: '/', expires: new Date(date.getTime() + (7 * 24 * 60 * 60 * 1000))
