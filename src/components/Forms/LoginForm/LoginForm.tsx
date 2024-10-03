@@ -42,16 +42,9 @@ export const LoginForm: FC = () =>
             if (response && response.token)
             {
                 const userToken = response.token;
-
-                if (data.rememberMe)
-                {
-                    const date = new Date();
-                    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-                    const expires = "expires=" + date.toUTCString();
-                    document.cookie = 'userToken' + "=" + userToken + ";" + expires + ";path=/";
-                } else
-                {
-                    document.cookie = 'userToken' + "=" + userToken + ";" + ";path=/";
+                const date = new Date();
+                const options = {
+                    path: '/', expires: new Date(date.getTime() + (7 * 24 * 60 * 60 * 1000))
                 }
                 // const options = data.rememberMe
                 //     ? {
@@ -61,7 +54,7 @@ export const LoginForm: FC = () =>
                 //     }
                 //     : { path: '/', sameSite: 'lax', secure: true };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // setCookie('userToken', userToken, options);
+                setCookie('userToken', userToken, options);
             }
         } catch (error)
         {
