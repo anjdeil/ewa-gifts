@@ -260,7 +260,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     const isInsufficient = subtotal ? subtotal < MIN_SUBTOTAL_TO_CHECKOUT : false;
     if (isInsufficient) router.push('/cart');
 
-    if (isLoading) return <Loader thickness={5} size={24} />
+    // if (isLoading) return <Loader thickness={5} size={24} />
 
     return (
         <>
@@ -281,7 +281,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                             </Box>
                         </Notification>
                     )}
-                    <Box className={styles.checkout__content}>
+                    {!cartErrorMessage && <Box className={styles.checkout__content}>
                         <Box>
                             <RegistrationForm
                                 isCheckout={true}
@@ -372,7 +372,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
                                 Kupuję i płacę
                             </button>
                         </Box>
-                    </Box>
+                    </Box>}
                     {isModalOpen && (
                         <CheckoutLogin onContinueClick={onContinueClick} />
                     )}
