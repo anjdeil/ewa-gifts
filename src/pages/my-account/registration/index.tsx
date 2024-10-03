@@ -41,7 +41,7 @@ const MyAccount: FC<MyAccountProps> = () =>
         if (data && data.data.status === 200)
             router.push("/my-account");
         else
-            removeCookie('userToken');
+            // removeCookie('userToken');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
