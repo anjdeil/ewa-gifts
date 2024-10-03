@@ -31,7 +31,7 @@ export async function checkUserTokenInServerSide(destination: string, context: G
         }
         else
         {
-            context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+            // context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
             return { redirect: redirect };
         }
 
@@ -42,11 +42,11 @@ export async function checkUserTokenInServerSide(destination: string, context: G
             const response = err.response as AxiosResponse;
             if (response?.data?.code === 'jwt_auth_invalid_token')
             {
-                context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+                // context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
                 return { redirect: redirect }
             }
         }
-        context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+        // context.res.setHeader('Set-Cookie', `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`);
         return { redirect: redirect }
     }
 }
