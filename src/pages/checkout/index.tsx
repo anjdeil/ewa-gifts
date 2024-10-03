@@ -261,6 +261,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     if (isInsufficient) router.push('/cart');
 
     // if (isLoading) return <Loader thickness={5} size={24} />
+    if (isLoading) console.log("Loading...");
 
     return (
         <>
