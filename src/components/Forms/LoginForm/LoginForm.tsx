@@ -54,7 +54,6 @@ export const LoginForm: FC = () =>
                 //     }
                 //     : { path: '/', sameSite: 'lax', secure: true };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
                 // setCookie('userToken', userToken, options);
             }
         } catch (error)
