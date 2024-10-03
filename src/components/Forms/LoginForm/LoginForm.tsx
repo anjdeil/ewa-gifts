@@ -43,25 +43,25 @@ export const LoginForm: FC = () =>
             {
                 const userToken = response.token;
 
-                const date = new Date();
-                date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-                const expires = "expires=" + date.toUTCString();
-                document.cookie = 'userToken=' + userToken + ";expires=" + expires + ";path=/;domain=.ewagifts.pl;SameSite=None;Secure";
-
                 // const date = new Date();
+                // date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+                // const expires = "expires=" + date.toUTCString();
+                // document.cookie = 'userToken=' + userToken + ";expires=" + expires + ";path=/;domain=.ewagifts.pl;SameSite=None;Secure";
+
                 // const options = {
                 //     path: '/', expires: new Date(date.getTime() + (7 * 24 * 60 * 60 * 1000))
                 // }
 
-                // const options = data.rememberMe
-                //     ? {
-                //         path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
-                //         sameSite: 'None',
-                //         secure: true
-                //     }
-                //     : { path: '/', sameSite: 'lax', secure: true };
+                const options = data.rememberMe
+                    ? {
+                        path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8),
+                        sameSite: 'None',
+                        secure: true
+                    }
+                    : { path: '/', sameSite: 'lax', secure: true };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // setCookie('userToken', userToken, options);
+                // @ts-expect-error
+                setCookie('userToken', userToken, options);
             }
         } catch (error)
         {
