@@ -24,8 +24,7 @@ export default function Review({
                 if (!entry.isIntersecting && open === name) {
                     setOpen("");
                 }
-            },
-            { threshold: 0.1 }
+            }
         );
 
         if (currentRef) {

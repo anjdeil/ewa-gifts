@@ -10,7 +10,8 @@
     background-color: $white-lilac;
     border-radius: 10px;
     padding: 20px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 
     &__author {
         display: flex;
@@ -36,15 +37,14 @@
     }
 
     &__button {
+        text-align: right;
         border: none;
         background-color: transparent;
         cursor: pointer;
         color: $text-gray;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        border-radius: 10px;
-        padding: 5px 8px;
+        padding: 4px 8px;
+        margin-bottom: -12px;
+        margin-right: -12px;
         font-size: 0.8rem;
     }
 }
