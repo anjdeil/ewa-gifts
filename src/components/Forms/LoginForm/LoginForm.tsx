@@ -54,11 +54,11 @@ export const LoginForm: FC = () =>
 
                 const options = data.rememberMe
                     ? {
-                        path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8),
+                        path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
                         sameSite: 'None',
                         secure: true
                     }
-                    : { path: '/', sameSite: 'lax', secure: true };
+                    : { path: '/', sameSite: 'Lax', secure: true };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 setCookie('userToken', userToken, options);
