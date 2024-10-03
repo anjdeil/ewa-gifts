@@ -42,9 +42,20 @@ export const LoginForm: FC = () =>
             if (response && response.token)
             {
                 const userToken = response.token;
-                const options = data.rememberMe
-                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8), sameSite: 'lax', secure: true }
-                    : { path: '/', sameSite: 'lax', secure: true };
+                const date = new Date();
+                const options = {
+                    path: '/', expires: new Date(date.getTime() + (7 * 24 * 60 * 60 * 1000)),
+                    sameSite: 'None',
+                    secure: true
+                }
+                // const options = data.rememberMe
+                //     ? {
+                //         path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
+                //         sameSite: 'None',
+                //         secure: true
+                //     }
+                //     : { path: '/', sameSite: 'lax', secure: true };
+
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 setCookie('userToken', userToken, options);
