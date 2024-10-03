@@ -40,7 +40,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         });
         const categoriesResponse = categoriesResponseData?.data as ResponseCategoryListType;
         const categories = categoriesResponse?.data && categoriesResponse.data.items as CategoryType[];
+
+        /* Return 404 if the categories not found */
         if (!categories?.length) return {
+            notFound: true
+        };
+
+        /* Return 404 if the categories in the response are less than the requested categories */
+        if (categories.length < categorySlugs.length) return {
             notFound: true
         };
 
