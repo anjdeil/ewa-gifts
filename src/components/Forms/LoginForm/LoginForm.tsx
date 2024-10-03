@@ -54,7 +54,7 @@ export const LoginForm: FC = () =>
 
                 const options = data.rememberMe
                     ? {
-                        path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
+                        path: '.ewagifts.pl', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
                         sameSite: 'None',
                         secure: true
                     }
