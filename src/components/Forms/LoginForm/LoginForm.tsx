@@ -43,7 +43,7 @@ export const LoginForm: FC = () =>
             {
                 const userToken = response.token;
                 const options = data.rememberMe
-                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8), sameSite: 'none', secure: false }
+                    ? { path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8), sameSite: 'none', secure: true }
                     : { path: '/', sameSite: 'lax', secure: true };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
