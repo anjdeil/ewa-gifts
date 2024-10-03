@@ -45,7 +45,8 @@ export const LoginForm: FC = () =>
                 const date = new Date();
                 const options = {
                     path: '/', expires: new Date(date.getTime() + (7 * 24 * 60 * 60 * 1000)),
-                    sameSite: 'None', secure: true
+                    sameSite: 'None',
+                    secure: true
                 }
                 // const options = data.rememberMe
                 //     ? {
