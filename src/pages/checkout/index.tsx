@@ -5,7 +5,7 @@ import
     FormHandle,
     RegistrationForm,
 } from "@/components/Forms/RegistrationForm";
-import { Loader } from "@/components/Layouts/Loader";
+// import { Loader } from "@/components/Layouts/Loader";
 import Notification from "@/components/Layouts/Notification";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import { Section } from "@/components/Layouts/Section";
@@ -261,6 +261,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     if (isInsufficient) router.push('/cart');
 
     // if (isLoading) return <Loader thickness={5} size={24} />
+    if (isLoading) console.log("Loading...");
 
     return (
         <>
