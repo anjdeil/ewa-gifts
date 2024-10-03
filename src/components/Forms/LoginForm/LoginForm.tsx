@@ -42,10 +42,17 @@ export const LoginForm: FC = () =>
             if (response && response.token)
             {
                 const userToken = response.token;
-                const date = new Date();
-                date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-                const expires = "expires=" + date.toUTCString();
-                document.cookie = 'userToken' + "=" + userToken + ";" + expires + ";path=/";
+
+                if (data.rememberMe)
+                {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+                    const expires = "expires=" + date.toUTCString();
+                    document.cookie = 'userToken' + "=" + userToken + ";" + expires + ";path=/";
+                } else
+                {
+                    document.cookie = 'userToken' + "=" + userToken + ";" + ";path=/";
+                }
                 // const options = data.rememberMe
                 //     ? {
                 //         path: '/', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 8).toUTCString(),
