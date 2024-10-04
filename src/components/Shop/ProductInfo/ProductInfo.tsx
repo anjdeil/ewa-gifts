@@ -169,7 +169,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 </Box>}
 
                 <div className={styles["product-info__island"]}>
-                    <Typography variant='h3' className={`${styles['product-info__island-title']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
+                    <Typography variant='h3' className={`${styles['product-info__sku']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
                     <span className={`${styles["product-info__stock-dot"]} ${currentStock && styles['product-info__stock-dot_active']}`}></span>
                     &nbsp;{currentStock ? `${currentStock} w magazynie` : "Brak w magazynie"}
                 </div>

@@ -76,13 +76,13 @@
 	&__island {
 		margin-bottom: 2rem;
 
-		&-title {
-			font-size: 0.9em;
-			color: $text-gray;
-			margin-bottom: 1.1rem;
-			font-weight: 400;
-		}
+		& h3 {
+			margin-bottom: 20px;
 
+			@media screen and (max-width: 768px) {
+				margin-bottom: 16px;
+			}
+		}
 	}
 
 	&__stock {

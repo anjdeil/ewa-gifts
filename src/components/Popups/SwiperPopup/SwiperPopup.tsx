@@ -1,16 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import React, { useMemo } from 'react';
-import styles from './styles.module.scss';
-import { IconButton } from "@mui/material";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation } from 'swiper/modules';
-import { styled } from '@mui/material/styles';
-import Image from 'next/image';
-import { useSelector } from "react-redux";
 import { SwiperPopupProps } from '@/types';
+import { IconButton } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import Image from 'next/image';
+import React, { useMemo } from 'react';
+import { useSelector } from "react-redux";
+import { FreeMode, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import styles from './styles.module.scss';
 
 const CustomSwiper = styled(Swiper)`
 	.swiper-button-prev.swiper-button-disabled,

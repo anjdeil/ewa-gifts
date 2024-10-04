@@ -4,14 +4,14 @@ import ProductInfo from '@/components/Shop/ProductInfo/ProductInfo';
 import { customRestApi } from "@/services/CustomRestApi";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
+import { responseSingleCustomApi } from "@/types/Services/customApi";
 import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/ProductListQueryParamsType";
 import { typeProductType } from "@/types/Shop";
+import { Box } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { FC } from "react";
 import styles from './styles.module.scss';
-import { responseSingleCustomApi } from "@/types/Services/customApi";
-import { Box } from "@mui/material";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
@@ -76,7 +76,7 @@ const Product: FC<ProductPropsType> = ({ product }) =>
             </Head>
 
             <main className={styles['product']}>
-                <Box className="container">
+                <Box className={`container ${styles['product__wrapper']}`}>
                     <Breadcrumbs links={categoriesLinks} />
                     <ProductInfo product={product} key={product.slug} />
                     {filteredRelatedProducts &&
