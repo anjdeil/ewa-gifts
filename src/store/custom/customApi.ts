@@ -49,6 +49,16 @@ export const customApi = createApi({
                 params,
             }),
         }),
+        fetchProductsMinimized: build.mutation({
+            query: (body) => ({
+                url: `/products/minimized`,
+                method: 'POST',
+                body: body,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }),
+        }),
     }),
 });
 
@@ -60,4 +70,5 @@ export const {
     useFetchProductsCirculationsMutation,
     useFetchMenuItemsListQuery,
     useFetchPostsQuery,
+    useFetchProductsMinimizedMutation,
 } = customApi;

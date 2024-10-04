@@ -1,19 +1,19 @@
 
+import { transformBuilderSplitSection } from "@/services/transformers";
+import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
 import { FC } from "react";
+import { BlogList } from "../Blog/BlogList";
+import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { CategoryBars } from "../Common/CategoryBars";
-import { Slider } from "../Sliders/Slider";
 import { Features } from "../Common/Features";
 import { Hero } from "../Common/Hero";
-import { Split } from "../Common/Split";
-import { transformBuilderSplitSection } from "@/services/transformers";
-import { AdaptiveImage } from "../Common/AdaptiveImage";
 import { RichTextComponent } from "../Common/RichTextComponent";
-import { BlogList } from "../Blog/BlogList";
-import { Section } from "../Layouts/Section";
-import { PageBuilderProps } from "@/types/PageBuilder/PageBuilderProps";
+import { Split } from "../Common/Split";
 import { CustomTabs } from "../Common/Tabs";
+import { Section } from "../Layouts/Section";
 import { ProductCarousel } from "../Shop";
 import { TopSeller } from "../Shop/TopSeller";
+import { Slider } from "../Sliders/Slider";
 import { CatalogList } from "../Catalog/CatalogList";
 import { Title } from "../Layouts/Title";
 import { TitleBuilder } from "@/types/layouts/Title";
@@ -39,7 +39,15 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             if (!('features' in section)) break;
                             return (
                                 <Section isContainer={true} className={'features'} key={key}>
-                                    <Features features={section.features} />
+                                    {section.features && <Features features={section.features} />}
+                                </Section>
+                            )
+                        }
+                        case "features_centered": {
+                            if (!('features_centered' in section)) break;
+                            return (
+                                <Section isContainer={true} className={'features'} key={key}>
+                                    {section.features_centered && <Features features={section.features_centered} isCentered />}
                                 </Section>
                             )
                         }
@@ -112,12 +120,14 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             break;
                         }
                         case "google_reviews": {
+
                             if ('google_reviews' in section) {
                                 return (
                                     <Section className={'reviews section_offset'} isContainer={true} key={key}>
                                         <GoogleReviews />
                                     </Section>
                                 );
+
                             }
                             break;
                         }
@@ -159,7 +169,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                             return <Title title={title.title} isCenter={title.is_center} />
                         }
                         default:
-                            console.error(`There's not section with this name.`)
+                            console.error(`There's not section with this name. ${section._type}`)
                             break;
                     }
                 }

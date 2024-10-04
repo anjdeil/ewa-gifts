@@ -8,6 +8,7 @@ type menuResponseType = z.infer<typeof menuResponseSchema>;
 export const wpAPI = createApi({
     reducerPath: 'wpAPI',
     baseQuery: fetchBaseQuery({ baseUrl: '/api/wp' }),
+    tagTypes: ['User'],
     endpoints: (build) => ({
         fetchMenuItems: build.query({
             query: (params) => ({
@@ -44,7 +45,27 @@ export const wpAPI = createApi({
                     'Authorization': `Bearer ${accessToken}`
                 },
             }),
+            providesTags: ['User']
         }),
+        fetchUserUpdate: build.mutation({
+            query: ({ accessToken, body }) => ({
+                url: "/users/me",
+                method: "PUT",
+                body: body,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }),
+            invalidatesTags: ["User"]
+        }),
+        fetchUserUpdateById: build.mutation({
+            query: ({ id, body }) => ({
+                url: `/users/${id}`,
+                method: "PUT",
+                body: body
+            }),
+            invalidatesTags: ["User"]
+        })
     }),
 })
 
@@ -53,5 +74,7 @@ export const {
     useFetchSomeMenuItemsQuery,
     useFetchAllBlogPostsQuery,
     useLazyFetchUserDataQuery,
-    useFetchUserDataQuery
+    useFetchUserDataQuery,
+    useFetchUserUpdateMutation,
+    useFetchUserUpdateByIdMutation
 } = wpAPI;

@@ -3,21 +3,12 @@ import axios, { AxiosResponse } from "axios";
 
 class CustomRestApi
 {
-    private readonly _apiBase: string;
-    constructor()
-    {
-        if (!process.env.REST_API_URL)
-        {
-            throw new Error("REST_API_URL environment variable is not defined");
-        }
-        this._apiBase = `${process.env.REST_API_URL}/api/v2/`;
-    }
+    private readonly _apiBase = `${process.env.REST_API_URL}/api/v2/`;
 
     async getResource(url: string, method: method, params?: paramsType, body?: object): Promise<AxiosResponse<unknown>>
     {
         const maxRetries = 3;
         let attempt = 0;
-        console.log("Requesting:", this._apiBase + url);
 
         while (attempt < maxRetries)
         {

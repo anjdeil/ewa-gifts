@@ -1,42 +1,45 @@
 import React, { FC, ReactNode } from "react";
 import Header from "../Layouts/Header/Header";
-import TopBar from "../Layouts/TopBar/TopBar";
 import PopupContainer from "@/components/Popups/PopupContainer";
 import { Footer } from "../Layouts";
 import { useMediaQuery } from "@mui/material";
-import MobileHeader from "../Layouts/MobileHeader/MobileHeader";
 import BottomMenu from "../Layouts/BottomMenu";
-import { useFetchMenuItemsListQuery } from "@/store/custom/customApi";
 import { createContext } from "react";
 import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
+import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
 
-export const MenusContext = createContext<MenuItemsType[] | undefined>(undefined);
-
-interface LayoutProps {
-    children: ReactNode
+interface AppContextType
+{
+    menus: MenuItemsType[];
+    categories: CategoryType[];
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+export const AppContext = createContext<AppContextType | undefined>(undefined);
+
+interface LayoutProps
+{
+    children: ReactNode,
+    menus: MenuItemsType[],
+    categories: CategoryType[],
+    error: Error | null
+}
+
+const Layout: FC<LayoutProps> = ({ children, menus, categories, error }) =>
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
-    const menuIds = [820, 818, 817, 816, 358];
 
-    const { data: menusData } = useFetchMenuItemsListQuery({
-        include: menuIds.join(',')
-    });
-
-    const menus = menusData?.data ? menusData.data.items as MenuItemsType[] : [];
+    if (error)
+        throw new Error("Zaszła pomyłka");
 
     return (
         <>
-            <MenusContext.Provider value={menus}>
-
-                {!isMobile && <TopBar />}
-                {!isMobile ? <Header /> : <MobileHeader />}
+            <AppContext.Provider value={{ menus, categories }}>
+                <Header />
                 <PopupContainer />
                 {isMobile && (<BottomMenu />)}
                 {children}
                 <Footer />
-            </MenusContext.Provider>
+            </AppContext.Provider>
         </>
     );
 };

@@ -33,5 +33,9 @@ export const responseMultipleCustomApiSchema = z.object({
 });
 
 export type pageType = z.infer<typeof pageSchema>;
-export type responseSingleCustomApi = z.infer<typeof responseSingleCustomApiSchema>;
-export type responseMultipleCustomApi = z.infer<typeof responseMultipleCustomApiSchema>;
+export type responseSingleCustomApi = z.infer<
+    typeof responseSingleCustomApiSchema
+>;
+export type responseMultipleCustomApi = z.infer<
+    typeof responseMultipleCustomApiSchema
+>;

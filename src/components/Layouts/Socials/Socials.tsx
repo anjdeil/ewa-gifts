@@ -5,16 +5,19 @@ import styles from './styles.module.scss';
 import { MenuSkeleton } from "../MenuSkeleton";
 import { MenuItemsType } from "@/types/Services/customApi/Menu/MenuItemsType";
 import Image from "next/image";
-import { MenusContext } from "@/components/Layout/Layout";
+import { AppContext } from "@/components/Layout/Layout";
 
-const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
-    const menus: MenuItemsType[] | undefined = useContext(MenusContext);
+const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) =>
+{
+    const context = useContext(AppContext);
+    const menus: MenuItemsType[] | undefined = context?.menus;
     const menuItems = menus?.find(({ id }) => id === menuId)?.items;
 
     const iconLinks = menuItems?.filter(({ fa_icon_code, title }) => fa_icon_code === title) || [];
     const otherLinks = menuItems?.filter(({ fa_icon_code, title }) => fa_icon_code !== title) || [];
 
-    if (!menuItems && skeleton) {
+    if (!menuItems && skeleton)
+    {
         return (
             <MenuSkeleton
                 elements={skeleton.elements}
@@ -30,8 +33,10 @@ const Socials: FC<wpMenuProps> = ({ menuId, className, skeleton }) => {
         <div className={`${styles.socials} ${className && className}`}>
             <nav className="nav">
                 <ul className={`list-reset ${styles.socials__list}`}>
-                    {Boolean(otherLinks?.length) && otherLinks.map(({ title, is_button, url, fa_icon_code }) => {
-                        switch (true) {
+                    {Boolean(otherLinks?.length) && otherLinks.map(({ title, is_button, url, fa_icon_code }) =>
+                    {
+                        switch (true)
+                        {
                             case is_button:
                                 return (
                                     <Link key={title} className={`desc link btn-primary ${styles['socials__link']}`} href={url}>

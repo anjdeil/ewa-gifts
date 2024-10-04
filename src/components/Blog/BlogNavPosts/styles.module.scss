@@ -1,60 +1,79 @@
 @import "@/styles/variables.module.scss";
 
 .wrapper {
-	max-width: 720px;
-	width: 100%;
-	padding: 0 0 93px;
-	margin: 0 auto;
+    max-width: 720px;
+    width: 100%;
+    padding: 0 0 93px;
+    margin: 0 auto;
 }
 
 .nav {
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
-	row-gap: 16px;
-	align-items: flex-start;
-	padding-top: 14px;
-	border-top: 1px solid $input-light;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    row-gap: 16px;
+    align-items: flex-start;
+    padding-top: 14px;
+    border-top: 1px solid $input-light;
 
-	@media screen and (min-width: 768px) {
-		flex-direction: row;
-	}
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
+    }
 
-	&__block {
-		display: inline-flex;
-		flex-direction: column;
-		grid-gap: 10px;
-		text-align: left;
-		width: 100%;
+    &__block {
+        display: inline-flex;
+        flex-direction: column;
+        grid-gap: 10px;
+        text-align: left;
+        width: 100%;
 
-		& span {
-			font-size: 16px;
-			line-height: 24px;
-			font-weight: 400;
+        & span {
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 400;
+            color: $black-color;
+            transition: .2s color ease-in-out;
 
-			@media screen and (max-width: 768px) {
-				font-size: 14px;
-			}
-		}
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+            }
 
-		& a {
-			line-height: 1.2;
-			color: grey;
-			font-weight: 600;
-			font-size: 16px;
-			text-decoration: none;
+            &.nav__text {
+                display: block;
+                line-height: 1.2;
+                color: $gray-transparent;
+                font-weight: 500;
+                font-size: 16px;
+                text-transform: uppercase;
 
-			@media screen and (max-width: 768px) {
-				font-size: 14px;
-			}
-		}
+                @media screen and (max-width: 1024px) {
+                    font-weight: 600;
+                }
 
-		&:last-child {
-			text-align: right;
+                @media screen and (max-width: 768px) {
+                    font-size: 14px;
+                }
+            }
+        }
 
-			@media screen and (max-width: 768px) {
-				text-align: left;
-			}
-		}
-	}
+        
+        & a {
+            display: flex;
+            flex-direction: column;
+            row-gap: 13px;
+            text-decoration: none;
+        }
+
+        &:last-child {
+            text-align: right;
+
+            @media screen and (max-width: 768px) {
+                text-align: left;
+            }
+        }
+
+        &:hover span {
+            color: $accent;
+        }
+    }
 }

@@ -3,7 +3,7 @@ import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
 import { Section } from "@/components/Layouts/Section";
 import { customRestApi } from "@/services/CustomRestApi";
-import { BlogItemSchema, BlogItemType } from "@/types";
+import { BlogItemSchema, BlogItemType } from "@/types/Blog";
 import { responseMultipleCustomApi } from "@/types/Services/customApi";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -22,8 +22,9 @@ const fetchPostData = async (slug: string) => {
     const response = await customRestApi.get(`posts/${slug}`);
     if (response && response.data) {
         return (response.data as { data: { item: BlogItemType } }).data.item;
+    } else {
+        throw new Error("Failed to fetch post data.");
     }
-    throw new Error("Failed to fetch post data.");
 };
 
 type ArticleProps = z.infer<typeof ArticlePropsSchema>;
@@ -75,13 +76,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         prevPost = prevPostPromise;
         nextPost = nextPostPromise;
 
-        const morePostsResponse = await customRestApi.get(`posts?per_page=3`);
+        const morePostsResponse = await customRestApi.get("posts", { per_page: 3 });
         if (morePostsResponse && morePostsResponse.data) {
-            const postsData = morePostsResponse.data as responseMultipleCustomApi;
+            const posts = (morePostsResponse.data as responseMultipleCustomApi)
+                .data.items;
 
-            const posts = postsData.data.items;
-
-            relatedPosts = posts.filter((post) => post.slug !== slug).slice(0, 2);
+            relatedPosts = posts
+                .filter((post) => post.slug !== slug)
+                .slice(0, 2);
         }
     } catch (err) {
         if (err instanceof Error) {
