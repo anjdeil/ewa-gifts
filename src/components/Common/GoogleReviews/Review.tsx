@@ -14,34 +14,32 @@ export default function Review({
     authorUrl,
     open,
     setOpen
-}: ReviewType) {
+}: ReviewType)
+{
     const reviewRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const currentRef = reviewRef.current;
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry.isIntersecting && open === name) {
+            ([entry]) =>
+            {
+                if (!entry.isIntersecting && open === name)
+                {
                     setOpen("");
                 }
             }
         );
 
-        if (currentRef) {
-            observer.observe(currentRef);
-        }
+        if (currentRef) observer.observe(currentRef);
 
-        return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef);
-            }
-        };
+        return () => { if (currentRef) observer.unobserve(currentRef); };
     }, [open, name, setOpen]);
-    
+
     return (
         <div ref={reviewRef} className={styles["review"]}>
             <Link href={authorUrl} target="_blank" className={styles["review__author"]}>
-                <Image className={styles["review__photo"]} width={64} height={64} alt={name} src={photo}></Image>
+                <Image className={styles["review__photo"]} width={64} height={64} alt={name} src={photo} />
                 <div className={styles["review__name"]}>{name}</div>
             </Link>
             <Stars rating={rating} />
