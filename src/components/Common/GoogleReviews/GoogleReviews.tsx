@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import transformGoogleReviews from "@/Utils/transformGoogleReviews";
+import CustomSwiper from "@/components/Shop/TopSeller/StyledSwiper";
+import { GoogleReviewType } from "@/types/GoogleReviews";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import 'swiper/css/pagination';
 import { Pagination } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
-import 'swiper/css/pagination';
-import CustomSwiper from "@/components/Shop/TopSeller/StyledSwiper";
-import styles from "./styles.module.scss";
 import Review from "./Review";
-import axios from "axios";
-import transformGoogleReviews from "@/Utils/transformGoogleReviews";
-import { GoogleReviewType } from "@/types/GoogleReviews";
+import styles from "./styles.module.scss";
 
 interface GoogleReviewsData {
     reviews: GoogleReviewType[]
@@ -15,6 +15,7 @@ interface GoogleReviewsData {
 
 export default function GoogleReviews() {
     const [data, setData] = useState<GoogleReviewsData | null>(null);
+    const [open, setOpen] = useState('');
 
     useEffect(() => {
         axios.get('/api/google-reviews')
@@ -55,6 +56,8 @@ export default function GoogleReviews() {
                                 name={name}
                                 rating={rating}
                                 text={text}
+                                open={open}
+                                setOpen={setOpen}
                             />
                         </SwiperSlide>
                     )}
