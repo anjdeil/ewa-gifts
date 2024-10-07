@@ -3,12 +3,11 @@ import { Box, Button } from "@mui/material";
 import { FC } from "react";
 import styles from './styles.module.scss';
 
-export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes, onSizeChange, currentSize, availableSizes }) =>
-{
+export const SizeOptions: FC<SizeOptionsProps> = ({ sizeAttributes, onSizeChange, currentSize, availableSizes }) => {
+
     return (
         <Box className={styles.SizeOptions}>
-            {sizeAttributes.map(attr =>
-            {
+            {sizeAttributes.map(attr => {
                 const uniqId = "slug" in attr ? attr.slug : attr.option;
                 let isAvailable = true;
 

@@ -1,30 +1,28 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
-import styles from './styles.module.scss';
-import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types";
-import { ColorOptions } from "../ColorOptions";
-import { SizeOptions } from "../SizeOptions";
 import AccordionProduct from "@/components/Accordions/AccordionProduct/AccordionProduct";
-import ProductCalculations from "../ProductCalculations";
+import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
-import { getDefaultVariation } from "@/Utils/getDefaultVariation";
-import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
-import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
-import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
-import { filterByCurrentAttr } from "@/Utils/filterByCurrentAttr";
-import { findOrDefault } from "@/Utils/findOrDefault";
-import { useRouter } from "next/router";
-import formatPrice from "@/Utils/formatPrice";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
+import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types/Shop";
+import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
+import { filterByCurrentAttr } from "@/Utils/filterByCurrentAttr";
+import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
+import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
+import { findOrDefault } from "@/Utils/findOrDefault";
+import formatPrice from "@/Utils/formatPrice";
+import { getDefaultVariation } from "@/Utils/getDefaultVariation";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import { useRouter } from "next/router";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { ColorOptions } from "../ColorOptions";
+import ProductCalculations from "../ProductCalculations";
 import ProductTitling from "../ProductTitling";
+import { SizeOptions } from "../SizeOptions";
+import styles from './styles.module.scss';
 
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     const router = useRouter();
-    const isTablet = useMediaQuery('(max-width: 1024px)');
+    const isTablet = useMediaQuery('(max-width: 768px)');
     const { name, description, price, sku, images, attributes, default_attributes, type, stock_quantity } = product;
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
@@ -32,7 +30,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
-    const [currentStock, setCurrentStock] = useState<number>(stock_quantity);
+    const [currentStock, setCurrentStock] = useState<number | boolean>(stock_quantity);
     const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
     const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
@@ -60,7 +58,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     useEffect(() =>
     {
         if (color) setCurrentColor(color as string);
-        if (size && sizes) setCurrentSize(findOrDefault(sizes, size).option);
+        if (size && sizes) setCurrentSize(findOrDefault(sizes, size as string).option);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -118,7 +116,19 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     return (
         <Box className={styles.product}>
-            {isTablet && <ProductTitling title={name} sku={currentSku} />}
+            {isTablet && (
+                <>
+                    <ProductTitling title={name} sku={currentSku} />
+                    {currentPrice && (
+                        <Box className={styles['price-wrapper']}>
+                        <Typography variant='body2' className={styles['product-info__price']}>
+                            Od {formatPrice(currentPrice)}
+                            &nbsp;Bez VAT
+                        </Typography>
+                        </Box>
+                    )}
+                </>
+            )}
 
             {currentImages &&
                 <Box className={styles.product__slider}>
@@ -126,13 +136,18 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 </Box>
             }
             <Box className={styles.product__info}>
-                {!isTablet && <ProductTitling title={name} sku={currentSku} />}
-                {currentPrice && <Box className={styles['price-wrapper']}>
-                    <Typography variant='body2' className={styles['product-info__price']}>
-                        Od {formatPrice(currentPrice)}
-                        &nbsp;<span className={styles["product-info__price_vat"]}>Bez VAT</span>
-                    </Typography>
-                </Box>}
+                {!isTablet && (
+                    <>
+                        <ProductTitling title={name} sku={currentSku} />
+                        {currentPrice && (
+                            <Box className={styles['price-wrapper']}>
+                                <Typography variant='body2' className={styles['product-info__price']}>
+                                    Od {formatPrice(currentPrice)}
+                                    &nbsp;Bez VAT
+                                </Typography>
+                            </Box>
+                        )}
+                </>)}
                 {(allColors && currentColor) && <Box className={styles['color-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:
@@ -146,7 +161,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     </Typography>
                     {currentSize &&
                         <SizeOptions
-                            sizeAttributes={allSizes}
+                            sizeAttributes={allSizes || []}
                             onSizeChange={onSizeChange}
                             currentSize={currentSize}
                             availableSizes={sizes}
@@ -154,7 +169,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 </Box>}
 
                 <div className={styles["product-info__island"]}>
-                    <h3 className={`${styles['product-info__island-title']} ${styles['product-info__stock']}`}>Dostępność:</h3>
+                    <Typography variant='h3' className={`${styles['product-info__sku']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
                     <span className={`${styles["product-info__stock-dot"]} ${currentStock && styles['product-info__stock-dot_active']}`}></span>
                     &nbsp;{currentStock ? `${currentStock} w magazynie` : "Brak w magazynie"}
                 </div>

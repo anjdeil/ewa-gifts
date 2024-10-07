@@ -1,7 +1,6 @@
 import MiniCart from "@/components/Cart/MiniCart";
 import { CustomInput } from "@/components/Forms/CustomInput";
-import
-{
+import {
     FormHandle,
     RegistrationForm,
 } from "@/components/Forms/RegistrationForm";
@@ -12,13 +11,18 @@ import { Section } from "@/components/Layouts/Section";
 import OrderTotals from "@/components/MyAccount/OrderTotals";
 import { useAppSelector } from "@/hooks/redux";
 import { useCreateOrderWoo } from "@/hooks/useCreateOrderWoo";
+import { compactCartItems } from "@/services/transformers/checkout";
 import wooCommerceRestApi from "@/services/wooCommerce/wooCommerceRestApi";
 import { useFetchProductsCirculationsMutation } from "@/store/custom/customApi";
 import { useLazyFetchCustomerDataQuery } from "@/store/wooCommerce/wooCommerceApi";
 import { useLazyFetchUserDataQuery } from "@/store/wordpress";
+import { WpWooError } from "@/types";
 import { CheckoutProps, userFieldsType } from "@/types/Pages/checkout";
+import { FetchProductsCirculationsResponse, ProductsCirculationsType } from "@/types/Services/customApi/Product/ProductsCirculationsType";
 import checkCartConflict from "@/Utils/checkCartConflict";
 import { checkUserTokenInServerSide } from "@/Utils/checkUserTokenInServerSide";
+import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
+import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 import { Box, Typography } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
@@ -28,11 +32,6 @@ import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { CheckoutLogin } from "./CheckoutLogin/CheckoutLogin";
 import styles from "./styles.module.scss";
-import { compactCartItems } from "@/services/transformers/checkout";
-import { WpWooError } from "@/types";
-import { FetchProductsCirculationsResponse, ProductsCirculationsType } from "@/types/Services/customApi/Product/ProductsCirculationsType";
-import { MIN_SUBTOTAL_TO_CHECKOUT } from "@/Utils/consts";
-import getSubtotalByLineItems from "@/Utils/getSubtotalByLineItems";
 
 const breadLinks = [{ name: "Składania zamowienia", url: "/checkout" }];
 

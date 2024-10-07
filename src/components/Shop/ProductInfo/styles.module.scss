@@ -1,29 +1,47 @@
 @import "@/styles/variables.module.scss";
 
 .product {
+	margin-bottom: 140px;
 	padding-top: 65px;
 	display: grid;
-	grid-template-columns: 50% 50%;
+	grid-template-columns: repeat(12, 1fr);
 	grid-gap: 20px;
 
 	@media screen and (max-width: 1024px) {
+		margin-bottom: 60px;
 		padding-top: 49px;
 	}
 
 	@media screen and (max-width: 768px) {
+		grid-template-columns: 1fr;
 		padding-top: 41px;
 		flex-direction: column;
-		grid-gap: 27px;
+		grid-gap: 16px;
 	}
 
 	&__slider {
-		// flex: 0 1 50%;
-		// width: 50%;
 		overflow: hidden;
+		grid-column: span 6;
+
+		@media screen and (max-width: 1024px) {
+			grid-column: span 5;
+		}
 
 		@media screen and (max-width: 768px) {
-			width: 100%;
-			// flex: 0 1 100%;
+			grid-column: 1 / -1;
+			margin-bottom: 11px;
+		}
+	}
+
+	&__info {
+		grid-column: span 6;
+
+		@media screen and (max-width: 1024px) {
+			grid-column: span 7;
+		}
+
+		@media screen and (max-width: 768px) {
+			grid-column: 1 / -1;
 		}
 	}
 }
@@ -56,19 +74,18 @@
 	}
 
 	&__island {
+		margin-bottom: 2rem;
 
-		&-title {
-			font-size: 0.9em;
-			color: $text-gray;
-			margin-bottom: 1em;
-			font-weight: 400;
+		& h3 {
+			margin-bottom: 20px;
+
+			@media screen and (max-width: 768px) {
+				margin-bottom: 16px;
+			}
 		}
-
-		margin-bottom: 1.5rem;
 	}
 
 	&__stock {
-
 		&-dot {
 			display: inline-block;
 			background: $text-gray;
@@ -88,29 +105,37 @@
 		color: $graphite;
 		margin-bottom: 22px;
 
-		&_vat {
-			color: $text-gray;
+		@media screen and (max-width: 768px) {
+			font-size: 14px;
+			margin-bottom: 0;
 		}
 	}
 
 	&__accordionWrapper {
 		margin-bottom: 40px;
+		display: flex;
+		flex-direction: column;
+		row-gap: 40px;
+
+		@media screen and (max-width: 1024px) {
+			row-gap: 25px;
+		}
 	}
 }
 
 .price-wrapper {
 	margin: 23px 0 21px;
+
+	@media screen and (max-width: 768px) {
+		margin: 0;
+	}
 }
 
 .color-wrapper {
-	margin-bottom: 39px;
-
-	@media screen and (max-width: 1024px) {
-		margin-bottom: 26px;
-	}
+	margin-bottom: 20px;
 
 	& h3 {
-		margin-bottom: 20px;
+		margin-bottom: 6px;
 
 		@media screen and (max-width: 768px) {
 			margin-bottom: 16px;
@@ -155,20 +180,5 @@
 		@media screen and (max-width: 768px) {
 			margin-bottom: 16px;
 		}
-	}
-}
-
-@media(max-width: 1024px) {
-	.product {
-		padding-top: 30px;
-		grid-template-columns: 1fr;
-	}
-}
-
-@media(max-width: 768px) {
-	.product {
-		padding-top: 20px;
-		flex-direction: column;
-		grid-gap: 30px;
 	}
 }
