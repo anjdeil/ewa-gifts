@@ -1,6 +1,6 @@
-import React, { FC } from "react";
 import formatPrice from "@/Utils/formatPrice";
 import { PriceProps } from "@/types/Shop/Price";
+import { FC } from "react";
 
 const Price: FC<PriceProps> = ({ price, withoutTax }) => {
     const formattedPrice = formatPrice(price);
@@ -9,7 +9,7 @@ const Price: FC<PriceProps> = ({ price, withoutTax }) => {
         <span className="price">
             {formattedPrice}
             {withoutTax && (
-                <span className="price__tax"> bez VAT</span>
+                <span> bez VAT</span>
             )}
         </span>
     );

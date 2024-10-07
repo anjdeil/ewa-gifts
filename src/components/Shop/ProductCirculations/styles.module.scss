@@ -54,6 +54,11 @@
         display: grid;
         grid-template-columns: 120px 1fr;
         gap: 20px;
+
+        &__slider {
+            display: flex;
+            align-items: center;
+        }
     }
 }
 
@@ -111,7 +116,7 @@
                 width: 100%;
             }
 
-            &__slider {
+            &__slider {                
                 padding-left: 10px;
                 padding-right: 10px;
             }

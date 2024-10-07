@@ -8,6 +8,15 @@
     font-size: 0.9em;
     gap: 20px;
 
+    &__main-button {
+        width: 277px;
+
+        @media screen and (max-width: 1024px) {
+			width: 300px;
+		}
+       
+    }
+
     &__secondary-button {
         font-size: 0.9rem;
         padding: 0.9em 1.5em;

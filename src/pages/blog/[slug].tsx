@@ -1,14 +1,14 @@
+import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
+import { BlogPost } from "@/components/Blog/BlogPost";
+import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
+import { Section } from "@/components/Layouts/Section";
+import { customRestApi } from "@/services/CustomRestApi";
+import { BlogItemSchema, BlogItemType } from "@/types/Blog";
+import { responseMultipleCustomApi } from "@/types/Services/customApi";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { FC } from "react";
-import { BlogPost } from "@/components/Blog/BlogPost";
-import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
-import { customRestApi } from "@/services/CustomRestApi";
 import { z } from "zod";
-import { Section } from "@/components/Layouts/Section";
-import { BlogItemSchema, BlogItemType } from "@/types/Blog";
-import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
-import { responseMultipleCustomApi } from "@/types/Services/customApi";
 
 const ArticlePropsSchema = z.object({
     response: BlogItemSchema,

@@ -4,7 +4,7 @@ import { defaultAttributesSchema, ProductOptionsSchema } from "../ProductCard";
 export const SizeOptionsPropsSchema = z.object({
     sizeAttributes: z.array(z.union([ProductOptionsSchema, defaultAttributesSchema])),
     onSizeChange: z.function().args(z.string()).returns(z.void()),
-    currentSize: z.string(),
+    currentSize: z.string().nullable().optional(),
     availableSizes: z.array(z.union([defaultAttributesSchema, ProductOptionsSchema])).nullable()
 });
 

@@ -1,13 +1,13 @@
-import React, { FC } from "react";
+import { BreadcrumbsProps } from "@/types/layouts/Breadcrumbs";
 import { Breadcrumbs as MuiBreadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
+import { FC } from "react";
 import styles from "./styles.module.scss";
-import { BreadcrumbsProps } from "@/types/layouts/Breadcrumbs";
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ links }) => {
 
     return (
-        <MuiBreadcrumbs aria-label="Breadcrumbs">
+        <MuiBreadcrumbs aria-label="Breadcrumbs" className={styles['breadcrumbs']}>
             <Link className={styles['breadcrumbs__link']} href={'/'}>Główna</Link>
             {
                 links?.map(({ name, url }, i, links) => {

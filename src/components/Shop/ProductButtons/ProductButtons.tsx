@@ -1,7 +1,7 @@
-import React, { FC } from "react";
 import { EwaButton } from "@/components/EwaComponents/EwaButton";
-import styles from "./styles.module.scss";
 import Link from "next/link";
+import { FC } from "react";
+import styles from "./styles.module.scss";
 
 interface ProductButtonsPropsType {
     hasAdded?: boolean,
@@ -24,10 +24,10 @@ const ProductButtons: FC<ProductButtonsPropsType> = ({ hasAdded = false, quantit
                             Zobacz koszyk
                         </Link>
                     </> :
-                    <EwaButton onClick={() => onAdd()}>
+                    <EwaButton onClick={() => onAdd()} className={styles['product-buttons__main-button']}>
                         {(hasAdded && !quantitiesMatch) ?
                             <>Aktualizuj ilość</> :
-                            <>Do koszyka</>
+                            <>Dodaj do koszyka</>
                         }
                     </EwaButton>
             }
