@@ -22,7 +22,8 @@ import { compactCartItems } from "@/services/transformers/checkout";
 
 const breadLinks = [{ name: 'Koszyk', url: '/cart' }];
 
-const Cart = () => {
+function Cart()
+{
   const { items, shippingLines } = useAppSelector(state => state.Cart);
   const { createOrder, error: createError, createdOrder } = useCreateOrderWoo();
   const [fetchProductsCirculations, { data: productsSpecsData, isLoading: isProductsSpecsLoading }] = useFetchProductsCirculationsMutation();
@@ -32,7 +33,8 @@ const Cart = () => {
   const [isUpdating, setIsUpdating] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     /* Fetch create order */
     setCartItems(items);
     setIsUpdating(true);
@@ -45,8 +47,10 @@ const Cart = () => {
     });
   }, [items]);
 
-  useEffect(() => {
-    if (createdOrder && createdOrder.line_items) {
+  useEffect(() =>
+  {
+    if (createdOrder && createdOrder.line_items)
+    {
       setCurrentOrder(createdOrder);
       setLineItems(createdOrder.line_items);
       setIsUpdating(false);
@@ -54,8 +58,10 @@ const Cart = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createdOrder])
 
-  useEffect(() => {
-    if (createError) {
+  useEffect(() =>
+  {
+    if (createError)
+    {
       setIsUpdating(false);
     }
   }, [createError]);
@@ -70,6 +76,8 @@ const Cart = () => {
     <>
       <Head>
         <title>Koszyk</title>
+        <meta name="description" content={`This is cart page`} />
+        <meta name="robots" content="noindex" />
       </Head>
       <main>
         <Section className="section" isContainer={true}>

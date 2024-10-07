@@ -5,6 +5,7 @@ import Link from 'next/link';
 import axios, { AxiosResponse } from 'axios';
 import parseCookies from '@/Utils/parseCookies';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Head from "next/head";
 
 const redirectToLogin = {
     redirect: {
@@ -14,14 +15,16 @@ const redirectToLogin = {
 };
 
 /* eslint-disable-next-line react-refresh/only-export-components */
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
     const cookies = context.req.headers.cookie;
     if (!cookies) return redirectToLogin;
 
     const cookieRows = parseCookies(cookies)
     if (!cookieRows.userToken) return redirectToLogin;
 
-    try {
+    try
+    {
         const userResponse = await axios.get(`${process.env.SITE_URL}/wp-json/wp/v2/users/me`, {
             headers: {
                 'Authorization': `Bearer ${cookieRows.userToken}`
@@ -38,9 +41,11 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             }
         }
 
-    } catch (error) {
+    } catch (error)
+    {
 
-        if (axios.isAxiosError(error)) {
+        if (axios.isAxiosError(error))
+        {
             const response = error?.response as AxiosResponse;
             if (response?.data?.code === 'jwt_auth_invalid_token') return redirectToLogin;
         }
@@ -51,21 +56,31 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     }
 }
 
-interface MyAccountPropsType {
+interface MyAccountPropsType
+{
     userId: string,
     userName: string,
 }
 
-const MyAccount: FC<MyAccountPropsType> = ({ userName }) => {
+const MyAccount: FC<MyAccountPropsType> = ({ userName }) =>
+{
     return (
-        <AccountLayout title="Moje konto">
-            <Notification>
-                Witaj {userName}! Nie jesteś {userName}? <Link href={'/my-account/logout'}>Wyloguj się</Link>
-            </Notification>
-            <Notification>
-                W ustawieniach swojego konta możesz przejrzeć swoje ostatnie zamówienia, zarządzać adresami płatności i dostawy oraz zmieniać hasło i szczegóły konta.
-            </Notification>
-        </AccountLayout>
+        <>
+            <Head>
+                <title>Moje konto</title>
+                <meta name="description" content={`This is my account page`} />
+                <meta name="robots" content="noindex" />
+            </Head>
+            <AccountLayout title="Moje konto">
+                <Notification>
+                    Witaj {userName}! Nie jesteś {userName}? <Link href={'/my-account/logout'}>Wyloguj się</Link>
+                </Notification>
+                <Notification>
+                    W ustawieniach swojego konta możesz przejrzeć swoje ostatnie zamówienia, zarządzać adresami płatności i dostawy oraz zmieniać hasło i szczegóły konta.
+                </Notification>
+            </AccountLayout>
+        </>
+
     );
 };
 
