@@ -14,8 +14,12 @@ import ShopSidebar from "../ShopSidebar";
 import MobileSidebar from "../ShopSidebar/MobileSidebar";
 import ShopToolbar from "../ShopToolbar";
 import styles from "./styles.module.scss";
+import { getCategoriesForUrl } from "@/Utils/getCategoriesForUrl";
+import { domain } from "@/constants";
+import { useMemo } from "react";
 
-interface ArchiveProps {
+interface ArchiveProps
+{
     searchTerm?: string,
     products: typeProductType[],
     categories?: CategoryType[],
@@ -38,7 +42,8 @@ export default function Archive({
     productsCount,
     availableAttributes,
     priceRange
-}: ArchiveProps) {
+}: ArchiveProps)
+{
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const currentCategory = Array.isArray(categories) ? categories[categories.length - 1] as CategoryType : null;
@@ -48,7 +53,8 @@ export default function Archive({
     const popup = useAppSelector(state => state.Popup);
     const router = useRouter();
 
-    const switchPage = (page: number) => {
+    const switchPage = (page: number) =>
+    {
         const { slugs, ...params } = router.query;
         if (!Array.isArray(slugs)) return;
 
@@ -80,14 +86,14 @@ export default function Archive({
     const pageTitle = currentCategory ? currentCategory.name :
         searchTerm ? `Wyniki wyszukiwania: ${searchTerm}` : "";
 
-    const linkCanonical = router.asPath.split('?')[0];
+    const canonicalUrl = useMemo(() => `${domain}/product-category/${getCategoriesForUrl(categories || [])}`, [categories]);
 
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
                 {/* {currentCategory?.description && <meta name="description" content={currentCategory.description} />} */}
-                <link rel="canonical" href={`https://ewagifts.pl${linkCanonical}`} />
+                <link rel="canonical" href={canonicalUrl} />
             </Head>
             <main className={styles['product-archive']}>
                 <div className="container">

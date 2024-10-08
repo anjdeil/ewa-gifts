@@ -2,12 +2,13 @@ import { BlogNavPosts } from "@/components/Blog/BlogNavPosts";
 import { BlogPost } from "@/components/Blog/BlogPost";
 import { BlogRelatedPosts } from "@/components/Blog/BlogRelatedPosts";
 import { Section } from "@/components/Layouts/Section";
+import { domain } from "@/constants";
 import { customRestApi } from "@/services/CustomRestApi";
 import { BlogItemSchema, BlogItemType } from "@/types/Blog";
 import { responseMultipleCustomApi } from "@/types/Services/customApi";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { z } from "zod";
 
 const ArticlePropsSchema = z.object({
@@ -18,11 +19,14 @@ const ArticlePropsSchema = z.object({
     error: z.string().optional(),
 });
 
-const fetchPostData = async (slug: string) => {
+const fetchPostData = async (slug: string) =>
+{
     const response = await customRestApi.get(`posts/${slug}`);
-    if (response && response.data) {
+    if (response && response.data)
+    {
         return (response.data as { data: { item: BlogItemType } }).data.item;
-    } else {
+    } else
+    {
         throw new Error("Failed to fetch post data.");
     }
 };
@@ -35,16 +39,21 @@ const Article: FC<ArticleProps> = ({
     nextPost,
     relatedPosts,
     error,
-}) => {
-    if (error) {
+}) =>
+{
+    if (error)
+    {
         throw new Error(error);
     }
+
+    const canonicalUrl = useMemo(() => `${domain}/blog/${response.slug}`, [response.slug]);
 
     return (
         <>
             <Head>
                 <title>{response.title}</title>
                 <meta name="description" content={response.excerpt} />
+                <link rel="canonical" href={canonicalUrl} />
             </Head>
             <main>
                 <Section className={"container"}>
@@ -57,7 +66,8 @@ const Article: FC<ArticleProps> = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) =>
+{
     const { slug } = context.params!;
     let response: BlogItemType | null = null;
     let prevPost: BlogItemType | null = null;
@@ -65,7 +75,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     let relatedPosts: BlogItemType[] = [];
     let error: string | null = null;
 
-    try {
+    try
+    {
         response = await fetchPostData(slug as string);
 
         const [prevPostPromise, nextPostPromise] = await Promise.all([
@@ -77,7 +88,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         nextPost = nextPostPromise;
 
         const morePostsResponse = await customRestApi.get("posts", { per_page: 3 });
-        if (morePostsResponse && morePostsResponse.data) {
+        if (morePostsResponse && morePostsResponse.data)
+        {
             const posts = (morePostsResponse.data as responseMultipleCustomApi)
                 .data.items;
 
@@ -85,10 +97,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 .filter((post) => post.slug !== slug)
                 .slice(0, 2);
         }
-    } catch (err) {
-        if (err instanceof Error) {
+    } catch (err)
+    {
+        if (err instanceof Error)
+        {
             error = err.message;
-        } else {
+        } else
+        {
             error = "Server Error.";
         }
     }

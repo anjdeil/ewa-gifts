@@ -10,8 +10,9 @@ import { typeProductType } from "@/types/Shop";
 import { Box } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import styles from './styles.module.scss';
+import { domain } from "@/constants";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
@@ -68,11 +69,14 @@ const Product: FC<ProductPropsType> = ({ product }) =>
     const filteredRelatedProducts = relatedProducts?.filter((related: typeProductType) => related.slug !== product.slug);
     if (filteredRelatedProducts && filteredRelatedProducts?.length > 4) filteredRelatedProducts.splice(-1);
 
+    const canonicalUrl = useMemo(() => `${domain}/product/${product.slug}`, [product.slug]);
+
     return (
         <>
             <Head>
                 <title>{product?.name}</title>
                 {product?.description && <meta name="description" content={product.description} />}
+                <link rel="canonical" href={canonicalUrl} />
             </Head>
 
             <main className={styles['product']}>

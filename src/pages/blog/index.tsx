@@ -3,6 +3,7 @@ import { Loader } from "@/components/Layouts/Loader";
 import { PageHeader } from "@/components/Layouts/PageHeader";
 import PagesNavigation from "@/components/Layouts/PagesNavigation";
 import { Section } from "@/components/Layouts/Section";
+import { domain } from "@/constants";
 import { customRestApi } from "@/services/CustomRestApi";
 import { useFetchPostsQuery } from "@/store/custom/customApi";
 import { BlogItemSchema, BlogItemType } from "@/types/Blog";
@@ -11,7 +12,7 @@ import { Box } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const BlogPropsSchema = z.object({
@@ -25,13 +26,17 @@ const perPage = 10;
 
 type BlogProps = z.infer<typeof BlogPropsSchema>;
 
-const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
+const canonicalUrl = `${domain}/blog`;
+
+function Blog({ response, page, count, error }: BlogProps)
+{
     const router = useRouter();
     const [posts, setPosts] = useState<BlogItemType[]>(response);
     const [currentPage, setCurrentPage] = useState<number>(page);
     const [initialLoad, setInitialLoad] = useState<boolean>(true);
 
-    if (error) {
+    if (error)
+    {
         throw new Error(error);
     }
 
@@ -42,24 +47,30 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
         }
     );
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setInitialLoad(false);
     }, []);
 
-    useEffect(() => {
-        if (fetchedPosts) {
+    useEffect(() =>
+    {
+        if (fetchedPosts)
+        {
             setPosts(fetchedPosts.data?.items || []);
         }
     }, [fetchedPosts]);
 
-    const switchPage = (newPage: number) => {
+    const switchPage = (newPage: number) =>
+    {
         const validPage = isNaN(newPage) || newPage <= 0 ? 1 : newPage;
 
         const params = { ...router.query };
 
-        if (validPage === 1) {
+        if (validPage === 1)
+        {
             delete params.page;
-        } else {
+        } else
+        {
             params.page = String(validPage);
         }
 
@@ -87,6 +98,7 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
             <Head>
                 <title>{pageTitle}</title>
                 <meta name="description" content={`This is ${pageTitle}`} />
+                <link rel="canonical" href={canonicalUrl} />
             </Head>
             <main>
                 <Section className="container">
@@ -115,11 +127,13 @@ const Blog: FC<BlogProps> = ({ response, page, count, error }) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) =>
+{
     const params = context.query;
     const page: number = Number(params.page) > 0 ? Number(params.page) : 1;
 
-    try {
+    try
+    {
         const allPostsResponse = await customRestApi.get(
             `posts?page=${page}&per_page=${perPage}`
         );
@@ -131,7 +145,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         const response = allPostsData.data.items;
 
-        if (!response.length) {
+        if (!response.length)
+        {
             return { notFound: true };
         }
 
@@ -145,7 +160,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 error: null,
             },
         };
-    } catch (err) {
+    } catch (err)
+    {
         console.error("Error fetching posts:", err);
         return {
             props: {
