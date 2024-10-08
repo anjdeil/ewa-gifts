@@ -125,7 +125,7 @@ function Blog({ response, page, count, error }: BlogProps)
             </main>
         </>
     );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) =>
 {
