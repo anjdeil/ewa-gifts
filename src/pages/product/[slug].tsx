@@ -13,6 +13,8 @@ import Head from "next/head";
 import { FC, useMemo } from "react";
 import styles from './styles.module.scss';
 import { domain } from "@/constants";
+import { getCanonicalLink } from "@/Utils/getCanonicalLink";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
@@ -54,6 +56,7 @@ interface ProductPropsType
 
 const Product: FC<ProductPropsType> = ({ product }) =>
 {
+    const router = useRouter();
     const slug = product.categories[product.categories.length - 1].slug;
     const productListQueryParams: ProductListQueryParamsType = {
         per_page: 5,
@@ -69,13 +72,14 @@ const Product: FC<ProductPropsType> = ({ product }) =>
     const filteredRelatedProducts = relatedProducts?.filter((related: typeProductType) => related.slug !== product.slug);
     if (filteredRelatedProducts && filteredRelatedProducts?.length > 4) filteredRelatedProducts.splice(-1);
 
-    const canonicalUrl = useMemo(() => `${domain}/product/${product.slug}`, [product.slug]);
+    const canonicalUrl = useMemo(() => getCanonicalLink(router.asPath, domain), [router.asPath]);
+    const { title, description } = product.seo_data;
 
     return (
         <>
             <Head>
-                <title>{product?.name}</title>
-                {product?.description && <meta name="description" content={product.description} />}
+                <title>{title || ''}</title>
+                {product?.description && <meta name="description" content={description || product.description} />}
                 <link rel="canonical" href={canonicalUrl} />
             </Head>
 

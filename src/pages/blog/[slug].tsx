@@ -6,8 +6,10 @@ import { domain } from "@/constants";
 import { customRestApi } from "@/services/CustomRestApi";
 import { BlogItemSchema, BlogItemType } from "@/types/Blog";
 import { responseMultipleCustomApi } from "@/types/Services/customApi";
+import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { FC, useMemo } from "react";
 import { z } from "zod";
 
@@ -41,18 +43,18 @@ const Article: FC<ArticleProps> = ({
     error,
 }) =>
 {
-    if (error)
-    {
-        throw new Error(error);
-    }
+    const router = useRouter();
 
-    const canonicalUrl = useMemo(() => `${domain}/blog/${response.slug}`, [response.slug]);
+    if (error) throw new Error(error);
+
+    const canonicalUrl = useMemo(() => getCanonicalLink(router.asPath, domain), [router.asPath]);
+    const { title, description } = response.seo_data;
 
     return (
         <>
             <Head>
-                <title>{response.title}</title>
-                <meta name="description" content={response.excerpt} />
+                <title>{title || ''}</title>
+                <meta name="description" content={description || response.excerpt} />
                 <link rel="canonical" href={canonicalUrl} />
             </Head>
             <main>
