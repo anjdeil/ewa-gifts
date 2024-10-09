@@ -12,13 +12,14 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
 {
   if (error || !page) throw new Error(error);
 
+  const { title, description, bot } = page.seo_data;
+
   return (
     <>
       <Head>
-        <title>{page.title}</title>
-        <meta name="description" content={page.title} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>{title || page.title}</title>
+        <meta name="description" content={description || page.title} />
+        {bot.is_no_index && <meta name="robots" content="noindex" />}
       </Head>
       <main>
         {!isMain && <PageHeader title={page.title} breadLinks={[{ name: page.title, url: `/${page.title}` }]} />}

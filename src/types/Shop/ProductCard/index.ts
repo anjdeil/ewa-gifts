@@ -1,3 +1,4 @@
+import { SeoDataSchema } from "@/types/seo";
 import { z } from "zod";
 
 export const ProductOptionsSchema = z.object({
@@ -77,6 +78,7 @@ export const simpleProductSchema = z.object({
     name: z.string(),
     price: z.union([z.number(), z.boolean()]),
     price_circulations: PriceCirculationsSchema,
+    seo_data: SeoDataSchema,
     sku: z.string(),
     slug: z.string(),
     stock_quantity: z.union([z.number(), z.boolean()]),

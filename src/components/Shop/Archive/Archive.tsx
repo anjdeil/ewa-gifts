@@ -14,7 +14,7 @@ import ShopSidebar from "../ShopSidebar";
 import MobileSidebar from "../ShopSidebar/MobileSidebar";
 import ShopToolbar from "../ShopToolbar";
 import styles from "./styles.module.scss";
-import { getCategoriesForUrl } from "@/Utils/getCategoriesForUrl";
+import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { domain } from "@/constants";
 import { useMemo } from "react";
 
@@ -86,7 +86,7 @@ export default function Archive({
     const pageTitle = currentCategory ? currentCategory.name :
         searchTerm ? `Wyniki wyszukiwania: ${searchTerm}` : "";
 
-    const canonicalUrl = useMemo(() => `${domain}/product-category/${getCategoriesForUrl(categories || [])}`, [categories]);
+    const canonicalUrl = useMemo(() => getCanonicalLink(router.asPath, domain), [router.asPath]);
 
     return (
         <>

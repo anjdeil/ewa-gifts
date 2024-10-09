@@ -8,11 +8,12 @@ import { customRestApi } from "@/services/CustomRestApi";
 import { useFetchPostsQuery } from "@/store/custom/customApi";
 import { BlogItemSchema, BlogItemType } from "@/types/Blog";
 import { responseMultipleCustomApi } from "@/types/Services/customApi";
+import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { Box } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
 const BlogPropsSchema = z.object({
@@ -25,8 +26,6 @@ const BlogPropsSchema = z.object({
 const perPage = 10;
 
 type BlogProps = z.infer<typeof BlogPropsSchema>;
-
-const canonicalUrl = `${domain}/blog`;
 
 function Blog({ response, page, count, error }: BlogProps)
 {
@@ -89,7 +88,7 @@ function Blog({ response, page, count, error }: BlogProps)
     const pagesCount = Math.ceil(count / perPage);
     const pageTitle = "Blog";
     const breadLinks = [{ name: pageTitle, url: "" }];
-
+    const canonicalUrl = useMemo(() => getCanonicalLink(router.asPath, domain, true), [router.asPath]);
     if (isLoading && posts.length === 0)
         return <Loader thickness={5} size={24} />;
 
