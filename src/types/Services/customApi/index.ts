@@ -1,5 +1,6 @@
 import { BlogItemSchema, BlogStatisticSchema } from "@/types/Blog";
 import { PageBuilderFullSectionsSchema } from "@/types/PageBuilder/PageBuilderFullSectionsSchema";
+import { SeoDataSchema } from "@/types/seo";
 import { ProductSchema } from "@/types/Shop";
 import { z } from "zod";
 
@@ -9,6 +10,7 @@ export const pageSchema = z.object({
     menu_order: z.number(),
     parent: z.number(),
     sections: z.array(PageBuilderFullSectionsSchema),
+    seo_data: SeoDataSchema,
     slug: z.string(),
     status: z.string(),
     title: z.string(),

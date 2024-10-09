@@ -19,6 +19,7 @@ const MyAccount: FC<MyAccountProps> = () =>
             <Head>
                 <title>{pageTitle}</title>
                 <meta name="description" content={`This is ${pageTitle}`} />
+                <meta name="robots" content="noindex" />
             </Head>
             <main style={{ minHeight: '100vh' }}>
                 <Section className={"section"} isContainer={true}>

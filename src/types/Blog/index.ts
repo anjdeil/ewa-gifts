@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SeoDataSchema } from "../seo";
 
 export const BlogCategorySchema = z.object({
     id: z.number(),
@@ -24,6 +25,7 @@ export const BlogItemSchema = z.object({
     menu_order: z.number(),
     categories: z.array(BlogCategorySchema),
     prev_post: z.string(),
+    seo_data: SeoDataSchema,
     next_post: z.string(),
 });
 

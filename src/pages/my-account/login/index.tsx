@@ -42,6 +42,8 @@ const MyAccount: FC<MyAccountProps> = () =>
         <>
             <Head>
                 <title>Logowanie</title>
+                <meta name="description" content={`This is login page`} />
+                <meta name="robots" content="noindex" />
             </Head>
             <main className={styles['my-account']}>
                 <div className="container">

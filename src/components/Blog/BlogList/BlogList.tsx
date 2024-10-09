@@ -7,7 +7,7 @@ import { FC, useEffect, useState } from "react";
 import { BlogListItem } from "../BlogListItem";
 import styles from "./styles.module.scss";
 
-const perPage = 4;
+const perPage = 2;
 
 export const BlogList: FC<BlogListProps> = ({ data = [] }) => {
     const [posts, setPosts] = useState<BlogItemType[]>(data);
