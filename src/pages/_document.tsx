@@ -1,7 +1,9 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import Script from 'next/script';
-export default class MyDocument extends Document {
-    render() {
+export default class MyDocument extends Document
+{
+    render()
+    {
         return (
             <Html lang="pl">
                 <Head>
@@ -14,6 +16,23 @@ export default class MyDocument extends Document {
                             })(window,document,'script','dataLayer','GTM-TCTL7HVL');`}
                     </Script>
                     {/* End Google Tag Manager */}
+                    {/* Organization Schema */}
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify({
+                                "@context": "https://schema.org",
+                                "@type": "Organization",
+                                "name": "Ewa Gifts",
+                                "url": "https://ewagifts.pl/",
+                                "logo": "https://ewagifts.pl/logo.svg",
+                                "sameAs": [
+                                    "https://www.facebook.com/people/Ewa-Gifts/61558161148225/",
+                                    "https://www.instagram.com/ewagifts.pl/"
+                                ]
+                            })
+                        }}
+                    />
                 </Head>
                 <body>
                     {/* Google Tag Manager (noscript) */}
