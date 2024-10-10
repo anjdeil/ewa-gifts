@@ -40,6 +40,21 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     useEffect(() =>
     {
+        const productPageParams = {} as { color?: string, size?: string };
+        if (currentColor) productPageParams.color = currentColor;
+        if (currentSize) productPageParams.size = currentSize;
+
+        router.push({
+            pathname: router.pathname,
+            query: {
+                ...router.query,
+                ...productPageParams,
+            }
+        }, undefined, { shallow: true });
+    }, [currentColor, currentSize, router]);
+
+    useEffect(() =>
+    {
         if (!default_attributes) return;
 
         if (allColors?.length)
@@ -121,10 +136,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <ProductTitling title={name} sku={currentSku} />
                     {currentPrice && (
                         <Box className={styles['price-wrapper']}>
-                        <Typography variant='body2' className={styles['product-info__price']}>
-                            Od {formatPrice(currentPrice)}
-                            &nbsp;Bez VAT
-                        </Typography>
+                            <Typography variant='body2' className={styles['product-info__price']}>
+                                Od {formatPrice(currentPrice)}
+                                &nbsp;Bez VAT
+                            </Typography>
                         </Box>
                     )}
                 </>
@@ -147,7 +162,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                                 </Typography>
                             </Box>
                         )}
-                </>)}
+                    </>)}
                 {(allColors && currentColor) && <Box className={styles['color-wrapper']}>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Dostępne kolory:

@@ -42,4 +42,30 @@ export const SeoDataSchema = z.object({
     twitter: TwitterSchema,
 });
 
+export interface ProductSeoType
+{
+    "@context": string;
+    "@type": string;
+    description: string;
+    name: string;
+    productID: string | number;
+    brand: {
+        "@type": string;
+        name: string;
+    };
+    Image: string;
+    offers: {
+        "@type": string;
+        availability: string;
+        price: string | number | boolean;
+        priceCurrency: string;
+        eligibleQuantity: {
+            value: number;
+            unitCode: string;
+            "@type": string[];
+        };
+        url: string;
+    }[];
+}
+
 export type SeoDataType = z.infer<typeof SeoDataSchema>;
