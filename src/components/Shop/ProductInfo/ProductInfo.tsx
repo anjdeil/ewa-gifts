@@ -22,8 +22,11 @@ import styles from './styles.module.scss';
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     const router = useRouter();
+    const { color, size } = router.query;
+
     const isTablet = useMediaQuery('(max-width: 768px)');
     const { name, description, price, sku, images, attributes, default_attributes, type, stock_quantity } = product;
+    const isSimple = type === "simple";
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
     const [currentPrice, setCurrentPrice] = useState<number | null>(Number(price) || null);
@@ -31,14 +34,67 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
     const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
     const [currentStock, setCurrentStock] = useState<number | boolean>(stock_quantity);
-    const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
     const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
     const allSizes = useMemo(() => transformProductSizes(attributes), [attributes]);
-    const isSimple = type === "simple";
-    const { color, size } = router.query;
+    const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
     useEffect(() =>
+    {
+        if (color || size)
+            setAttributesByParams();
+        else
+            addDefaultAttributes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { updateUrlParams(); setProductVariation(); }, [currentSize, currentColor]);
+
+    useEffect(() => { setProductVariation(); }, [currentColor]);
+
+    function setProductVariation(): void
+    {
+        const currentVariation = getCurrentVariation();
+        if (currentVariation && currentVariation.length > 0)
+        {
+            setCurrentImages(currentVariation[0].images);
+            setCurrentPrice(Number(currentVariation[0].price));
+            setCurrentSku(currentVariation[0].sku);
+            setCurrentStock(currentVariation[0].stock_quantity);
+            setCurrentVariation(currentVariation[0]);
+        }
+    }
+
+
+    function setAttributesByParams(): void
+    {
+        if (typeof color === 'string') setColor(color);
+        if (typeof size !== 'string') return;
+        // if (sizes && currentColor)
+        // {
+        //     console.log(typeof color === 'string');
+        //     const sizeVariations = filterOptionsByColorName(product.variations, currentColor);
+        //     setSizes(transformProductSizes(sizeVariations));
+        //     setCurrentSize(sizeVariations[0].option);
+        //     return;
+        // }
+        // const sizeVariations = filterOptionsBySize(product.variations);
+        // setSizes(transformProductSizes(sizeVariations));
+        // setCurrentSize(size);
+    }
+
+    function onColorChange(checkedColor: string): void 
+    {
+        setColor(checkedColor);
+    }
+
+    function onSizeChange(checkedSize: string): void 
+    {
+        setCurrentSize(checkedSize);
+    }
+
+    function updateUrlParams(): void
     {
         const productPageParams = {} as { color?: string, size?: string };
         if (currentColor) productPageParams.color = currentColor;
@@ -51,9 +107,24 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 ...productPageParams,
             }
         }, undefined, { shallow: true });
-    }, [currentColor, currentSize, router]);
+    }
 
-    useEffect(() =>
+    function setColor(color: string): void
+    {
+        if (!color) return;
+        setCurrentColor(color);
+
+        if (!product?.variations || !allSizes?.length || isSimple || !currentColor) return;
+
+        const variations = filterOptionsByColorName(product.variations, currentColor);
+        if (variations)
+        {
+            setSizes(transformProductSizes(variations));
+            setCurrentSize(variations[0].option);
+        }
+    }
+
+    function addDefaultAttributes(): void
     {
         if (!default_attributes) return;
 
@@ -68,38 +139,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
             if (baseSize) setCurrentSize(baseSize);
         }
-    }, [allColors, attributes, default_attributes, allSizes]);
-
-    useEffect(() =>
-    {
-        if (color) setCurrentColor(color as string);
-        if (size && sizes) setCurrentSize(findOrDefault(sizes, size as string).option);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    function onColorChange(checkedColor: string): void 
-    {
-        setCurrentColor(checkedColor);
     }
-
-    function onSizeChange(checkedSize: string): void 
-    {
-        setCurrentSize(checkedSize);
-    }
-
-    useEffect(() =>
-    {
-        if (!product?.variations || !allSizes?.length || isSimple) return;
-
-        const variations = currentColor
-            ? filterOptionsByColorName(product.variations, currentColor)
-            : filterOptionsBySize(product.variations);
-        if (variations)
-        {
-            setSizes(transformProductSizes(variations));
-            setCurrentSize(variations[0].option);
-        }
-    }, [currentColor, product.variations, allSizes]);
 
     const getCurrentVariation = useCallback(() =>
     {
@@ -113,21 +153,6 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             return filterByCurrentAttr(product.variations, currentAttr as string, attrName);
         }
     }, [currentColor, currentSize, allSizes, product.variations]);
-
-    useEffect(() =>
-    {
-        if (!product.variations || isSimple) return;
-
-        const currentVariation = getCurrentVariation();
-        if (currentVariation && currentVariation.length > 0)
-        {
-            setCurrentImages(currentVariation[0].images);
-            setCurrentPrice(Number(currentVariation[0].price));
-            setCurrentSku(currentVariation[0].sku);
-            setCurrentStock(currentVariation[0].stock_quantity);
-            setCurrentVariation(currentVariation[0]);
-        }
-    }, [currentColor, currentSize, getCurrentVariation, isSimple, product.variations]);
 
     return (
         <Box className={styles.product}>

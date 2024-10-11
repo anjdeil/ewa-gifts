@@ -53,9 +53,6 @@ export function getProductSeoSchema(reqUrl: string, product: typeProductType, do
         productVariation = filterByCurrentAttr(product.variations, productParams.size, 'size');
 
     if (productVariation.length)
-        console.log('productVariation1', productVariation[0]);
-
-    if (productVariation.length)
         return generateProductSeoSchema(product, url.href, productVariation[0]);
     else
         return generateProductSeoSchema(product, url.href);
