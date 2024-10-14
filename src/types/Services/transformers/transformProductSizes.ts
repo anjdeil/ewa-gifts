@@ -11,7 +11,6 @@ export function transformProductSizes(attrArray: ProductAttributesType[] | defau
     if (simple.length > 0 && "options" in simple[0])
     {
         const options = simple.filter(variation => variation.name === 'size');
-        console.log(options);
         if (options.length > 0)
             return sortProductSizes(options[0].options);
     }

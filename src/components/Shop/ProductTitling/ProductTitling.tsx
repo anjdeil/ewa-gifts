@@ -1,12 +1,14 @@
 import { FC } from "react";
 import styles from './styles.module.scss';
 
-interface ProductTitlingPropsType {
+interface ProductTitlingPropsType
+{
     title: string,
-    sku: string | null
+    sku: string | undefined | null
 }
 
-const ProductTitling: FC<ProductTitlingPropsType> = ({ title, sku }) => {
+const ProductTitling: FC<ProductTitlingPropsType> = ({ title, sku }) =>
+{
     return (
         <div>
             {title &&
