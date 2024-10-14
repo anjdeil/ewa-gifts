@@ -2,12 +2,11 @@ import AccordionProduct from "@/components/Accordions/AccordionProduct/Accordion
 import ProductSwiper from "@/components/Shop/ProductSwiper/ProductSwiper";
 import { transformColorsArray } from "@/services/transformers/woocommerce/transformColorsArray";
 import { transformProductSizes } from "@/types/Services/transformers/transformProductSizes";
-import { defaultAttributesType, ProductImagesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types/Shop";
+import { defaultAttributesType, ProductInfoProps, ProductOptions, variationsProductType } from "@/types/Shop";
 import { filterByColorAndSize } from "@/Utils/filterByColorAndSize";
 import { filterByCurrentAttr } from "@/Utils/filterByCurrentAttr";
 import { filterOptionsByColorName } from "@/Utils/filterOptionsByColorName";
 import { filterOptionsBySize } from "@/Utils/filterOptionsBySize";
-import { findOrDefault } from "@/Utils/findOrDefault";
 import formatPrice from "@/Utils/formatPrice";
 import { getDefaultVariation } from "@/Utils/getDefaultVariation";
 import { Box, Typography, useMediaQuery } from "@mui/material";
@@ -19,6 +18,15 @@ import ProductTitling from "../ProductTitling";
 import { SizeOptions } from "../SizeOptions";
 import styles from './styles.module.scss';
 
+function getCurrentStockValue(simpleProductStock: number | boolean,
+    variableProductStock: number | boolean | undefined): string
+{
+    if (simpleProductStock || variableProductStock)
+        return `${variableProductStock || simpleProductStock} w magazynie`
+    else
+        return "Brak w magazynie"
+}
+
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     const router = useRouter();
@@ -26,75 +34,104 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
     const isTablet = useMediaQuery('(max-width: 768px)');
     const { name, description, price, sku, images, attributes, default_attributes, type, stock_quantity } = product;
-    const isSimple = type === "simple";
     const [currentColor, setCurrentColor] = useState<string | null>(null);
     const [currentSize, setCurrentSize] = useState<string | null>(null);
-    const [currentPrice, setCurrentPrice] = useState<number | null>(Number(price) || null);
-    const [currentSku, setCurrentSku] = useState<string | null>(sku || null);
-    const [currentImages, setCurrentImages] = useState<ProductImagesType[] | null>(images || null);
+    const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
     const [currentVariation, setCurrentVariation] = useState<variationsProductType | null>(null);
-    const [currentStock, setCurrentStock] = useState<number | boolean>(stock_quantity);
 
+    const isSimple = useMemo(() => type === 'simple', [type]);
     const allColors = useMemo(() => transformColorsArray(attributes), [attributes]);
     const allSizes = useMemo(() => transformProductSizes(attributes), [attributes]);
-    const [sizes, setSizes] = useState<ProductOptions[] & defaultAttributesType[] | null>(null);
 
+    /** Check params and default attributes */
     useEffect(() =>
     {
         if (color || size)
             setAttributesByParams();
         else
             addDefaultAttributes();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => { updateUrlParams(); setProductVariation(); }, [currentSize, currentColor]);
+    /** 
+     * Change currentSize depending on currentColor
+     * Updating url params
+     * Set current product variation
+     */
+    useEffect(() =>
+    {
+        updateUrlParams();
+        setProductVariation();
+    }, [currentSize, currentColor]);
 
-    useEffect(() => { setProductVariation(); }, [currentColor]);
+    useEffect(() =>
+    {
+        if (allSizes?.length && currentColor)
+            setSize();
+    }, [currentColor]);
 
-    function setProductVariation(): void
+    /** Get current variation depending on color and size */
+    const getCurrentVariation = useCallback(() =>
+    {
+        if (currentColor && currentSize)
+        {
+            return filterByColorAndSize(product.variations, currentColor as string, currentSize);
+        } else
+        {
+            const attrName = allSizes?.length ? 'size' : 'color';
+            const currentAttr = allSizes?.length ? currentSize : currentColor;
+            if (typeof (currentAttr) !== 'string') return;
+            return filterByCurrentAttr(product.variations, currentAttr, attrName);
+        }
+    }, [allSizes?.length, currentColor, currentSize, product.variations]);
+
+    /** Set current variation */
+    const setProductVariation = useCallback(() =>
     {
         const currentVariation = getCurrentVariation();
         if (currentVariation && currentVariation.length > 0)
-        {
-            setCurrentImages(currentVariation[0].images);
-            setCurrentPrice(Number(currentVariation[0].price));
-            setCurrentSku(currentVariation[0].sku);
-            setCurrentStock(currentVariation[0].stock_quantity);
             setCurrentVariation(currentVariation[0]);
-        }
-    }
+    }, [getCurrentVariation])
 
-
-    function setAttributesByParams(): void
+    /** Set currentColor and size by params */
+    const setAttributesByParams = useCallback(() =>
     {
-        if (typeof color === 'string') setColor(color);
-        if (typeof size !== 'string') return;
-        // if (sizes && currentColor)
-        // {
-        //     console.log(typeof color === 'string');
-        //     const sizeVariations = filterOptionsByColorName(product.variations, currentColor);
-        //     setSizes(transformProductSizes(sizeVariations));
-        //     setCurrentSize(sizeVariations[0].option);
-        //     return;
-        // }
-        // const sizeVariations = filterOptionsBySize(product.variations);
-        // setSizes(transformProductSizes(sizeVariations));
-        // setCurrentSize(size);
-    }
+        if (typeof color === 'string') onColorChange(color);
+        if (typeof size === 'string') onSizeChange(size);
+    }, [])
 
-    function onColorChange(checkedColor: string): void 
+    const onColorChange = useCallback((checkedColor: string): void =>
     {
-        setColor(checkedColor);
-    }
+        if (!checkedColor) return;
+        setCurrentColor(checkedColor);
+    }, []);
 
-    function onSizeChange(checkedSize: string): void 
+    const onSizeChange = useCallback((checkedSize: string): void =>
     {
+        if (!checkedSize) return;
         setCurrentSize(checkedSize);
-    }
+    }, []);
 
-    function updateUrlParams(): void
+    /** Set currentSize depending on variations, currentColor and checkedSize */
+    const setSize = useCallback(() =>
+    {
+        if (!product?.variations || !allSizes?.length || isSimple) return;
+
+        let variations = []
+        if (currentColor)
+        {
+            variations = filterOptionsByColorName(product.variations, currentColor);
+        } else
+        {
+            variations = filterOptionsBySize(product.variations);
+        }
+        if (variations)
+        {
+            setSizes(transformProductSizes(variations));
+            setCurrentSize(variations[0].option);
+        }
+    }, [allSizes?.length, currentColor, isSimple, product.variations])
+
+    const updateUrlParams = useCallback(() =>
     {
         const productPageParams = {} as { color?: string, size?: string };
         if (currentColor) productPageParams.color = currentColor;
@@ -107,24 +144,9 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 ...productPageParams,
             }
         }, undefined, { shallow: true });
-    }
+    }, [currentColor, currentSize, router]);
 
-    function setColor(color: string): void
-    {
-        if (!color) return;
-        setCurrentColor(color);
-
-        if (!product?.variations || !allSizes?.length || isSimple || !currentColor) return;
-
-        const variations = filterOptionsByColorName(product.variations, currentColor);
-        if (variations)
-        {
-            setSizes(transformProductSizes(variations));
-            setCurrentSize(variations[0].option);
-        }
-    }
-
-    function addDefaultAttributes(): void
+    const addDefaultAttributes = useCallback(() =>
     {
         if (!default_attributes) return;
 
@@ -139,30 +161,17 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             const baseSize = getDefaultVariation("size", attributes, default_attributes);
             if (baseSize) setCurrentSize(baseSize);
         }
-    }
-
-    const getCurrentVariation = useCallback(() =>
-    {
-        if (currentColor && currentSize)
-        {
-            return filterByColorAndSize(product.variations, currentColor as string, currentSize);
-        } else
-        {
-            const attrName = allSizes?.length ? 'size' : 'color';
-            const currentAttr = allSizes?.length ? currentSize : currentColor;
-            return filterByCurrentAttr(product.variations, currentAttr as string, attrName);
-        }
-    }, [currentColor, currentSize, allSizes, product.variations]);
+    }, [allColors?.length, allSizes?.length, attributes, default_attributes])
 
     return (
         <Box className={styles.product}>
             {isTablet && (
                 <>
-                    <ProductTitling title={name} sku={currentSku} />
-                    {currentPrice && (
+                    <ProductTitling title={name} sku={currentVariation?.sku || sku} />
+                    {price || currentVariation?.price && (
                         <Box className={styles['price-wrapper']}>
                             <Typography variant='body2' className={styles['product-info__price']}>
-                                Od {formatPrice(currentPrice)}
+                                Od {formatPrice(currentVariation?.price || price)}
                                 &nbsp;Bez VAT
                             </Typography>
                         </Box>
@@ -170,19 +179,19 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                 </>
             )}
 
-            {currentImages &&
+            {(images || currentVariation?.images) &&
                 <Box className={styles.product__slider}>
-                    <ProductSwiper data={currentImages} />
+                    <ProductSwiper data={images || currentVariation?.images} />
                 </Box>
             }
             <Box className={styles.product__info}>
                 {!isTablet && (
                     <>
-                        <ProductTitling title={name} sku={currentSku} />
-                        {currentPrice && (
+                        <ProductTitling title={name} sku={currentVariation?.sku || sku} />
+                        {price || currentVariation?.price && (
                             <Box className={styles['price-wrapper']}>
                                 <Typography variant='body2' className={styles['product-info__price']}>
-                                    Od {formatPrice(currentPrice)}
+                                    Od {formatPrice(price || currentVariation?.price)}
                                     &nbsp;Bez VAT
                                 </Typography>
                             </Box>
@@ -199,19 +208,18 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
                     <Typography variant='h3' className={styles['product-info__sku']}>
                         Wybierz rozmiar:
                     </Typography>
-                    {currentSize &&
-                        <SizeOptions
-                            sizeAttributes={allSizes || []}
-                            onSizeChange={onSizeChange}
-                            currentSize={currentSize}
-                            availableSizes={sizes}
-                        />}
+                    <SizeOptions
+                        sizeAttributes={allSizes || []}
+                        onSizeChange={onSizeChange}
+                        currentSize={currentSize}
+                        availableSizes={sizes}
+                    />
                 </Box>}
 
                 <div className={styles["product-info__island"]}>
                     <Typography variant='h3' className={`${styles['product-info__sku']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
-                    <span className={`${styles["product-info__stock-dot"]} ${currentStock && styles['product-info__stock-dot_active']}`}></span>
-                    &nbsp;{currentStock ? `${currentStock} w magazynie` : "Brak w magazynie"}
+                    <span className={`${styles["product-info__stock-dot"]} ${(stock_quantity || currentVariation?.stock_quantity) && styles['product-info__stock-dot_active']}`}></span>
+                    &nbsp;{getCurrentStockValue(stock_quantity, currentVariation?.stock_quantity)}
                 </div>
 
                 <ProductCalculations product={product} variation={currentVariation} />
