@@ -17,7 +17,6 @@ import ProductCalculations from "../ProductCalculations";
 import ProductTitling from "../ProductTitling";
 import { SizeOptions } from "../SizeOptions";
 import styles from './styles.module.scss';
-
 function getCurrentStockValue(simpleProductStock: number | boolean,
     variableProductStock: number | boolean | undefined): string
 {
@@ -26,7 +25,6 @@ function getCurrentStockValue(simpleProductStock: number | boolean,
     else
         return "Brak w magazynie"
 }
-
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
     const router = useRouter();
@@ -127,7 +125,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
         if (variations)
         {
             setSizes(transformProductSizes(variations));
-            setCurrentSize(variations[0].option);
+            setCurrentSize(currentSize || variations[0].option);
         }
     }, [allSizes?.length, currentColor, isSimple, product.variations])
 
@@ -168,10 +166,10 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
             {isTablet && (
                 <>
                     <ProductTitling title={name} sku={currentVariation?.sku || sku} />
-                    {price || currentVariation?.price && (
+                    {currentVariation?.price || price && (
                         <Box className={styles['price-wrapper']}>
                             <Typography variant='body2' className={styles['product-info__price']}>
-                                Od {formatPrice(currentVariation?.price || price)}
+                                Od {formatPrice((currentVariation?.price || price))}
                                 &nbsp;Bez VAT
                             </Typography>
                         </Box>
@@ -181,17 +179,17 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
             {(images || currentVariation?.images) &&
                 <Box className={styles.product__slider}>
-                    <ProductSwiper data={images || currentVariation?.images} />
+                    <ProductSwiper data={currentVariation?.images || images} />
                 </Box>
             }
             <Box className={styles.product__info}>
                 {!isTablet && (
                     <>
                         <ProductTitling title={name} sku={currentVariation?.sku || sku} />
-                        {price || currentVariation?.price && (
+                        {(price || currentVariation?.price) && (
                             <Box className={styles['price-wrapper']}>
                                 <Typography variant='body2' className={styles['product-info__price']}>
-                                    Od {formatPrice(price || currentVariation?.price)}
+                                    Od {formatPrice(currentVariation?.price || price)}
                                     &nbsp;Bez VAT
                                 </Typography>
                             </Box>
