@@ -8,7 +8,7 @@ import { SwiperProps } from '@/types';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -88,6 +88,59 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
     const [activeSlide, setActiveSlide] = useState(0);
     const dispatch = useAppDispatch();
 
+    const swiperRef = useRef<HTMLDivElement>(null);
+    const heightRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        const updateHeight = () => {
+            if (swiperRef.current) {
+                const currentHeight = swiperRef.current.offsetHeight;
+
+                if (heightRef.current === null) {
+                    heightRef.current = currentHeight;
+                }
+            }
+        };
+
+        const handleImagesLoad = () => {
+            updateHeight();
+        };
+
+        const images = swiperRef.current?.querySelectorAll('img');
+        if (heightRef.current === null && images) {
+            images.forEach((img) => {
+                if (img.complete) {
+                    handleImagesLoad();
+                } else {
+                    img.addEventListener('load', handleImagesLoad);
+                    img.addEventListener('error', handleImagesLoad);
+                }
+            });
+        }
+
+        updateHeight();
+
+        const handleResize = () => {
+            heightRef.current = null;
+            if (swiperRef.current) {
+                swiperRef.current.style.minHeight = 'unset';
+            }
+            updateHeight();
+        };
+        
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            if (images) {
+                images.forEach((img) => {
+                    img.removeEventListener('load', handleImagesLoad);
+                    img.removeEventListener('error', handleImagesLoad);
+                });
+            }
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [data]);
+
     const swiperId = `swiper-2`;
     const nextElId = `${swiperId}-next`;
     const prevElId = `${swiperId}-prev`;
@@ -111,6 +164,7 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
     return (
         <Box>
             <CustomSwiperFor
+                ref={swiperRef}
                 breakpoints={{
                     1340: {
                         slidesPerView: 1,
@@ -125,14 +179,22 @@ const ProductSwiper: React.FC<SwiperProps> = ({ data }) => {
                 thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                 modules={[FreeMode, Navigation, Thumbs]}
                 className={`mySwiper2 ${styles.forNav}`}
+                style={{ minHeight: heightRef.current ? heightRef.current : 'auto'}}
                 onSlideChange={handleSlideChange}
             >
                 {data &&
                     data.map((item, index) => (
                         <SwiperSlide key={item.id} className={styles.slide}>
                             <button type='button' className={styles.slide__btn} onClick={handlerOpen}>
-                                <Image unoptimized={true} src={item.src} alt={`Product image ${index + 1}`} width={600} height={600}
-                                    className={styles.slide__img} />
+                                <Image
+                                    unoptimized={true}
+                                    priority
+                                    src={item.src}
+                                    alt={`Product image ${index + 1}`}
+                                    width={600}
+                                    height={600}
+                                    className={styles.slide__img}
+                                />
                             </button>
                         </SwiperSlide>
                     ))}
