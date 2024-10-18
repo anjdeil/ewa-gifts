@@ -15,7 +15,10 @@ import styles from './styles.module.scss';
 import { domain } from "@/constants";
 import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { useRouter } from "next/router";
+import { getProductSeoSchema } from "@/Utils/getProductSeoSchema";
+import { ProductSeoType } from "@/types/seo";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
     const { slug } = context.query;
@@ -32,11 +35,23 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         }
 
         const productResponse = productResponseData.data as responseSingleCustomApi;
-        const product = productResponse?.data && productResponse.data.item;
+        const product = productResponse?.data && productResponse.data.item as typeProductType;
+        const domain = process.env.FRONT_URL || "";
+
+        if (!product)
+        {
+            console.error('Error: Product not found');
+            return {
+                notFound: true
+            };
+        }
+
+        const productSeoSchema = getProductSeoSchema(context.resolvedUrl, product, domain);
 
         return {
             props: {
-                product
+                product,
+                productSeoSchema
             },
         };
 
@@ -51,10 +66,11 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 interface ProductPropsType
 {
-    product: typeProductType
+    product: typeProductType,
+    productSeoSchema: ProductSeoType | null
 }
 
-const Product: FC<ProductPropsType> = ({ product }) =>
+const Product: FC<ProductPropsType> = ({ product, productSeoSchema }) =>
 {
     const router = useRouter();
     const slug = product.categories[product.categories.length - 1].slug;
@@ -81,6 +97,7 @@ const Product: FC<ProductPropsType> = ({ product }) =>
                 <title>{title || ''}</title>
                 {product?.description && <meta name="description" content={description || product.description} />}
                 <link rel="canonical" href={canonicalUrl} />
+                {productSeoSchema && <script type="application/ld+json">{JSON.stringify(productSeoSchema)}</script>}
             </Head>
 
             <main className={styles['product']}>
