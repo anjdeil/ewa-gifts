@@ -1,30 +1,26 @@
+import Notification from "@/components/Layouts/Notification";
 import { useFetchProductListQuery } from "@/store/custom/customApi";
 import { Box, useMediaQuery } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { TopSellerCard } from "../TopSellerCard";
-import Notification from "@/components/Layouts/Notification";
 import { ProductCarousel } from "../ProductCarousel";
+import { TopSellerCard } from "../TopSellerCard";
 
-export const TopSeller: FC = () =>
-{
-    const { data, error, isError } = useFetchProductListQuery({ per_page: 10 });
+export const TopSeller: FC = () => {
+    const { data, error, isError } = useFetchProductListQuery({ per_page: 3 });
     const [isLoading, setLoading] = useState<boolean>(true);
     const [products, setProducts] = useState<[] | null>(null);
     const [customError, setCustomError] = useState<boolean | string>(false);
     const isTable = useMediaQuery('(min-width:1024px)');
 
-    useEffect(() =>
-    {
-        if (data && data.data.items.length > 0)
-        {
+    useEffect(() => {
+        if (data && data.data.items.length > 0) {
             setLoading(false);
             setProducts(data.data.items);
         }
 
         if (data && data.data.items.length === 0) { setCustomError("Products not found"); }
 
-        if ((isError || !data) && !isLoading)
-        {
+        if ((isError || !data) && !isLoading) {
             console.error(error);
             setLoading(false);
             setCustomError("Server Error");
