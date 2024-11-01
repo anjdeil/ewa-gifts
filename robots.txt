@@ -1,0 +1,4 @@
+Disallow: /*?action=
+Disallow: /*?p=
+Disallow: /*?add-to-cart=
+Disallow: /*?add_to_wishlist=
