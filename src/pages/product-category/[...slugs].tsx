@@ -6,8 +6,10 @@ import { ResponseProductListType } from "@/types/Services/customApi/Product/Resp
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Archive from "@/components/Shop/Archive";
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    try {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
+{
+    try
+    {
 
         const { slugs, ...params } = context.query;
         if (slugs === undefined || !Array.isArray(slugs)) return {
@@ -91,7 +93,9 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
          * Get statistic:
          */
         const statistic = productsResponse?.data && productsResponse.data.statistic;
-        if (!statistic) {
+        console.log('statisticssss', productsResponse);
+        if (!statistic)
+        {
             throw new Error("Zaszła pomyłka");
         }
 
@@ -115,12 +119,12 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             }
         };
 
-    } catch (error) {
+    } catch (error)
+    {
         context.res.statusCode = 500;
-        console.log(error);
+        console.error(error);
         return { props: { error: "Something went wrong!" } };
     }
-
 }
 
 export default Archive;
