@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://new.ewagifts.pl
+
+# Sitemaps
+Sitemap: https://new.ewagifts.pl/sitemap.xml
