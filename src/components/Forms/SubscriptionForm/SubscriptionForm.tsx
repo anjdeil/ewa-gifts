@@ -62,6 +62,7 @@ export const SubscriptionForm: FC<SubscriptionFormProps> = ({ formId }) =>
                     <input
                         type="checkbox"
                         {...register("consent")}
+                        checked={true}
                     />
                     Wyrażam zgodę na przesyłanie informacji handlowej.
                 </label>
