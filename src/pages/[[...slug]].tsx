@@ -14,9 +14,6 @@ const Page: FC<PageProps> = ({ page, error, isMain }) =>
 
   const { title, description, bot } = page.seo_data;
 
-  console.log(bot);
-
-
   return (
     <>
       <Head>
