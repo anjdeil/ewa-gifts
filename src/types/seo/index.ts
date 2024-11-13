@@ -1,45 +1,47 @@
 import { z } from "zod";
 
 const OpenGraphSchema = z.object({
-    description: z.string().optional(),
-    image: z.string().optional(),
-    image_id: z.number().optional(),
+    description: z.string().nullable(),
+    image: z.string().nullable(),
+    image_id: z.number().nullable(),
     image_meta: z.object({
         alt: z.string(),
         filesize: z.number(),
         height: z.number().optional(),
-        id: z.number().optional(),
+        id: z.string().optional(),
         path: z.string().optional(),
         pixels: z.number(),
         size: z.string().optional(),
         type: z.string().optional(),
         url: z.string().optional(),
         width: z.number().optional(),
-    }),
-    image_source: z.string().optional(),
-    title: z.string().optional(),
+    }).nullable(),
+    image_source: z.string().nullable(),
+    title: z.string().nullable(),
 });
 
 const TwitterSchema = z.object({
-    description: z.string().optional(),
-    image: z.string().optional(),
-    image_id: z.number().optional(),
-    image_source: z.string().optional(),
-    title: z.string().optional(),
+    description: z.string().nullable(),
+    image: z.string().nullable(),
+    image_id: z.number().nullable(),
+    image_source: z.string().nullable(),
+    title: z.string().nullable(),
+});
+
+export const BotSchema = z.object({
+    is_no_archive: z.boolean(),
+    is_no_follow: z.boolean(),
+    is_no_index: z.boolean()
 });
 
 export const SeoDataSchema = z.object({
-    bot: z.object({
-        is_no_archive: z.boolean(),
-        is_no_follow: z.boolean(),
-        is_no_index: z.boolean(),
-    }),
-    breadcrumb_title: z.string().optional(),
-    description: z.string().optional(),
+    bot: BotSchema,
+    breadcrumb_title: z.string().nullable(),
+    description: z.string().nullable(),
     open_graph: OpenGraphSchema,
-    reading_time_minutes: z.number().optional(),
-    title: z.string().optional(),
-    twitter: TwitterSchema,
+    reading_time_minutes: z.number().nullable(),
+    title: z.string().nullable(),
+    twitter: TwitterSchema
 });
 
 export interface ProductSeoType

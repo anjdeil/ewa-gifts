@@ -4,7 +4,7 @@ import PagesNavigation from "@/components/Layouts/PagesNavigation";
 import { useAppSelector } from "@/hooks/redux";
 import transformBreadcrumbsCategories from "@/services/transformers/woocommerce/transformBreadcrumbsCategories";
 import { StatisticAttributeType } from "@/types/Services/customApi/Attribute/StatisticAttributeType";
-import { CategoryType } from "@/types/Services/customApi/Category/CategoryType";
+import { CategoryType, ResponseSingleCategoryCustomType } from "@/types/Services/customApi/Category/CategoryType";
 import { typeProductType } from "@/types/Shop";
 import { useMediaQuery } from "@mui/material";
 import Head from "next/head";
@@ -16,7 +16,7 @@ import ShopToolbar from "../ShopToolbar";
 import styles from "./styles.module.scss";
 import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { domain } from "@/constants";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 interface ArchiveProps
 {
@@ -30,7 +30,8 @@ interface ArchiveProps
     priceRange: {
         min: number,
         max: number
-    }
+    },
+    categorySeo: ResponseSingleCategoryCustomType | null
 }
 
 export default function Archive({
@@ -41,10 +42,18 @@ export default function Archive({
     pagesCount,
     productsCount,
     availableAttributes,
-    priceRange
+    priceRange,
+    categorySeo
 }: ArchiveProps)
 {
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const categoryItem = categorySeo?.data?.item || null;
+    const { seo_data: categorySeoData = null } = categorySeo?.data?.item || {};
+
+    useEffect(() =>
+    {
+        console.log(categorySeo);
+    }, [categorySeo])
 
     const currentCategory = Array.isArray(categories) ? categories[categories.length - 1] as CategoryType : null;
     const links = currentCategory ? transformBreadcrumbsCategories(categories as CategoryType[]) :
@@ -91,9 +100,11 @@ export default function Archive({
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
-                {/* {currentCategory?.description && <meta name="description" content={currentCategory.description} />} */}
+                <title>{categorySeoData?.title || ""}</title>
+                <meta name="description" content={categorySeoData?.description || currentCategory?.description} />
                 <link rel="canonical" href={canonicalUrl} />
+                {categoryItem?.video_url && <meta property="og:video" content={categoryItem?.video_url} />}
+
             </Head>
             <main className={styles['product-archive']}>
                 <div className="container">

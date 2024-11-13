@@ -5,6 +5,7 @@ import { ProductListQueryParamsType } from "@/types/Services/customApi/Product/P
 import { ResponseProductListType } from "@/types/Services/customApi/Product/ResponseProductListType";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Archive from "@/components/Shop/Archive";
+import { validateResponseSingleCategory } from "@/Utils/zodValidators/validateResponseSingleCategory";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) =>
 {
@@ -71,11 +72,12 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
          *
          * Collect filters: */
         const productsPerPage = 21;
+        const category = categories[categories.length - 1].slug;
 
         const productListQueryParams: ProductListQueryParamsType = {
             page: (page !== "1") ? page : undefined,
             per_page: productsPerPage,
-            category: categories[categories.length - 1].slug,
+            category: category,
             pa_supplier: typeof params?.pa_supplier === 'string' ? params.pa_supplier : undefined,
             pa_base_color: typeof params?.pa_base_color === 'string' ? params.pa_base_color : undefined,
             order_by: typeof params?.order_by === 'string' ? params.order_by : undefined,
@@ -88,6 +90,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         const productsResponseData = await customRestApi.get(`products`, productListQueryParams);
         const productsResponse = productsResponseData?.data as ResponseProductListType;
         const products = productsResponse?.data && productsResponse.data.items;
+
+        /* Fetch category SEO and validate */
+        const categorySeoResponse = await customRestApi.get(`categories/${category}`);
+        const isCategorySeoValid = await validateResponseSingleCategory(categorySeoResponse.data);
+        let categorySeo = null;
+        if (isCategorySeoValid)
+            categorySeo = categorySeoResponse.data;
+
 
         /**
          * Get statistic:
@@ -115,7 +125,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 priceRange: {
                     min: statistic.min_price,
                     max: statistic.max_price
-                }
+                },
+                categorySeo: categorySeo
             }
         };
 
