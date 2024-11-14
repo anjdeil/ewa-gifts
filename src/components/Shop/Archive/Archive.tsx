@@ -47,13 +47,16 @@ export default function Archive({
 }: ArchiveProps)
 {
     const isMobile = useMediaQuery('(max-width: 768px)');
+    /** Get seo data for the current category */
     const categoryItem = categorySeo?.data?.item || null;
+    // Open graph
     const { seo_data: categorySeoData = null } = categorySeo?.data?.item || {};
-
-    useEffect(() =>
-    {
-        console.log(categorySeo);
-    }, [categorySeo])
+    const { open_graph } = categorySeoData || {};
+    const { title, description, image, image_meta } = open_graph || {};
+    const { width, height } = image_meta || {};
+    // Twitter
+    const { twitter } = categorySeoData || {};
+    const { title: twitTitle, description: twitDesc, image: twitImage } = twitter || {};
 
     const currentCategory = Array.isArray(categories) ? categories[categories.length - 1] as CategoryType : null;
     const links = currentCategory ? transformBreadcrumbsCategories(categories as CategoryType[]) :
@@ -100,11 +103,23 @@ export default function Archive({
     return (
         <>
             <Head>
+                {/* Standard Meta Tags */}
                 <title>{categorySeoData?.title || ""}</title>
                 <meta name="description" content={categorySeoData?.description || currentCategory?.description} />
                 <link rel="canonical" href={canonicalUrl} />
+                {/* Open Graph Meta Tags */}
+                <meta property="og:type" content="website" />
+                {title && <meta property="og:title" content={title} />}
+                {description && <meta property="og:description" content={description} />}
+                {image && <meta property="og:image" content={image} />}
+                {width && <meta property="og:image:width" content={width.toString()} />}
+                {height && <meta property="og:image:height" content={height.toString()} />}
                 {categoryItem?.video_url && <meta property="og:video" content={categoryItem?.video_url} />}
-
+                {/* Optional Twitter Meta Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                {twitTitle && <meta name="twitter:title" content={twitTitle} />}
+                {twitDesc && <meta name="twitter:description" content={twitDesc} />}
+                {twitImage && <meta name="twitter:image" content={twitImage} />}
             </Head>
             <main className={styles['product-archive']}>
                 <div className="container">

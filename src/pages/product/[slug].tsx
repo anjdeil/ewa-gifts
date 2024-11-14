@@ -10,7 +10,7 @@ import { typeProductType } from "@/types/Shop";
 import { Box } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import styles from './styles.module.scss';
 import { domain } from "@/constants";
 import { getCanonicalLink } from "@/Utils/getCanonicalLink";
@@ -89,15 +89,35 @@ const Product: FC<ProductPropsType> = ({ product, productSeoSchema }) =>
     if (filteredRelatedProducts && filteredRelatedProducts?.length > 4) filteredRelatedProducts.splice(-1);
 
     const canonicalUrl = useMemo(() => getCanonicalLink(router.asPath, domain), [router.asPath]);
-    const { title, description } = product.seo_data;
+
+    /** Get seo data for the current category */
+    const { title, description, open_graph, twitter } = product.seo_data || {};
+    // Open graph
+    const { title: graphTitle, description: graphDesc, image: graphImage, image_meta: graphImageMeta } = open_graph || {};
+    const { width, height } = graphImageMeta || {};
+    // Twitter
+    const { title: twitTitle, description: twitDesc, image: twitImage } = twitter || {};
 
     return (
         <>
             <Head>
-                <title>{title || ''}</title>
-                {product?.description && <meta name="description" content={description || product.description} />}
+                {/* Standard Meta Tags */}
+                <title>{title || ""}</title>
+                <meta name="description" content={description || product.description} />
                 <link rel="canonical" href={canonicalUrl} />
                 {productSeoSchema && <script type="application/ld+json">{JSON.stringify(productSeoSchema)}</script>}
+                {/* Open Graph Meta Tags */}
+                <meta property="og:type" content="website" />
+                {graphTitle && <meta property="og:title" content={graphTitle} />}
+                {graphDesc && <meta property="og:description" content={graphDesc} />}
+                {graphImage && <meta property="og:image" content={graphImage} />}
+                {width && <meta property="og:image:width" content={width.toString()} />}
+                {height && <meta property="og:image:height" content={height.toString()} />}
+                {/* Optional Twitter Meta Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                {twitTitle && <meta name="twitter:title" content={twitTitle} />}
+                {twitDesc && <meta name="twitter:description" content={twitDesc} />}
+                {twitImage && <meta name="twitter:image" content={twitImage} />}
             </Head>
 
             <main className={styles['product']}>

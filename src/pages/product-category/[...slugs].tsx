@@ -98,7 +98,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         if (isCategorySeoValid)
             categorySeo = categorySeoResponse.data;
 
-
         /**
          * Get statistic:
          */
