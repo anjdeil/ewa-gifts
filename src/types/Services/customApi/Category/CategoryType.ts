@@ -7,9 +7,9 @@ export const CategorySchema = z.object({
     id: z.number(),
     name: z.string(),
     parent_id: z.number(),
-    seo_data: SeoDataSchema,
+    seo_data: SeoDataSchema.optional(),
     slug: z.string(),
-    video_url: z.string().nullable()
+    video_url: z.string().nullable().optional()
 });
 
 export const responseSingleCategoryCustomApiSchema = z.object({

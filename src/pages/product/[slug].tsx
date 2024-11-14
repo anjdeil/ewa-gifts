@@ -10,7 +10,7 @@ import { typeProductType } from "@/types/Shop";
 import { Box } from "@mui/material";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import styles from './styles.module.scss';
 import { domain } from "@/constants";
 import { getCanonicalLink } from "@/Utils/getCanonicalLink";

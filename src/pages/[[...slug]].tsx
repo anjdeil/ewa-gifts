@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import { customRestApi } from "@/services/CustomRestApi";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { PageBuilder } from "@/components/PageBuilder";
 import { AxiosResponse } from "axios";
 import { PageHeader } from "@/components/Layouts/PageHeader";

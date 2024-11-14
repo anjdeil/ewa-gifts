@@ -16,7 +16,7 @@ import ShopToolbar from "../ShopToolbar";
 import styles from "./styles.module.scss";
 import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { domain } from "@/constants";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 interface ArchiveProps
 {

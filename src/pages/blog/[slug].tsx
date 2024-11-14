@@ -10,7 +10,7 @@ import { getCanonicalLink } from "@/Utils/getCanonicalLink";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { z } from "zod";
 
 const ArticlePropsSchema = z.object({
