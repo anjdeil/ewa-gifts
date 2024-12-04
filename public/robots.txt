@@ -6,4 +6,9 @@ Allow: /
 Host: https://ewagifts.pl
 
 # Sitemaps
-Sitemap: https://ewagifts.pl/sitemap.xml
+Sitemap: https://ewagifts.pl/sitemap-0.xml
+
+Disallow: /*?action= 
+Disallow: /*?p= 
+Disallow: /*?add-to-cart= 
+Disallow: /*?add_to_wishlist=
