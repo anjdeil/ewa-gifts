@@ -2,8 +2,13 @@
 User-agent: *
 Allow: /
 
+Disallow: /*?action=
+Disallow: /*?p=
+Disallow: /*?add-to-cart=
+Disallow: /*?add_to_wishlist=
+
 # Host
 Host: https://ewagifts.pl
 
 # Sitemaps
-Sitemap: https://ewagifts.pl/sitemap.xml
+Sitemap: https://new.ewagifts.pl/sitemap_index.xml
