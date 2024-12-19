@@ -8,7 +8,7 @@ export default function Contacts() {
     return (
         <>
             <Head>
-                <title>Kontakt</title>
+                <title>Kontakt - Ewa Gifts</title>
             </Head>
             <PageHeader title="Kontakt" breadLinks={[{ name: "Kontakt", url: "" }]} />
             <main className={styles["contacts"]}>

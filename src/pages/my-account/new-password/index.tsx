@@ -15,7 +15,7 @@ const MyAccount: FC<MyAccountProps> = () => {
     return (
         <>
             <Head>
-                <title>Nowe hasło</title>
+                <title>Nowe hasło - Ewa Gifts</title>
             </Head>
             <main className={styles['my-account']}>
                 <div className="container">

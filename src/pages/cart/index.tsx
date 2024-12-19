@@ -75,7 +75,7 @@ function Cart()
   return (
     <>
       <Head>
-        <title>Koszyk</title>
+        <title>Koszyk - Ewa Gifts</title>
         <meta name="description" content={`This is cart page`} />
         <meta name="robots" content="noindex" />
       </Head>

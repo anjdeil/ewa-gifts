@@ -29,7 +29,7 @@ const ErrorBanner = ({ statusCode = 500 }: { statusCode?: number }) => {
     return (
         <>
             <Head>
-                <title>{title}</title>
+                <title>{title} - Ewa Gifts</title>
             </Head>
             <main>
                 <div className="container">

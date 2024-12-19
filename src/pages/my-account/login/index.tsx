@@ -41,7 +41,7 @@ const MyAccount: FC<MyAccountProps> = () =>
     return (
         <>
             <Head>
-                <title>Logowanie</title>
+                <title>Logowanie - Ewa Gifts</title>
                 <meta name="description" content={`This is login page`} />
                 <meta name="robots" content="noindex" />
             </Head>

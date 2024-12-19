@@ -265,7 +265,7 @@ const Checkout: FC<CheckoutProps> = ({ userData }) =>
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
+                <title>{pageTitle} - Ewa Gifts</title>
                 <meta name="description" content={`${pageTitle} page`} />
             </Head>
             <main>

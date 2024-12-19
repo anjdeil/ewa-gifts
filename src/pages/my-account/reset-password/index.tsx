@@ -17,7 +17,7 @@ const MyAccount: FC<MyAccountProps> = () =>
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
+                <title>{pageTitle} - Ewa Gifts</title>
                 <meta name="description" content={`This is ${pageTitle}`} />
                 <meta name="robots" content="noindex" />
             </Head>
