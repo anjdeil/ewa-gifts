@@ -16,7 +16,7 @@ export const CustomInputPropsSchema = z.object({
     .function()
     .args(
       z.unknown() as z.ZodType<
-        React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        React.ChangeEvent<HTMLInputElement>
       >
     )
     .returns(z.void())

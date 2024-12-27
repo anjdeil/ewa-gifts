@@ -45,7 +45,7 @@ export const CustomInput: FC<CustomInputProps> = ({
   }, [initialValue, name, setValue]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (setValue) {
       setValue(name, e.currentTarget.value, { shouldValidate: true });
