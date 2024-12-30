@@ -77,52 +77,64 @@ export const LoginForm: FC = () =>
     };
 
     return (
-        <Box
-            maxWidth={'500px'}
-            margin={'0 auto'}
+      <Box maxWidth={'500px'} margin={'0 auto'}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ marginBottom: '30px' }}
         >
-            <form onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: '30px' }}>
-                <Box
-                    display={'flex'}
-                    flexDirection={'column'}
-                    gap={'30px'}
-                >
-                    <CustomInput
-                        fieldName="E-mail "
-                        name='email'
-                        register={register}
-                        errors={errors}
-                    />
-                    <CustomInput
-                        fieldName="Password"
-                        name='password'
-                        register={register}
-                        errors={errors}
-                        isPassword={true}
-                    />
-                    <CustomInput
-                        fieldName="Remember me"
-                        name='rememberMe'
-                        register={register}
-                        errors={errors}
-                        isCheckbox={true}
-                    />
-                    <button className="btn-primary btn" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Sign in'}</button>
-                    {(isSubmitSuccessful && !isError) && <p style={{ color: variables.successfully }}>
-                        You have successfully logged into my account.
-                    </p>}
-                    {isError && <p style={{ color: variables.error }}
-                        dangerouslySetInnerHTML={{ __html: (error as WpWooError).data?.message }} />}
-                </Box>
-            </form>
-            <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
-                <Link href={"/my-account/reset-password"} className="desc link">
-                    Nie pamiętasz hasła?
-                </Link>
-                <Link href={"/my-account/registration"} className="desc link">
-                    Nie masz konta? Zarejestruj się!
-                </Link>
-            </Box>
+          <Box display={'flex'} flexDirection={'column'} gap={'30px'}>
+            <CustomInput
+              fieldName='E-mail '
+              name='email'
+              register={register}
+              errors={errors}
+              autoComplete='email'
+            />
+            <CustomInput
+              fieldName='Password'
+              name='password'
+              register={register}
+              errors={errors}
+              isPassword={true}
+              autoComplete='current-password'
+            />
+            <CustomInput
+              fieldName='Remember me'
+              name='rememberMe'
+              register={register}
+              errors={errors}
+              isCheckbox={true}
+            />
+            <button
+              className='btn-primary btn'
+              type='submit'
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Sign in'}
+            </button>
+            {isSubmitSuccessful && !isError && (
+              <p style={{ color: variables.successfully }}>
+                You have successfully logged into my account.
+              </p>
+            )}
+            {isError && (
+              <p
+                style={{ color: variables.error }}
+                dangerouslySetInnerHTML={{
+                  __html: (error as WpWooError).data?.message,
+                }}
+              />
+            )}
+          </Box>
+        </form>
+        <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
+          <Link href={'/my-account/reset-password'} className='desc link'>
+            Nie pamiętasz hasła?
+          </Link>
+          <Link href={'/my-account/registration'} className='desc link'>
+            Nie masz konta? <strong>Zarejestruj się</strong>!
+          </Link>
         </Box>
-    )
+      </Box>
+    );
 }
