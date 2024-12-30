@@ -88,6 +88,7 @@ export const LoginForm: FC = () =>
               name='email'
               register={register}
               errors={errors}
+              autoComplete='email'
             />
             <CustomInput
               fieldName='Password'
@@ -95,6 +96,7 @@ export const LoginForm: FC = () =>
               register={register}
               errors={errors}
               isPassword={true}
+              autoComplete='current-password'
             />
             <CustomInput
               fieldName='Remember me'
