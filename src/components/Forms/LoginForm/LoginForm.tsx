@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CustomInput } from "../CustomInput";
@@ -21,14 +21,23 @@ type LoginForm = z.infer<typeof LoginFormSchema>;
 
 export const LoginForm: FC = () =>
 {
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, reset } = useForm<LoginForm>({
-        resolver: zodResolver(LoginFormSchema)
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setValue, reset } = useForm<LoginForm>({
+      resolver: zodResolver(LoginFormSchema),
     });
 
     const [fetchUserToken, { isError, error }] = useFetchUserTokenMutation();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setCookie] = useCookies(['userToken']);
-
+  
+    useEffect(() => {
+    const inputs = document.querySelectorAll<HTMLInputElement>('input');
+    inputs.forEach(input => {
+        if (input.value) {
+            setValue(input.name as keyof LoginForm, input.value, { shouldValidate: true });
+        }
+    });
+    }, [setValue]);
+  
     const onSubmit = async (data: LoginForm) =>
     {
         const body = {
@@ -88,6 +97,8 @@ export const LoginForm: FC = () =>
               name='email'
               register={register}
               errors={errors}
+              initialValue={''}
+              setValue={setValue}
               autoComplete='email'
             />
             <CustomInput
@@ -95,6 +106,8 @@ export const LoginForm: FC = () =>
               name='password'
               register={register}
               errors={errors}
+              initialValue={''}
+              setValue={setValue}
               isPassword={true}
               autoComplete='current-password'
             />

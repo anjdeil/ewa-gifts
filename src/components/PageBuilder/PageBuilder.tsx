@@ -134,7 +134,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                         case "catalogs":
                             if (!("catalogs" in section)) break;
                             return (
-                                <Section className={"catalogs"} isContainer={true}>
+                                <Section className={"catalogs"} isContainer={true} key={key}>
                                     <CatalogList catalogs={section.catalogs} />
                                 </Section>
                             )
@@ -160,7 +160,7 @@ export const PageBuilder: FC<PageBuilderProps> = ({ sections, isContainer = true
                                 />
                             );
                             if (isContainer)
-                                return <Section isContainer={true} className={"rich-text"}>{richTextComponent}</Section>;
+                                return <Section isContainer={true} className={"rich-text"} key={key}>{richTextComponent}</Section>;
 
                             return richTextComponent;
                         }
