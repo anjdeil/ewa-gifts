@@ -95,7 +95,7 @@ function Blog({ response, page, count, error }: BlogProps)
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
+                <title>{pageTitle} - Ewa Gifts</title>
                 <meta name="description" content={`This is ${pageTitle}`} />
                 <link rel="canonical" href={canonicalUrl} />
             </Head>

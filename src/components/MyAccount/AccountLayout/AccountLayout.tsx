@@ -25,7 +25,7 @@ const AccountLayout: FC<AccountLayoutPropsType> = ({ title, children, breadcrumb
     return (
         <>
             <Head>
-                <title>{title}</title>
+                <title>{title} - Ewa Gifts</title>
             </Head>
             <main className={styles['my-account']}>
                 <div className="container">

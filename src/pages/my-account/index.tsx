@@ -67,7 +67,7 @@ const MyAccount: FC<MyAccountPropsType> = ({ userName }) =>
     return (
         <>
             <Head>
-                <title>Moje konto</title>
+                <title>Moje konto - Ewa Gifts</title>
                 <meta name="description" content={`This is my account page`} />
                 <meta name="robots" content="noindex" />
             </Head>

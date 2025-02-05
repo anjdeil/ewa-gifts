@@ -1,1 +1,1 @@
-export const MIN_SUBTOTAL_TO_CHECKOUT = 300;
+export const MIN_SUBTOTAL_TO_CHECKOUT = 700;
