@@ -7,7 +7,7 @@ export function filterOptionsByColorName(variations: variationsProductType[], na
     const availableVariations: defaultAttributesType[] = [];
     variations.forEach(variation =>
     {
-        if (variation.stock_quantity === 0) return;
+        // if (variation.stock_quantity === 0) return;
 
         const res = variation.attributes.filter(attr => attr.name === 'color' && attr.option === name);
         if (res.length > 0)
