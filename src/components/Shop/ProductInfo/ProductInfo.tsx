@@ -20,10 +20,11 @@ import styles from './styles.module.scss';
 function getCurrentStockValue(simpleProductStock: number | boolean,
     variableProductStock: number | boolean | undefined): string
 {
-    if (simpleProductStock || variableProductStock)
-        return `${variableProductStock || simpleProductStock} w magazynie`
-    else
-        return "Brak w magazynie"
+    if (variableProductStock !== undefined) {
+        return variableProductStock ? `${variableProductStock} w magazynie` : "Brak w magazynie";
+    } else {
+        return simpleProductStock ? `${simpleProductStock} w magazynie` : "Brak w magazynie";
+    }
 }
 const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 {
@@ -216,7 +217,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) =>
 
                 <div className={styles["product-info__island"]}>
                     <Typography variant='h3' className={`${styles['product-info__sku']} ${styles['product-info__stock']}`}>Dostępność:</Typography>
-                    <span className={`${styles["product-info__stock-dot"]} ${(stock_quantity || currentVariation?.stock_quantity) && styles['product-info__stock-dot_active']}`}></span>
+                    <span className={`${styles["product-info__stock-dot"]} ${(currentVariation ? currentVariation?.stock_quantity : stock_quantity) && styles['product-info__stock-dot_active']}`}></span>
                     &nbsp;{getCurrentStockValue(stock_quantity, currentVariation?.stock_quantity)}
                 </div>
 
